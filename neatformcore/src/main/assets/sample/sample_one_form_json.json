@@ -22,7 +22,7 @@
           },
           "rule": [
             {
-              "effect": "HIDE",
+              "action": "HIDE",
               "condition": "{age} > 30"
             }
           ],
@@ -58,7 +58,7 @@
           },
           "rule": [
             {
-              "effect": "HIDE",
+              "action": "HIDE",
               "condition": "{age} > 30"
             }
           ],
@@ -79,7 +79,7 @@
       "step_number": 3,
       "fields": [
         {
-          "name": "username",
+          "name": "dame",
           "type": "edit_text",
           "properties": {
             "hint": "Blood type test",
@@ -93,7 +93,7 @@
           },
           "rule": [
             {
-              "effect": "HIDE",
+              "action": "HIDE",
               "condition": "{age} > 30"
             }
           ],
@@ -114,7 +114,7 @@
       "step_number": 4,
       "fields": [
         {
-          "name": "username",
+          "name": "amaki",
           "type": "edit_text",
           "properties": {
             "hint": "Blood type test",
@@ -128,7 +128,7 @@
           },
           "rule": [
             {
-              "effect": "HIDE",
+              "action": "HIDE",
               "condition": "{age} > 30"
             }
           ],
@@ -149,7 +149,7 @@
       "step_number": 5,
       "fields": [
         {
-          "name": "username",
+          "name": "elly",
           "type": "edit_text",
           "properties": {
             "hint": "Blood type test",
@@ -163,7 +163,7 @@
           },
           "rule": [
             {
-              "effect": "HIDE",
+              "action": "HIDE",
               "condition": "{age} > 30"
             }
           ],
