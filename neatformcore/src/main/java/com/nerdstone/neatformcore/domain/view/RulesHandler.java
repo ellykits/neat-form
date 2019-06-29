@@ -1,12 +1,13 @@
 package com.nerdstone.neatformcore.domain.view;
 
-import android.view.View;
+import com.nerdstone.neatformcore.domain.model.NFormViewOption;
 
 public interface RulesHandler {
 
-    enum Operations {
-        HIDE, SHOW, DISABLE, ENABLE, FILTER
-    }
+  enum Operations {
+    HIDE, SHOW, DISABLE, ENABLE, FILTER
+  }
 
-    void performAction(View view, Operations operations);
+  void evaluateRule(NFormViewOption viewOption);
+
 }

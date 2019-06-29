@@ -1,17 +1,18 @@
 {
   "form": "Profile",
   "is_multi_step": true,
+  "rules_file": "rules/sample_one_form_json_rules.json",
   "count": 5,
   "steps": [
     {
-      "title": "Behaviour and counselling",
+      "title": "Test and counselling",
       "step_number": 1,
       "fields": [
         {
-          "name": "username",
+          "name": "adult",
           "type": "edit_text",
           "properties": {
-            "hint": "Blood type test",
+            "hint": "This is an adult",
             "type": "name",
             "text_size": 18.4
           },
@@ -20,12 +21,6 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "rule": [
-            {
-              "action": "HIDE",
-              "condition": "{age} > 30"
-            }
-          ],
           "validation": [
             "{username}.length() < 8",
             "!{username}.contains(@)"
@@ -34,8 +29,18 @@
         },
         {
           "name": "age",
-          "type": "calculation",
-          "value": "{age} > 18 ? Adult : Child "
+          "type": "edit_text",
+          "properties": {
+            "hint": "Enter your age",
+            "type": "name",
+            "text_size": 18.4
+          },
+          "meta_data": {
+            "openmrs_entity": "",
+            "openmrs_entity_id": "",
+            "openmrs_entity_parent": ""
+          },
+          "required_status": "yes -> Please add age"
         }
       ]
     },
@@ -56,160 +61,10 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "rule": [
-            {
-              "action": "HIDE",
-              "condition": "{age} > 30"
-            }
-          ],
           "validation": [
             "{username}.length() < 8",
             "!{username}.contains(@)"
           ]
-        },
-        {
-          "name": "age",
-          "type": "calculation",
-          "value": "{age} > 18 ? Adult : Child "
-        }
-      ]
-    },
-    {
-      "title": "Physical Exam",
-      "step_number": 3,
-      "fields": [
-        {
-          "name": "dame",
-          "type": "edit_text",
-          "properties": {
-            "hint": "Blood type test",
-            "type": "name",
-            "text_size": 18.4
-          },
-          "meta_data": {
-            "openmrs_entity": "",
-            "openmrs_entity_id": "",
-            "openmrs_entity_parent": ""
-          },
-          "rule": [
-            {
-              "action": "HIDE",
-              "condition": "{age} > 30"
-            }
-          ],
-          "validation": [
-            "{username}.length() < 8",
-            "!{username}.contains(@)"
-          ]
-        },
-        {
-          "name": "age",
-          "type": "calculation",
-          "value": "{age} > 18 ? Adult : Child "
-        }
-      ]
-    },
-    {
-      "title": "Testing",
-      "step_number": 4,
-      "fields": [
-        {
-          "name": "amaki",
-          "type": "edit_text",
-          "properties": {
-            "hint": "Blood type test",
-            "type": "name",
-            "text_size": 18.4
-          },
-          "meta_data": {
-            "openmrs_entity": "",
-            "openmrs_entity_id": "",
-            "openmrs_entity_parent": ""
-          },
-          "rule": [
-            {
-              "action": "HIDE",
-              "condition": "{age} > 30"
-            }
-          ],
-          "validation": [
-            "{username}.length() < 8",
-            "!{username}.contains(@)"
-          ]
-        },
-        {
-          "name": "age",
-          "type": "calculation",
-          "value": "{age} > 18 ? Adult : Child "
-        }
-      ]
-    },
-    {
-      "title": "Symptoms and Followup",
-      "step_number": 5,
-      "fields": [
-        {
-          "name": "elly",
-          "type": "edit_text",
-          "properties": {
-            "hint": "Blood type test",
-            "type": "name",
-            "text_size": 18.4
-          },
-          "meta_data": {
-            "openmrs_entity": "",
-            "openmrs_entity_id": "",
-            "openmrs_entity_parent": ""
-          },
-          "rule": [
-            {
-              "action": "HIDE",
-              "condition": "{age} > 30"
-            }
-          ],
-          "validation": [
-            "{username}.length() < 8",
-            "!{username}.contains(@)"
-          ]
-        },
-        {
-          "name": "gender",
-          "type": "multi_choice_checkbox",
-          "properties": {
-            "label": "Select your gender"
-          },
-          "meta_data": {
-            "openmrs_entity": "",
-            "openmrs_entity_id": "",
-            "openmrs_entity_parent": ""
-          },
-          "options": [
-            {
-              "name": "female",
-              "label": "Female",
-              "is_exclusive": false,
-              "metadata": {
-                "openmrs_entity": "120192AAAAAAAAAAAAAA",
-                "openmrs_entity_id": "",
-                "openmrs_entity_parent": ""
-              }
-            },
-            {
-              "name": "Male",
-              "label": "Male",
-              "is_exclusive": false,
-              "metadata": {
-                "openmrs_entity": "120191AAAAAAAAAAAAAA",
-                "openmrs_entity_id": "",
-                "openmrs_entity_parent": ""
-              }
-            }
-          ]
-        },
-        {
-          "name": "age",
-          "type": "calculation",
-          "value": "{age} > 18 ? Adult : Child "
         }
       ]
     }

@@ -1,60 +1,70 @@
 package com.nerdstone.neatformcore.domain.model;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
 
 public class NForm implements Serializable {
 
-    @SerializedName("form")
-    private String formName;
+  @SerializedName("form")
+  private String formName;
 
-    @SerializedName("is_multi_step")
-    private Boolean isMultiStep;
+  @SerializedName("is_multi_step")
+  private Boolean isMultiStep;
 
-    @SerializedName("count")
-    private int count;
+  @SerializedName("rules_file")
+  private String rulesFile;
 
-    @SerializedName("steps")
-    private List<NFormContent> steps;
+  @SerializedName("count")
+  private int count;
 
-    public NForm() {
-    }
+  @SerializedName("steps")
+  private List<NFormContent> steps;
 
-    public NForm(String formName) {
-        this.formName = formName;
-    }
+  public NForm() {
+  }
 
-    public String getFormName() {
-        return formName;
-    }
+  public NForm(String formName) {
+    this.formName = formName;
+  }
 
-    public void setFormName(String formName) {
-        this.formName = formName;
-    }
+  public String getFormName() {
+    return formName;
+  }
 
-    public Boolean isMultiStep() {
-        return isMultiStep;
-    }
+  public void setFormName(String formName) {
+    this.formName = formName;
+  }
 
-    public void setMultiStep(Boolean multiStep) {
-        isMultiStep = multiStep;
-    }
+  public Boolean isMultiStep() {
+    return isMultiStep;
+  }
 
-    public int getCount() {
-        return count;
-    }
+  public void setMultiStep(Boolean multiStep) {
+    isMultiStep = multiStep;
+  }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
+  public int getCount() {
+    return count;
+  }
 
-    public List<NFormContent> getSteps() {
-        return steps;
-    }
+  public void setCount(int count) {
+    this.count = count;
+  }
 
-    public void setSteps(List<NFormContent> steps) {
-        this.steps = steps;
-    }
+  public List<NFormContent> getSteps() {
+    return steps;
+  }
+
+  public void setSteps(List<NFormContent> steps) {
+    this.steps = steps;
+  }
+
+  public String getRulesFile() {
+    return rulesFile;
+  }
+
+  public void setRulesFile(String rulesFile) {
+    this.rulesFile = rulesFile;
+  }
 }

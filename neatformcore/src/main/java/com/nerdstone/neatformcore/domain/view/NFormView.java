@@ -7,14 +7,16 @@ import com.nerdstone.neatformcore.views.data.ViewDataHandler;
 
 public interface NFormView {
 
-    NFormViewOption getViewOption();
+  NFormViewOption getViewOption();
 
-    NFormView initView(NFormViewProperty viewProperty, ViewDataHandler viewDataHandler);
+  NFormView initView(NFormViewProperty viewProperty, ViewDataHandler viewDataHandler);
 
-    NFormViewData getViewData();
+  NFormViewData getViewData();
 
-    void setOnDataPassListener(DataPassListener dataPassListener);
+  void setOnDataPassListener(DataPassListener dataPassListener);
 
-    void handleRules();
+  void handleRules();
+
+  void setupView();
 
 }

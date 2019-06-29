@@ -1,39 +1,30 @@
 package com.nerdstone.neatformcore.views.data;
 
-import android.util.Log;
-
 import com.nerdstone.neatformcore.domain.model.NFormViewOption;
 import com.nerdstone.neatformcore.domain.view.DataPassListener;
-
+import com.nerdstone.neatformcore.domain.view.RulesHandler;
+import com.nerdstone.neatformcore.rules.NFormRulesHandler;
 import org.jeasy.rules.api.Facts;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ViewDataHandler implements DataPassListener {
 
-    private static Facts facts = new Facts();
+  private static final String TAG = ViewDataHandler.class.getCanonicalName();
+  private static Facts facts = new Facts();
+  private RulesHandler rulesHandler;
 
-    private static final String TAG = ViewDataHandler.class.getCanonicalName();
+  public ViewDataHandler() {
+    rulesHandler = new NFormRulesHandler();
+  }
 
-    @Override
-    public void onPassData(NFormViewOption viewOption) {
-        facts.put(viewOption.getName(), viewOption.getValue());
-        String regex = "\\{(.*?)\\}";
-        String test = "This is a {blue_gam} string with {gest_age_openmrs} special words. {gest_age}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(test);
-        List<String> matches = new ArrayList<>();
-        while (matcher.find()) {
-            matches.add(matcher.group());
-        }
-        for (String key : matches) {
-            Log.i(TAG, "Key: " + key.replace("{", "").replace("}",""));
-        }
 
-        Log.i(TAG, "Passed data {name: " + viewOption.getName() + " , value: " + viewOption.getValue() + "}");
-    }
+  @Override
+  public void onPassData(NFormViewOption viewOption) {
+    facts.put(viewOption.getName(), viewOption.getValue());
+    evaluateRules(viewOption);
+  }
+
+  private void evaluateRules(NFormViewOption viewOption) {
+    rulesHandler.evaluateRule(viewOption);
+  }
 
 }

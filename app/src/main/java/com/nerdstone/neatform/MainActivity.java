@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         formBuilder = new JsonFormBuilder(mainLayout);
         compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(new AssetFile()
-                .readFile(this, "sample/sample_one_form_json.json")
+                .readAssetFileAsString(this, "sample/sample_one_form_json.json")
                 .compose(RxHelper.getSingleIoScheduler())
                 .subscribe(
                         file -> {
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
                         },
                         err -> Log.e(TAG, "Error reading asset files: " + err)
                 ));
-
     }
 
     @Override
