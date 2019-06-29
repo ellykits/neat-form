@@ -13,9 +13,7 @@ import com.nerdstone.neatformcore.views.data.ViewDataHandler;
 public class RadioButtonNFormView extends AppCompatRadioButton implements NFormView {
 
   private static String TAG = RadioButtonNFormView.class.getCanonicalName();
-
   private NFormViewOption viewOption;
-
   private DataPassListener dataPassListener;
 
   public RadioButtonNFormView(Context context) {

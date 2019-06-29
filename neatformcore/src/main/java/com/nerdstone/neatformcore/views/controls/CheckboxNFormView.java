@@ -13,9 +13,7 @@ import com.nerdstone.neatformcore.views.data.ViewDataHandler;
 public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
 
   private static String TAG = CheckboxNFormView.class.getCanonicalName();
-
   private DataPassListener dataPassListener;
-
   private NFormViewOption viewOption;
 
   public CheckboxNFormView(Context context) {

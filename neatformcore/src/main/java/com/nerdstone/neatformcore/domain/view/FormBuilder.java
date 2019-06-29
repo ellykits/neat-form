@@ -13,8 +13,11 @@ public interface FormBuilder {
 
   NForm getForm(String source);
 
-  void addFormViews(NForm form, Context context);
+  void createFormViews(Context context);
 
   void setViewDataHandler(ViewDataHandler viewDataHandler);
 
+  void registerFormRules(Context context);
+
+  void freeResources();
 }

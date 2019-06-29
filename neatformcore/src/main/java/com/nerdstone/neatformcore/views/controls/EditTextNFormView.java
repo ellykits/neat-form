@@ -16,11 +16,8 @@ import com.nerdstone.neatformcore.views.data.ViewDataHandler;
 public class EditTextNFormView extends AppCompatEditText implements NFormView {
 
   private static String TAG = EditTextNFormView.class.getCanonicalName();
-
   private DataPassListener dataPassListener;
-
   private NFormViewOption viewOption;
-
   private NFormViewProperty viewProperties;
 
   public EditTextNFormView(Context context) {

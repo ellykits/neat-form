@@ -19,7 +19,6 @@ import java.util.List;
 public class MultiChoiceRootView extends LinearLayout implements RootView {
 
   private String label;
-
   private TextView labelTextView;
 
   public MultiChoiceRootView(Context context) {

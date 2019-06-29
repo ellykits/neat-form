@@ -14,9 +14,7 @@ import com.nerdstone.neatformcore.views.data.ViewDataHandler;
 public class SpinnerNFormView extends AppCompatSpinner implements NFormView {
 
   private static String TAG = SpinnerNFormView.class.getCanonicalName();
-
   private NFormViewOption viewOption;
-
   private DataPassListener dataPassListener;
 
   public SpinnerNFormView(Context context) {

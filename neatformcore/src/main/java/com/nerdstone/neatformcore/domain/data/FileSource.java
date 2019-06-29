@@ -9,4 +9,5 @@ import io.reactivex.Single;
 public interface FileSource {
 
   Single<String> readAssetFileAsString(Context context, String filePath);
+
 }
