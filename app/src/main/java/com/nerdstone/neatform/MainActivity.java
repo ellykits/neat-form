@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import com.nerdstone.neatformcore.datasource.AssetFile;
 import com.nerdstone.neatformcore.domain.view.FormBuilder;
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder;
+import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType;
 import com.nerdstone.neatformcore.rx.RxHelper;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             file -> {
               formBuilder.getForm(file);
               formBuilder.createFormViews(this);
-              formBuilder.registerFormRules(this);
+              formBuilder.registerFormRules(this, RulesFileType.YAML);
             },
             err -> Log.e(TAG, "Error reading asset files: " + err)
         ));

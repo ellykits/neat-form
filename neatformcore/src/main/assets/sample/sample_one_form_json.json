@@ -34,7 +34,7 @@
         },
         {
           "name": "age",
-          "type": "calculation",
+          "type": "String",
           "value": "{age} > 18 ? Adult : Child "
         }
       ]

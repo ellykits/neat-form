@@ -7,24 +7,24 @@ import com.nerdstone.neatformcore.rules.NFormRulesHandler;
 
 public class ViewDataHandler implements DataPassListener {
 
-  private static final String TAG = ViewDataHandler.class.getCanonicalName();
-  private static ViewDataHandler viewDataHandler;
-  private RulesHandler rulesHandler;
+    private static final String TAG = ViewDataHandler.class.getCanonicalName();
+    private static ViewDataHandler viewDataHandler;
+    private RulesHandler rulesHandler;
 
-  private ViewDataHandler() {
-    rulesHandler = NFormRulesHandler.getInstance();
-  }
-
-  public static ViewDataHandler getInstance() {
-    if (viewDataHandler == null) {
-      viewDataHandler = new ViewDataHandler();
+    private ViewDataHandler() {
+        rulesHandler = NFormRulesHandler.getInstance();
     }
-    return viewDataHandler;
-  }
 
-  @Override
-  public void onPassData(NFormViewOption viewOption) {
-    rulesHandler.evaluateRule(viewOption);
-  }
+    public static ViewDataHandler getInstance() {
+        if (viewDataHandler == null) {
+            viewDataHandler = new ViewDataHandler();
+        }
+        return viewDataHandler;
+    }
+
+    @Override
+    public void onPassData(NFormViewOption viewOption) {
+        rulesHandler.evaluateRule(viewOption);
+    }
 
 }

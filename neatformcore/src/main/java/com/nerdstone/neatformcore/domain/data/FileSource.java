@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.domain.data;
 
 import android.content.Context;
+
 import io.reactivex.Single;
 
 /***
@@ -8,6 +9,6 @@ import io.reactivex.Single;
  */
 public interface FileSource {
 
-  Single<String> readAssetFileAsString(Context context, String filePath);
+    Single<String> readAssetFileAsString(Context context, String filePath);
 
 }
