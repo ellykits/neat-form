@@ -1,0 +1,11 @@
+[
+  {
+    "name": "alcohol_rule",
+    "description": "children are not allowed to buy alcohol",
+    "priority": 1,
+    "condition": "new Integer(age) < 18",
+    "actions": [
+      "logger.printMessage('Children are not allowed to buy alcohol')"
+    ]
+  }
+]

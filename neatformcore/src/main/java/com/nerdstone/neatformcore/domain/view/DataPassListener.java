@@ -4,5 +4,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewOption;
 
 public interface DataPassListener {
 
-  void onPassData(NFormViewOption viewOption);
+    void onPassData(NFormViewOption viewOption);
+
 }

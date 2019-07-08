@@ -4,10 +4,10 @@ import com.nerdstone.neatformcore.domain.model.NFormViewOption;
 
 public interface RulesHandler {
 
-  enum Operations {
-    HIDE, SHOW, DISABLE, ENABLE, FILTER
-  }
+    void evaluateRule(NFormViewOption viewOption);
 
-  void evaluateRule(NFormViewOption viewOption);
+    enum Operations {
+        HIDE, SHOW, DISABLE, ENABLE, FILTER
+    }
 
 }

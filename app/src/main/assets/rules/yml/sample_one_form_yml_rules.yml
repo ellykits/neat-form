@@ -1,0 +1,41 @@
+name: "1age"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"
+---
+name: "age"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"
+---
+name: "3age"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"
+---
+name: "age"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"
+---
+name: "age2"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"
+---
+name: "age3"
+description: "children are not allowed to buy alcohol"
+priority: 1
+condition: "new Integer(age) < 18"
+actions:
+  - "calculation =  (new Integer(age) + 3) * 10"

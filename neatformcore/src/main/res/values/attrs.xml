@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="CheckboxNFormView">
-    <attr format="boolean" name="showLabel"/>
-    <attr format="string" name="multiChoiceLabel"/>
-  </declare-styleable>
+    <declare-styleable name="CheckboxNFormView">
+        <attr name="showLabel" format="boolean" />
+        <attr name="multiChoiceLabel" format="string" />
+    </declare-styleable>
 </resources>
