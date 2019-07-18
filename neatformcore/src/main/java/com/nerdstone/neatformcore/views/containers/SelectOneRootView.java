@@ -5,10 +5,10 @@ import android.util.AttributeSet;
 import android.widget.RadioGroup;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.NFormView;
 import com.nerdstone.neatformcore.domain.view.RootView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class SelectOneRootView extends RadioGroup implements RootView {
 
     @Override
     public void addChildren(List<NFormViewProperty> viewProperties,
-                            ViewDataHandler viewDataHandler) {
+                            ViewDispatcher viewDispatcher) {
 
     }
 

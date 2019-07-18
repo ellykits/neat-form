@@ -55,8 +55,7 @@ public class RulesFactory implements RuleListener {
                         mvelRuleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
                         break;
                     default:
-                        throw new Exception(
-                                "Unsupported file type. The library only supports YAML and JSON standards at the moment");
+                        throw new Exception("Unsupported file type. The library only supports YAML and JSON standards at the moment");
                 }
 
                 rules = mvelRuleFactory.createRules(new BufferedReader(
@@ -65,16 +64,16 @@ public class RulesFactory implements RuleListener {
         });
     }
 
-    public void updateFacts(NFormViewOption viewOption) {
+    private void updateFacts(NFormViewOption viewOption) {
         facts.put(viewOption.getName(), viewOption.getValue());
     }
 
-    public void fireRules() {
+    private void fireRules() {
         rulesEngine.fire(rules, facts);
         Timber.i("rule fired");
     }
 
-    public void initRuleFactory() {
+    private void initRuleFactory() {
         facts = new Facts();
         facts.put("calculation", "");
         rulesEngine = new DefaultRulesEngine();
@@ -108,11 +107,11 @@ public class RulesFactory implements RuleListener {
         Timber.tag(TAG).e(exception);
     }
 
-    public String getCurrentRule() {
+    private String getCurrentRule() {
         return currentRule;
     }
 
-    public void setCurrentRule(String currentRule) {
+    private void setCurrentRule(String currentRule) {
         this.currentRule = currentRule;
     }
 
@@ -125,12 +124,4 @@ public class RulesFactory implements RuleListener {
     public enum RulesFileType {
         JSON, YAML
     }
-
-    private class Logger {
-
-        private void printMessage(String message) {
-            Timber.tag(TAG).i(message);
-        }
-    }
-
 }

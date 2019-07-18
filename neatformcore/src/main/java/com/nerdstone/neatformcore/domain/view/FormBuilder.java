@@ -3,9 +3,9 @@ package com.nerdstone.neatformcore.domain.view;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import com.nerdstone.neatformcore.domain.model.NForm;
+import com.nerdstone.neatformcore.domain.model.form.NForm;
 import com.nerdstone.neatformcore.rules.RulesFactory;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 public interface FormBuilder {
 
@@ -17,7 +17,7 @@ public interface FormBuilder {
 
     void createFormViews(Context context);
 
-    void setViewDataHandler(ViewDataHandler viewDataHandler);
+    void setViewDispatcher(ViewDispatcher viewDispatcher);
 
     void registerFormRules(Context context, RulesFactory.RulesFileType rulesFileType);
 

@@ -4,14 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nerdstone.neatformcore.domain.model.NForm;
-import com.nerdstone.neatformcore.domain.model.NFormContent;
+import com.nerdstone.neatformcore.domain.model.form.NForm;
+import com.nerdstone.neatformcore.domain.model.form.NFormContent;
 import com.nerdstone.neatformcore.domain.view.FormBuilder;
 import com.nerdstone.neatformcore.domain.view.RootView;
 import com.nerdstone.neatformcore.rules.RulesFactory;
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType;
 import com.nerdstone.neatformcore.views.containers.VerticalRootView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,14 +28,14 @@ public class JsonFormBuilder implements FormBuilder {
 
     private static final String TAG = JsonFormBuilder.class.getCanonicalName();
     private ViewGroup mainLayout;
-    private ViewDataHandler viewDataHandler;
+    private ViewDispatcher viewDispatcher;
     private NForm form;
     private CompositeDisposable compositeDisposable;
     private RulesFactory rulesFactory;
 
     public JsonFormBuilder(ViewGroup mainLayout) {
         this.mainLayout = mainLayout;
-        viewDataHandler = ViewDataHandler.getInstance();
+        viewDispatcher = ViewDispatcher.getInstance();
         rulesFactory = RulesFactory.getInstance();
         compositeDisposable = new CompositeDisposable();
     }
@@ -66,15 +66,15 @@ public class JsonFormBuilder implements FormBuilder {
         if (form != null && form.getSteps() != null) {
             for (NFormContent formContent : form.getSteps()) {
                 RootView rootView = new VerticalRootView(context);
-                rootView.addChildren(formContent.getFields(), viewDataHandler);
+                rootView.addChildren(formContent.getFields(), viewDispatcher);
                 mainLayout.addView((View) rootView.initRootView());
             }
         }
     }
 
     @Override
-    public void setViewDataHandler(ViewDataHandler viewDataHandler) {
-        this.viewDataHandler = viewDataHandler;
+    public void setViewDispatcher(ViewDispatcher viewDispatcher) {
+        this.viewDispatcher = viewDispatcher;
     }
 
     @Override

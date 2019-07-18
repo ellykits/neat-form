@@ -6,10 +6,10 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.NFormView;
 import com.nerdstone.neatformcore.domain.view.RootView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import java.util.List;
 
@@ -38,9 +38,8 @@ public class VerticalRootView extends LinearLayout implements RootView {
     }
 
     @Override
-    public void addChildren(List<NFormViewProperty> viewProperties,
-                            ViewDataHandler viewDataHandler) {
-        createViews(this, viewProperties, getContext(), viewDataHandler);
+    public void addChildren(List<NFormViewProperty> viewProperties, ViewDispatcher viewDispatcher) {
+        createViews(this, viewProperties, getContext(), viewDispatcher);
     }
 
     @Override

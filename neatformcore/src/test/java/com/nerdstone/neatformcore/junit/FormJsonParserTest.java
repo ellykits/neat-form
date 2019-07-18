@@ -1,8 +1,8 @@
 package com.nerdstone.neatformcore.junit;
 
-import com.nerdstone.neatformcore.domain.model.NForm;
-import com.nerdstone.neatformcore.domain.model.NFormContent;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.model.form.NForm;
+import com.nerdstone.neatformcore.domain.model.form.NFormContent;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.form.json.JsonFormParser;
 
 import org.junit.Before;

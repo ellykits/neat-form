@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.domain.model;
+package com.nerdstone.neatformcore.domain.model.form;
 
 import com.google.gson.annotations.SerializedName;
 

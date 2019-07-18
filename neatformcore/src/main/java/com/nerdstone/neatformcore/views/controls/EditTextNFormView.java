@@ -6,18 +6,19 @@ import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
 import com.nerdstone.neatformcore.domain.model.NFormViewOption;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
-import com.nerdstone.neatformcore.domain.view.DataPassListener;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
+import com.nerdstone.neatformcore.domain.view.RootView;
 import com.nerdstone.neatformcore.utils.Constants;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import static com.nerdstone.neatformcore.form.json.NFormViewBuilder.makeView;
 
 public class EditTextNFormView extends AppCompatEditText implements NFormView {
 
     private static String TAG = EditTextNFormView.class.getCanonicalName();
-    private DataPassListener dataPassListener;
+    private DataActionListener dataActionListener;
     private NFormViewOption viewOption;
     private NFormViewProperty viewProperties;
 
@@ -42,7 +43,7 @@ public class EditTextNFormView extends AppCompatEditText implements NFormView {
     }
 
     @Override
-    public NFormView initView(NFormViewProperty viewProperty, ViewDataHandler viewDataHandler) {
+    public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
         this.viewOption = new NFormViewOption(this);
         this.viewProperties = viewProperty;
 
@@ -53,7 +54,7 @@ public class EditTextNFormView extends AppCompatEditText implements NFormView {
                 makeView(viewProperty.getViewAttributes(), this, Constants.ViewType.EDIT_TEXT);
             }
         }
-        setOnDataPassListener(viewDataHandler);
+        setOnDataPassListener(viewDispatcher);
         return this;
     }
 
@@ -63,9 +64,9 @@ public class EditTextNFormView extends AppCompatEditText implements NFormView {
     }
 
     @Override
-    public void setOnDataPassListener(DataPassListener dataPassListener) {
-        if (this.dataPassListener == null) {
-            this.dataPassListener = dataPassListener;
+    public void setOnDataPassListener(DataActionListener dataActionListener) {
+        if (this.dataActionListener == null) {
+            this.dataActionListener = dataActionListener;
         }
     }
 
@@ -73,9 +74,9 @@ public class EditTextNFormView extends AppCompatEditText implements NFormView {
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
 
-        if (viewOption != null && this.dataPassListener != null) {
+        if (viewOption != null && this.dataActionListener != null) {
             this.viewOption.setValue(text);
-            this.dataPassListener.onPassData(viewOption);
+            this.dataActionListener.onPassData(viewOption);
         }
     }
 
@@ -87,5 +88,10 @@ public class EditTextNFormView extends AppCompatEditText implements NFormView {
     @Override
     public void setupView() {
 
+    }
+
+    @Override
+    public RootView getNFormRootView() {
+        return (RootView) this.getParent();
     }
 }

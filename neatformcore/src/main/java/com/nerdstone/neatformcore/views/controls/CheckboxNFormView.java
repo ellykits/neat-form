@@ -6,15 +6,16 @@ import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
 import com.nerdstone.neatformcore.domain.model.NFormViewOption;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
-import com.nerdstone.neatformcore.domain.view.DataPassListener;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.domain.view.RootView;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
 
     private static String TAG = CheckboxNFormView.class.getCanonicalName();
-    private DataPassListener dataPassListener;
+    private DataActionListener dataActionListener;
     private NFormViewOption viewOption;
 
     public CheckboxNFormView(Context context) {
@@ -38,9 +39,9 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     }
 
     @Override
-    public NFormView initView(NFormViewProperty viewProperty, ViewDataHandler viewDataHandler) {
+    public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
         this.viewOption = new NFormViewOption(this);
-        setOnDataPassListener(viewDataHandler);
+        setOnDataPassListener(viewDispatcher);
         return this;
     }
 
@@ -50,9 +51,9 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     }
 
     @Override
-    public void setOnDataPassListener(DataPassListener dataPassListener) {
-        if (this.dataPassListener == null) {
-            this.dataPassListener = dataPassListener;
+    public void setOnDataPassListener(DataActionListener dataActionListener) {
+        if (this.dataActionListener == null) {
+            this.dataActionListener = dataActionListener;
         }
     }
 
@@ -64,5 +65,10 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     @Override
     public void setupView() {
 
+    }
+
+    @Override
+    public RootView getNFormRootView() {
+        return (RootView) this.getParent();
     }
 }
