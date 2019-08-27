@@ -1,8 +1,11 @@
 package com.nerdstone.neatformcore.domain.model;
 
+import android.arch.persistence.room.Entity;
+
 import java.io.Serializable;
 import java.util.Map;
 
+@Entity
 public class NFormViewData implements Serializable {
 
     private String name;

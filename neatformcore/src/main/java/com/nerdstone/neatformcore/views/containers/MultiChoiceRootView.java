@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import com.nerdstone.neatformcore.R;
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.NFormView;
 import com.nerdstone.neatformcore.domain.view.RootView;
 import com.nerdstone.neatformcore.views.controls.CheckboxNFormView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import java.util.List;
 
@@ -44,12 +44,12 @@ public class MultiChoiceRootView extends LinearLayout implements RootView {
 
     @Override
     public void addChild(NFormView nFormView) {
-        addView(nFormView.getViewOption().getView());
+        addView(nFormView.getViewDetails().getView());
     }
 
     @Override
     public void addChildren(List<NFormViewProperty> viewProperties,
-                            ViewDataHandler viewDataHandler) {
+                            ViewDispatcher viewDispatcher) {
         for (int count = 0; count < 5; count++) {
             addChild(new CheckboxNFormView(getContext(), null));
         }

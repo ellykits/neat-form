@@ -1,8 +1,8 @@
 package com.nerdstone.neatformcore.domain.view;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface RootView {
 
     void addChild(NFormView nFormView);
 
-    void addChildren(List<NFormViewProperty> viewProperties, ViewDataHandler viewDataHandler);
+    void addChildren(List<NFormViewProperty> viewProperties, ViewDispatcher viewDispatcher);
 
     List<NFormViewData> getViewsData();
 

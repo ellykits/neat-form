@@ -5,17 +5,18 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
-import com.nerdstone.neatformcore.domain.model.NFormViewProperty;
-import com.nerdstone.neatformcore.domain.view.DataPassListener;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
+import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
+import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
-import com.nerdstone.neatformcore.views.data.ViewDataHandler;
+import com.nerdstone.neatformcore.domain.view.RootView;
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 
 public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
 
     private static String TAG = CheckboxNFormView.class.getCanonicalName();
-    private DataPassListener dataPassListener;
-    private NFormViewOption viewOption;
+    private DataActionListener dataActionListener;
+    private NFormViewDetails viewDetails;
 
     public CheckboxNFormView(Context context) {
         super(context);
@@ -33,14 +34,14 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     }
 
     @Override
-    public NFormViewOption getViewOption() {
-        return this.viewOption;
+    public NFormViewDetails getViewDetails() {
+        return this.viewDetails;
     }
 
     @Override
-    public NFormView initView(NFormViewProperty viewProperty, ViewDataHandler viewDataHandler) {
-        this.viewOption = new NFormViewOption(this);
-        setOnDataPassListener(viewDataHandler);
+    public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
+        this.viewDetails = new NFormViewDetails(this);
+        setOnDataPassListener(viewDispatcher);
         return this;
     }
 
@@ -50,19 +51,19 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     }
 
     @Override
-    public void setOnDataPassListener(DataPassListener dataPassListener) {
-        if (this.dataPassListener == null) {
-            this.dataPassListener = dataPassListener;
+    public void setOnDataPassListener(DataActionListener dataActionListener) {
+        if (this.dataActionListener == null) {
+            this.dataActionListener = dataActionListener;
         }
-    }
-
-    @Override
-    public void handleRules() {
-
     }
 
     @Override
     public void setupView() {
 
+    }
+
+    @Override
+    public RootView getNFormRootView() {
+        return (RootView) this.getParent();
     }
 }

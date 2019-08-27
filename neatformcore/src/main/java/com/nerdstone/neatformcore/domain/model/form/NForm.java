@@ -1,9 +1,10 @@
-package com.nerdstone.neatformcore.domain.model;
+package com.nerdstone.neatformcore.domain.model.form;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class NForm implements Serializable {
 
@@ -21,6 +22,9 @@ public class NForm implements Serializable {
 
     @SerializedName("steps")
     private List<NFormContent> steps;
+
+    @SerializedName("meta_data")
+    private Map<String, Object> formMetadata;
 
     public NForm() {
     }
@@ -67,5 +71,9 @@ public class NForm implements Serializable {
 
     public void setRulesFile(String rulesFile) {
         this.rulesFile = rulesFile;
+    }
+
+    public Map<String, Object> getFormMetadata() {
+        return formMetadata;
     }
 }

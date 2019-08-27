@@ -1,12 +1,15 @@
 package com.nerdstone.neatformcore.domain.view;
 
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
+import com.nerdstone.neatformcore.rules.RulesFactory;
 
 public interface RulesHandler {
 
-    void evaluateRule(NFormViewOption viewOption);
+    void evaluateRule(NFormViewDetails viewDetails);
 
-    enum Operations {
+    RulesFactory getRulesFactory();
+
+    enum Operation {
         HIDE, SHOW, DISABLE, ENABLE, FILTER
     }
 
