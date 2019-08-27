@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.rules;
 
 import android.content.Context;
 
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
@@ -15,6 +15,9 @@ import org.jeasy.rules.support.YamlRuleDefinitionReader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import timber.log.Timber;
@@ -29,6 +32,7 @@ public class RulesFactory implements RuleListener {
     private Facts facts;
     private DefaultRulesEngine rulesEngine;
     private String currentRule;
+    private Map<String, Set<String>> subjectsRegistry;
 
     private RulesFactory() {
         initRuleFactory();
@@ -41,21 +45,16 @@ public class RulesFactory implements RuleListener {
         return rulesFactory;
     }
 
-    public Completable readRulesFromFile(Context context, String filePath,
-                                         RulesFileType rulesFileType) {
-
+    public Completable readRulesFromFile(Context context, String filePath, RulesFileType rulesFileType) {
         return Completable.fromAction(() -> {
             if (rules == null) {
                 MVELRuleFactory mvelRuleFactory;
-                switch (rulesFileType) {
-                    case JSON:
-                        mvelRuleFactory = new MVELRuleFactory(new JsonRuleDefinitionReader());
-                        break;
-                    case YAML:
-                        mvelRuleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
-                        break;
-                    default:
-                        throw new Exception("Unsupported file type. The library only supports YAML and JSON standards at the moment");
+                if (rulesFileType == RulesFileType.JSON) {
+                    mvelRuleFactory = new MVELRuleFactory(new JsonRuleDefinitionReader());
+                } else if (rulesFileType == RulesFileType.YAML) {
+                    mvelRuleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
+                } else {
+                    throw new Exception("Unsupported file type. The library only supports YAML and JSON standards at the moment");
                 }
 
                 rules = mvelRuleFactory.createRules(new BufferedReader(
@@ -64,8 +63,8 @@ public class RulesFactory implements RuleListener {
         });
     }
 
-    private void updateFacts(NFormViewOption viewOption) {
-        facts.put(viewOption.getName(), viewOption.getValue());
+    private void updateFacts(NFormViewDetails viewDetails) {
+        facts.put(viewDetails.getName(), viewDetails.getValue());
     }
 
     private void fireRules() {
@@ -75,21 +74,22 @@ public class RulesFactory implements RuleListener {
 
     private void initRuleFactory() {
         facts = new Facts();
-        facts.put("calculation", "");
         rulesEngine = new DefaultRulesEngine();
         rulesEngine.registerRuleListener(this);
+        subjectsRegistry = new HashMap<>();
     }
 
     @Override
     public boolean beforeEvaluate(Rule rule, Facts facts) {
         Timber.tag(TAG).d("Before evaluation of rule {%s}", rule);
-        return getCurrentRule()
-                .equalsIgnoreCase(rule.getName());//Only evaluate rule that matches name
+        return rule.getName().startsWith(getCurrentRule());
     }
 
     @Override
     public void afterEvaluate(Rule rule, Facts facts, boolean evaluationResult) {
-        Timber.tag(TAG).d("After evaluation of rule result: {%s}", evaluationResult);
+        if (evaluationResult) {
+            Timber.tag(TAG).d("Cool {%s} evaluated as 'true'", rule.getName());
+        }
     }
 
     @Override
@@ -115,10 +115,14 @@ public class RulesFactory implements RuleListener {
         this.currentRule = currentRule;
     }
 
-    public void updateFactsAndExecuteRule(NFormViewOption viewOption) {
-        rulesFactory.setCurrentRule(viewOption.getName());
-        rulesFactory.updateFacts(viewOption);
+    public void updateFactsAndExecuteRule(NFormViewDetails viewDetails) {
+        rulesFactory.setCurrentRule(viewDetails.getName());
+        rulesFactory.updateFacts(viewDetails);
         rulesFactory.fireRules();
+    }
+
+    public Map<String, Set<String>> getSubjectsRegistry() {
+        return subjectsRegistry;
     }
 
     public enum RulesFileType {

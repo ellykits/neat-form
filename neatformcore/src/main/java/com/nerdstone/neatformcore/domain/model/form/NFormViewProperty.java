@@ -20,14 +20,17 @@ public class NFormViewProperty implements Serializable {
     @SerializedName("meta_data")
     private Map<String, Object> viewMetadata;
 
-    @SerializedName("rule")
-    private List<NFormViewRule> viewRules;
-
     @SerializedName("options")
     private List<NFormSubViewProperty> options;
 
     @SerializedName("required_status")
     private String requiredStatus;
+
+    @SerializedName("validation")
+    private String validations;
+
+    @SerializedName("subjects")
+    private String subjects;
 
     public NFormViewProperty() {
     }
@@ -73,14 +76,6 @@ public class NFormViewProperty implements Serializable {
         this.viewMetadata = viewMetadata;
     }
 
-    public List<NFormViewRule> getViewRules() {
-        return viewRules;
-    }
-
-    public void setViewRules(List<NFormViewRule> viewRules) {
-        this.viewRules = viewRules;
-    }
-
     public List<NFormSubViewProperty> getOptions() {
         return options;
     }
@@ -95,5 +90,21 @@ public class NFormViewProperty implements Serializable {
 
     public void setRequiredStatus(String requiredStatus) {
         this.requiredStatus = requiredStatus;
+    }
+
+    public String getValidations() {
+        return validations;
+    }
+
+    public void setValidations(String validations) {
+        this.validations = validations;
+    }
+
+    public String getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(String subjects) {
+        this.subjects = subjects;
     }
 }

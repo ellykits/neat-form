@@ -1,9 +1,9 @@
 package com.nerdstone.neatformcore.domain.view;
 
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 
 public interface DataActionListener {
 
-    void onPassData(NFormViewOption viewOption);
+    void onPassData(NFormViewDetails viewDetails);
 
 }

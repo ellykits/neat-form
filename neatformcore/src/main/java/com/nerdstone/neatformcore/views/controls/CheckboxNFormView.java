@@ -5,7 +5,7 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
@@ -16,7 +16,7 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
 
     private static String TAG = CheckboxNFormView.class.getCanonicalName();
     private DataActionListener dataActionListener;
-    private NFormViewOption viewOption;
+    private NFormViewDetails viewDetails;
 
     public CheckboxNFormView(Context context) {
         super(context);
@@ -34,13 +34,13 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
     }
 
     @Override
-    public NFormViewOption getViewOption() {
-        return this.viewOption;
+    public NFormViewDetails getViewDetails() {
+        return this.viewDetails;
     }
 
     @Override
     public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
-        this.viewOption = new NFormViewOption(this);
+        this.viewDetails = new NFormViewDetails(this);
         setOnDataPassListener(viewDispatcher);
         return this;
     }
@@ -55,11 +55,6 @@ public class CheckboxNFormView extends AppCompatCheckBox implements NFormView {
         if (this.dataActionListener == null) {
             this.dataActionListener = dataActionListener;
         }
-    }
-
-    @Override
-    public void handleRules() {
-
     }
 
     @Override

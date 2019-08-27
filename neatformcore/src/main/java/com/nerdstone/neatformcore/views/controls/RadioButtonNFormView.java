@@ -5,7 +5,7 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
@@ -15,7 +15,7 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 public class RadioButtonNFormView extends AppCompatRadioButton implements NFormView {
 
     private static String TAG = RadioButtonNFormView.class.getCanonicalName();
-    private NFormViewOption viewOption;
+    private NFormViewDetails viewDetails;
     private DataActionListener dataActionListener;
 
     public RadioButtonNFormView(Context context) {
@@ -35,13 +35,13 @@ public class RadioButtonNFormView extends AppCompatRadioButton implements NFormV
 
 
     @Override
-    public NFormViewOption getViewOption() {
-        return this.viewOption;
+    public NFormViewDetails getViewDetails() {
+        return this.viewDetails;
     }
 
     @Override
     public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
-        this.viewOption = new NFormViewOption(this);
+        this.viewDetails = new NFormViewDetails(this);
         setOnDataPassListener(viewDispatcher);
         return this;
     }
@@ -56,11 +56,6 @@ public class RadioButtonNFormView extends AppCompatRadioButton implements NFormV
         if (this.dataActionListener == null) {
             this.dataActionListener = dataActionListener;
         }
-    }
-
-    @Override
-    public void handleRules() {
-
     }
 
     @Override

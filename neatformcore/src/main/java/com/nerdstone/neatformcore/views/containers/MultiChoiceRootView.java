@@ -44,7 +44,7 @@ public class MultiChoiceRootView extends LinearLayout implements RootView {
 
     @Override
     public void addChild(NFormView nFormView) {
-        addView(nFormView.getViewOption().getView());
+        addView(nFormView.getViewDetails().getView());
     }
 
     @Override

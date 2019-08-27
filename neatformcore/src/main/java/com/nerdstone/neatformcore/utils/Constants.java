@@ -2,6 +2,10 @@ package com.nerdstone.neatformcore.utils;
 
 public class Constants {
 
+    public static final class Database {
+        public static final String NAME = "form_data.db";
+    }
+
     public static final class ViewType {
 
         public static final String EDIT_TEXT = "edit_text";

@@ -1,6 +1,6 @@
 package com.nerdstone.neatformcore.views.handlers;
 
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.RulesHandler;
 import com.nerdstone.neatformcore.rules.NFormRulesHandler;
@@ -23,8 +23,11 @@ public class ViewDispatcher implements DataActionListener {
     }
 
     @Override
-    public void onPassData(NFormViewOption viewOption) {
-        rulesHandler.evaluateRule(viewOption);
+    public void onPassData(NFormViewDetails viewDetails) {
+        rulesHandler.evaluateRule(viewDetails);
     }
 
+    public RulesHandler getRulesHandler() {
+        return rulesHandler;
+    }
 }

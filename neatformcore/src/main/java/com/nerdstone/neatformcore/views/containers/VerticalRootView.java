@@ -34,7 +34,7 @@ public class VerticalRootView extends LinearLayout implements RootView {
 
     @Override
     public void addChild(NFormView nFormView) {
-        this.addView(nFormView.getViewOption().getView());
+        this.addView(nFormView.getViewDetails().getView());
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData;
-import com.nerdstone.neatformcore.domain.model.NFormViewOption;
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails;
 import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty;
 import com.nerdstone.neatformcore.domain.view.DataActionListener;
 import com.nerdstone.neatformcore.domain.view.NFormView;
@@ -16,7 +16,7 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher;
 public class SpinnerNFormView extends AppCompatSpinner implements NFormView {
 
     private static String TAG = SpinnerNFormView.class.getCanonicalName();
-    private NFormViewOption viewOption;
+    private NFormViewDetails viewDetails;
     private DataActionListener dataActionListener;
 
     public SpinnerNFormView(Context context) {
@@ -51,13 +51,13 @@ public class SpinnerNFormView extends AppCompatSpinner implements NFormView {
     }
 
     @Override
-    public NFormViewOption getViewOption() {
-        return this.viewOption;
+    public NFormViewDetails getViewDetails() {
+        return this.viewDetails;
     }
 
     @Override
     public NFormView initView(NFormViewProperty viewProperty, ViewDispatcher viewDispatcher) {
-        this.viewOption = new NFormViewOption(this);
+        this.viewDetails = new NFormViewDetails(this);
         setOnDataPassListener(viewDispatcher);
         return this;
     }
@@ -72,11 +72,6 @@ public class SpinnerNFormView extends AppCompatSpinner implements NFormView {
         if (this.dataActionListener == null) {
             this.dataActionListener = dataActionListener;
         }
-    }
-
-    @Override
-    public void handleRules() {
-
     }
 
     @Override

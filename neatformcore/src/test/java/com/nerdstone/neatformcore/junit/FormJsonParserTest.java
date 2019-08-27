@@ -11,6 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class FormJsonParserTest {
 
@@ -46,10 +47,8 @@ public class FormJsonParserTest {
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
                 "               ],\n" +
-                "               \"validation\": [\n" +
-                "                  \"{username}.length() < 8\",\n" +
-                "                  \"!{username}.contains(@)\"\n" +
-                "               ],\n" +
+                "               \"validation\": \"{username}.length() < 8\",\n" +
+                "                \"subjects\": \"age, medications\",\n" +
                 "               \"required_status\": \"yes -> Please add username\" " +
                 "            },\n" +
                 "            {\n" +
@@ -81,10 +80,6 @@ public class FormJsonParserTest {
                 "                     \"action\": \"HIDE\",\n" +
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
-                "               ],\n" +
-                "               \"validation\": [\n" +
-                "                  \"{username}.length() < 8\",\n" +
-                "                  \"!{username}.contains(@)\"\n" +
                 "               ]\n" +
                 "            },\n" +
                 "            {\n" +
@@ -116,10 +111,6 @@ public class FormJsonParserTest {
                 "                     \"action\": \"HIDE\",\n" +
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
-                "               ],\n" +
-                "               \"validation\": [\n" +
-                "                  \"{username}.length() < 8\",\n" +
-                "                  \"!{username}.contains(@)\"\n" +
                 "               ]\n" +
                 "            },\n" +
                 "            {\n" +
@@ -151,10 +142,6 @@ public class FormJsonParserTest {
                 "                     \"action\": \"HIDE\",\n" +
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
-                "               ],\n" +
-                "               \"validation\": [\n" +
-                "                  \"{username}.length() < 8\",\n" +
-                "                  \"!{username}.contains(@)\"\n" +
                 "               ]\n" +
                 "            },\n" +
                 "            {\n" +
@@ -186,10 +173,6 @@ public class FormJsonParserTest {
                 "                     \"action\": \"HIDE\",\n" +
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
-                "               ],\n" +
-                "               \"validation\": [\n" +
-                "                  \"{username}.length() < 8\",\n" +
-                "                  \"!{username}.contains(@)\"\n" +
                 "               ]\n" +
                 "            },\n" +
                 "{\n" +
@@ -260,17 +243,10 @@ public class FormJsonParserTest {
         NForm nForm = JsonFormParser.parseJson(json);
         NFormViewProperty property = nForm.getSteps().get(0).getFields().get(0);
         assertEquals(property.getName(), "username");
+        assertEquals("{username}.length() < 8" , property.getValidations());
+        assertTrue( property.getSubjects().contains("age"));
         assertEquals(property.getRequiredStatus(), "yes -> Please add username");
         assertEquals(property.getType(), "edit_text");
-    }
-
-    @Test
-    public void testThatNFormRuleIsCorrectlyParsed() {
-        NForm nForm = JsonFormParser.parseJson(json);
-        NFormViewProperty property = nForm.getSteps().get(0).getFields().get(0);
-        assertEquals(property.getViewRules().size(), 1);
-        assertEquals(property.getViewRules().get(0).getAction(), "HIDE");
-        assertEquals(property.getViewRules().get(0).getCondition(), "{age} > 30");
     }
 
     @Test

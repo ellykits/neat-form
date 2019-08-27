@@ -29,29 +29,46 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            unitTests.returnDefaultValues = true
         }
     }
 
 }
 
 dependencies {
+    def room_version = "1.1.1"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'org.jeasy:easy-rules-core:3.3.0'
-    implementation 'org.jeasy:easy-rules-mvel:3.3.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.dagger:dagger:2.16'
+    //Presentation and core layer
+    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'com.android.support.constraint:constraint-layout:1.1.3'
+    api 'com.jakewharton.timber:timber:4.7.1'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'io.reactivex.rxjava2:rxjava:2.2.9'
+    api 'org.jeasy:easy-rules-core:3.3.0'
+    api 'org.jeasy:easy-rules-mvel:3.3.0'
+    api 'com.google.code.gson:gson:2.8.5'
+    api 'com.google.dagger:dagger:2.16'
 
+    //Data layer
+    api "android.arch.persistence.room:runtime:$room_version"
+    api "android.arch.persistence.room:rxjava2:$room_version"
+
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation "android.arch.persistence.room:testing:$room_version"
+    testImplementation 'org.mockito:mockito-core:2.8.47'
+    // PowerMock
+    def powerMockVersion = '1.7.1'
+    testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
+    testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
+    testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
+    testImplementation "org.powermock:powermock-classloading-xstream:$powerMockVersion"
 
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
