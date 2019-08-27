@@ -21,11 +21,9 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": [
-            "{username}.length() < 8",
-            "!{username}.contains(@)"
-          ],
-          "required_status": "yes:please add username"
+          "validation": "length() < 8; !contains(@)",
+          "subjects": "age, medications, gender",
+          "required_status": "True:please add username"
         },
         {
           "name": "age",
