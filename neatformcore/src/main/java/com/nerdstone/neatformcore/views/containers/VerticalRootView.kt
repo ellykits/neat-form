@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import com.nerdstone.neatformcore.domain.model.NFormViewData
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.NFormViewUtils.createViews

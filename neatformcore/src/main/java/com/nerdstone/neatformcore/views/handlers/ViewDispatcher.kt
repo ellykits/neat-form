@@ -1,19 +1,19 @@
 package com.nerdstone.neatformcore.views.handlers
 
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
-import com.nerdstone.neatformcore.domain.view.DataActionListener
-import com.nerdstone.neatformcore.domain.view.RulesHandler
-import com.nerdstone.neatformcore.rules.NFormRulesHandler
+import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.rules.RulesFactory
 
-class ViewDispatcher private constructor() : DataActionListener {
-    val rulesHandler: RulesHandler
+class ViewDispatcher private constructor() :
+    DataActionListener {
 
-    init {
-        rulesHandler = NFormRulesHandler.INSTANCE
-    }
+    val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
     override fun onPassData(viewDetails: NFormViewDetails) {
-        rulesHandler.evaluateRule(viewDetails)
+        //Only execute rule if view has dependants
+        if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
+            rulesFactory.updateFactsAndExecuteRules(viewDetails)
+        }
     }
 
     companion object {

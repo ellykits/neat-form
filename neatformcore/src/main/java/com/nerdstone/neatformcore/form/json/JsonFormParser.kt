@@ -3,7 +3,7 @@ package com.nerdstone.neatformcore.form.json
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
-import com.nerdstone.neatformcore.domain.model.form.NForm
+import com.nerdstone.neatformcore.domain.model.NForm
 import java.io.StringReader
 
 object JsonFormParser {

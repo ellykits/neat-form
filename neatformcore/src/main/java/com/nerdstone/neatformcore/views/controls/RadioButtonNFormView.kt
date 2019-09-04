@@ -3,19 +3,20 @@ package com.nerdstone.neatformcore.views.controls
 import android.content.Context
 import android.support.v7.widget.AppCompatRadioButton
 import android.util.AttributeSet
-
+import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
-import com.nerdstone.neatformcore.domain.view.DataActionListener
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class RadioButtonNFormView : AppCompatRadioButton, NFormView {
-    override var viewDetails: NFormViewDetails = NFormViewDetails()
+    override var viewDetails: NFormViewDetails = NFormViewDetails(this)
         private set
     private var dataActionListener: DataActionListener? = null
+    override lateinit var viewProperties: NFormViewProperty
+
 
     override val viewData: NFormViewData
         get() = NFormViewData()
@@ -36,7 +37,6 @@ class RadioButtonNFormView : AppCompatRadioButton, NFormView {
     }
 
     override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher): NFormView {
-        this.viewDetails = NFormViewDetails(this)
         setOnDataPassListener(viewDispatcher)
         return this
     }

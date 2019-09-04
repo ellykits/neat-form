@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewData
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.views.controls.CheckboxNFormView

@@ -1,7 +1,12 @@
 package com.nerdstone.neatformcore.utils
 
 import android.content.Context
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
+import android.graphics.Color
+import android.support.v7.widget.AppCompatEditText
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.controls.EditTextNFormView
@@ -11,28 +16,47 @@ import java.util.*
 
 object NFormViewUtils {
 
-    fun createViews(rootView: RootView, viewProperties: List<NFormViewProperty>,
-                    context: Context, viewDispatcher: ViewDispatcher) {
+    fun createViews(
+        rootView: RootView, viewProperties: List<NFormViewProperty>,
+        context: Context, viewDispatcher: ViewDispatcher
+    ) {
 
         for (viewProperty in viewProperties) {
-            registerSubjects(splitText(viewProperty.subjects, ","), viewProperty, viewDispatcher)
+            viewDispatcher.rulesFactory
+                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+
             when (viewProperty.type) {
-                ViewType.EDIT_TEXT -> rootView.addChild(EditTextNFormView(context).initView(viewProperty, viewDispatcher))
-                ViewType.SPINNER -> rootView.addChild(SpinnerNFormView(context).initView(viewProperty, viewDispatcher))
+                ViewType.EDIT_TEXT ->
+                    rootView.addChild(
+                        EditTextNFormView(context).initView(
+                            viewProperty,
+                            viewDispatcher
+                        )
+                    )
+                ViewType.SPINNER -> rootView.addChild(
+                    SpinnerNFormView(context).initView(
+                        viewProperty,
+                        viewDispatcher
+                    )
+                )
             }
         }
-    }
-
-    private fun registerSubjects(subjects: List<String>, viewProperty: NFormViewProperty,
-                                 viewDispatcher: ViewDispatcher) {
-
-
     }
 
     fun splitText(text: String?, delimiter: String): List<String> {
         return if (text == null || text.isEmpty()) {
             ArrayList()
-        } else Arrays.asList(*text.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+        } else listOf(*text.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
     }
 
+    fun addRedAsterixOnHint(editText: AppCompatEditText) {
+        if ((editText.hint.isNotBlank())) {
+            val hint = SpannableString(editText.hint.toString() + " *")
+            hint.setSpan(
+                ForegroundColorSpan(Color.RED), hint.length - 1, hint.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            editText.hint = hint
+        }
+    }
 }
