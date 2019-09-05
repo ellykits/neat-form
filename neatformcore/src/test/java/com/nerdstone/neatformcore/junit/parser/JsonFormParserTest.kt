@@ -1,11 +1,11 @@
-package com.nerdstone.neatformcore.junit
+package com.nerdstone.neatformcore.junit.parser
 
 import com.nerdstone.neatformcore.form.json.JsonFormParser
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class FormJsonParserTest {
+class JsonFormParserTest {
 
     private var json: String? = null
 

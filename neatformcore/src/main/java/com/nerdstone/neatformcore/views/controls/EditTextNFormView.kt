@@ -3,14 +3,14 @@ package com.nerdstone.neatformcore.views.controls
 import android.content.Context
 import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
-import com.nerdstone.neatformcore.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
-import com.nerdstone.neatformcore.utils.NFormViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
@@ -18,7 +18,8 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
     override var viewDetails: NFormViewDetails = NFormViewDetails(this)
 
-    private val editTextBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
+    private val editTextBuilder: EditTextViewBuilder =
+        EditTextViewBuilder(this)
 
     override lateinit var viewProperties: NFormViewProperty
 
@@ -47,7 +48,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
         this.viewProperties = viewProperty
         viewDetails.name = viewProperty.name
-        viewDetails.subjects = NFormViewUtils.splitText(viewProperty.subjects, ",")
+        viewDetails.subjects = ViewUtils.splitText(viewProperty.subjects, ",")
         setOnDataPassListener(viewDispatcher)
         editTextBuilder.buildView()
         return this

@@ -1,9 +1,9 @@
-package com.nerdstone.neatformcore.builders
+package com.nerdstone.neatformcore.views.builders
 
 import android.text.SpannableStringBuilder
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
-import com.nerdstone.neatformcore.utils.NFormViewUtils
 import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.controls.EditTextNFormView
 import java.util.*
 
@@ -44,10 +44,10 @@ class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : Vi
     }
 
     private fun addRedAsteriskOnHint(editTextNFormView: EditTextNFormView) {
-        if (Utils.extractKeyValue(editTextNFormView.viewProperties.requiredStatus!!)
-                .first == "yes"
-        ) {
-            NFormViewUtils.addRedAsterixOnHint(editTextNFormView)
+        val isRequired = Utils.extractKeyValue(editTextNFormView.viewProperties.requiredStatus!!)
+            .first.toLowerCase()
+        if (isRequired == "yes" || isRequired == "true") {
+            ViewUtils.addRedAsterixOnHint(editTextNFormView)
         }
     }
 

@@ -7,7 +7,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
-import com.nerdstone.neatformcore.utils.NFormViewUtils.createViews
+import com.nerdstone.neatformcore.utils.ViewUtils.createViews
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class VerticalRootView : LinearLayout, RootView {

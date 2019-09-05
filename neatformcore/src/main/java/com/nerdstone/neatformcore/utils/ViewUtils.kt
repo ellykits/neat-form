@@ -14,7 +14,7 @@ import com.nerdstone.neatformcore.views.controls.SpinnerNFormView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import java.util.*
 
-object NFormViewUtils {
+object ViewUtils {
 
     fun createViews(
         rootView: RootView, viewProperties: List<NFormViewProperty>,

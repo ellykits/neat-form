@@ -17,7 +17,7 @@ object Utils {
     }
 
     fun extractKeyValue(key: String): Pair<String, String> {
-        val keyDataType = NFormViewUtils.splitText(key, ":")
+        val keyDataType = ViewUtils.splitText(key, ":")
         return Pair(keyDataType.first().trim(), keyDataType.last().trim())
     }
 }
