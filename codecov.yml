@@ -1,26 +1,8 @@
-codecov:
-  notify:
-    require_ci_to_pass: true
-
 coverage:
-  precision: 2
-  round: down
-  range: "70...100"
-
   status:
-    project: true
+    project:
+      default:
+        target: 70%
+        threshold: null
     patch: false
     changes: false
-
-parsers:
-  gcov:
-    branch_detection:
-      conditional: true
-      loop: true
-      method: false
-      macro: false
-
-comment:
-  layout: "header, diff"
-  behavior: default
-  require_changes: false
