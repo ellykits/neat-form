@@ -9,7 +9,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 
-class ViewDispatcherTest {
+class   `Test passing data from field `   {
 
     private val viewDispatcher = spyk<ViewDispatcher>()
     private val viewDetails = spyk(NFormViewDetails(mockk(relaxed = false)))

@@ -54,7 +54,6 @@ class `Test building EditText view` {
         Assert.assertTrue(editTextNFormView.paddingEnd == 12 && editTextNFormView.paddingStart == 12)
     }
 
-
     @After
     fun `After everything else`() {
         unmockkAll()

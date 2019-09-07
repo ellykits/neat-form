@@ -19,17 +19,12 @@ import timber.log.Timber
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder(override var mainLayout: ViewGroup) :
-    FormBuilder {
-    private var viewDispatcher: ViewDispatcher
-    private var form: NForm? = null
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private val rulesFactory: RulesFactory
+class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
 
-    init {
-        viewDispatcher = ViewDispatcher.INSTANCE
-        rulesFactory = RulesFactory.INSTANCE
-    }
+    private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
+    private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
+    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    var form: NForm? = null
 
     override fun getForm(source: String): NForm? {
         if (form == null) {
@@ -49,10 +44,6 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) :
                 mainLayout.addView(rootView.initRootView() as View)
             }
         }
-    }
-
-    override fun setViewDispatcher(viewDispatcher: ViewDispatcher) {
-        this.viewDispatcher = viewDispatcher
     }
 
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
@@ -79,6 +70,6 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) :
 
     override fun freeResources() {
         compositeDisposable.clear()
+        compositeDisposable.dispose()
     }
-
 }
