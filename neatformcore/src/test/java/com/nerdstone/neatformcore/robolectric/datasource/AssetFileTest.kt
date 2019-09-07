@@ -1,8 +1,8 @@
 package com.nerdstone.neatformcore.robolectric.datasource
 
 import android.content.Context
-import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.datasource.AssetFile
+import com.nerdstone.neatformcore.robolectric.utils.TestConstants
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.TestScheduler
 import org.junit.After
@@ -28,7 +28,7 @@ class `Test working with Assets` {
     fun `Read file should work well`() {
         val testScheduler = TestScheduler()
         val testObserver = AssetFile()
-            .readAssetFileAsString(context, TestConstants.SAMPLE_ONE_FORM)
+            .readAssetFileAsString(context, TestConstants.SAMPLE_ONE_FORM_FILE)
             .subscribeOn(testScheduler)
             .observeOn(testScheduler)
             .test()

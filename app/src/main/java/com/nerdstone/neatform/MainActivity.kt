@@ -19,8 +19,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         mainLayout = findViewById(R.id.mainLinearLayout)
         formBuilder = JsonFormBuilder(mainLayout)
+
         compositeDisposable.add(AssetFile()
             .readAssetFileAsString(this, "sample/sample_one_form.json")
             .subscribe(

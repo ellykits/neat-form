@@ -4,8 +4,7 @@ import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.rules.RulesFactory
 
-class ViewDispatcher private constructor() :
-    DataActionListener {
+class ViewDispatcher private constructor() : DataActionListener {
 
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
