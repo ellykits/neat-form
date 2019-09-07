@@ -97,12 +97,12 @@ class RulesFactory private constructor() : RuleListener {
     private fun updateExecutableRules() {
         val dependantViews = subjectsRegistry[currentViewDetails.name]
         dependantViews?.forEach { nFormRule ->
-            nFormRule.matchingRules?.also {
+            nFormRule.matchingRules.also {
                 if (it.isEmpty()) {
                     nFormRule.matchingRules = getMatchingRules(nFormRule.key)
                 }
             }
-            executableRulesList.addAll(nFormRule.matchingRules!!.asIterable())
+            executableRulesList.addAll(nFormRule.matchingRules.asIterable())
         }
     }
 
@@ -150,9 +150,10 @@ class RulesFactory private constructor() : RuleListener {
     }
 
 
-
-    private fun getMatchingRules(ruleName: String): Set<Rule>? {
-        return allRules?.filter { it.name.startsWith(ruleName) }?.toSet()
+    private fun getMatchingRules(ruleName: String): Set<Rule> {
+        if (allRules == null) {
+            return hashSetOf()
+        }
+        return allRules?.filter { it.name.startsWith(ruleName) }!!.toSet()
     }
-
 }

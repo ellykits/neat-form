@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.robolectric
+package com.nerdstone.neatformcore.robolectric.datasource
 
 import android.content.Context
 import com.nerdstone.neatformcore.TestConstants
@@ -13,24 +13,19 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class AssetFileTest {
+class `Test working with Assets` {
 
     private var compositeDisposable: CompositeDisposable? = null
     private lateinit var context: Context
 
     @Before
-    fun setUp() {
+    fun `Before everything else`() {
         context = RuntimeEnvironment.systemContext
         compositeDisposable = CompositeDisposable()
     }
 
-    @After
-    fun tearDown() {
-        compositeDisposable!!.clear()
-    }
-
     @Test
-    fun testReadFile() {
+    fun `Read file should work well`() {
         val testScheduler = TestScheduler()
         val testObserver = AssetFile()
             .readAssetFileAsString(context, TestConstants.SAMPLE_ONE_FORM)
@@ -41,5 +36,11 @@ class AssetFileTest {
         testObserver.assertSubscribed()
             .assertNoErrors()
             .dispose()
+    }
+
+
+    @After
+    fun `After everything else`() {
+        compositeDisposable!!.clear()
     }
 }

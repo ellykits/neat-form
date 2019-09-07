@@ -5,12 +5,12 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class JsonFormParserTest {
+class `Test passing JSON files` {
 
     private var json: String? = null
 
     @Before
-    fun setUp() {
+    fun `Before everything else`() {
         json = "{\n" +
                 "   \"form\": \"Profile\",\n" +
                 "   \"is_multi_step\": true,\n" +
@@ -213,16 +213,16 @@ class JsonFormParserTest {
     }
 
     @Test
-    fun testJsonParserWithValidJson() {
+    fun `Should parse a valid JSON into NForm model`() {
         val nForm = JsonFormParser.parseJson(json)
         assertEquals(nForm!!.formName, "Profile")
         assertEquals(nForm.count.toLong(), 5)
-        assertEquals(nForm.steps!!.size.toLong(), 5)
+        assertEquals(nForm.steps.size.toLong(), 5)
         assertNotNull(nForm)
     }
 
     @Test
-    fun testThatNFormContentIsCorrectlyParsed() {
+    fun `Should correctly parse form content`() {
         val nForm = JsonFormParser.parseJson(json)
         val nFormContent = nForm!!.steps[0]
         assertEquals(nFormContent.stepName, "Behaviour and counselling")
@@ -231,7 +231,7 @@ class JsonFormParserTest {
     }
 
     @Test
-    fun testThatNFormViewPropertyIsCorrectlyParsed() {
+    fun `Should properly parse view properties`() {
         val nForm = JsonFormParser.parseJson(json)
         val property = nForm!!.steps[0].fields[0]
         assertEquals(property.name, "username")
@@ -242,7 +242,7 @@ class JsonFormParserTest {
     }
 
     @Test
-    fun testThatNFormSubViewPropertyCorrectlyParsed() {
+    fun `Should properly parse sub view properties` () {
         val nForm = JsonFormParser.parseJson(json)
         val property = nForm!!.steps[4].fields[1]
         assertEquals(property.options!!.size.toLong(), 2)
@@ -255,7 +255,7 @@ class JsonFormParserTest {
     }
 
     @Test
-    fun testJsonParserWithNullAndEmptyJson() {
+    fun `Should not parse empty JSON or null`() {
         assertNull(JsonFormParser.parseJson(null))
         assertNull(JsonFormParser.parseJson(""))
     }

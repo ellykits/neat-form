@@ -30,8 +30,10 @@ class SelectOneRootView : RadioGroup, RootView {
 
     }
 
-    override fun addChildren(viewProperties: List<NFormViewProperty>,
-                             viewDispatcher: ViewDispatcher) {
+    override fun addChildren(
+        viewProperties: List<NFormViewProperty>,
+        viewDispatcher: ViewDispatcher
+    ) {
 
     }
 

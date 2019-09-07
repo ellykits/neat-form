@@ -8,7 +8,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class `Utility Class Test` {
+class `Test Utils` {
 
     private enum class TestEnum {
         THREE, TWO, ONE, ZERO

@@ -49,8 +49,8 @@ object ViewUtils {
         } else listOf(*text.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
     }
 
-    fun addRedAsterixOnHint(editText: AppCompatEditText) {
-        if ((editText.hint.isNotBlank())) {
+    fun appendRedAsteriskToHint(editText: AppCompatEditText) {
+        if (editText.hint.isNotBlank()) {
             val hint = SpannableString(editText.hint.toString() + " *")
             hint.setSpan(
                 ForegroundColorSpan(Color.RED), hint.length - 1, hint.length,

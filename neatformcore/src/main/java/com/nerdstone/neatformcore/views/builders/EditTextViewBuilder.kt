@@ -24,7 +24,7 @@ class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : Vi
                     when (attribute.key.toUpperCase()) {
                         EditTextProperties.HINT.name -> {
                             hint = SpannableStringBuilder(attribute.value as String)
-                            addRedAsteriskOnHint(editTextNFormView)
+                            formatHintForRequiredFields(editTextNFormView)
                         }
                         EditTextProperties.PADDING.name -> {
                             val value = Utils.pxToDp(
@@ -40,15 +40,16 @@ class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : Vi
                 }
             }
         }
-
     }
 
-    private fun addRedAsteriskOnHint(editTextNFormView: EditTextNFormView) {
-        val isRequired = Utils.extractKeyValue(editTextNFormView.viewProperties.requiredStatus!!)
-            .first.toLowerCase()
-        if (isRequired == "yes" || isRequired == "true") {
-            ViewUtils.addRedAsterixOnHint(editTextNFormView)
+    private fun formatHintForRequiredFields(editTextNFormView: EditTextNFormView) {
+        if (editTextNFormView.viewProperties.requiredStatus != null) {
+            val isRequired =
+                Utils.extractKeyValue(editTextNFormView.viewProperties.requiredStatus!!)
+                    .first.toLowerCase()
+            if (isRequired == "yes" || isRequired == "true") {
+                ViewUtils.appendRedAsteriskToHint(editTextNFormView)
+            }
         }
     }
-
 }

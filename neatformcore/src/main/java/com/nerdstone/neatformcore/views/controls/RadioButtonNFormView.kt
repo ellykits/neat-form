@@ -32,11 +32,18 @@ class RadioButtonNFormView : AppCompatRadioButton, NFormView {
         setupView()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         setupView()
     }
 
-    override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher): NFormView {
+    override fun initView(
+        viewProperty: NFormViewProperty,
+        viewDispatcher: ViewDispatcher
+    ): NFormView {
         setOnDataPassListener(viewDispatcher)
         return this
     }

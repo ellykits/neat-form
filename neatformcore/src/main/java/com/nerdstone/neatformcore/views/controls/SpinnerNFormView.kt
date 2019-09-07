@@ -36,20 +36,34 @@ class SpinnerNFormView : AppCompatSpinner, NFormView {
         setupView()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         setupView()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, mode: Int) : super(context, attrs, defStyleAttr, mode) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet,
+        defStyleAttr: Int,
+        mode: Int
+    ) : super(context, attrs, defStyleAttr, mode) {
         setupView()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, mode: Int,
-                popupTheme: Resources.Theme) : super(context, attrs, defStyleAttr, mode, popupTheme) {
+    constructor(
+        context: Context, attrs: AttributeSet, defStyleAttr: Int, mode: Int,
+        popupTheme: Resources.Theme
+    ) : super(context, attrs, defStyleAttr, mode, popupTheme) {
         setupView()
     }
 
-    override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher): NFormView {
+    override fun initView(
+        viewProperty: NFormViewProperty,
+        viewDispatcher: ViewDispatcher
+    ): NFormView {
         setOnDataPassListener(viewDispatcher)
         return this
     }

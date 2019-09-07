@@ -6,6 +6,7 @@ import java.util.*
 
 
 object Utils {
+
     fun <T : Enum<T>> convertEnumToSet(clazz: Class<T>): HashSet<String> {
         return EnumSet.allOf(clazz).map { it.name }.toHashSet()
     }
