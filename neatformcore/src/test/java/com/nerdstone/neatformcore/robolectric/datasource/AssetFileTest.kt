@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.datasource
 
 import android.content.Context
-import com.nerdstone.neatformcore.TestConstants
+import com.nerdstone.neatformcore.robolectric.utils.TestConstants
 import com.nerdstone.neatformcore.datasource.AssetFile
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.TestScheduler

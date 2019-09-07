@@ -10,7 +10,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.controls.EditTextNFormView
-import com.nerdstone.neatformcore.views.controls.SpinnerNFormView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import java.util.*
 
@@ -33,12 +32,6 @@ object ViewUtils {
                             viewDispatcher
                         )
                     )
-                ViewType.SPINNER -> rootView.addChild(
-                    SpinnerNFormView(context).initView(
-                        viewProperty,
-                        viewDispatcher
-                    )
-                )
             }
         }
     }
