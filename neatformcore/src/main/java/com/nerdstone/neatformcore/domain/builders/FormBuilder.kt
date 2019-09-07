@@ -1,9 +1,8 @@
-package com.nerdstone.neatformcore.domain.view
+package com.nerdstone.neatformcore.domain.builders
 
 import android.content.Context
 import android.view.ViewGroup
-
-import com.nerdstone.neatformcore.domain.model.form.NForm
+import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 

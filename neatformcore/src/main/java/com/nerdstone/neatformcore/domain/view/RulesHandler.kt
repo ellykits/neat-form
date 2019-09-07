@@ -1,16 +1,17 @@
 package com.nerdstone.neatformcore.domain.view
 
-import com.nerdstone.neatformcore.domain.model.NFormViewDetails
-import com.nerdstone.neatformcore.rules.RulesFactory
+import android.view.View
 
 interface RulesHandler {
-
-    val rulesFactory: RulesFactory
-
-    fun evaluateRule(viewDetails: NFormViewDetails)
 
     enum class Operation {
         HIDE, SHOW, DISABLE, ENABLE, FILTER
     }
+
+    fun setVisibility(view: View, operation: Operation, condition: Boolean)
+
+    fun setEnabled(view: View, operation: Operation, condition: Boolean)
+
+    fun filterItems(filterItems: List<String>)
 
 }

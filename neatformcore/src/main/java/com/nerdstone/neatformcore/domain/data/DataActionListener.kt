@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.domain.view
+package com.nerdstone.neatformcore.domain.data
 
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 

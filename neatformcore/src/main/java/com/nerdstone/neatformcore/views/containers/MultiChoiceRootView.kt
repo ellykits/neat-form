@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewData
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.views.controls.CheckboxNFormView
@@ -26,8 +26,10 @@ class MultiChoiceRootView : LinearLayout, RootView {
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        LayoutInflater.from(context).inflate(R.layout.multi_choice_nformview_layout,
-                this, true)
+        LayoutInflater.from(context).inflate(
+            R.layout.multi_choice_nformview_layout,
+            this, true
+        )
         setupAttributes(attrs)
         setupView()
     }
@@ -41,16 +43,20 @@ class MultiChoiceRootView : LinearLayout, RootView {
         addView(nFormView.viewDetails.view)
     }
 
-    override fun addChildren(viewProperties: List<NFormViewProperty>,
-                             viewDispatcher: ViewDispatcher) {
+    override fun addChildren(
+        viewProperties: List<NFormViewProperty>,
+        viewDispatcher: ViewDispatcher
+    ) {
         for (count in 0..4) {
             addChild(CheckboxNFormView(context))
         }
     }
 
     private fun setupAttributes(attrs: AttributeSet) {
-        val typedArray = context.theme.obtainStyledAttributes(attrs,
-                R.styleable.CheckboxNFormView, 0, 0)
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.CheckboxNFormView, 0, 0
+        )
         try {
             label = typedArray.getString(R.styleable.CheckboxNFormView_multiChoiceLabel)
         } finally {

@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.domain.view
 
 import com.nerdstone.neatformcore.domain.model.NFormViewData
-import com.nerdstone.neatformcore.domain.model.form.NFormViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 interface RootView {

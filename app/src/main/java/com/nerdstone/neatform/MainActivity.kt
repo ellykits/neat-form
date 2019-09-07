@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.LinearLayout
 import com.nerdstone.neatformcore.datasource.AssetFile
-import com.nerdstone.neatformcore.domain.view.FormBuilder
+import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +12,7 @@ import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
-    private var compositeDisposable: CompositeDisposable? = null
+    private val compositeDisposable = CompositeDisposable()
     private lateinit var mainLayout: LinearLayout
     private var formBuilder: FormBuilder? = null
 
@@ -21,14 +21,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mainLayout = findViewById(R.id.mainLinearLayout)
         formBuilder = JsonFormBuilder(mainLayout)
-        compositeDisposable = CompositeDisposable()
-        compositeDisposable!!.add(AssetFile()
-            .readAssetFileAsString(this, "sample/sample_one_form_json.json")
+        compositeDisposable.add(AssetFile()
+            .readAssetFileAsString(this, "sample/sample_one_form.json")
             .subscribe(
                 { file ->
-                    formBuilder!!.getForm(file)
-                    formBuilder!!.createFormViews(this)
-                    formBuilder!!.registerFormRules(this, RulesFileType.YAML)
+                    formBuilder?.also {
+                        it.getForm(file)
+                        it.createFormViews(this)
+                        it.registerFormRules(this, RulesFileType.YAML)
+                    }
+
                 },
                 { err -> Timber.e("Error reading asset files: $err") }
             ))
@@ -36,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        compositeDisposable!!.clear()
-        formBuilder!!.freeResources()
+        compositeDisposable.addAll((formBuilder as JsonFormBuilder).compositeDisposable)
+        compositeDisposable.clear()
+
     }
 }

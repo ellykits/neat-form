@@ -1,6 +1,6 @@
 package com.nerdstone.neatformcore.utils
 
-class Constants {
+object Constants {
 
     object Database {
         const val NAME = "form_data.db"
