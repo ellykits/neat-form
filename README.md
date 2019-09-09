@@ -4,7 +4,6 @@ NeatForm lets you create basic android views using JSON standard. This is especi
 
 [![CodeFactor](https://www.codefactor.io/repository/github/ellykits/neatform/badge)](https://www.codefactor.io/repository/github/ellykits/neatform) [![CircleCI](https://circleci.com/gh/ellykits/NeatForm/tree/master.svg?style=svg)](https://circleci.com/gh/ellykits/NeatForm/tree/master) [![codecov](https://codecov.io/gh/ellykits/NeatForm/branch/master/graph/badge.svg)](https://codecov.io/gh/ellykits/NeatForm)
 
-
 ## Getting Started
 
 These instructions will help you get started in setting up your forms and running the app. 
@@ -13,14 +12,17 @@ These instructions will help you get started in setting up your forms and runnin
 ### Authoring forms
 
 Below is a sample json form that will be translated to the corresponding views.
-| Form Attribute        | Usage                                                                             | 
-| ----------------------|:--------------------------------------------------------------------------------- | 
-| form                  |             Name of your form                                                     | 
+
+
+| Form Attribute        | Usage                                                                             |
+| ----------------------|:--------------------------------------------------------------------------------- |
+| form                  |             Name of your form                                                     |
 | is_multi_step         |   Indicates whether the form has multiple steps or not                            |  
-| rules_file            | Specifies where to get the rules for handling skip logic and calculation          | 
+| rules_file            | Specifies where to get the rules for handling skip logic and calculation          |
 | count                 |               Number of steps in the form                                         |
 | steps                 | The form steps with the desired fields                                            |
-| metadata              | Information that you would also like to pass with the form when submitting data   |
+| metadata              | Information that you would also like to pass with the form when submitting data  
+ |
 
 ```json
 {
@@ -88,7 +90,11 @@ actions:
 ## Examples
 
 Here is a an example of ```EditText``` Generated from the above JSON.
-<img src="pics/edit_text_1.png" height="380" width="240" /> 
+
+
+<img src="pics/edit_text_1.png" height="380" width="240" />
+
+
 
 ## Built With
 
