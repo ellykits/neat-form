@@ -38,6 +38,18 @@ android {
         abortOnError false
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            unitTests.returnDefaultValues = true
+        }
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+
 }
 
 dependencies {
