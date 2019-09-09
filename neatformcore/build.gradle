@@ -73,6 +73,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation "org.robolectric:shadows-multidex:3.8"
     testImplementation "android.arch.persistence.room:testing:$room_version"
     testImplementation "io.mockk:mockk:$mockKVersion"
 
