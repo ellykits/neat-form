@@ -60,6 +60,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation "org.robolectric:shadows-multidex:3.8"
     testImplementation "io.mockk:mockk:$mockKVersion"
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
