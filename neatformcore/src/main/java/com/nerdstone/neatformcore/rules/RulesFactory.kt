@@ -16,49 +16,40 @@ import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRuleFactory
 import org.jeasy.rules.support.JsonRuleDefinitionReader
 import org.jeasy.rules.support.YamlRuleDefinitionReader
+import org.mvel2.CompileException
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class RulesFactory private constructor() : RuleListener {
 
-    private var allRules: Rules? = null
     private var facts: Facts = Facts()
     private var rulesEngine: DefaultRulesEngine = DefaultRulesEngine()
     private lateinit var currentViewDetails: NFormViewDetails
     private var executableRulesList: HashSet<Rule> = hashSetOf()
-    private val rulesHandler: RulesHandler = NFormRulesHandler.INSTANCE
+    var allRules: Rules? = null
+    val rulesHandler: RulesHandler = NFormRulesHandler.INSTANCE
     val subjectsRegistry: HashMap<String, HashSet<NFormRule>> = hashMapOf()
-
-    enum class DataTypes {
-        TEXT, BOOL, NUMBER
-    }
 
     init {
         rulesEngine.registerRuleListener(this)
     }
 
-    override fun beforeEvaluate(rule: Rule?, facts: Facts?): Boolean {
-        return true
-    }
+    override fun beforeEvaluate(rule: Rule?, facts: Facts?): Boolean = true
 
-    override fun onSuccess(rule: Rule?, facts: Facts?) {
-        executableRulesList.remove(rule)
-    }
+    override fun onSuccess(rule: Rule?, facts: Facts?) = Timber.d("%s executed successfully", rule)
 
-    override fun onFailure(rule: Rule?, facts: Facts?, exception: Exception?) {
-        executableRulesList.clear()
-        Timber.e(exception)
-    }
+    override fun onFailure(rule: Rule?, facts: Facts?, exception: Exception?) =
+        when (exception) {
+            is CompileException -> Timber.e(exception.cause)
+            else -> Timber.e(exception)
+        }
 
-    override fun beforeExecute(rule: Rule?, facts: Facts?) {
-        //Overridden
-    }
+    override fun beforeExecute(rule: Rule?, facts: Facts?) =//Overridden
+        Unit
 
-    override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) {
-        //Overridden
-    }
-
+    override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) =
+        rulesHandler.handleSkipLogic(evaluationResult, rule, facts)
 
     fun readRulesFromFile(
         context: Context, filePath: String, rulesFileType: RulesFileType
@@ -76,6 +67,7 @@ class RulesFactory private constructor() : RuleListener {
                     )
                 )
             }
+            rulesHandler.hideViewsInitially(allRules)
         }
     }
 
@@ -86,6 +78,7 @@ class RulesFactory private constructor() : RuleListener {
 
     private fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
+        rulesHandler.hideOrShowViews(facts)
     }
 
     fun updateFactsAndExecuteRules(viewDetails: NFormViewDetails) {
@@ -95,6 +88,7 @@ class RulesFactory private constructor() : RuleListener {
     }
 
     private fun updateExecutableRules() {
+        executableRulesList.clear()
         val dependantViews = subjectsRegistry[currentViewDetails.name]
         dependantViews?.forEach { nFormRule ->
             nFormRule.matchingRules.also {
@@ -104,22 +98,7 @@ class RulesFactory private constructor() : RuleListener {
             }
             executableRulesList.addAll(nFormRule.matchingRules.asIterable())
         }
-    }
-
-    enum class RulesFileType {
-        JSON, YAML
-    }
-
-    companion object {
-        @Volatile
-        private var instance: RulesFactory? = null
-
-        val INSTANCE: RulesFactory
-            get() = instance ?: synchronized(this) {
-                RulesFactory().also {
-                    instance = it
-                }
-            }
+        rulesHandler.executableRulesList = executableRulesList
     }
 
     fun registerSubjects(subjects: List<String>, viewProperty: NFormViewProperty) {
@@ -138,7 +117,6 @@ class RulesFactory private constructor() : RuleListener {
                 )
             )
         }
-
     }
 
     private fun setDefaultFact(key: String, dataType: String) {
@@ -149,11 +127,30 @@ class RulesFactory private constructor() : RuleListener {
         }
     }
 
-
     private fun getMatchingRules(ruleName: String): Set<Rule> {
         if (allRules == null) {
             return hashSetOf()
         }
         return allRules?.filter { it.name.startsWith(ruleName) }!!.toSet()
+    }
+
+    enum class DataTypes {
+        TEXT, BOOL, NUMBER
+    }
+
+    enum class RulesFileType {
+        JSON, YAML
+    }
+
+    companion object {
+        @Volatile
+        private var instance: RulesFactory? = null
+
+        val INSTANCE: RulesFactory
+            get() = instance ?: synchronized(this) {
+                RulesFactory().also {
+                    instance = it
+                }
+            }
     }
 }

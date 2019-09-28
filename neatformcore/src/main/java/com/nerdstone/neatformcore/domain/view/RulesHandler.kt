@@ -1,17 +1,26 @@
 package com.nerdstone.neatformcore.domain.view
 
-import android.view.View
+import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import org.jeasy.rules.api.Facts
+import org.jeasy.rules.api.Rule
+import org.jeasy.rules.api.Rules
 
 interface RulesHandler {
 
-    enum class Operation {
-        HIDE, SHOW, DISABLE, ENABLE, FILTER
-    }
+    var executableRulesList: HashSet<Rule>
 
-    fun setVisibility(view: View, operation: Operation, condition: Boolean)
+    var formBuilder: FormBuilder
 
-    fun setEnabled(view: View, operation: Operation, condition: Boolean)
+    val viewIdsMap: HashMap<String, Int>
 
-    fun filterItems(filterItems: List<String>)
+    fun handleReadOnlyState()
+
+    fun handleFilter(filterItems: List<String>)
+
+    fun handleSkipLogic(evaluationResult: Boolean, rule: Rule?, facts: Facts?)
+
+    fun hideOrShowViews(facts: Facts?)
+
+    fun hideViewsInitially(allRules: Rules?)
 
 }

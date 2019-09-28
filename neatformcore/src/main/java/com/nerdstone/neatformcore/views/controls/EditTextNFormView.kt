@@ -3,24 +3,23 @@ package com.nerdstone.neatformcore.views.controls
 import android.content.Context
 import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
+import android.view.View
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
+import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
+
     private var dataActionListener: DataActionListener? = null
-
+    private val editTextBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
     override var viewDetails: NFormViewDetails = NFormViewDetails(this)
-
-    private val editTextBuilder: EditTextViewBuilder =
-        EditTextViewBuilder(this)
-
     override lateinit var viewProperties: NFormViewProperty
 
     override val viewData: NFormViewData
@@ -49,9 +48,15 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         this.viewProperties = viewProperty
         viewDetails.name = viewProperty.name
         viewDetails.subjects = ViewUtils.splitText(viewProperty.subjects, ",")
-        setOnDataPassListener(viewDispatcher)
         editTextBuilder.buildView()
+        mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
+        setOnDataPassListener(viewDispatcher)
         return this
+    }
+
+    override fun mapViewIdToName(rulesHandler: RulesHandler) {
+        id = View.generateViewId()
+        rulesHandler.viewIdsMap[this.viewProperties.name] = id
     }
 
     override fun setOnDataPassListener(dataActionListener: DataActionListener) {
@@ -69,10 +74,11 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         lengthAfter: Int
     ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
-
-        dataActionListener?.also {
-            this.viewDetails.value = text
-            it.onPassData(viewDetails)
+        if (text.isNotEmpty()) {
+            dataActionListener?.also {
+                this.viewDetails.value = text.toString()
+                it.onPassData(viewDetails)
+            }
         }
     }
 }

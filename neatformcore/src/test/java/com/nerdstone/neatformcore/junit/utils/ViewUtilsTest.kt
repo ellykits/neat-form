@@ -23,6 +23,12 @@ class `Test View Utils` {
         Assert.assertEquals(" child:text", splitText[1])
     }
 
+    @Test
+    fun `Should return string before given suffix`() {
+        Assert.assertEquals("age", ViewUtils.getKey("age_visibility", "_visibility"))
+        Assert.assertEquals("age_visibility", ViewUtils.getKey("age_visibility", "visible"))
+    }
+
     @After
     fun `After everything else`() {
         unmockkAll()
