@@ -23,11 +23,11 @@ import java.io.InputStreamReader
 
 class RulesFactory private constructor() : RuleListener {
 
-    private var allRules: Rules? = null
     private var facts: Facts = Facts()
     private var rulesEngine: DefaultRulesEngine = DefaultRulesEngine()
     private lateinit var currentViewDetails: NFormViewDetails
     private var executableRulesList: HashSet<Rule> = hashSetOf()
+    var allRules: Rules? = null
     val rulesHandler: RulesHandler = NFormRulesHandler.INSTANCE
     val subjectsRegistry: HashMap<String, HashSet<NFormRule>> = hashMapOf()
 

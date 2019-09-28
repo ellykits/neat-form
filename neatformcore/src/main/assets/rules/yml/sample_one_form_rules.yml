@@ -2,7 +2,7 @@
 name: "child_visibility"
 description: "children are not allowed to buy alcohol"
 priority: 1
-condition: "age < 18"
+condition: "age <= 18"
 actions:
   - "child_visibility = true"
 ---
@@ -11,11 +11,12 @@ description: "decade calculation"
 priority: 1
 condition: "true"
 actions:
+  - "import java.math.BigInteger;"
   - "adult_calculation =  age * 10"
 ---
 name: "adult_visibility"
 description: "adults can buy alcohol"
 priority: 1
-condition: "age > 18"
+condition: "age > 18 || child == 'adult'"
 actions:
   - "adult_visibility =  true"

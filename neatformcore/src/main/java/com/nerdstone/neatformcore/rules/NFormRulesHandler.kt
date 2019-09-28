@@ -62,6 +62,19 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
     }
 
+    override fun hideViewsInitially(allRules: Rules?) {
+        allRules?.also {
+            it.toMutableList()
+                .filter { rule ->
+                    rule.name.toLowerCase().endsWith(Constants.RuleActions.VISIBILITY)
+                }.forEach { item ->
+                    val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
+                    val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)
+                    changeVisibility(false, view)
+                }
+        }
+    }
+
     private fun changeVisibility(value: Boolean?, view: View) {
         if (value != null) {
             when {
@@ -80,19 +93,6 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
         } else {
             view.visibility = View.GONE
-        }
-    }
-
-    override fun hideViewsInitially(allRules: Rules?) {
-        allRules?.also {
-            it.toMutableList()
-                .filter { rule ->
-                    rule.name.toLowerCase().endsWith(Constants.RuleActions.VISIBILITY)
-                }.forEach { item ->
-                    val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                    val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)
-                    changeVisibility(false, view)
-                }
         }
     }
 }
