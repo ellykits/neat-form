@@ -10,7 +10,7 @@ import java.util.*
 class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : ViewBuilder {
 
     enum class EditTextProperties {
-        HINT, PADDING, TEXT_SIZE
+        HINT, PADDING, TEXT_SIZE, TEXT
     }
 
     override val acceptedAttributes: HashSet<String> =
@@ -20,21 +20,26 @@ class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : Vi
     override fun buildView() {
         editTextNFormView.viewProperties.viewAttributes?.forEach { attribute ->
             if (acceptedAttributes.contains(attribute.key.toUpperCase())) {
-                editTextNFormView.apply {
+                with(editTextNFormView) {
                     when (attribute.key.toUpperCase()) {
                         EditTextProperties.HINT.name -> {
                             hint = SpannableStringBuilder(attribute.value as String)
                             formatHintForRequiredFields(editTextNFormView)
                         }
+
                         EditTextProperties.PADDING.name -> {
                             val value = Utils.pxToDp(
                                 (attribute.value as String).toFloat(),
                                 editTextNFormView.context
                             )
-                            setPadding(value, value, value, value)
+                             this.setPadding(value, value, value, value)
                         }
+
                         EditTextProperties.TEXT_SIZE.name ->
                             textSize = (attribute.value as String).toFloat()
+
+                        EditTextProperties.TEXT.name ->
+                            this.setText(attribute.value.toString())
 
                     }
                 }

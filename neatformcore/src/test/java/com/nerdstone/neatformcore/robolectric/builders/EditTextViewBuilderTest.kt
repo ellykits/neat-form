@@ -5,7 +5,10 @@ import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.controls.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -14,9 +17,7 @@ import org.robolectric.RuntimeEnvironment
 class `Test building EditText view` {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val editTextNFormView = spyk(
-        objToCopy = EditTextNFormView(RuntimeEnvironment.systemContext)
-    )
+    private val editTextNFormView =  EditTextNFormView(RuntimeEnvironment.systemContext)
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
 
     @Before
@@ -46,7 +47,15 @@ class `Test building EditText view` {
     }
 
     @Test
-    @Ignore("Throws stack overflow exception because of calling setPadding() method of super")
+    fun `Should set text on the field `() {
+        val text = "Am a sample text on field"
+        viewProperty.viewAttributes = hashMapOf("text" to text)
+        editTextViewBuilder.buildView()
+        Assert.assertTrue(editTextNFormView.text.toString().isNotEmpty() &&
+                editTextNFormView.text.toString() == "Am a sample text on field")
+    }
+
+    @Test
     fun `Should set padding on EditText `() {
         viewProperty.viewAttributes = hashMapOf("padding" to "12")
         editTextViewBuilder.buildView()
