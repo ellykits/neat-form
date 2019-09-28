@@ -27,10 +27,7 @@ object ViewUtils {
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
                     rootView.addChild(
-                        EditTextNFormView(context).initView(
-                            viewProperty,
-                            viewDispatcher
-                        )
+                        EditTextNFormView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
@@ -51,5 +48,9 @@ object ViewUtils {
             )
             editText.hint = hint
         }
+    }
+
+    fun getKey(name: String, suffix: String): String {
+        return name.substringBefore(suffix)
     }
 }

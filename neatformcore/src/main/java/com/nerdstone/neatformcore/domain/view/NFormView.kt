@@ -22,5 +22,6 @@ interface NFormView {
 
     fun setupView()
 
+    fun mapViewIdToName(rulesHandler: RulesHandler)
 
 }

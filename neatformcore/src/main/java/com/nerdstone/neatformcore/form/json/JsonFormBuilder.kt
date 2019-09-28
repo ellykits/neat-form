@@ -23,8 +23,13 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
+    private val rulesHandler = rulesFactory.rulesHandler
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
     var form: NForm? = null
+
+    init {
+        rulesHandler.formBuilder = this
+    }
 
     override fun getForm(source: String): NForm? {
         if (form == null) {
