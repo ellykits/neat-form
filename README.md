@@ -95,7 +95,6 @@ Here is a an example of ```EditText``` Generated from the above JSON.
 <img src="pics/edit_text_1.png" height="380" width="240" />
 
 
-
 ## Built With
 
 * [Easy Rules](https://github.com/j-easy/easy-rules) - Rules Engine library 
