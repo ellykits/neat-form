@@ -40,22 +40,6 @@ class NFormContent : Serializable {
 
 }
 
-
-class NFormSubViewProperty : Serializable {
-
-    @SerializedName("name")
-    var name: String? = null
-
-    @SerializedName("label")
-    var label: String? = null
-
-    @SerializedName("is_exclusive")
-    var isExclusive: Boolean? = null
-
-    @SerializedName("metadata")
-    var viewMetadata: Map<String, Any>? = null
-}
-
 class NFormViewProperty : Serializable {
 
     @SerializedName("name")
@@ -92,4 +76,22 @@ class NFormViewProperty : Serializable {
         this.name = name
         this.type = type
     }
+}
+
+class NFormSubViewProperty : Serializable {
+
+    @SerializedName("name")
+    var name: String? = null
+
+    @SerializedName("label")
+    var label: String? = null
+
+    @SerializedName("is_exclusive")
+    var isExclusive: Boolean? = null
+
+    @SerializedName("metadata")
+    var viewMetadata: Map<String, Any>? = null
+
+    @SerializedName("properties")
+    var viewAttributes: Map<String, Any>? = null
 }

@@ -57,6 +57,16 @@
           },
           "required_status": "yes:Please add age",
           "subjects": "age:number, adult:text"
+        },
+        {
+          "name": "email_subscription",
+          "type": "checkbox",
+          "properties": {
+            "text": "Subscribe to email notifications",
+            "text_size": "20"
+          },
+          "required_status": "yes:Please specify your marital status",
+          "subjects": "age:number"
         }
       ]
     }

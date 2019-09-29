@@ -2,25 +2,27 @@ package com.nerdstone.neatformcore.views.builders
 
 import android.text.SpannableStringBuilder
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.controls.EditTextNFormView
 import java.util.*
 
-class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : ViewBuilder {
+class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+
+    private val editTextNFormView: EditTextNFormView = nFormView as EditTextNFormView
+
+    override val acceptedAttributes: HashSet<String> =
+        Utils.convertEnumToSet(EditTextProperties::class.java)
 
     enum class EditTextProperties {
         HINT, PADDING, TEXT_SIZE, TEXT
     }
 
-    override val acceptedAttributes: HashSet<String> =
-        Utils.convertEnumToSet(EditTextProperties::class.java)
-
-
     override fun buildView() {
         editTextNFormView.viewProperties.viewAttributes?.forEach { attribute ->
             if (acceptedAttributes.contains(attribute.key.toUpperCase())) {
-                with(editTextNFormView) {
+                editTextNFormView.apply {
                     when (attribute.key.toUpperCase()) {
                         EditTextProperties.HINT.name -> {
                             hint = SpannableStringBuilder(attribute.value as String)
@@ -32,14 +34,14 @@ class EditTextViewBuilder(private val editTextNFormView: EditTextNFormView) : Vi
                                 (attribute.value as String).toFloat(),
                                 editTextNFormView.context
                             )
-                             this.setPadding(value, value, value, value)
+                            setPadding(value, value, value, value)
                         }
 
                         EditTextProperties.TEXT_SIZE.name ->
                             textSize = (attribute.value as String).toFloat()
 
                         EditTextProperties.TEXT.name ->
-                            this.setText(attribute.value.toString())
+                            setText(attribute.value.toString())
 
                     }
                 }

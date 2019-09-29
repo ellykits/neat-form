@@ -20,3 +20,10 @@ priority: 1
 condition: "age > 18 || child == 'adult'"
 actions:
   - "adult_visibility =  true"
+---
+name: "email_subscription_visibility"
+description: "Display email subscription checkbox"
+priority: 1
+condition: "age > 18"
+actions:
+  - "email_subscription_visibility =  true"
