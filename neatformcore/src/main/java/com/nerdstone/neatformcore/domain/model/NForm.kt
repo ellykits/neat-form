@@ -83,8 +83,8 @@ class NFormSubViewProperty : Serializable {
     @SerializedName("name")
     var name: String? = null
 
-    @SerializedName("label")
-    var label: String? = null
+    @SerializedName("text")
+    var text: String? = null
 
     @SerializedName("is_exclusive")
     var isExclusive: Boolean? = null

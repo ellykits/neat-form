@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.views.controls
+package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.support.v7.widget.AppCompatEditText

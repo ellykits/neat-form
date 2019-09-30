@@ -2,6 +2,7 @@ package com.nerdstone.neatformcore.utils
 
 import android.content.Context
 import android.util.TypedValue
+import com.nerdstone.neatformcore.domain.view.NFormView
 import java.util.*
 
 
@@ -20,5 +21,11 @@ object Utils {
     fun extractKeyValue(key: String): Pair<String, String> {
         val keyDataType = ViewUtils.splitText(key, ":")
         return Pair(keyDataType.first().trim(), keyDataType.last().trim())
+    }
+
+    fun isFieldRequired(nFormView: NFormView): Boolean {
+        val isRequired = extractKeyValue(nFormView.viewProperties.requiredStatus!!)
+            .first.toLowerCase()
+        return isRequired == "yes" || isRequired == "true"
     }
 }

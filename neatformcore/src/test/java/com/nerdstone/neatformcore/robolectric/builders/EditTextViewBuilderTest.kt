@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
-import com.nerdstone.neatformcore.views.controls.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.After

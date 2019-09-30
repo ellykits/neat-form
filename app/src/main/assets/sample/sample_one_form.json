@@ -67,6 +67,79 @@
           },
           "required_status": "yes:Please specify your marital status",
           "subjects": "age:number"
+        },
+        {
+          "name": "choose_language",
+          "type": "multi_choice_checkbox",
+          "properties": {
+            "text": "Pick the languages you are proficient in."
+          },
+          "options": [
+            {
+              "name": "eng",
+              "text" : "English",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123123123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "french",
+              "text" : "French",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123123123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "kisw",
+              "text" : "Kiswahili",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123123123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "spanish",
+              "text" : "Español",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A918928912",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "none",
+              "text" : "None of the above",
+              "is_exclusive": true,
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123123123123",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify your languages",
+          "subjects": "age:number"
+        },
+        {
+          "name": "language_none",
+          "type": "edit_text",
+          "properties": {
+            "hint": "Specify your language",
+            "type": "name",
+            "text_size": "20"
+          },
+          "meta_data": {
+            "openmrs_entity": "",
+            "openmrs_entity_id": "",
+            "openmrs_entity_parent": ""
+          },
+          "required_status": "true:Please specify language",
+          "subjects": "choose_language:text"
         }
       ]
     }

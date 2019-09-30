@@ -171,7 +171,7 @@ class `Test passing JSON files` {
                 "   \"name\": \"gender\",\n" +
                 "   \"type\": \"multi_choice_checkbox\",\n" +
                 "   \"properties\": {\n" +
-                "      \"label\": \"Select your gender\"\n" +
+                "      \"text\": \"Select your gender\"\n" +
                 "   },\n" +
                 "   \"meta_data\": {\n" +
                 "      \"openmrs_entity\": \"\",\n" +
@@ -181,7 +181,7 @@ class `Test passing JSON files` {
                 "   \"options\": [\n" +
                 "      {\n" +
                 "         \"name\": \"female\",\n" +
-                "         \"label\": \"Female\",\n" +
+                "         \"text\": \"Female\",\n" +
                 "         \"is_exclusive\": false,\n" +
                 "         \"metadata\": {\n" +
                 "            \"openmrs_entity\": \"120192AAAAAAAAAAAAAA\",\n" +
@@ -191,7 +191,7 @@ class `Test passing JSON files` {
                 "      },\n" +
                 "      {\n" +
                 "         \"name\": \"male\",\n" +
-                "         \"label\": \"Male\",\n" +
+                "         \"text\": \"Male\",\n" +
                 "         \"is_exclusive\": false,\n" +
                 "         \"metadata\": {\n" +
                 "            \"openmrs_entity\": \"120191AAAAAAAAAAAAAA\",\n" +
@@ -247,9 +247,9 @@ class `Test passing JSON files` {
         val property = nForm!!.steps[4].fields[1]
         assertEquals(property.options!!.size.toLong(), 2)
         assertEquals(property.options!![0].name, "female")
-        assertEquals(property.options!![0].label, "Female")
+        assertEquals(property.options!![0].text, "Female")
         assertEquals(property.options!![1].name, "male")
-        assertEquals(property.options!![1].label, "Male")
+        assertEquals(property.options!![1].text, "Male")
         assertEquals(property.options!![0].viewMetadata!!.size.toLong(), 3)
         assertEquals(property.options!![1].viewMetadata!!.size.toLong(), 3)
     }

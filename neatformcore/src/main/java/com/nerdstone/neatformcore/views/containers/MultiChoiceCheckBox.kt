@@ -13,15 +13,19 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
-    override val viewBuilder: ViewBuilder
-        get() = TODO("not implemented")
 
+    override val viewBuilder: ViewBuilder = MultiChoiceCheckBoxViewBuilder(this)
     override var dataActionListener: DataActionListener? = null
     override val viewDetails: NFormViewDetails
         get() = NFormViewDetails(this)
+
+    init {
+        orientation = VERTICAL
+    }
 
     override val viewData: NFormViewData
         get() = NFormViewData()
@@ -38,12 +42,11 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override fun initView(
         viewProperty: NFormViewProperty,
         viewDispatcher: ViewDispatcher
-    ): NFormView = ViewUtils.setupView(this, viewProperty, viewBuilder, viewDispatcher )
+    ): NFormView = ViewUtils.setupView(this, viewProperty, viewBuilder, viewDispatcher)
 
     override fun setOnDataPassListener(dataActionListener: DataActionListener) {
         if (this.dataActionListener == null) this.dataActionListener = dataActionListener
     }
-
 
     override fun mapViewIdToName(rulesHandler: RulesHandler) {
         id = View.generateViewId()

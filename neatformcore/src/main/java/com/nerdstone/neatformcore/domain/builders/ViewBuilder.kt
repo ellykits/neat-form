@@ -10,4 +10,6 @@ interface ViewBuilder {
 
     fun buildView()
 
+    fun setViewProperties(attribute: Map.Entry<String, Any>)
+
 }

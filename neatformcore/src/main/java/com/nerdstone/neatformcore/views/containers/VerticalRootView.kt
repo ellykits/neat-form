@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class VerticalRootView : LinearLayout, RootView {
+
     init {
         orientation = VERTICAL
     }
@@ -23,7 +24,13 @@ class VerticalRootView : LinearLayout, RootView {
 
     override fun initRootView(): RootView = this
 
-    override fun addChild(nFormView: NFormView) = this.addView(nFormView.viewDetails.view)
+    override fun addChild(nFormView: NFormView) {
+        val view = nFormView.viewDetails.view
+        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        params.bottomMargin = 20
+        view.layoutParams = params
+        this.addView(view)
+    }
 
     override fun addChildren(
         viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher

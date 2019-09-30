@@ -5,7 +5,7 @@ import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.controls.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import java.util.*
 
 class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -20,42 +20,44 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     }
 
     override fun buildView() {
-        editTextNFormView.viewProperties.viewAttributes?.forEach { attribute ->
-            if (acceptedAttributes.contains(attribute.key.toUpperCase())) {
-                editTextNFormView.apply {
-                    when (attribute.key.toUpperCase()) {
-                        EditTextProperties.HINT.name -> {
-                            hint = SpannableStringBuilder(attribute.value as String)
-                            formatHintForRequiredFields(editTextNFormView)
-                        }
-
-                        EditTextProperties.PADDING.name -> {
-                            val value = Utils.pxToDp(
-                                (attribute.value as String).toFloat(),
-                                editTextNFormView.context
-                            )
-                            setPadding(value, value, value, value)
-                        }
-
-                        EditTextProperties.TEXT_SIZE.name ->
-                            textSize = (attribute.value as String).toFloat()
-
-                        EditTextProperties.TEXT.name ->
-                            setText(attribute.value.toString())
-
-                    }
-                }
-            }
-        }
+        ViewUtils.applyViewAttributes(
+            nFormView = editTextNFormView,
+            acceptedAttributes = acceptedAttributes,
+            task = this::setViewProperties
+        )
     }
 
     private fun formatHintForRequiredFields(editTextNFormView: EditTextNFormView) {
         if (editTextNFormView.viewProperties.requiredStatus != null) {
-            val isRequired =
-                Utils.extractKeyValue(editTextNFormView.viewProperties.requiredStatus!!)
-                    .first.toLowerCase()
-            if (isRequired == "yes" || isRequired == "true") {
-                ViewUtils.appendRedAsteriskToHint(editTextNFormView)
+            if (Utils.isFieldRequired(editTextNFormView)) {
+                editTextNFormView.hint =
+                    ViewUtils.addRedAsteriskSuffix(editTextNFormView.hint.toString())
+            }
+        }
+    }
+
+    override fun setViewProperties(attribute: Map.Entry<String, Any>) {
+        editTextNFormView.apply {
+            when (attribute.key.toUpperCase()) {
+                EditTextProperties.HINT.name -> {
+                    hint = SpannableStringBuilder(attribute.value as String)
+                    formatHintForRequiredFields(editTextNFormView)
+                }
+
+                EditTextProperties.PADDING.name -> {
+                    val value = Utils.pxToDp(
+                        (attribute.value as String).toFloat(),
+                        editTextNFormView.context
+                    )
+                    setPadding(value, value, value, value)
+                }
+
+                EditTextProperties.TEXT_SIZE.name ->
+                    textSize = (attribute.value as String).toFloat()
+
+                EditTextProperties.TEXT.name ->
+                    setText(attribute.value.toString())
+
             }
         }
     }
