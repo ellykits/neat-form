@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.os.Build
+import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
@@ -11,6 +12,7 @@ import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -66,8 +68,6 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             ) {
                 text = ViewUtils.addRedAsteriskSuffix(label.text.toString())
             }
-
-
         }
         multiChoiceCheckBox.addView(label)
     }
@@ -86,7 +86,45 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             text = nFormSubViewProperty.text
             setTag(R.id.field_name, nFormSubViewProperty.name)
             ViewUtils.applyCheckBoxStyle(multiChoiceCheckBox.context, checkBox)
+            setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    multiChoiceCheckBox.viewDetails.value =
+                        mutableMapOf(buttonView.getTag(R.id.field_name) to buttonView.text.toString())
+                    handleExclusiveChecks(this)
+                } else {
+                    multiChoiceCheckBox.viewDetails.value =
+                        mutableMapOf(buttonView.getTag(R.id.field_name) to null)
+                }
+                multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
+            }
+            setTag(R.id.is_checkbox_option, true)
+            if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
+                setTag(R.id.is_exclusive_checkbox, true)
+            }
         }
         multiChoiceCheckBox.addView(checkBox)
     }
+
+    private fun handleExclusiveChecks(checkBox: CheckBox) {
+        val isExclusive = checkBox.getTag(R.id.is_exclusive_checkbox) as Boolean?
+        val checkBoxes =
+            ((checkBox.parent) as View).getViewsByTagValue(R.id.is_checkbox_option, true)
+
+        when (isExclusive) {
+            null, false -> checkBoxes.forEach { view ->
+                if (view is CheckBox && view.getTag(R.id.is_exclusive_checkbox) != null &&
+                    view.getTag(R.id.is_exclusive_checkbox) == true
+                ) {
+                    view.isChecked = false
+                }
+            }
+            else -> checkBoxes.forEach { view ->
+                if (view is CheckBox && view.getTag(R.id.field_name) != checkBox.getTag(R.id.field_name) && isExclusive == true) {
+                    view.isChecked = false
+                }
+            }
+        }
+    }
 }
+
+

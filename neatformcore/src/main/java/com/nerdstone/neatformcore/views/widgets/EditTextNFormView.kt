@@ -17,23 +17,22 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
+    override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
     override var viewDetails: NFormViewDetails = NFormViewDetails(this)
-    override lateinit var viewProperties: NFormViewProperty
-
-    override val viewData: NFormViewData
-        get() = NFormViewData()
-
-    override val nFormRootView: RootView
-        get() = this.parent as RootView
+    override val viewData get() = NFormViewData()
+    override val nFormRootView get() = this.parent as RootView
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher)
-            : NFormView = ViewUtils.setupView(this, viewProperty, viewBuilder, viewDispatcher)
+            : NFormView {
+        ViewUtils.setupView(this, viewProperty, viewDispatcher)
+        return this
+    }
 
     override fun mapViewIdToName(rulesHandler: RulesHandler) {
         id = View.generateViewId()

@@ -81,7 +81,7 @@ class NFormViewProperty : Serializable {
 class NFormSubViewProperty : Serializable {
 
     @SerializedName("name")
-    var name: String? = null
+    lateinit var name: String
 
     @SerializedName("text")
     var text: String? = null

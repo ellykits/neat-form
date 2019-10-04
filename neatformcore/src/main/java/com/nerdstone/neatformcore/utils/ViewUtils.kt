@@ -8,7 +8,6 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.CheckBox
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
@@ -70,17 +69,16 @@ object ViewUtils {
     }
 
     fun setupView(
-        nFormView: NFormView, viewProperty: NFormViewProperty, viewBuilder: ViewBuilder,
+        nFormView: NFormView, viewProperty: NFormViewProperty,
         viewDispatcher: ViewDispatcher
-    ): NFormView {
+    ) {
         nFormView.viewProperties = viewProperty
         nFormView.viewDetails.name = viewProperty.name
         nFormView.viewDetails.metadata = viewProperty.viewMetadata
         nFormView.viewDetails.subjects = splitText(viewProperty.subjects, ",")
         nFormView.mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
         nFormView.setOnDataPassListener(viewDispatcher)
-        viewBuilder.buildView()
-        return nFormView
+        nFormView.viewBuilder.buildView()
     }
 
     fun applyViewAttributes(
@@ -97,7 +95,7 @@ object ViewUtils {
         }
     }
 
-    fun applyCheckBoxStyle(context: Context, checkBox: CheckBox){
+    fun applyCheckBoxStyle(context: Context, checkBox: CheckBox) {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> checkBox.setTextAppearance(R.style.checkBoxStyle)
             else -> checkBox.setTextAppearance(context, R.style.checkBoxStyle)

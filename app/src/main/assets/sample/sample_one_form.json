@@ -103,8 +103,9 @@
               }
             },
             {
-              "name": "spanish",
-              "text" : "Español",
+              "name": "need_help",
+              "text" : "Help me choose",
+              "is_exclusive": true,
               "meta_data": {
                 "openmrs_entity": "",
                 "openmrs_entity_id": "A918928912",
