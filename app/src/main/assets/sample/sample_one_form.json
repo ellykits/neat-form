@@ -56,7 +56,7 @@
             "openmrs_entity_parent": ""
           },
           "required_status": "yes:Please add age",
-          "subjects": "age:number, adult:text"
+          "subjects": "age:number, adult:text, email_subscription:map"
         },
         {
           "name": "email_subscription",
@@ -124,7 +124,7 @@
             }
           ],
           "required_status": "yes:Please specify your languages",
-          "subjects": "age:number"
+          "subjects": "email_subscription:map"
         },
         {
           "name": "language_none",
@@ -140,7 +140,7 @@
             "openmrs_entity_parent": ""
           },
           "required_status": "true:Please specify language",
-          "subjects": "choose_language:text"
+          "subjects": "choose_language:map"
         }
       ]
     }

@@ -124,6 +124,8 @@ class RulesFactory private constructor() : RuleListener {
             DataTypes.BOOL.name -> facts.put(key, false)
             DataTypes.NUMBER.name -> facts.put(key, 0)
             DataTypes.TEXT.name -> facts.put(key, "")
+            DataTypes.LIST.name -> facts.put(key, listOf<Any>())
+            DataTypes.MAP.name -> facts.put(key, linkedMapOf<Any, Any>())
         }
     }
 
@@ -135,7 +137,7 @@ class RulesFactory private constructor() : RuleListener {
     }
 
     enum class DataTypes {
-        TEXT, BOOL, NUMBER
+        TEXT, BOOL, NUMBER, LIST, MAP
     }
 
     enum class RulesFileType {

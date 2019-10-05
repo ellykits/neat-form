@@ -27,3 +27,17 @@ priority: 1
 condition: "age > 18"
 actions:
   - "email_subscription_visibility =  true"
+---
+name: "language_none_visibility"
+description: "Specify language if none is chosen"
+priority: 1
+condition: "choose_language['none'] != null"
+actions:
+  - "language_none_visibility =  true"
+---
+name: "choose_language_visibility"
+description: "Ask the user the languages they are proficient in"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "choose_language_visibility =  true"

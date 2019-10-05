@@ -18,6 +18,7 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
+    private val valuesMap = mutableMapOf<String, String?>()
 
     enum class MultiChoiceCheckBoxProperties {
         TEXT
@@ -95,7 +96,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                     multiChoiceCheckBox.viewDetails.value =
                         mutableMapOf(buttonView.getTag(R.id.field_name) to null)
                 }
-                multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
+                handleCheckBoxValues(this)
             }
             setTag(R.id.is_checkbox_option, true)
             if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
@@ -105,6 +106,26 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         multiChoiceCheckBox.addView(checkBox)
     }
 
+    /**
+     * Save the name of the checkbox option plus the label as key-value pair when the checkbox
+     * is selected
+     */
+    private fun handleCheckBoxValues(checkBox: CheckBox) {
+        val nameTag = checkBox.getTag(R.id.field_name) as String
+        if (checkBox.isChecked) {
+            valuesMap[nameTag] = checkBox.text.toString()
+        } else {
+            valuesMap[nameTag] = null
+        }
+
+        multiChoiceCheckBox.viewDetails.value = valuesMap
+        multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
+    }
+
+    /**
+     * Example is when you have an option called  'none' and you do not want select it with the
+     * other options.
+     */
     private fun handleExclusiveChecks(checkBox: CheckBox) {
         val isExclusive = checkBox.getTag(R.id.is_exclusive_checkbox) as Boolean?
         val checkBoxes =
