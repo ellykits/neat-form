@@ -48,4 +48,15 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
         id = View.generateViewId()
         rulesHandler.viewIdsMap[this.viewProperties.name] = id
     }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+        resetValueWhenHidden()
+    }
+
+    override fun resetValueWhenHidden() {
+        if (visibility == View.GONE) {
+            viewBuilder.resetCheckBoxValues()
+        }
+    }
 }

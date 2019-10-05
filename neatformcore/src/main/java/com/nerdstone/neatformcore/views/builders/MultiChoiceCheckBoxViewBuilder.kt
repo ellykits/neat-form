@@ -128,8 +128,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
      */
     private fun handleExclusiveChecks(checkBox: CheckBox) {
         val isExclusive = checkBox.getTag(R.id.is_exclusive_checkbox) as Boolean?
-        val checkBoxes =
-            ((checkBox.parent) as View).getViewsByTagValue(R.id.is_checkbox_option, true)
+        val checkBoxes = (checkBox.parent as View).getViewsByTagValue(R.id.is_checkbox_option, true)
 
         when (isExclusive) {
             null, false -> checkBoxes.forEach { view ->
@@ -143,6 +142,16 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                 if (view is CheckBox && view.getTag(R.id.field_name) != checkBox.getTag(R.id.field_name) && isExclusive == true) {
                     view.isChecked = false
                 }
+            }
+        }
+    }
+
+    fun resetCheckBoxValues() {
+        val checkBoxes =
+            ((multiChoiceCheckBox) as View).getViewsByTagValue(R.id.is_checkbox_option, true)
+        checkBoxes.forEach { view ->
+            if (view is CheckBox && view.isChecked) {
+                view.isChecked = false
             }
         }
     }

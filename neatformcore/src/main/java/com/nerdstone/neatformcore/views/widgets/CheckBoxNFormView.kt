@@ -56,6 +56,16 @@ class CheckBoxNFormView : CheckBox, NFormView {
             }
             it.onPassData(viewDetails)
         }
+    }
 
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+        resetValueWhenHidden()
+    }
+
+    override fun resetValueWhenHidden() {
+        if (visibility == View.GONE && isChecked) {
+            isChecked = false
+        }
     }
 }

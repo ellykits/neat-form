@@ -27,4 +27,5 @@ interface NFormView {
 
     fun mapViewIdToName(rulesHandler: RulesHandler)
 
+    fun resetValueWhenHidden()
 }

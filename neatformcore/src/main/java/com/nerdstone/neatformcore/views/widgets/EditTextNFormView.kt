@@ -55,4 +55,15 @@ class EditTextNFormView : AppCompatEditText, NFormView {
             }
         }
     }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+        resetValueWhenHidden()
+    }
+    
+    override fun resetValueWhenHidden() {
+        if (visibility == View.GONE) {
+            setText("")
+        }
+    }
 }

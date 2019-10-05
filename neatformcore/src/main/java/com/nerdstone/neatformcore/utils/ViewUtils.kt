@@ -72,13 +72,17 @@ object ViewUtils {
         nFormView: NFormView, viewProperty: NFormViewProperty,
         viewDispatcher: ViewDispatcher
     ) {
+        //Set view properties
         nFormView.viewProperties = viewProperty
         nFormView.viewDetails.name = viewProperty.name
         nFormView.viewDetails.metadata = viewProperty.viewMetadata
         nFormView.viewDetails.subjects = splitText(viewProperty.subjects, ",")
+
+        //Add listener and build view
         nFormView.mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
         nFormView.setOnDataPassListener(viewDispatcher)
         nFormView.viewBuilder.buildView()
+
     }
 
     fun applyViewAttributes(
