@@ -17,6 +17,7 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
+
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
@@ -60,7 +61,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         super.setVisibility(visibility)
         resetValueWhenHidden()
     }
-    
+
     override fun resetValueWhenHidden() {
         if (visibility == View.GONE) {
             setText("")
