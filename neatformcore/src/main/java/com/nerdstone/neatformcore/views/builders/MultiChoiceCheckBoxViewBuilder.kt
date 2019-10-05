@@ -148,7 +148,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
 
     fun resetCheckBoxValues() {
         val checkBoxes =
-            ((multiChoiceCheckBox) as View).getViewsByTagValue(R.id.is_checkbox_option, true)
+            (multiChoiceCheckBox as View).getViewsByTagValue(R.id.is_checkbox_option, true)
         checkBoxes.forEach { view ->
             if (view is CheckBox && view.isChecked) {
                 view.isChecked = false
