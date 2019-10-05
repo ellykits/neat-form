@@ -66,9 +66,11 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                 EditTextProperties.TEXT_SIZE.name ->
                     textSize = (attribute.value as String).toFloat()
 
-                EditTextProperties.TEXT.name ->
+                EditTextProperties.TEXT.name -> {
                     setText(attribute.value.toString())
-
+                    requestFocus()
+                    editTextNFormView.dataActionListener?.onPassData(editTextNFormView.viewDetails)
+                }
             }
         }
     }

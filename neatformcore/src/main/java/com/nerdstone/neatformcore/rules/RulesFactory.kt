@@ -76,7 +76,7 @@ class RulesFactory private constructor() : RuleListener {
         facts.put(currentViewDetails.name, currentViewDetails.value)
     }
 
-    private fun fireRules() {
+    fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
         rulesHandler.hideOrShowViews(facts)
     }
