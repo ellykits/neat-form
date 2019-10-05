@@ -4,6 +4,8 @@ object Constants {
 
     object ViewType {
         const val EDIT_TEXT = "edit_text"
+        const val MULTI_CHOICE_CHECKBOX = "multi_choice_checkbox"
+        const val CHECKBOX = "checkbox"
     }
 
     object RuleActions {

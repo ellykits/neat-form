@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="field_name" type="id"/>
+  <item name="is_checkbox_option" type="id"/>
+  <item name="is_exclusive_checkbox" type="id"/>
+</resources>

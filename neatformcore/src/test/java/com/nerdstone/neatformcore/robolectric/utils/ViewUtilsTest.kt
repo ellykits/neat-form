@@ -28,7 +28,7 @@ class `Test View Utils with Robolectric` {
             spyk(AppCompatEditText(RuntimeEnvironment.systemContext), recordPrivateCalls = false)
         mockEditText.hint = "Am a required hint"
         val originalHintLength = mockEditText.hint.toString().length
-        ViewUtils.appendRedAsteriskToHint(mockEditText)
+        mockEditText.hint = ViewUtils.addRedAsteriskSuffix(mockEditText.hint.toString())
         val finalHintLength = mockEditText.hint.toString().length
         Assert.assertEquals(originalHintLength + 2, finalHintLength)
         Assert.assertTrue(mockEditText.hint.toString().endsWith("*"))

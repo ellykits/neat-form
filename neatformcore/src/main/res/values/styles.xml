@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="multiChoiceCheckBoxLabelStyle" parent="android:Widget.TextView">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/colorBlack</item>
+    <item name="android:textSize">@dimen/defaultTextSize</item>
+    <item name="android:layout_marginBottom">@dimen/verticalMargin</item>
+  </style>
+
+  <style name="checkBoxStyle" parent="android:Widget.CompoundButton.CheckBox">
+    <item name="android:textSize">@dimen/defaultTextSize</item>
+    <item name="android:layout_marginStart">0dp</item>
+  </style>
+</resources>

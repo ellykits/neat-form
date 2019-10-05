@@ -5,7 +5,7 @@ import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.robolectric.utils.TestConstants
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
-import com.nerdstone.neatformcore.views.controls.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import org.junit.Assert
 import org.junit.Before

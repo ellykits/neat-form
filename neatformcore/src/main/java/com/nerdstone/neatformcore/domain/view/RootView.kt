@@ -14,6 +14,4 @@ interface RootView {
 
     fun addChildren(viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher)
 
-    fun setupView()
-
 }

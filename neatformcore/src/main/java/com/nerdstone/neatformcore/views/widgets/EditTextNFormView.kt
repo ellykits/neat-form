@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.views.controls
+package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.support.v7.widget.AppCompatEditText
@@ -17,40 +17,21 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
-    private var dataActionListener: DataActionListener? = null
-    private val editTextBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
-    override var viewDetails: NFormViewDetails = NFormViewDetails(this)
+
     override lateinit var viewProperties: NFormViewProperty
+    override var dataActionListener: DataActionListener? = null
+    override val viewBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
+    override var viewDetails: NFormViewDetails = NFormViewDetails(this)
+    override val viewData get() = NFormViewData()
+    override val nFormRootView get() = this.parent as RootView
 
-    override val viewData: NFormViewData
-        get() = NFormViewData()
+    constructor(context: Context) : super(context)
 
-    override val nFormRootView: RootView
-        get() = this.parent as RootView
-
-    constructor(context: Context) : super(context) {
-        setupView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        setupView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-        context, attrs, defStyleAttr
-    ) {
-        setupView()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher)
             : NFormView {
-
-        this.viewProperties = viewProperty
-        viewDetails.name = viewProperty.name
-        viewDetails.subjects = ViewUtils.splitText(viewProperty.subjects, ",")
-        editTextBuilder.buildView()
-        mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
-        setOnDataPassListener(viewDispatcher)
+        ViewUtils.setupView(this, viewProperty, viewDispatcher)
         return this
     }
 
@@ -60,13 +41,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
     }
 
     override fun setOnDataPassListener(dataActionListener: DataActionListener) {
-        if (this.dataActionListener == null) {
-            this.dataActionListener = dataActionListener
-        }
-    }
-
-    override fun setupView() {
-        //overridden
+        if (this.dataActionListener == null) this.dataActionListener = dataActionListener
     }
 
     override fun onTextChanged(
@@ -79,6 +54,17 @@ class EditTextNFormView : AppCompatEditText, NFormView {
                 this.viewDetails.value = text.toString()
                 it.onPassData(viewDetails)
             }
+        }
+    }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+        resetValueWhenHidden()
+    }
+
+    override fun resetValueWhenHidden() {
+        if (visibility == View.GONE) {
+            setText("")
         }
     }
 }
