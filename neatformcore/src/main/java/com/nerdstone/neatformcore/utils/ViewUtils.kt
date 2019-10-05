@@ -82,7 +82,7 @@ object ViewUtils {
         nFormView.mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
         nFormView.setOnDataPassListener(viewDispatcher)
         nFormView.viewBuilder.buildView()
-
+        nFormView.viewDetails.view.isFocusableInTouchMode = true
     }
 
     fun applyViewAttributes(

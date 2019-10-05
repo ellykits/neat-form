@@ -17,11 +17,20 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
         TEXT
     }
 
-    override fun buildView() = ViewUtils.applyViewAttributes(
-        nFormView = checkBoxNFormView,
-        acceptedAttributes = acceptedAttributes,
-        task = this::setViewProperties
-    )
+    override fun buildView() {
+        ViewUtils.applyViewAttributes(
+            nFormView = checkBoxNFormView,
+            acceptedAttributes = acceptedAttributes,
+            task = this::setViewProperties
+        )
+
+        if (checkBoxNFormView.viewProperties.requiredStatus != null
+            && Utils.isFieldRequired(checkBoxNFormView)
+        ) {
+            checkBoxNFormView.text =
+                ViewUtils.addRedAsteriskSuffix(checkBoxNFormView.text.toString())
+        }
+    }
 
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {

@@ -1,12 +1,15 @@
 package com.nerdstone.neatformcore.views.builders
 
+import android.content.Context
 import android.text.SpannableStringBuilder
+import android.view.inputmethod.InputMethodManager
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import java.util.*
+
 
 class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
@@ -25,6 +28,14 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
+        //Hide keyboard when focus is lost
+        editTextNFormView.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                val inputMethodManager =
+                    editTextNFormView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+        }
     }
 
     private fun formatHintForRequiredFields(editTextNFormView: EditTextNFormView) {

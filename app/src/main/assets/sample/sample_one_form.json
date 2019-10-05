@@ -65,7 +65,7 @@
             "text": "Subscribe to email notifications",
             "text_size": "20"
           },
-          "required_status": "yes:Please specify your marital status",
+          "required_status": "yes:Please specify if you want subscription",
           "subjects": "age:number"
         },
         {

@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
+import android.view.View
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
@@ -61,6 +62,12 @@ class `Test building EditText view` {
         editTextViewBuilder.buildView()
         Assert.assertTrue(editTextNFormView.paddingBottom == 12 && editTextNFormView.paddingTop == 12)
         Assert.assertTrue(editTextNFormView.paddingEnd == 12 && editTextNFormView.paddingStart == 12)
+    }
+
+    @Test
+    fun `Should reset the EditText value when visibility is gone`() {
+        editTextNFormView.visibility = View.GONE
+        Assert.assertTrue(editTextNFormView.text.toString().isEmpty())
     }
 
     @After

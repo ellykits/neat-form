@@ -139,6 +139,15 @@ class `Test Rules Engine functionality` {
 
     }
 
+    @Test
+    fun `Test whether view with skip logic rules defined are hidden when you first load the form`() {
+        //If this view has a rule to handle its visibility then by default set it's visibility
+        //To false when you first launch the form until when rules are fired
+        view.visibility = View.VISIBLE
+        rulesHandler.hideViewsInitially(rulesFactory.allRules)
+        Assert.assertTrue(view.visibility == View.GONE)
+    }
+
     @After
     fun `After everything else`() {
         unmockkAll()

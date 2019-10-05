@@ -90,9 +90,7 @@ actions:
 
 Here is a an example of ```EditText``` Generated from the above JSON.
 
-|      Screen 1                              |    Screen 2                                                    |
-|:----------------------------------------------:|:-----------------------------------------------------------------:|
-| <img src="pics/edit_text_1.png" height="960" width="540" /> |
+<img src="pics/edit_text_1.png" height="480" width="270" /> 
 
 
 ## Built With
