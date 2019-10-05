@@ -5,7 +5,8 @@
   <dimen name="verticalMargin">8dp</dimen>
   <dimen name="defaultMargin">8dp</dimen>
 
-  <!-- TextView Defaults -->
-  <dimen name="defaultTextSize">20sp</dimen>
+  <!-- Defaults -->
+  <dimen name="defaultTextSize">18sp</dimen>
+  <dimen name="editTextSize">18sp</dimen>
 
 </resources>

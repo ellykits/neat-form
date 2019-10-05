@@ -1,8 +1,10 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.content.Context
+import android.os.Build
 import android.text.SpannableStringBuilder
 import android.view.inputmethod.InputMethodManager
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
@@ -49,6 +51,10 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         editTextNFormView.apply {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.editTextStyle)
+            else setTextAppearance(editTextNFormView.context, R.style.editTextStyle)
+
             when (attribute.key.toUpperCase()) {
                 EditTextProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)

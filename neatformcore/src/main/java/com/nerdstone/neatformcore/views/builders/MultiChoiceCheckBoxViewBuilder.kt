@@ -49,20 +49,15 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         val label = TextView(multiChoiceCheckBox.context)
         label.apply {
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.multiChoiceCheckBoxLabelStyle)
+            else setTextAppearance(multiChoiceCheckBox.context, R.style.multiChoiceCheckBoxLabelStyle)
+
             layoutParams = ViewGroup.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
 
             text = attribute.value.toString()
-
-            when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> setTextAppearance(R.style.multiChoiceCheckBoxLabelStyle)
-                else -> setTextAppearance(
-                    multiChoiceCheckBox.context,
-                    R.style.multiChoiceCheckBoxLabelStyle
-                )
-            }
 
             if (multiChoiceCheckBox.viewProperties.requiredStatus != null
                 && Utils.isFieldRequired(multiChoiceCheckBox)

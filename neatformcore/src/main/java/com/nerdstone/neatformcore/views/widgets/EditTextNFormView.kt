@@ -17,7 +17,6 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
-
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder: EditTextViewBuilder = EditTextViewBuilder(this)

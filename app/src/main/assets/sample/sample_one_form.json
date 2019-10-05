@@ -14,7 +14,6 @@
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text_size": "20",
             "text": "Catch me if you can"
           },
           "meta_data": {
@@ -32,9 +31,7 @@
           "properties": {
             "hint": "Enter your age (will be multiplied by 10)",
             "type": "name",
-            "text_size": "18.6",
-            "padding": "8",
-            "text": "9"
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -48,8 +45,7 @@
           "type": "edit_text",
           "properties": {
             "hint": "I am a child",
-            "type": "name",
-            "text_size": "20"
+            "type": "name"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -63,8 +59,7 @@
           "name": "email_subscription",
           "type": "checkbox",
           "properties": {
-            "text": "Subscribe to email notifications",
-            "text_size": "20"
+            "text": "Subscribe to email notifications"
           },
           "required_status": "yes:Please specify if you want subscription",
           "subjects": "age:number"
@@ -132,8 +127,7 @@
           "type": "edit_text",
           "properties": {
             "hint": "Specify your language",
-            "type": "name",
-            "text_size": "20"
+            "type": "name"
           },
           "meta_data": {
             "openmrs_entity": "",
