@@ -31,9 +31,10 @@ class FormActivity : AppCompatActivity() {
 
         formBuilder = JsonFormBuilder(mainLayout)
 
-        if (intent.extras != null && intent.extras.getString("path") != null) {
-            val path = intent.extras.getString("path")
-            val pageTitle = intent.extras.getString("page").capitalizeWords()
+        if (intent.extras != null) {
+
+            val path = intent?.extras?.getString("path") ?: ""
+            val pageTitle = intent?.extras?.getString("page")?.capitalizeWords()
 
             pageTitleTextView.text = pageTitle
             compositeDisposable.add(AssetFile()
