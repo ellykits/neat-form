@@ -27,7 +27,7 @@ class VerticalRootView : LinearLayout, RootView {
     override fun addChild(nFormView: NFormView) {
         val view = nFormView.viewDetails.view
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        params.bottomMargin = 20
+        params.bottomMargin = 24
         view.layoutParams = params
         this.addView(view)
     }

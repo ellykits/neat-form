@@ -35,12 +35,12 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         checkBoxNFormView.apply {
+            ViewUtils.applyCheckBoxStyle(checkBoxNFormView.context, checkBoxNFormView)
             when (attribute.key.toUpperCase()) {
                 CheckBoxProperties.TEXT.name -> {
                     text = attribute.value.toString()
                 }
             }
-            ViewUtils.applyCheckBoxStyle(checkBoxNFormView.context, checkBoxNFormView)
         }
     }
 }

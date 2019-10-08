@@ -55,9 +55,11 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
             .forEach { key ->
                 facts?.let {
-                    val value = facts.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}")
-                    val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)
-                    changeVisibility(value, view)
+                    val value = it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}")
+                    if (viewIdsMap.containsKey(key)) {
+                        viewIdsMap[key]?.let { id -> formBuilder.mainLayout.findViewById<View>(id) }
+                            ?.also { view -> changeVisibility(value, view) }
+                    }
                 }
             }
     }
