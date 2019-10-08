@@ -8,10 +8,9 @@ import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 
 class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
-    private val checkBoxNFormView: CheckBoxNFormView = nFormView as CheckBoxNFormView
+    private val checkBoxNFormView = nFormView as CheckBoxNFormView
 
-    override val acceptedAttributes: HashSet<String> =
-        Utils.convertEnumToSet(CheckBoxProperties::class.java)
+    override val acceptedAttributes = Utils.convertEnumToSet(CheckBoxProperties::class.java)
 
     enum class CheckBoxProperties {
         TEXT

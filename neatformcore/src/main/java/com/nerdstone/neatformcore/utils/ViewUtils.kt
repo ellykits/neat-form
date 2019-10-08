@@ -17,6 +17,7 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import java.util.*
 
 object ViewUtils {
@@ -42,6 +43,10 @@ object ViewUtils {
                 ViewType.CHECKBOX ->
                     rootView.addChild(
                         CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
+                    )
+                ViewType.SPINNER ->
+                    rootView.addChild(
+                        SpinnerNFormView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
@@ -84,7 +89,6 @@ object ViewUtils {
         viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] = nFormView.viewDetails.view.id
         nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
-        nFormView.viewDetails.view.isFocusableInTouchMode = true
     }
 
     fun applyViewAttributes(

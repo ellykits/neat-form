@@ -17,8 +17,8 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
-    override val viewBuilder: EditTextViewBuilder = EditTextViewBuilder(this)
-    override var viewDetails: NFormViewDetails = NFormViewDetails(this)
+    override val viewBuilder = EditTextViewBuilder(this)
+    override var viewDetails = NFormViewDetails(this)
     override val nFormRootView get() = this.parent as RootView
 
     constructor(context: Context) : super(context)

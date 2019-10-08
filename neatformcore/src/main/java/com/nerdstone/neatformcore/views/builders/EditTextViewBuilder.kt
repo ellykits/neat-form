@@ -10,15 +10,13 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-import java.util.*
 
 
 class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
-    private val editTextNFormView: EditTextNFormView = nFormView as EditTextNFormView
+    private val editTextNFormView = nFormView as EditTextNFormView
 
-    override val acceptedAttributes: HashSet<String> =
-        Utils.convertEnumToSet(EditTextProperties::class.java)
+    override val acceptedAttributes = Utils.convertEnumToSet(EditTextProperties::class.java)
 
     enum class EditTextProperties {
         HINT, PADDING, TEXT_SIZE, TEXT

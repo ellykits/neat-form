@@ -65,6 +65,39 @@
           "subjects": "age:number"
         },
         {
+          "name": "gender",
+          "type": "spinner",
+          "properties": {
+            "text": "Choose your gender"
+          },
+          "options": [
+            {
+              "name": "none",
+              "text": "Select gender"
+            },
+            {
+              "name": "female",
+              "text": "Female",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123390123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "male",
+              "text": "Male",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "S8918313",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "subjects": "email_subscription:map",
+          "required_status": "yes:Please specify your gender"
+        },
+        {
           "name": "choose_language",
           "type": "multi_choice_checkbox",
           "properties": {
@@ -120,7 +153,7 @@
             }
           ],
           "required_status": "yes:Please specify your languages",
-          "subjects": "email_subscription:map"
+          "subjects": "email_subscription:map, gender:text"
         },
         {
           "name": "language_none",

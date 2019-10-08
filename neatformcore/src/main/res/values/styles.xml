@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="multiChoiceCheckBoxLabelStyle" parent="android:Widget.TextView">
-    <item name="android:textStyle">normal</item>
+  <style name="labelStyle" parent="android:Widget.TextView">
+    <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/colorDark</item>
     <item name="android:textSize">@dimen/defaultTextSize</item>
     <item name="android:layout_marginBottom">@dimen/verticalMargin</item>
@@ -15,7 +15,7 @@
   </style>
 
   <style name="editTextStyle" parent="android:Widget.EditText">
-    <item name="android:textSize">@dimen/editTextSize</item>
+    <item name="android:textSize">@dimen/defaultTextSize</item>
     <item name="android:layout_marginStart">0dp</item>
     <item name="android:paddingEnd">8dp</item>
     <item name="android:paddingStart">8dp</item>
