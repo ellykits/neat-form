@@ -6,6 +6,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.CheckBox
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -79,8 +80,9 @@ object ViewUtils {
         nFormView.viewDetails.subjects = splitText(viewProperty.subjects, ",")
 
         //Add listener and build view
-        nFormView.mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
-        nFormView.setOnDataPassListener(viewDispatcher)
+        nFormView.viewDetails.view.id = View.generateViewId()
+        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] = nFormView.viewDetails.view.id
+        nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
         nFormView.viewDetails.view.isFocusableInTouchMode = true
     }
