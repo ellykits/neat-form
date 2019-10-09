@@ -197,7 +197,18 @@ object TestConstants {
                       "text": "Don't know"
                     }
                   ],
-                  "required_status": "yes:Wiki contribution field is required."
+                  "required_status": "yes:Wiki contribution field is required.",
+                  "subjects": "email_subscription:map, gender:text"
+                },
+                {
+                  "name": "wiki_contribution_yes",
+                  "type": "edit_text",
+                  "properties": {
+                    "hint": "What was your contribution?",
+                    "type": "name"
+                  },
+                  "required_status": "true:Please specify your contributions",
+                  "subjects": "wiki_contribution:map"
                 }
               ]
             }
