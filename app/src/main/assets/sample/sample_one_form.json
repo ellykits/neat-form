@@ -22,7 +22,7 @@
             "openmrs_entity_parent": ""
           },
           "validation": "length() < 8; !contains(@)",
-          "subjects": "age:number, child:text",
+          "subjects": "age:number, child:text, dob:number",
           "required_status": "True:please add username"
         },
         {
@@ -207,7 +207,9 @@
           "name": "dob",
           "type": "datetime_picker",
           "properties": {
-            "hint": "Enter birth date"
+            "hint": "Enter birth date",
+            "type": "date_picker",
+            "display_format": "d/MM/YY"
           },
           "required_status": "true:Please specify your dob"
         }

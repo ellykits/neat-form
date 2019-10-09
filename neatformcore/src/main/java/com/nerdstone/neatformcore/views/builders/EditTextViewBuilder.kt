@@ -1,9 +1,7 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.content.Context
 import android.os.Build
 import android.text.SpannableStringBuilder
-import android.view.inputmethod.InputMethodManager
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -30,11 +28,9 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             task = this::setViewProperties
         )
         //Hide keyboard when focus is lost
-        editTextNFormView.setOnFocusChangeListener { v, hasFocus ->
+        editTextNFormView.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val inputMethodManager =
-                    editTextNFormView.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
+                Utils.hideSoftKeyBoard(editTextNFormView)
             }
         }
     }

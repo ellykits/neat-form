@@ -14,6 +14,12 @@
     <item name="android:textColor">@color/colorBlack</item>
   </style>
 
+  <style name="radioButtonStyle" parent="android:Widget.CompoundButton.RadioButton">
+    <item name="android:textSize">@dimen/defaultTextSize</item>
+    <item name="android:layout_marginStart">0dp</item>
+    <item name="android:textColor">@color/colorBlack</item>
+  </style>
+
   <style name="editTextStyle" parent="android:Widget.EditText">
     <item name="android:textSize">@dimen/defaultTextSize</item>
     <item name="android:layout_marginStart">0dp</item>
