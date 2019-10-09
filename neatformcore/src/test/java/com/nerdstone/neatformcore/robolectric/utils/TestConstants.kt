@@ -3,7 +3,7 @@ package com.nerdstone.neatformcore.robolectric.utils
 object TestConstants {
     private const val SAMPLE_DIR = "sample/"
     const val SAMPLE_ONE_FORM_FILE = SAMPLE_DIR + "sample_one_form.json"
-    const val SAMPLE_JSON ="{\n" +
+    const val SAMPLE_JSON = "{\n" +
             "  \"form\": \"Profile\",\n" +
             "  \"is_multi_step\": true,\n" +
             "  \"rules_file\": \"rules/yml/sample_one_form_rules.yml\",\n" +
@@ -70,6 +70,39 @@ object TestConstants {
             "          \"subjects\": \"age:number\"\n" +
             "        },\n" +
             "        {\n" +
+            "          \"name\": \"gender\",\n" +
+            "          \"type\": \"spinner\",\n" +
+            "          \"properties\": {\n" +
+            "            \"text\": \"Choose your gender\"\n" +
+            "          },\n" +
+            "          \"options\": [\n" +
+            "            {\n" +
+            "              \"name\": \"none\",\n" +
+            "              \"text\": \"Select gender\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "              \"name\": \"female\",\n" +
+            "              \"text\": \"Female\",\n" +
+            "              \"meta_data\": {\n" +
+            "                \"openmrs_entity\": \"\",\n" +
+            "                \"openmrs_entity_id\": \"A123390123123\",\n" +
+            "                \"openmrs_entity_parent\": \"\"\n" +
+            "              }\n" +
+            "            },\n" +
+            "            {\n" +
+            "              \"name\": \"male\",\n" +
+            "              \"text\": \"Male\",\n" +
+            "              \"meta_data\": {\n" +
+            "                \"openmrs_entity\": \"\",\n" +
+            "                \"openmrs_entity_id\": \"S8918313\",\n" +
+            "                \"openmrs_entity_parent\": \"\"\n" +
+            "              }\n" +
+            "            }\n" +
+            "          ],\n" +
+            "          \"subjects\": \"email_subscription:map\",\n" +
+            "          \"required_status\": \"yes:Please specify your gender\"\n" +
+            "        },\n" +
+            "        {\n" +
             "          \"name\": \"choose_language\",\n" +
             "          \"type\": \"multi_choice_checkbox\",\n" +
             "          \"properties\": {\n" +
@@ -125,7 +158,7 @@ object TestConstants {
             "            }\n" +
             "          ],\n" +
             "          \"required_status\": \"yes:Please specify your languages\",\n" +
-            "          \"subjects\": \"email_subscription:map\"\n" +
+            "          \"subjects\": \"email_subscription:map, gender:text\"\n" +
             "        },\n" +
             "        {\n" +
             "          \"name\": \"language_none\",\n" +
