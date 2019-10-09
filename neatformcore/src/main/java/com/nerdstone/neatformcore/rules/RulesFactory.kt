@@ -76,7 +76,7 @@ class RulesFactory private constructor() : RuleListener {
         facts.put(currentViewDetails.name, currentViewDetails.value)
     }
 
-    fun fireRules() {
+    private fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
         rulesHandler.hideOrShowViews(facts)
     }
@@ -123,7 +123,7 @@ class RulesFactory private constructor() : RuleListener {
         when (dataType.toUpperCase()) {
             DataTypes.BOOL.name -> facts.put(key, false)
             DataTypes.NUMBER.name -> facts.put(key, 0)
-            DataTypes.TEXT.name -> facts.put(key, "")
+            DataTypes.TEXT.name -> facts.put(key, null)
             DataTypes.LIST.name -> facts.put(key, listOf<Any>())
             DataTypes.MAP.name -> facts.put(key, linkedMapOf<Any, Any>())
         }

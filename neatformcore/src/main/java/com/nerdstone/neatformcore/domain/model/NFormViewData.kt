@@ -8,6 +8,5 @@ import java.io.Serializable
 class NFormViewData : Serializable {
     var name: String? = null
     var value: Any? = null
-    var label: String? = null
     var metadata: Map<String, Any>? = null
 }

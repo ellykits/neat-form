@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.views.containers
+package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
@@ -10,15 +10,15 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
+import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
-class MultiChoiceCheckBox : LinearLayout, NFormView {
+class SpinnerNFormView : LinearLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
-    override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
-    override val viewDetails = NFormViewDetails(this)
+    override val viewBuilder = SpinnerViewBuilder(this)
+    override var viewDetails = NFormViewDetails(this)
     override val nFormRootView get() = this.parent as RootView
 
     init {
@@ -27,11 +27,10 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun initView(
-        viewProperty: NFormViewProperty,
-        viewDispatcher: ViewDispatcher
+        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
         ViewUtils.setupView(this, viewProperty, viewDispatcher)
         return this
@@ -44,7 +43,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() {
         if (visibility == View.GONE) {
-            viewBuilder.resetCheckBoxValues()
+            viewBuilder.resetSpinnerValue()
         }
     }
 }

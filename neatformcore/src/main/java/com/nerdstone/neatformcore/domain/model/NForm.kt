@@ -84,7 +84,7 @@ class NFormSubViewProperty : Serializable {
     lateinit var name: String
 
     @SerializedName("text")
-    var text: String? = null
+    lateinit var text: String
 
     @SerializedName("is_exclusive")
     var isExclusive: Boolean? = null

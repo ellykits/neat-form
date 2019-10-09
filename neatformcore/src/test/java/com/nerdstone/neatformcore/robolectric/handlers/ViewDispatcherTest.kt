@@ -2,8 +2,8 @@ package com.nerdstone.neatformcore.robolectric.handlers
 
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.rules.RulesFactory
-import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.*
 import org.junit.After
 import org.junit.Before

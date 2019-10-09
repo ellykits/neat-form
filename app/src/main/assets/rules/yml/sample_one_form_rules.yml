@@ -38,6 +38,13 @@ actions:
 name: "choose_language_visibility"
 description: "Ask the user the languages they are proficient in"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "gender == 'Female'"
 actions:
   - "choose_language_visibility =  true"
+---
+name: "gender_visibility"
+description: "Ask gender"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "gender_visibility =  true"

@@ -6,6 +6,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.CheckBox
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -16,6 +17,7 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import java.util.*
 
 object ViewUtils {
@@ -41,6 +43,10 @@ object ViewUtils {
                 ViewType.CHECKBOX ->
                     rootView.addChild(
                         CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
+                    )
+                ViewType.SPINNER ->
+                    rootView.addChild(
+                        SpinnerNFormView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
@@ -79,10 +85,10 @@ object ViewUtils {
         nFormView.viewDetails.subjects = splitText(viewProperty.subjects, ",")
 
         //Add listener and build view
-        nFormView.mapViewIdToName(viewDispatcher.rulesFactory.rulesHandler)
-        nFormView.setOnDataPassListener(viewDispatcher)
+        nFormView.viewDetails.view.id = View.generateViewId()
+        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] = nFormView.viewDetails.view.id
+        nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
-        nFormView.viewDetails.view.isFocusableInTouchMode = true
     }
 
     fun applyViewAttributes(

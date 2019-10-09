@@ -24,8 +24,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         TEXT
     }
 
-    override val acceptedAttributes: HashSet<String>
-        get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
+    override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
 
 
     override fun buildView() {
@@ -49,8 +48,11 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         val label = TextView(multiChoiceCheckBox.context)
         label.apply {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.multiChoiceCheckBoxLabelStyle)
-            else setTextAppearance(multiChoiceCheckBox.context, R.style.multiChoiceCheckBoxLabelStyle)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
+            else setTextAppearance(
+                multiChoiceCheckBox.context,
+                R.style.labelStyle
+            )
 
             layoutParams = ViewGroup.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
