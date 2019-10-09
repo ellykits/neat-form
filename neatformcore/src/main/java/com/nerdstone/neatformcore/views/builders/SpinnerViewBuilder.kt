@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import java.util.*
 
 class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
@@ -35,7 +36,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         materialSpinner.apply {
-            when (attribute.key.toUpperCase()) {
+            when (attribute.key.toUpperCase(Locale.getDefault())) {
                 SpinnerProperties.TEXT.name -> createLabel(attribute)
             }
         }
