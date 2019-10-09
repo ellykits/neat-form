@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import java.util.*
 
 
 class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -53,7 +54,7 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.editTextStyle)
             else setTextAppearance(editTextNFormView.context, R.style.editTextStyle)
 
-            when (attribute.key.toUpperCase()) {
+            when (attribute.key.toUpperCase(Locale.getDefault())) {
                 EditTextProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
                     formatHintForRequiredFields(editTextNFormView)

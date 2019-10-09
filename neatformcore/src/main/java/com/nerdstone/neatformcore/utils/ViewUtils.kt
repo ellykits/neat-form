@@ -14,6 +14,7 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
@@ -47,6 +48,10 @@ object ViewUtils {
                 ViewType.SPINNER ->
                     rootView.addChild(
                         SpinnerNFormView(context).initView(viewProperty, viewDispatcher)
+                    )
+                ViewType.RADIO_GROUP ->
+                    rootView.addChild(
+                        RadioGroupView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
@@ -86,7 +91,8 @@ object ViewUtils {
 
         //Add listener and build view
         nFormView.viewDetails.view.id = View.generateViewId()
-        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] = nFormView.viewDetails.view.id
+        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] =
+            nFormView.viewDetails.view.id
         nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
     }
@@ -98,7 +104,7 @@ object ViewUtils {
     ) {
         if (nFormView.viewProperties.viewAttributes != null) {
             nFormView.viewProperties.viewAttributes?.forEach { attribute ->
-                if (acceptedAttributes.contains(attribute.key.toUpperCase())) {
+                if (acceptedAttributes.contains(attribute.key.toUpperCase(Locale.getDefault()))) {
                     task(attribute)
                 }
             }
