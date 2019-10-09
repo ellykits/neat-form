@@ -4,7 +4,7 @@ object TestConstants {
     private const val SAMPLE_DIR = "sample/"
     const val SAMPLE_ONE_FORM_FILE = SAMPLE_DIR + "sample_one_form.json"
     const val SAMPLE_JSON =
-        """ 
+        """
         {
           "form": "Profile",
           "is_multi_step": true,
