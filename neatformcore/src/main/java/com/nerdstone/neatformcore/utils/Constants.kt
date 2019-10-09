@@ -8,6 +8,7 @@ object Constants {
         const val MULTI_CHOICE_CHECKBOX = "multi_choice_checkbox"
         const val CHECKBOX = "checkbox"
         const val RADIO_GROUP = "radio_group"
+        const val DATETIME_PICKER = "datetime_picker"
     }
 
     object RuleActions {

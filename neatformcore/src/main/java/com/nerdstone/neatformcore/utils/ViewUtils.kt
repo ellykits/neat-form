@@ -17,6 +17,7 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
+import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import java.util.*
@@ -52,6 +53,10 @@ object ViewUtils {
                 ViewType.RADIO_GROUP ->
                     rootView.addChild(
                         RadioGroupView(context).initView(viewProperty, viewDispatcher)
+                    )
+                ViewType.DATETIME_PICKER ->
+                    rootView.addChild(
+                        DateTimePickerNFormView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
