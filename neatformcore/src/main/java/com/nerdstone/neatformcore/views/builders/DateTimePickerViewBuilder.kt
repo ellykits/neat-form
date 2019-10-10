@@ -1,8 +1,10 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.support.design.widget.TextInputEditText
 import android.widget.DatePicker
+import android.widget.TimePicker
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -14,13 +16,14 @@ import java.util.*
 
 
 class DateTimePickerViewBuilder(override val nFormView: NFormView) :
-    DatePickerDialog.OnDateSetListener, ViewBuilder {
+    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
     private var dateDisplayFormat = "YYYY-MM-dd"
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
     private val textInputEditText = TextInputEditText(dateTimePickerNFormView.context)
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
     private val selectedDate = Calendar.getInstance()
+    private val calendar = Calendar.getInstance()
 
     enum class DateTimePickerProperties {
         HINT, TYPE, DISPLAY_FORMAT
@@ -39,9 +42,6 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
         )
 
         dateTimePickerNFormView.addView(textInputEditText)
-        textInputEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            0, 0, R.drawable.ic_today, 0
-        )
         textInputEditText.compoundDrawablePadding = 8
         textInputEditText.isFocusable = false
     }
@@ -55,11 +55,17 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
                 DateTimePickerProperties.TYPE.name -> {
                     when {
                         attribute.value.toString() == DatePickerType.DATE_PICKER -> {
+                            textInputEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                0, 0, R.drawable.ic_today, 0
+                            )
                             textInputEditText.setOnClickListener {
                                 launchDatePickerDialog()
                             }
                         }
                         attribute.value.toString() == DatePickerType.TIME_PICKER -> {
+                            textInputEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                0, 0, R.drawable.ic_schedule, 0
+                            )
                             textInputEditText.setOnClickListener {
                                 launchTimePickerDialog()
                             }
@@ -74,8 +80,6 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     }
 
     private fun launchDatePickerDialog() {
-
-        val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
@@ -87,11 +91,29 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     }
 
     private fun launchTimePickerDialog() {
-
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val isTwentyFourHour = false
+        val timePickerDialog =
+            TimePickerDialog(dateTimePickerNFormView.context, this, hour, minute, isTwentyFourHour)
+        timePickerDialog.show()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         selectedDate.set(year, month, dayOfMonth)
+        textInputEditText.setText(getFormattedDate())
+        dateTimePickerNFormView.viewDetails.value = selectedDate.timeInMillis
+        dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        selectedDate.set(
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH),
+            hourOfDay,
+            minute
+        )
         textInputEditText.setText(getFormattedDate())
         dateTimePickerNFormView.viewDetails.value = selectedDate.timeInMillis
         dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
@@ -102,5 +124,4 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
             dateDisplayFormat,
             Locale.getDefault()
         ).format(Date(selectedDate.timeInMillis))
-
 }

@@ -209,9 +209,19 @@
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "d/MM/YY"
+            "display_format": "dd/MM/YYYY"
           },
           "required_status": "true:Please specify your dob"
+        },
+        {
+          "name": "time",
+          "type": "datetime_picker",
+          "properties": {
+            "hint": "Enter time you clocked in",
+            "type": "time_picker",
+            "display_format": "hh:m a"
+          },
+          "required_status": "true:Please specify the time you clocked in"
         }
       ]
     }
