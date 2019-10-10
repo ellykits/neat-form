@@ -5,13 +5,13 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
+import java.util.*
 
 class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
-    private val checkBoxNFormView: CheckBoxNFormView = nFormView as CheckBoxNFormView
+    private val checkBoxNFormView = nFormView as CheckBoxNFormView
 
-    override val acceptedAttributes: HashSet<String> =
-        Utils.convertEnumToSet(CheckBoxProperties::class.java)
+    override val acceptedAttributes = Utils.convertEnumToSet(CheckBoxProperties::class.java)
 
     enum class CheckBoxProperties {
         TEXT
@@ -36,7 +36,7 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         checkBoxNFormView.apply {
             ViewUtils.applyCheckBoxStyle(checkBoxNFormView.context, checkBoxNFormView)
-            when (attribute.key.toUpperCase()) {
+            when (attribute.key.toUpperCase(Locale.getDefault())) {
                 CheckBoxProperties.TEXT.name -> {
                     text = attribute.value.toString()
                 }

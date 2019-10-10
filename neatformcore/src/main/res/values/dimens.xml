@@ -7,6 +7,6 @@
 
   <!-- Defaults -->
   <dimen name="defaultTextSize">18sp</dimen>
-  <dimen name="editTextSize">18sp</dimen>
+  <dimen name="defaultPadding">8dp</dimen>
 
 </resources>

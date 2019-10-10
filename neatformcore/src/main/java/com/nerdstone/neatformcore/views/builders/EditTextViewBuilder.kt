@@ -15,10 +15,9 @@ import java.util.*
 
 class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
-    private val editTextNFormView: EditTextNFormView = nFormView as EditTextNFormView
+    private val editTextNFormView = nFormView as EditTextNFormView
 
-    override val acceptedAttributes: HashSet<String> =
-        Utils.convertEnumToSet(EditTextProperties::class.java)
+    override val acceptedAttributes = Utils.convertEnumToSet(EditTextProperties::class.java)
 
     enum class EditTextProperties {
         HINT, PADDING, TEXT_SIZE, TEXT
@@ -55,7 +54,7 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.editTextStyle)
             else setTextAppearance(editTextNFormView.context, R.style.editTextStyle)
 
-            when (attribute.key.toUpperCase()) {
+            when (attribute.key.toUpperCase(Locale.getDefault())) {
                 EditTextProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
                     formatHintForRequiredFields(editTextNFormView)
