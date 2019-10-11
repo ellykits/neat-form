@@ -82,6 +82,8 @@ class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
         val radioButton = RadioButton(radioGroupView.context)
         radioButton.apply {
             text = nFormSubViewProperty.text
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.radioButtonStyle)
+            else setTextAppearance(radioGroupView.context, R.style.radioButtonStyle)
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_radio_group_option, true)
             setOnCheckedChangeListener { radioButton, isChecked ->
@@ -91,7 +93,6 @@ class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                     handleExclusiveChecks(this, radioButton.getTag(R.id.field_name) as String)
                     radioGroupView.dataActionListener?.onPassData(radioGroupView.viewDetails)
                 }
-
             }
         }
 

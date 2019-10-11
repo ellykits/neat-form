@@ -52,6 +52,9 @@ android {
             }
         }
     }
+    configurations.all {
+        resolutionStrategy.force 'com.google.android.material:material:1.0.0'
+    }
 }
 
 dependencies {
@@ -80,6 +83,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation "org.robolectric:shadows-multidex:3.8"
+    testImplementation 'androidx.test:core:1.2.0'
     testImplementation "android.arch.persistence.room:testing:$room_version"
     testImplementation "io.mockk:mockk:$mockKVersion"
 

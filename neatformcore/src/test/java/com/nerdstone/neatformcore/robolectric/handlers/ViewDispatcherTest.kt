@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.handlers
 
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -11,9 +12,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test View Dispacher action` {
 
     private val viewProperty = NFormViewProperty()
