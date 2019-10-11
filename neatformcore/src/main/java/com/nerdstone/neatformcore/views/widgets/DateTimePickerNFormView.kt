@@ -32,7 +32,14 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
         return this
     }
 
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+        resetValueWhenHidden()
+    }
+
     override fun resetValueWhenHidden() {
-        TODO("not implemented")
+        if (visibility == GONE) {
+            viewBuilder.resetDatetimePickerValue()
+        }
     }
 }

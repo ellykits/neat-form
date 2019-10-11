@@ -1,8 +1,10 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.widget.LinearLayout
+import androidx.test.core.app.ApplicationProvider
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.robolectric.utils.TestConstants
+import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
@@ -17,8 +19,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test building form with JSON` {
 
     private val mainLayout: LinearLayout = LinearLayout(RuntimeEnvironment.systemContext)
@@ -49,7 +53,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should create views with the parsed form`() {
-        jsonFormBuilder.createFormViews(RuntimeEnvironment.application)
+        jsonFormBuilder.createFormViews(ApplicationProvider.getApplicationContext())
         //Main layout has on element: VerticalRootView
         Assert.assertTrue(mainLayout.childCount == 1)
         Assert.assertTrue(mainLayout.getChildAt(0) is VerticalRootView)

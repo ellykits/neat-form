@@ -20,10 +20,10 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
 
     private var dateDisplayFormat = "YYYY-MM-dd"
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
-    private val textInputEditText = TextInputEditText(dateTimePickerNFormView.context)
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
     private val selectedDate = Calendar.getInstance()
     private val calendar = Calendar.getInstance()
+    val textInputEditText = TextInputEditText(dateTimePickerNFormView.context)
 
     enum class DateTimePickerProperties {
         HINT, TYPE, DISPLAY_FORMAT
@@ -51,6 +51,7 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 DateTimePickerProperties.HINT.name -> {
                     hint = attribute.value.toString()
+                    formatHintForRequiredFields()
                 }
                 DateTimePickerProperties.TYPE.name -> {
                     when {
@@ -75,6 +76,15 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
                 DateTimePickerProperties.DISPLAY_FORMAT.name -> {
                     dateDisplayFormat = attribute.value.toString()
                 }
+            }
+        }
+    }
+
+    private fun formatHintForRequiredFields() {
+        if (dateTimePickerNFormView.viewProperties.requiredStatus != null) {
+            if (Utils.isFieldRequired(dateTimePickerNFormView)) {
+                textInputEditText.hint =
+                    ViewUtils.addRedAsteriskSuffix(textInputEditText.hint.toString())
             }
         }
     }
@@ -124,4 +134,10 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
             dateDisplayFormat,
             Locale.getDefault()
         ).format(Date(selectedDate.timeInMillis))
+
+    fun resetDatetimePickerValue() {
+        textInputEditText.setText("")
+        dateTimePickerNFormView.viewDetails.value = null
+        dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
+    }
 }

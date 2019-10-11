@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.utils
 
 import android.util.TypedValue
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.utils.Utils
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -13,8 +14,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test Utils with Robolectric` {
     @Before
     fun `Before everything else`() {

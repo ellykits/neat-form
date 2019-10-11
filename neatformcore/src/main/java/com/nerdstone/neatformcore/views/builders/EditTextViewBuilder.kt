@@ -35,7 +35,7 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
         }
     }
 
-    private fun formatHintForRequiredFields(editTextNFormView: EditTextNFormView) {
+    private fun formatHintForRequiredFields() {
         if (editTextNFormView.viewProperties.requiredStatus != null) {
             if (Utils.isFieldRequired(editTextNFormView)) {
                 editTextNFormView.hint =
@@ -53,7 +53,7 @@ class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 EditTextProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
-                    formatHintForRequiredFields(editTextNFormView)
+                    formatHintForRequiredFields()
                 }
 
                 EditTextProperties.PADDING.name -> {

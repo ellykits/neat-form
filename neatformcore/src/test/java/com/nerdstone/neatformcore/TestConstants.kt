@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.robolectric.utils
+package com.nerdstone.neatformcore
 
 object TestConstants {
     private const val SAMPLE_DIR = "sample/"

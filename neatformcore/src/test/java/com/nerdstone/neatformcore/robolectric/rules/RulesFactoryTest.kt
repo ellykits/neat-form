@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.rules
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
@@ -23,9 +24,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test Rules Engine functionality` {
 
     private val view: View = View(RuntimeEnvironment.systemContext)

@@ -2,7 +2,9 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import android.widget.TextView
+import androidx.test.core.app.ApplicationProvider
 import com.jaredrummler.materialspinner.MaterialSpinner
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
@@ -15,16 +17,17 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test building Spinner view` {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val spinnerOption1 = spyk(NFormSubViewProperty())
     private val spinnerOption2 = spyk(NFormSubViewProperty())
     private val spinnerOption3 = spyk(NFormSubViewProperty())
-    private val spinnerNFormView = SpinnerNFormView(RuntimeEnvironment.application)
+    private val spinnerNFormView = SpinnerNFormView(ApplicationProvider.getApplicationContext())
     private val spinnerViewBuilder =
         spyk(objToCopy = SpinnerViewBuilder(spinnerNFormView), recordPrivateCalls = true)
 
