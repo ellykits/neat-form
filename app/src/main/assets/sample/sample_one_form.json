@@ -214,16 +214,6 @@
           "required_status": "true:Please specify your dob"
         },
         {
-          "name": "dob2",
-          "type": "datetime_picker",
-          "properties": {
-            "hint": "Enter birth date again",
-            "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
-          },
-          "required_status": "true:Please specify your dob"
-        },
-        {
           "name": "time",
           "type": "datetime_picker",
           "properties": {
@@ -232,16 +222,6 @@
             "display_format": "hh:m a"
           },
           "required_status": "true:Please specify the time you clocked in"
-        },
-        {
-          "name": "time",
-          "type": "datetime_picker",
-          "properties": {
-            "hint": "Enter time you clocked out",
-            "type": "time_picker",
-            "display_format": "hh:m a"
-          },
-          "required_status": "true:Please specify the time you clocked out"
         }
       ]
     }

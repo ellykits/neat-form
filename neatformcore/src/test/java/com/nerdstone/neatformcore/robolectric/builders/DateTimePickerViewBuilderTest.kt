@@ -6,10 +6,8 @@ import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
-import io.mockk.confirmVerified
 import io.mockk.spyk
 import io.mockk.unmockkAll
-import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -95,15 +93,27 @@ class `Test building DateTimePicker view` {
     }
 
     @Test
-    fun `Should launch date picker dialog when edit text is clicked`() {
+    fun `Should launch date picker dialog, display formatted time and update view details value`() {
         val hint = "Am a hint"
         val type = "date_picker"
         viewProperty.viewAttributes =
             hashMapOf("hint" to hint, "display_format" to "dd/MM/YYYY", "type" to type)
         dateTimePickerViewBuilder.buildView()
         dateTimePickerViewBuilder.textInputEditText.performClick()
-        verify { dateTimePickerViewBuilder invoke "launchDatePickerDialog" }
-        confirmVerified(dateTimePickerViewBuilder)
+        dateTimePickerViewBuilder.onDateSet(spyk(), 2019, 0,1)
+        Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.text.toString() == "01/01/2019")
+    }
+
+    @Test
+    fun `Should launch time picker dialog, display formatted time and update view details value`() {
+        val hint = "Am a hint"
+        val type = "time_picker"
+        viewProperty.viewAttributes =
+            hashMapOf("hint" to hint, "display_format" to "hh:m a", "type" to type)
+        dateTimePickerViewBuilder.buildView()
+        dateTimePickerViewBuilder.textInputEditText.performClick()
+        dateTimePickerViewBuilder.onTimeSet(spyk(), 11, 30)
+        Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.text.toString() == "11:30 AM")
     }
 
     @After

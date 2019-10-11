@@ -29,7 +29,7 @@ object TestConstants {
                     "openmrs_entity_parent": ""
                   },
                   "validation": "length() < 8; !contains(@)",
-                  "subjects": "age:number, child:text",
+                  "subjects": "age:number, child:text, dob:number",
                   "required_status": "True:please add username"
                 },
                 {
@@ -209,6 +209,26 @@ object TestConstants {
                   },
                   "required_status": "true:Please specify your contributions",
                   "subjects": "wiki_contribution:map"
+                },
+                {
+                  "name": "dob",
+                  "type": "datetime_picker",
+                  "properties": {
+                    "hint": "Enter birth date",
+                    "type": "date_picker",
+                    "display_format": "dd/MM/YYYY"
+                  },
+                  "required_status": "true:Please specify your dob"
+                },
+                {
+                  "name": "time",
+                  "type": "datetime_picker",
+                  "properties": {
+                    "hint": "Enter time you clocked in",
+                    "type": "time_picker",
+                    "display_format": "hh:m a"
+                  },
+                  "required_status": "true:Please specify the time you clocked in"
                 }
               ]
             }

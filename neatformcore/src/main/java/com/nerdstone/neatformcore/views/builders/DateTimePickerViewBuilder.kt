@@ -90,9 +90,9 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     }
 
     private fun launchDatePickerDialog() {
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        val year = selectedDate.get(Calendar.YEAR)
+        val month = selectedDate.get(Calendar.MONTH)
+        val dayOfMonth = selectedDate.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog =
             DatePickerDialog(dateTimePickerNFormView.context, this, year, month, dayOfMonth)
@@ -101,8 +101,8 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     }
 
     private fun launchTimePickerDialog() {
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val hour = selectedDate.get(Calendar.HOUR_OF_DAY)
+        val minute = selectedDate.get(Calendar.MINUTE)
         val isTwentyFourHour = false
         val timePickerDialog =
             TimePickerDialog(dateTimePickerNFormView.context, this, hour, minute, isTwentyFourHour)
