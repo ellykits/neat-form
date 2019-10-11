@@ -6,6 +6,7 @@ object Constants {
         const val EDIT_TEXT = "edit_text"
         const val MULTI_CHOICE_CHECKBOX = "multi_choice_checkbox"
         const val CHECKBOX = "checkbox"
+        const val TOASTERS_NOTES = "toaster_notes"
     }
 
     object RuleActions {

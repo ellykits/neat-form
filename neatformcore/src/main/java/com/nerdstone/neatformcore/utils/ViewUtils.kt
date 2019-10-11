@@ -16,31 +16,36 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.NotesNFormView
 import java.util.*
 
 object ViewUtils {
 
     fun createViews(
-        rootView: RootView, viewProperties: List<NFormViewProperty>,
-        context: Context, viewDispatcher: ViewDispatcher
+            rootView: RootView, viewProperties: List<NFormViewProperty>,
+            context: Context, viewDispatcher: ViewDispatcher
     ) {
 
         for (viewProperty in viewProperties) {
             viewDispatcher.rulesFactory
-                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+                    .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
 
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
                     rootView.addChild(
-                        EditTextNFormView(context).initView(viewProperty, viewDispatcher)
+                            EditTextNFormView(context).initView(viewProperty, viewDispatcher)
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
                     rootView.addChild(
-                        MultiChoiceCheckBox(context).initView(viewProperty, viewDispatcher)
+                            MultiChoiceCheckBox(context).initView(viewProperty, viewDispatcher)
                     )
                 ViewType.CHECKBOX ->
                     rootView.addChild(
-                        CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
+                            CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
+                    )
+                ViewType.TOASTERS_NOTES ->
+                    rootView.addChild(
+                            NotesNFormView(context).initView(viewProperty, viewDispatcher)
                     )
             }
         }
@@ -56,8 +61,8 @@ object ViewUtils {
         if (text.isNotEmpty()) {
             val textWithSuffix = SpannableString("$text *")
             textWithSuffix.setSpan(
-                ForegroundColorSpan(Color.RED), textWithSuffix.length - 1, textWithSuffix.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ForegroundColorSpan(Color.RED), textWithSuffix.length - 1, textWithSuffix.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             return textWithSuffix
         }
@@ -69,8 +74,8 @@ object ViewUtils {
     }
 
     fun setupView(
-        nFormView: NFormView, viewProperty: NFormViewProperty,
-        viewDispatcher: ViewDispatcher
+            nFormView: NFormView, viewProperty: NFormViewProperty,
+            viewDispatcher: ViewDispatcher
     ) {
         //Set view properties
         nFormView.viewProperties = viewProperty
@@ -86,9 +91,9 @@ object ViewUtils {
     }
 
     fun applyViewAttributes(
-        nFormView: NFormView,
-        acceptedAttributes: HashSet<String>,
-        task: (attribute: Map.Entry<String, Any>) -> Unit
+            nFormView: NFormView,
+            acceptedAttributes: HashSet<String>,
+            task: (attribute: Map.Entry<String, Any>) -> Unit
     ) {
         if (nFormView.viewProperties.viewAttributes != null) {
             nFormView.viewProperties.viewAttributes?.forEach { attribute ->
