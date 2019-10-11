@@ -14,6 +14,7 @@ import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import java.util.*
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
@@ -24,8 +25,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         TEXT
     }
 
-    override val acceptedAttributes: HashSet<String>
-        get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
+    override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
 
 
     override fun buildView() {
@@ -38,7 +38,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
-        when (attribute.key.toUpperCase()) {
+        when (attribute.key.toUpperCase(Locale.getDefault())) {
             MultiChoiceCheckBoxProperties.TEXT.name -> {
                 createLabel(attribute)
             }
@@ -49,8 +49,11 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         val label = TextView(multiChoiceCheckBox.context)
         label.apply {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.multiChoiceCheckBoxLabelStyle)
-            else setTextAppearance(multiChoiceCheckBox.context, R.style.multiChoiceCheckBoxLabelStyle)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
+            else setTextAppearance(
+                multiChoiceCheckBox.context,
+                R.style.labelStyle
+            )
 
             layoutParams = ViewGroup.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -81,6 +84,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
         checkBox.apply {
             text = nFormSubViewProperty.text
             setTag(R.id.field_name, nFormSubViewProperty.name)
+            setTag(R.id.is_checkbox_option, true)
             ViewUtils.applyCheckBoxStyle(multiChoiceCheckBox.context, checkBox)
             setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
@@ -93,7 +97,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                 }
                 handleCheckBoxValues(this)
             }
-            setTag(R.id.is_checkbox_option, true)
+
             if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
                 setTag(R.id.is_exclusive_checkbox, true)
             }

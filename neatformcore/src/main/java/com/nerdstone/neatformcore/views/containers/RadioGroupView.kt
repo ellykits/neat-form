@@ -10,14 +10,14 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
+import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
-class MultiChoiceCheckBox : LinearLayout, NFormView {
+class RadioGroupView : LinearLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
-    override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
+    override val viewBuilder = RadioGroupViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override val nFormRootView get() = this.parent as RootView
 
@@ -44,7 +44,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() {
         if (visibility == View.GONE) {
-            viewBuilder.resetCheckBoxValues()
+            viewBuilder.resetRadioButtonsValue()
         }
     }
 }

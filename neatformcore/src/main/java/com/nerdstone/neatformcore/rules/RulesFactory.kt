@@ -20,6 +20,7 @@ import org.mvel2.CompileException
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.*
 
 class RulesFactory private constructor() : RuleListener {
 
@@ -76,7 +77,7 @@ class RulesFactory private constructor() : RuleListener {
         facts.put(currentViewDetails.name, currentViewDetails.value)
     }
 
-    fun fireRules() {
+    private fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
         rulesHandler.hideOrShowViews(facts)
     }
@@ -120,10 +121,10 @@ class RulesFactory private constructor() : RuleListener {
     }
 
     private fun setDefaultFact(key: String, dataType: String) {
-        when (dataType.toUpperCase()) {
+        when (dataType.toUpperCase(Locale.getDefault())) {
             DataTypes.BOOL.name -> facts.put(key, false)
             DataTypes.NUMBER.name -> facts.put(key, 0)
-            DataTypes.TEXT.name -> facts.put(key, "")
+            DataTypes.TEXT.name -> facts.put(key, null)
             DataTypes.LIST.name -> facts.put(key, listOf<Any>())
             DataTypes.MAP.name -> facts.put(key, linkedMapOf<Any, Any>())
         }

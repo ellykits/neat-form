@@ -65,6 +65,39 @@
           "subjects": "age:number"
         },
         {
+          "name": "gender",
+          "type": "spinner",
+          "properties": {
+            "text": "Choose your gender"
+          },
+          "options": [
+            {
+              "name": "none",
+              "text": "Select gender"
+            },
+            {
+              "name": "female",
+              "text": "Female",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123390123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "male",
+              "text": "Male",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "S8918313",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "subjects": "email_subscription:map",
+          "required_status": "yes:Please specify your gender"
+        },
+        {
           "name": "choose_language",
           "type": "multi_choice_checkbox",
           "properties": {
@@ -120,7 +153,7 @@
             }
           ],
           "required_status": "yes:Please specify your languages",
-          "subjects": "email_subscription:map"
+          "subjects": "email_subscription:map, gender:text"
         },
         {
           "name": "language_none",
@@ -136,6 +169,39 @@
           },
           "required_status": "true:Please specify language",
           "subjects": "choose_language:map"
+        },
+        {
+          "name": "wiki_contribution",
+          "type": "radio_group",
+          "properties": {
+            "text": "Have you ever contributed to or written a page in the Wiki?"
+          },
+          "options": [
+            {
+              "name": "yes",
+              "text": "Yes"
+            },
+            {
+              "name": "no",
+              "text": "No"
+            },
+            {
+              "name": "dont_know",
+              "text": "Don't know"
+            }
+          ],
+          "required_status": "yes:Wiki contribution field is required.",
+          "subjects": "email_subscription:map, gender:text"
+        },
+        {
+          "name": "wiki_contribution_yes",
+          "type": "edit_text",
+          "properties": {
+            "hint": "What was your contribution?",
+            "type": "name"
+          },
+          "required_status": "true:Please specify your contributions",
+          "subjects": "wiki_contribution:map"
         }
       ]
     }

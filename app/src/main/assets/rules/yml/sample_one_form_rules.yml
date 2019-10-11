@@ -38,6 +38,27 @@ actions:
 name: "choose_language_visibility"
 description: "Ask the user the languages they are proficient in"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "gender == 'Female'"
 actions:
   - "choose_language_visibility =  true"
+---
+name: "gender_visibility"
+description: "Ask gender"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "gender_visibility =  true"
+---
+name: "wiki_contribution_yes_visibility"
+description: "Ask contribution"
+priority: 1
+condition: "wiki_contribution != null && wiki_contribution['wiki_contribution'] == 'Yes'"
+actions:
+  - "wiki_contribution_yes_visibility = true"
+---
+name: "wiki_contribution_visibility"
+description: "Wiki contribution"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "wiki_contribution_visibility =  true"
