@@ -29,13 +29,29 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         MAX_VALUE, TEXT, FIRST_NUMBER, VISIBLE_NUMBERS
     }
 
+    object Constants {
+        const val FIRST_NUMBER = "first_number"
+        const val MAX_VALUE = "max_value"
+        const val VISIBLE_NUMBERS = "visible_numbers"
+    }
+
     override fun buildView() {
+        initNumbers()
         ViewUtils.applyViewAttributes(
             nFormView = numberSelectorNFormView,
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
     }
+
+    private fun initNumbers() {
+        numberSelectorNFormView.viewProperties.viewAttributes?.also {
+            firstNumber = it[Constants.FIRST_NUMBER].toString().toInt()
+            maxValue = it[Constants.MAX_VALUE].toString().toInt()
+            visibleNumbers = it[Constants.VISIBLE_NUMBERS].toString().toInt()
+        }
+    }
+
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {

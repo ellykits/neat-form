@@ -228,9 +228,9 @@
           "type": "number_selector",
           "properties": {
             "text": "Number of previous pregnancies",
+            "visible_numbers": "5",
             "max_value": "18",
-            "first_number": "1",
-            "visible_numbers": "5"
+            "first_number": "1"
           },
           "required_status": "no:Please specify the time you clocked in"
         }
