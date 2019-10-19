@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <!--Common -->
   <color name="colorBlack">#263238</color>
   <color name="colorDark">#212121</color>
   <color name="colorDarkGrey">#6C7066</color>
   <color name="colorWhite">#FFFFFF</color>
+
+  <!--Custom -->
+  <color name="numberSelectorItemDefault">#F0F3F7</color>
+  <color name="numberSelectorItemSelected">#278BC4</color>
 </resources>

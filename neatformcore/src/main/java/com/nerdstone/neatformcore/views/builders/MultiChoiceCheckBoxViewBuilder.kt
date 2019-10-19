@@ -1,11 +1,7 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.os.Build
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -40,43 +36,16 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
             MultiChoiceCheckBoxProperties.TEXT.name -> {
-                createLabel(attribute)
+                multiChoiceCheckBox.addView(ViewUtils.addViewLabel(attribute, multiChoiceCheckBox))
             }
         }
     }
-
-    private fun createLabel(attribute: Map.Entry<String, Any>) {
-        val label = TextView(multiChoiceCheckBox.context)
-        label.apply {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
-            else setTextAppearance(
-                multiChoiceCheckBox.context,
-                R.style.labelStyle
-            )
-
-            layoutParams = ViewGroup.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            text = attribute.value.toString()
-
-            if (multiChoiceCheckBox.viewProperties.requiredStatus != null
-                && Utils.isFieldRequired(multiChoiceCheckBox)
-            ) {
-                text = ViewUtils.addRedAsteriskSuffix(label.text.toString())
-            }
-        }
-        multiChoiceCheckBox.addView(label)
-    }
-
 
     private fun createMultipleCheckboxes() {
-        val options = multiChoiceCheckBox.viewProperties.options
-        options?.also {
-            options.forEach { createSingleCheckBox(it) }
-        }
+        multiChoiceCheckBox.viewProperties.options
+            ?.also { option ->
+                option.forEach { createSingleCheckBox(it) }
+            }
     }
 
     private fun createSingleCheckBox(nFormSubViewProperty: NFormSubViewProperty) {
@@ -146,13 +115,13 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     }
 
     fun resetCheckBoxValues() {
-        val checkBoxes =
-            (multiChoiceCheckBox as View).getViewsByTagValue(R.id.is_checkbox_option, true)
-        checkBoxes.forEach { view ->
-            if (view is CheckBox && view.isChecked) {
-                view.isChecked = false
+        (multiChoiceCheckBox as View).getViewsByTagValue(R.id.is_checkbox_option, true)
+            .map { it as CheckBox }
+            .forEach { view ->
+                if (view.isChecked) {
+                    view.isChecked = false
+                }
             }
-        }
     }
 }
 

@@ -1,6 +1,7 @@
 package com.nerdstone.neatform.form
 
 import android.os.Bundle
+import android.os.Debug
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -42,7 +43,9 @@ class FormActivity : AppCompatActivity() {
                 .subscribe(
                     { file ->
                         formBuilder?.also {
+                            Debug.startMethodTracing("readForm")
                             it.getForm(file)
+                            Debug.stopMethodTracing()
                             it.createFormViews(this)
                             it.registerFormRules(this, RulesFileType.YAML)
                         }
