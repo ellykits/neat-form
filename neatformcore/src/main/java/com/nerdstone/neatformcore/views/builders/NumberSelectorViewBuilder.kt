@@ -33,6 +33,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         const val FIRST_NUMBER = "first_number"
         const val MAX_VALUE = "max_value"
         const val VISIBLE_NUMBERS = "visible_numbers"
+        const val ANY_TAG = "any-tag"
     }
 
     override fun buildView() {
@@ -114,7 +115,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
                 setPadding(0, 20, 0, 20)
                 setOnClickListener {
                     setNumberSelectorBackground(this, true)
-                    resetNumberSelectorBackground(this)
+                    resetNumberSelectorBackground(getTag(R.id.number_selector_key) as String)
                     if (number == visibleNumbers) {
                         showPopupMenu(this)
                     } else {
@@ -166,12 +167,12 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         }
     }
 
-    private fun resetNumberSelectorBackground(item: TextView) {
+    private fun resetNumberSelectorBackground(tag: String) {
         (numberSelectorNFormView as View)
             .getViewsByTagValue(R.id.is_number_selector, true)
             .map { it as TextView }
             .forEach { view ->
-                if (view.getTag(R.id.number_selector_key) != item.getTag(R.id.number_selector_key)) {
+                if (view.getTag(R.id.number_selector_key) as String != tag) {
                     setNumberSelectorBackground(view, false)
                 }
             }
@@ -200,5 +201,10 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         numberSelectorNFormView.dataActionListener?.onPassData(numberSelectorNFormView.viewDetails)
     }
 
+    fun resetNumberSelectorValue() {
+        numberSelectorNFormView.viewDetails.value = null
+        numberSelectorNFormView.dataActionListener?.onPassData(numberSelectorNFormView.viewDetails)
+        resetNumberSelectorBackground(Constants.ANY_TAG)
+    }
 }
 

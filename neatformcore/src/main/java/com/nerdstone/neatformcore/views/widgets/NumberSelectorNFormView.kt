@@ -43,7 +43,7 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() {
         if (visibility == View.GONE) {
-           //Do something
+            viewBuilder.resetNumberSelectorValue()
         }
     }
 }
