@@ -117,6 +117,8 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
                     resetNumberSelectorBackground(this)
                     if (number == visibleNumbers) {
                         showPopupMenu(this)
+                    } else {
+                        passValue(this)
                     }
                 }
             }
@@ -175,7 +177,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
             }
     }
 
-    fun getValue(text: String): Int {
+    private fun getValue(text: String): Int {
         return text.replace("+", "").trim().toInt()
     }
 
@@ -187,9 +189,16 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         popupMenu.setOnMenuItemClickListener { item ->
             lastNumber = item.title.toString().toInt()
             textView.text = item.title
+            passValue(textView)
             return@setOnMenuItemClickListener true
         }
         popupMenu.show()
     }
+
+    private fun passValue(textView: TextView) {
+        numberSelectorNFormView.viewDetails.value = textView.text.toString().toInt()
+        numberSelectorNFormView.dataActionListener?.onPassData(numberSelectorNFormView.viewDetails)
+    }
+
 }
 
