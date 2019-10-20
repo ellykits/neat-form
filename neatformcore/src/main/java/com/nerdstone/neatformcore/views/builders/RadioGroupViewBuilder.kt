@@ -36,7 +36,7 @@ class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
             RadioGroupViewProperties.TEXT.name -> {
-                radioGroupView.addView(ViewUtils.addViewLabel(attribute, radioGroupView))
+                radioGroupView.addView(ViewUtils.addViewLabel(attribute.toPair(), radioGroupView))
             }
         }
     }

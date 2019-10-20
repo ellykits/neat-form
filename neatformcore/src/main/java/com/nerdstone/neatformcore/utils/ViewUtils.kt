@@ -127,7 +127,7 @@ object ViewUtils {
         }
     }
 
-    fun addViewLabel(attribute: Map.Entry<String, Any>, nFormView: NFormView): TextView {
+    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): TextView {
         val label = TextView((nFormView as View).context)
 
         label.apply {
@@ -140,7 +140,7 @@ object ViewUtils {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
 
-            text = attribute.value.toString()
+            text = attribute.second as String
 
             if (nFormView.viewProperties.requiredStatus != null
                 && Utils.isFieldRequired(nFormView)

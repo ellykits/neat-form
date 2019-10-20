@@ -9,10 +9,7 @@ import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
-import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
-import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
-import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import com.nerdstone.neatformcore.views.widgets.*
 import io.mockk.spyk
 import org.junit.Assert
 import org.junit.Before
@@ -60,7 +57,7 @@ class `Test building form with JSON` {
         Assert.assertTrue(mainLayout.getChildAt(0) is VerticalRootView)
         //VerticalRootView has 3 EditTextNFormView
         val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
-        Assert.assertTrue(verticalRootView.childCount == 11)
+        Assert.assertTrue(verticalRootView.childCount == 12)
         Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
         Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
         Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
@@ -74,5 +71,6 @@ class `Test building form with JSON` {
         val timePickerAttributes =
             (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
         Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
+        Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
     }
 }

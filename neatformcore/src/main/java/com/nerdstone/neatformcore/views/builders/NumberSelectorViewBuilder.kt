@@ -37,11 +37,25 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
     }
 
     override fun buildView() {
+        createLabel()
         initNumbers()
         ViewUtils.applyViewAttributes(
             nFormView = numberSelectorNFormView,
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
+        )
+    }
+
+    private fun createLabel() {
+        val text = numberSelectorNFormView.viewProperties.viewAttributes?.get(
+            NumberSelectorProperties.TEXT.name.toLowerCase(
+                Locale.getDefault()
+            )
+        )
+        numberSelectorNFormView.addView(
+            ViewUtils.addViewLabel(
+                Pair(NumberSelectorProperties.TEXT.name, text!!), numberSelectorNFormView
+            )
         )
     }
 
@@ -56,14 +70,6 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
-            NumberSelectorProperties.TEXT.name -> {
-                numberSelectorNFormView.addView(
-                    ViewUtils.addViewLabel(
-                        attribute,
-                        numberSelectorNFormView
-                    )
-                )
-            }
             NumberSelectorProperties.FIRST_NUMBER.name -> {
                 firstNumber = attribute.value.toString().toInt()
             }
@@ -84,8 +90,9 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
         (firstNumber..this.visibleNumbers).forEach { number ->
             val item = getNumberSelectorItem(number)
             if (this.visibleNumbers == 1) {
-                numberSelectorNFormView.addView(item)
                 setNumberSelectorBackground(item, false)
+                numberSelectorLayout.addView(item)
+                numberSelectorNFormView.addView(numberSelectorLayout)
                 return
             }
             setNumberSelectorBackground(item, false)
@@ -116,7 +123,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
                 setOnClickListener {
                     setNumberSelectorBackground(this, true)
                     resetNumberSelectorBackground(getTag(R.id.number_selector_key) as String)
-                    if (number == visibleNumbers) {
+                    if (number == visibleNumbers && maxValue > visibleNumbers) {
                         showPopupMenu(this)
                     } else {
                         passValue(this)

@@ -227,10 +227,10 @@
           "name": "no_prev_pregnancies",
           "type": "number_selector",
           "properties": {
-            "text": "Number of previous pregnancies",
-            "visible_numbers": "5",
-            "max_value": "18",
-            "first_number": "0"
+            "visible_numbers": "1",
+            "max_value": "1",
+            "first_number": "1",
+            "text": "Number of previous pregnancies"
           },
           "subjects": "email_subscription:map, gender:text",
           "required_status": "no:Please specify the time you clocked in"

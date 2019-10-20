@@ -36,7 +36,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 SpinnerProperties.TEXT.name -> spinnerNFormView.addView(
                     ViewUtils.addViewLabel(
-                        attribute,
+                        attribute.toPair(),
                         spinnerNFormView
                     )
                 )
