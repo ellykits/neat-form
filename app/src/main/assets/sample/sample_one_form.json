@@ -222,6 +222,46 @@
             "display_format": "hh:m a"
           },
           "required_status": "true:Please specify the time you clocked in"
+        },
+        {
+          "name": "no_prev_pregnancies",
+          "type": "number_selector",
+          "properties": {
+            "visible_numbers": "5",
+            "max_value": "10",
+            "first_number": "1",
+            "text": "Number of previous pregnancies"
+          },
+          "subjects": "email_subscription:map, gender:text",
+          "required_status": "no:Please specify the time you clocked in"
+        },
+        {
+          "name": "delivery_methods",
+          "type": "multi_choice_checkbox",
+          "properties": {
+            "text": "Previous delivery methods."
+          },
+          "options": [
+            {
+              "name": "vaginal",
+              "text": "Vaginal delivery",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A12312332123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "c-section",
+              "text": "C-Section",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A12123123123123",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "subjects": "no_prev_pregnancies:number"
         }
       ]
     }

@@ -54,7 +54,6 @@ class `Test building MultiChoiceCheckBox view` {
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
 
-        //Set EditText properties and assign EditText view builder
         multiChoiceCheckBox.viewProperties = viewProperty
     }
 

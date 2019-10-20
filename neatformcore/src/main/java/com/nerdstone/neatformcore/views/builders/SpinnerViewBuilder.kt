@@ -1,9 +1,6 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.os.Build
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.jaredrummler.materialspinner.MaterialSpinner
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
@@ -37,33 +34,14 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         materialSpinner.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
-                SpinnerProperties.TEXT.name -> createLabel(attribute)
+                SpinnerProperties.TEXT.name -> spinnerNFormView.addView(
+                    ViewUtils.addViewLabel(
+                        attribute.toPair(),
+                        spinnerNFormView
+                    )
+                )
             }
         }
-    }
-
-    private fun createLabel(attribute: Map.Entry<String, Any>) {
-        val label = TextView(spinnerNFormView.context)
-        label.apply {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
-            else setTextAppearance(
-                spinnerNFormView.context, R.style.labelStyle
-            )
-            layoutParams = ViewGroup.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            text = attribute.value.toString()
-
-            if (spinnerNFormView.viewProperties.requiredStatus != null
-                && Utils.isFieldRequired(spinnerNFormView)
-            ) {
-                text = ViewUtils.addRedAsteriskSuffix(label.text.toString())
-            }
-        }
-        spinnerNFormView.addView(label)
     }
 
     private fun addSpinnerOptions() {
@@ -80,6 +58,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
         materialSpinner.apply {
             layoutParams = params
             setItems(spinnerOptions)
+            setBackgroundResource(R.drawable.spinner_bg)
             setHintColor(R.color.colorBlack)
             setOnItemSelectedListener { _, pos, _, item ->
                 if (pos > 0) {

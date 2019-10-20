@@ -27,7 +27,6 @@
     <item name="android:paddingStart">8dp</item>
   </style>
 
-  <!-- Base application theme. -->
-  <style name="CustomTestTheme" parent="Theme.AppCompat">
-  </style>
+  <!-- Base application theme for Test -->
+  <style name="CustomTestTheme" parent="Theme.AppCompat" />
 </resources>

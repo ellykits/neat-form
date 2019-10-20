@@ -4,4 +4,6 @@
   <item name="is_checkbox_option" type="id"/>
   <item name="is_exclusive_checkbox" type="id"/>
   <item name="is_radio_group_option" type="id"/>
+  <item name="is_number_selector" type="id" />
+  <item name="number_selector_key" type="id" />
 </resources>

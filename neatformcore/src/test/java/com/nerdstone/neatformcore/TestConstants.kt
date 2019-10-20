@@ -229,6 +229,18 @@ object TestConstants {
                     "display_format": "hh:m a"
                   },
                   "required_status": "true:Please specify the time you clocked in"
+                },
+                 {
+                  "name": "no_prev_pregnancies",
+                  "type": "number_selector",
+                  "properties": {
+                    "visible_numbers": "5",
+                    "max_value": "18",
+                    "first_number": "0",
+                    "text": "Number of previous pregnancies"
+                  },
+                  "subjects": "email_subscription:map, gender:text",
+                  "required_status": "no:Please specify the time you clocked in"
                 }
               ]
             }

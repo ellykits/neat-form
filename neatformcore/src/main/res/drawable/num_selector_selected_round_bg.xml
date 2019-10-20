@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/numberSelectorItemSelected" />
+    <corners
+        android:bottomLeftRadius="@dimen/number_selector_padding"
+        android:bottomRightRadius="@dimen/number_selector_padding"
+        android:topLeftRadius="@dimen/number_selector_padding"
+        android:topRightRadius="@dimen/number_selector_padding" />
+</shape>

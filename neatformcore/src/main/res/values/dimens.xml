@@ -8,5 +8,7 @@
   <!-- Defaults -->
   <dimen name="defaultTextSize">18sp</dimen>
   <dimen name="defaultPadding">8dp</dimen>
+  <dimen name="defaultTextViewPadding">16dp</dimen>
+  <dimen name="number_selector_padding">40dp</dimen>
 
 </resources>
