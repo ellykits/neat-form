@@ -30,7 +30,7 @@ class `Test building form with JSON` {
     private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
-    fun `Setting up`() {
+    fun `Before everything else`() {
         Dispatchers.setMain(testDispatcher)
     }
 

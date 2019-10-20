@@ -5,7 +5,6 @@ import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.datasource.AssetFile
-import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +21,6 @@ class `Test working with Assets` {
     @Before
     fun `Before everything else`() {
         context = ApplicationProvider.getApplicationContext()
-
     }
 
     @Test
@@ -32,9 +30,5 @@ class `Test working with Assets` {
         Assert.assertNotNull(content)
         Assert.assertTrue(content.contains("Profile"))
 
-    }
-
-    @After
-    fun `After everything else`() {
     }
 }
