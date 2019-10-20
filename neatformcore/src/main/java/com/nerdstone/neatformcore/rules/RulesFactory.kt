@@ -7,7 +7,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Utils
-import io.reactivex.Completable
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.RuleListener
@@ -46,30 +45,27 @@ class RulesFactory private constructor() : RuleListener {
             else -> Timber.e(exception)
         }
 
-    override fun beforeExecute(rule: Rule?, facts: Facts?) =//Overridden
-        Unit
+    override fun beforeExecute(rule: Rule?, facts: Facts?) = Unit
 
     override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) =
         rulesHandler.handleSkipLogic(evaluationResult, rule, facts)
 
     fun readRulesFromFile(
         context: Context, filePath: String, rulesFileType: RulesFileType
-    ): Completable {
-        return Completable.fromAction {
-            if (allRules == null) {
-                val mvelRuleFactory: MVELRuleFactory = when (rulesFileType) {
-                    RulesFileType.JSON -> MVELRuleFactory(JsonRuleDefinitionReader())
-                    RulesFileType.YAML -> MVELRuleFactory(YamlRuleDefinitionReader())
-                }
-
-                allRules = mvelRuleFactory.createRules(
-                    BufferedReader(
-                        InputStreamReader(AssetFile.openFileAsset(context, filePath))
-                    )
-                )
+    ) {
+        if (allRules == null) {
+            val mvelRuleFactory: MVELRuleFactory = when (rulesFileType) {
+                RulesFileType.JSON -> MVELRuleFactory(JsonRuleDefinitionReader())
+                RulesFileType.YAML -> MVELRuleFactory(YamlRuleDefinitionReader())
             }
-            rulesHandler.hideViewsInitially(allRules)
+
+            allRules = mvelRuleFactory.createRules(
+                BufferedReader(
+                    InputStreamReader(AssetFile.openFileAsset(context, filePath))
+                )
+            )
         }
+        rulesHandler.hideViewsInitially(allRules)
     }
 
     private fun updateCurrentViewAndFacts(viewDetails: NFormViewDetails) {

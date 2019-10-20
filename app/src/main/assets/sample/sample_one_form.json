@@ -229,7 +229,7 @@
           "properties": {
             "visible_numbers": "5",
             "max_value": "10",
-            "first_number": "1",
+            "first_number": "0",
             "text": "Number of previous pregnancies"
           },
           "subjects": "email_subscription:map, gender:text",

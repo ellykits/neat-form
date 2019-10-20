@@ -5,59 +5,48 @@ import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
 import io.mockk.spyk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.*
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test building form with JSON` {
 
-    private val mainLayout: LinearLayout = LinearLayout(RuntimeEnvironment.systemContext)
+    private val mainLayout: LinearLayout = LinearLayout(ApplicationProvider.getApplicationContext())
     private val jsonFormBuilder: JsonFormBuilder = spyk(JsonFormBuilder(mainLayout))
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
-    fun `Before everything else`() {
-        jsonFormBuilder.getForm(TestConstants.SAMPLE_JSON)
+    fun `Setting up`() {
+        Dispatchers.setMain(testDispatcher)
     }
 
     @Test
-    fun `Should read form from assets`() {
+    fun `Should parse json, create views and register form rules`() = runBlockingTest {
+        jsonFormBuilder.buildForm(TestConstants.SAMPLE_ONE_FORM_FILE)
         Assert.assertNotNull(jsonFormBuilder.form)
         Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
         Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
-    }
 
-    @Test
-    fun `Should read rules from assets then free resources`() {
-        jsonFormBuilder.registerFormRules(
-            RuntimeEnvironment.systemContext,
-            RulesFactory.RulesFileType.YAML
-        )
-        Assert.assertTrue(jsonFormBuilder.compositeDisposable.size() > 0)
-        jsonFormBuilder.freeResources()
-        Assert.assertTrue(jsonFormBuilder.compositeDisposable.isDisposed)
-    }
-
-    @Test
-    fun `Should create views with the parsed form`() {
-        jsonFormBuilder.createFormViews(ApplicationProvider.getApplicationContext())
         //Main layout has on element: VerticalRootView
         Assert.assertTrue(mainLayout.childCount == 1)
         Assert.assertTrue(mainLayout.getChildAt(0) is VerticalRootView)
         //VerticalRootView has 3 EditTextNFormView
         val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
-        Assert.assertTrue(verticalRootView.childCount == 12)
+        Assert.assertTrue(verticalRootView.childCount == 13)
         Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
         Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
         Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
@@ -72,5 +61,12 @@ class `Test building form with JSON` {
             (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
         Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
         Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
+    }
+
+    @After
+    fun `Tearing everything down`() {
+        Dispatchers.resetMain()
+        testScope.cleanupTestCoroutines()
+        testDispatcher.cleanupTestCoroutines()
     }
 }
