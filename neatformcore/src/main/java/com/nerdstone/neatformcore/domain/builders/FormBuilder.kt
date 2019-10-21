@@ -2,18 +2,17 @@ package com.nerdstone.neatformcore.domain.builders
 
 import android.content.Context
 import android.view.ViewGroup
-import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 
 interface FormBuilder {
 
+    var fileSource: String
+
     var mainLayout: ViewGroup
 
-    fun getForm(source: String): NForm?
+    fun buildForm() :FormBuilder
 
     fun createFormViews(context: Context)
 
     fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
-
-    fun freeResources()
 }

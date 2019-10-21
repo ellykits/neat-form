@@ -3,39 +3,66 @@ package com.nerdstone.neatformcore.form.json
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import io.reactivex.CompletableObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
+class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSource: String) :
+    FormBuilder {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val singleRunner = SingleRunner()
     var form: NForm? = null
 
     init {
         rulesHandler.formBuilder = this
     }
 
-    override fun getForm(source: String): NForm? {
-        if (form == null) {
-            form = JsonFormParser.parseJson(source)
+    override fun buildForm(): FormBuilder {
+        GlobalScope.launch(Dispatchers.Main) {
+            if (form == null) {
+                val async = async(Dispatchers.Default) {
+                    singleRunner.afterPrevious {
+                        parseJsonForm(fileSource)
+                    }
+                }
+                form = async.await()
+            }
+            launch(Dispatchers.IO) {
+                singleRunner.afterPrevious {
+                    registerFormRules(mainLayout.context, RulesFileType.YAML)
+                }
+            }
+            launch(Dispatchers.Main) {
+                singleRunner.afterPrevious {
+                    createFormViews(mainLayout.context)
+                }
+            }
         }
-        return form
+        return this
+    }
+
+    private fun parseJsonForm(source: String): NForm? {
+        return JsonFormParser.parseJson(
+            AssetFile.readAssetFileAsString(
+                mainLayout.context,
+                source
+            )
+        )
     }
 
     /***
@@ -52,29 +79,8 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
     }
 
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
-        form?.rulesFile?.let {
+        form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
-                .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(
-                    object : CompletableObserver {
-                        override fun onSubscribe(d: Disposable) {
-                            compositeDisposable.add(d)
-                        }
-
-                        override fun onComplete() {
-                            Timber.i("Completed reading rules from file successfully")
-                        }
-
-                        override fun onError(e: Throwable) {
-                            Timber.e(e)
-                        }
-                    })
         }
-    }
-
-    override fun freeResources() {
-        compositeDisposable.clear()
-        compositeDisposable.dispose()
     }
 }

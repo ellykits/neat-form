@@ -30,40 +30,56 @@ object ViewUtils {
     ) {
 
         for (viewProperty in viewProperties) {
-            viewDispatcher.rulesFactory
-                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
-
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
                     rootView.addChild(
-                        EditTextNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(EditTextNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
                     rootView.addChild(
-                        MultiChoiceCheckBox(context).initView(viewProperty, viewDispatcher)
+                        getView(MultiChoiceCheckBox(context), viewProperty, viewDispatcher)
                     )
                 ViewType.CHECKBOX ->
                     rootView.addChild(
-                        CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(CheckBoxNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.SPINNER ->
                     rootView.addChild(
-                        SpinnerNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(SpinnerNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.RADIO_GROUP ->
                     rootView.addChild(
-                        RadioGroupView(context).initView(viewProperty, viewDispatcher)
+                        getView(RadioGroupView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.DATETIME_PICKER ->
                     rootView.addChild(
-                        DateTimePickerNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(DateTimePickerNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.NUMBER_SELECTOR ->
                     rootView.addChild(
-                        NumberSelectorNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(NumberSelectorNFormView(context), viewProperty, viewDispatcher)
                     )
             }
+
         }
+    }
+
+    private fun getView(
+        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+    ): NFormView {
+        if (viewProperty.subjects != null) {
+            viewDispatcher.rulesFactory
+                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+            val hasVisibilityRule = viewDispatcher.rulesFactory.viewHasVisibilityRule(
+                viewProperty
+            )
+            if (hasVisibilityRule) {
+                viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
+                    false, nFormView.viewDetails.view
+                )
+            }
+        }
+        return nFormView.initView(viewProperty, viewDispatcher)
     }
 
     fun splitText(text: String?, delimiter: String): List<String> {

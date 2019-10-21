@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.rules
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -54,7 +55,7 @@ class `Test Rules Engine functionality` {
 
         //Setup rules handler with form builder and views map
         rulesHandler.viewIdsMap["adult"] = 1
-        rulesHandler.formBuilder = JsonFormBuilder(mainLayout)
+        rulesHandler.formBuilder = JsonFormBuilder(mainLayout, TestConstants.SAMPLE_ONE_FORM_FILE)
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
 
@@ -147,7 +148,7 @@ class `Test Rules Engine functionality` {
         //If this view has a rule to handle its visibility then by default set it's visibility
         //To false when you first launch the form until when rules are fired
         view.visibility = View.VISIBLE
-        rulesHandler.hideViewsInitially(rulesFactory.allRules)
+        rulesHandler.hideOrShowField("adult", false)
         Assert.assertTrue(view.visibility == View.GONE)
     }
 
