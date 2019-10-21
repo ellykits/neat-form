@@ -6,9 +6,11 @@ import com.nerdstone.neatformcore.rules.RulesFactory
 
 interface FormBuilder {
 
+    var fileSource: String
+
     var mainLayout: ViewGroup
 
-    fun buildForm(source: String)
+    fun buildForm() :FormBuilder
 
     fun createFormViews(context: Context)
 

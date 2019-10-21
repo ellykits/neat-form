@@ -13,12 +13,14 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
+class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSource: String) :
+    FormBuilder {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -30,15 +32,15 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
         rulesHandler.formBuilder = this
     }
 
-    override fun buildForm(source: String) {
+    override fun buildForm(): FormBuilder {
         GlobalScope.launch(Dispatchers.Main) {
             if (form == null) {
-                form = parseJsonForm(source)
-            }
-            launch(Dispatchers.Main) {
-                singleRunner.afterPrevious {
-                    createFormViews(mainLayout.context)
+                val async = async(Dispatchers.Default) {
+                    singleRunner.afterPrevious {
+                        parseJsonForm(fileSource)
+                    }
                 }
+                form = async.await()
             }
             launch(Dispatchers.IO) {
                 singleRunner.afterPrevious {
@@ -47,21 +49,20 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
             }
             launch(Dispatchers.Main) {
                 singleRunner.afterPrevious {
-                    rulesFactory.refreshHiddenViews()
+                    createFormViews(mainLayout.context)
                 }
             }
         }
+        return this
     }
 
-    private suspend fun parseJsonForm(source: String): NForm? {
-        return singleRunner.afterPrevious {
-            JsonFormParser.parseJson(
-                AssetFile.readAssetFileAsString(
-                    mainLayout.context,
-                    source
-                )
+    private fun parseJsonForm(source: String): NForm? {
+        return JsonFormParser.parseJson(
+            AssetFile.readAssetFileAsString(
+                mainLayout.context,
+                source
             )
-        }
+        )
     }
 
     /***

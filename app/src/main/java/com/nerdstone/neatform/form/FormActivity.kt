@@ -24,7 +24,7 @@ class FormActivity : AppCompatActivity() {
         pageTitleTextView = findViewById(R.id.pageTitleTextView)
         exitFormImageView = findViewById(R.id.exitFormImageView)
 
-        formBuilder = JsonFormBuilder(mainLayout)
+
 
         if (intent.extras != null) {
             val path = intent?.extras?.getString("path") ?: ""
@@ -35,7 +35,8 @@ class FormActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            formBuilder?.buildForm(path)
+
+            formBuilder = JsonFormBuilder(mainLayout, path).buildForm()
         }
     }
 }

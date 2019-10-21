@@ -37,9 +37,9 @@ class NFormRulesHandler private constructor() : RulesHandler {
         TODO("implement functionality for filtering")
     }
 
-    override fun handleSkipLogic(evaluationResult: Boolean, rule: Rule?, facts: Facts?) {
+    override fun updateSkipLogicFactAfterEvaluate(evaluationResult: Boolean, rule: Rule?, facts: Facts?) {
         if (rule != null && facts != null && !evaluationResult) {
-            if (facts.asMap().containsKey(rule.name) && rule.name.toLowerCase()
+            if (facts.asMap().containsKey(rule.name) && rule.name.toLowerCase(Locale.getDefault())
                     .endsWith(Constants.RuleActions.VISIBILITY)
             ) {
                 facts.put(rule.name, false)
@@ -47,22 +47,27 @@ class NFormRulesHandler private constructor() : RulesHandler {
         }
     }
 
-    override fun hideOrShowViews(facts: Facts?) {
+    override fun handleSkipLogic(facts: Facts?) {
         executableRulesList
             .map { rule -> rule.name }
-            .filter { it.toLowerCase().endsWith(Constants.RuleActions.VISIBILITY) }
+            .filter {
+                it.toLowerCase(Locale.getDefault()).endsWith(Constants.RuleActions.VISIBILITY)
+            }
             .map { name ->
                 ViewUtils.getKey(name, Constants.RuleActions.VISIBILITY)
             }
             .forEach { key ->
                 facts?.let {
-                    val value = it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}")
-                    if (viewIdsMap.containsKey(key)) {
-                        viewIdsMap[key]?.let { id -> formBuilder.mainLayout.findViewById<View>(id) }
-                            ?.also { view -> changeVisibility(value, view) }
-                    }
+                    hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
                 }
             }
+    }
+
+     fun hideOrShowField(key: String, isVisible: Boolean?) {
+        if (viewIdsMap.containsKey(key)) {
+            viewIdsMap[key]?.let { id -> formBuilder.mainLayout.findViewById<View>(id) }
+                ?.also { view -> changeVisibility(isVisible, view) }
+        }
     }
 
     override fun refreshViews(allRules: Rules?) {
@@ -79,7 +84,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         }
     }
 
-    private fun changeVisibility(value: Boolean?, view: View) {
+    override fun changeVisibility(value: Boolean?, view: View) {
         if (value != null) {
             when {
                 value -> {

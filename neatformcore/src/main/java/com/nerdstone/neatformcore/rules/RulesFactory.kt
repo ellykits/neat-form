@@ -6,6 +6,7 @@ import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.RulesHandler
+import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.Utils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -48,7 +49,7 @@ class RulesFactory private constructor() : RuleListener {
     override fun beforeExecute(rule: Rule?, facts: Facts?) = Unit
 
     override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) =
-        rulesHandler.handleSkipLogic(evaluationResult, rule, facts)
+        rulesHandler.updateSkipLogicFactAfterEvaluate(evaluationResult, rule, facts)
 
     fun readRulesFromFile(
         context: Context, filePath: String, rulesFileType: RulesFileType
@@ -74,7 +75,7 @@ class RulesFactory private constructor() : RuleListener {
 
     private fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
-        rulesHandler.hideOrShowViews(facts)
+        rulesHandler.handleSkipLogic(facts)
     }
 
     fun updateFactsAndExecuteRules(viewDetails: NFormViewDetails) {
@@ -115,8 +116,10 @@ class RulesFactory private constructor() : RuleListener {
         }
     }
 
-    fun refreshHiddenViews() {
-        rulesHandler.refreshViews(allRules)
+    fun viewHasVisibilityRule(viewProperty: NFormViewProperty): Boolean {
+        val hasVisibilityRule =
+            allRules?.map { it.name }?.contains("${viewProperty.name}${Constants.RuleActions.VISIBILITY}")
+        return hasVisibilityRule != null && hasVisibilityRule
     }
 
     private fun setDefaultFact(key: String, dataType: String) {
