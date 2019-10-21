@@ -21,6 +21,6 @@ interface RulesHandler {
 
     fun hideOrShowViews(facts: Facts?)
 
-    fun hideViewsInitially(allRules: Rules?)
+    fun refreshViews(allRules: Rules?)
 
 }

@@ -65,7 +65,6 @@ class RulesFactory private constructor() : RuleListener {
                 )
             )
         }
-        rulesHandler.hideViewsInitially(allRules)
     }
 
     private fun updateCurrentViewAndFacts(viewDetails: NFormViewDetails) {
@@ -114,6 +113,10 @@ class RulesFactory private constructor() : RuleListener {
                 )
             )
         }
+    }
+
+    fun refreshHiddenViews() {
+        rulesHandler.refreshViews(allRules)
     }
 
     private fun setDefaultFact(key: String, dataType: String) {

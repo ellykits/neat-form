@@ -147,7 +147,7 @@ class `Test Rules Engine functionality` {
         //If this view has a rule to handle its visibility then by default set it's visibility
         //To false when you first launch the form until when rules are fired
         view.visibility = View.VISIBLE
-        rulesHandler.hideViewsInitially(rulesFactory.allRules)
+        rulesHandler.refreshViews(rulesFactory.allRules)
         Assert.assertTrue(view.visibility == View.GONE)
     }
 

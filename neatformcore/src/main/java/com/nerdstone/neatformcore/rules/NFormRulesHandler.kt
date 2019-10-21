@@ -8,6 +8,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
+import java.util.*
 
 class NFormRulesHandler private constructor() : RulesHandler {
 
@@ -64,11 +65,12 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
     }
 
-    override fun hideViewsInitially(allRules: Rules?) {
+    override fun refreshViews(allRules: Rules?) {
         allRules?.also {
             it.toMutableList()
                 .filter { rule ->
-                    rule.name.toLowerCase().endsWith(Constants.RuleActions.VISIBILITY)
+                    rule.name.toLowerCase(Locale.getDefault())
+                        .endsWith(Constants.RuleActions.VISIBILITY)
                 }.forEach { item ->
                     val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
                     val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)

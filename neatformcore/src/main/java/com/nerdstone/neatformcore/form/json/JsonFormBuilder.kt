@@ -40,9 +40,14 @@ class JsonFormBuilder(override var mainLayout: ViewGroup) : FormBuilder {
                     createFormViews(mainLayout.context)
                 }
             }
-            launch(Dispatchers.Main) {
+            launch(Dispatchers.IO) {
                 singleRunner.afterPrevious {
                     registerFormRules(mainLayout.context, RulesFileType.YAML)
+                }
+            }
+            launch(Dispatchers.Main) {
+                singleRunner.afterPrevious {
+                    rulesFactory.refreshHiddenViews()
                 }
             }
         }
