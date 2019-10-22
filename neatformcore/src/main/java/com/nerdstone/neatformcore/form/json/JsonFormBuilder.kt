@@ -8,10 +8,10 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -26,28 +26,30 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
     private val singleRunner = SingleRunner()
+    var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
 
     init {
         rulesHandler.formBuilder = this
+        coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
     override fun buildForm(): FormBuilder {
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
-                val async = async(Dispatchers.Default) {
+                val async = async(coroutineContextProvider.default) {
                     singleRunner.afterPrevious {
                         parseJsonForm(fileSource)
                     }
                 }
                 form = async.await()
             }
-            launch(Dispatchers.IO) {
+            launch(coroutineContextProvider.io) {
                 singleRunner.afterPrevious {
                     registerFormRules(mainLayout.context, RulesFileType.YAML)
                 }
             }
-            launch(Dispatchers.Main) {
+            launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
                     createFormViews(mainLayout.context)
                 }
