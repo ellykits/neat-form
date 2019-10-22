@@ -1,7 +1,9 @@
 package com.nerdstone.neatformcore.utils
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.CoroutineContext
 
 /**
  * A helper class to execute tasks sequentially in coroutines.
@@ -54,4 +56,18 @@ class SingleRunner {
             return block()
         }
     }
+}
+
+interface CoroutineContextProvider {
+
+    val main: CoroutineContext
+        get() = Dispatchers.Main
+
+    val io: CoroutineContext
+        get() = Dispatchers.IO
+
+    val default: CoroutineContext
+        get() = Dispatchers.Default
+
+    class Default : CoroutineContextProvider
 }

@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.widget.LinearLayout
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestConstants
+import com.nerdstone.neatformcore.TestCoroutineContextProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
@@ -11,10 +12,9 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
 import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert
@@ -36,11 +36,12 @@ class `Test building form with JSON` {
     @Before
     fun `Before everything else`() {
         Dispatchers.setMain(testDispatcher)
+        jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
     }
 
     @Test
-    fun `Should parse json, create views and register form rules`() {
-        TestCoroutineScope(testDispatcher).launch {
+    fun `Should parse json, create views and register form rules`() =
+        runBlockingTest {
             jsonFormBuilder.buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
@@ -67,7 +68,6 @@ class `Test building form with JSON` {
             Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
             Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
         }
-    }
 
     @After
     fun `Tearing everything down`() {
