@@ -7,13 +7,11 @@ object TestConstants {
         """
         {
           "form": "Profile",
-          "is_multi_step": true,
           "rules_file": "rules/yml/sample_one_form_rules.yml",
           "count": 1,
           "steps": [
             {
               "title": "Test and counselling",
-              "step_number": 1,
               "fields": [
                 {
                   "name": "adult",
