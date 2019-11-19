@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
  * @author Elly Nerdstone
  */
 class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSource: String) :
-    FormBuilder {
+        FormBuilder {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -34,7 +35,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
-    override fun buildForm(): FormBuilder {
+    override fun buildForm(view: View?): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
                 val async = async(coroutineContextProvider.default) {
@@ -51,7 +52,10 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
-                    createFormViews(mainLayout.context)
+                    if (view == null)
+                        createFormViews(mainLayout.context)
+                    else
+                        updateFormViews(mainLayout.context, view)
                 }
             }
         }
@@ -60,10 +64,10 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
 
     private fun parseJsonForm(source: String): NForm? {
         return JsonFormParser.parseJson(
-            AssetFile.readAssetFileAsString(
-                mainLayout.context,
-                source
-            )
+                AssetFile.readAssetFileAsString(
+                        mainLayout.context,
+                        source
+                )
         )
     }
 
@@ -79,6 +83,21 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
         }
     }
+
+    /***
+     * @param context android context
+     */
+    fun updateFormViews(context: Context, view: View) {
+        if (form != null) {
+            for (formContent in form!!.steps) {
+                val rootView = VerticalRootView(context)
+                ViewUtils.updateViews(view, formContent.fields, context, viewDispatcher)
+                rootView.addView(view)
+                mainLayout.addView(rootView.initRootView() as View)
+            }
+        }
+    }
+
 
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
         form?.rulesFile?.also {

@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.domain.builders
 
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import com.nerdstone.neatformcore.rules.RulesFactory
 
@@ -10,7 +11,7 @@ interface FormBuilder {
 
     var mainLayout: ViewGroup
 
-    fun buildForm() :FormBuilder
+    fun buildForm(view: View?): FormBuilder
 
     fun createFormViews(context: Context)
 

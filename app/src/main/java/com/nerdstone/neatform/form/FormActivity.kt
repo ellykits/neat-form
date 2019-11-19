@@ -36,7 +36,7 @@ class FormActivity : AppCompatActivity() {
                 }
             }
 
-            formBuilder = JsonFormBuilder(mainLayout, path).buildForm()
+            formBuilder = JsonFormBuilder(mainLayout, path).buildForm(layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null))
         }
     }
 }

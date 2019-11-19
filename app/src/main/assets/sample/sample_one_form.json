@@ -26,7 +26,7 @@
           "name": "age",
           "type": "edit_text",
           "properties": {
-            "hint": "Enter your age (will be multiplied by 10)",
+            "hint": "Enter your age",
             "type": "name",
             "padding": "8"
           },
@@ -151,114 +151,6 @@
           ],
           "required_status": "yes:Please specify your languages",
           "subjects": "email_subscription:map, gender:text"
-        },
-        {
-          "name": "language_none",
-          "type": "edit_text",
-          "properties": {
-            "hint": "Specify your language",
-            "type": "name"
-          },
-          "meta_data": {
-            "openmrs_entity": "",
-            "openmrs_entity_id": "",
-            "openmrs_entity_parent": ""
-          },
-          "required_status": "true:Please specify language",
-          "subjects": "choose_language:map"
-        },
-        {
-          "name": "wiki_contribution",
-          "type": "radio_group",
-          "properties": {
-            "text": "Have you ever contributed to or written a page in the Wiki?"
-          },
-          "options": [
-            {
-              "name": "yes",
-              "text": "Yes"
-            },
-            {
-              "name": "no",
-              "text": "No"
-            },
-            {
-              "name": "dont_know",
-              "text": "Don't know"
-            }
-          ],
-          "required_status": "yes:Wiki contribution field is required.",
-          "subjects": "email_subscription:map, gender:text"
-        },
-        {
-          "name": "wiki_contribution_yes",
-          "type": "edit_text",
-          "properties": {
-            "hint": "What was your contribution?",
-            "type": "name"
-          },
-          "required_status": "true:Please specify your contributions",
-          "subjects": "wiki_contribution:map"
-        },
-        {
-          "name": "dob",
-          "type": "datetime_picker",
-          "properties": {
-            "hint": "Enter birth date",
-            "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
-          },
-          "required_status": "true:Please specify your dob"
-        },
-        {
-          "name": "time",
-          "type": "datetime_picker",
-          "properties": {
-            "hint": "Enter time you clocked in",
-            "type": "time_picker",
-            "display_format": "hh:m a"
-          },
-          "required_status": "true:Please specify the time you clocked in"
-        },
-        {
-          "name": "no_prev_pregnancies",
-          "type": "number_selector",
-          "properties": {
-            "visible_numbers": "5",
-            "max_value": "10",
-            "first_number": "0",
-            "text": "Number of previous pregnancies"
-          },
-          "subjects": "email_subscription:map, gender:text",
-          "required_status": "no:Please specify the time you clocked in"
-        },
-        {
-          "name": "delivery_methods",
-          "type": "multi_choice_checkbox",
-          "properties": {
-            "text": "Previous delivery methods."
-          },
-          "options": [
-            {
-              "name": "vaginal",
-              "text": "Vaginal delivery",
-              "meta_data": {
-                "openmrs_entity": "",
-                "openmrs_entity_id": "A12312332123123",
-                "openmrs_entity_parent": ""
-              }
-            },
-            {
-              "name": "c-section",
-              "text": "C-Section",
-              "meta_data": {
-                "openmrs_entity": "",
-                "openmrs_entity_id": "A12123123123123",
-                "openmrs_entity_parent": ""
-              }
-            }
-          ],
-          "subjects": "no_prev_pregnancies:number"
         }
       ]
     }
