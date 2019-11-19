@@ -4,54 +4,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/layout_age"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-        android:id="@+id/adult"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/age"
-        app:layout_constraintTop_toTopOf="@+id/age" />
+        <com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+            android:id="@+id/age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1">
 
-    <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-        android:id="@+id/child"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/age"
-        app:layout_constraintTop_toTopOf="@+id/age" />
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView>
+
+        <com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+            android:id="@+id/child"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView>
+
+        <com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+            android:id="@+id/adult"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView>
+
+
+    </LinearLayout>
 
     <com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
         android:id="@+id/email_subscription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/age"
-        app:layout_constraintTop_toBottomOf="@+id/age" />
+        app:layout_constraintStart_toStartOf="@+id/layout_age"
+        app:layout_constraintTop_toBottomOf="@+id/layout_age" />
 
     <com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
         android:id="@+id/gender"
-        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/email_subscription"
         app:layout_constraintTop_toBottomOf="@+id/email_subscription" />
 
     <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
         android:id="@+id/choose_language"
-        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/gender"
         app:layout_constraintTop_toBottomOf="@+id/gender" />
 

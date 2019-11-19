@@ -42,7 +42,7 @@ class `Test building form with JSON` {
     @Test
     fun `Should parse json, create views and register form rules`() =
         runBlockingTest {
-            jsonFormBuilder.buildForm()
+            jsonFormBuilder.buildForm(null)
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")

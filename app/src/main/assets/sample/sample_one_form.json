@@ -7,11 +7,12 @@
       "fields": [
         {
           "name": "adult",
-          "type": "edit_text",
+          "type": "text_input_layout",
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text": "Catch me if you can"
+            "text": "Catch me if you can",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -24,7 +25,7 @@
         },
         {
           "name": "age",
-          "type": "edit_text",
+          "type": "text_input_layout",
           "properties": {
             "hint": "Enter your age",
             "type": "name",
@@ -39,10 +40,11 @@
         },
         {
           "name": "child",
-          "type": "edit_text",
+          "type": "text_input_layout",
           "properties": {
             "hint": "I am a child",
-            "type": "name"
+            "type": "name",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
