@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
+import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
@@ -17,8 +18,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(application = TestNeatFormApp::class)
 class `Test building MultiChoiceCheckBox view` {
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -51,7 +54,6 @@ class `Test building MultiChoiceCheckBox view` {
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
 
-        //Set EditText properties and assign EditText view builder
         multiChoiceCheckBox.viewProperties = viewProperty
     }
 

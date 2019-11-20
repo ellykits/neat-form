@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.domain.view
 
+import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -17,10 +18,12 @@ interface RulesHandler {
 
     fun handleFilter(filterItems: List<String>)
 
-    fun handleSkipLogic(evaluationResult: Boolean, rule: Rule?, facts: Facts?)
+    fun updateSkipLogicFactAfterEvaluate(evaluationResult: Boolean, rule: Rule?, facts: Facts?)
 
-    fun hideOrShowViews(facts: Facts?)
+    fun handleSkipLogic(facts: Facts?)
 
-    fun hideViewsInitially(allRules: Rules?)
+    fun refreshViews(allRules: Rules?)
+
+    fun changeVisibility(value: Boolean?, view: View)
 
 }

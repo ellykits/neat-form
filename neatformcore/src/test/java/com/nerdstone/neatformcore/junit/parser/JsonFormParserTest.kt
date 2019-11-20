@@ -13,12 +13,9 @@ class `Test passing JSON files` {
     fun `Before everything else`() {
         json = "{\n" +
                 "   \"form\": \"Profile\",\n" +
-                "   \"is_multi_step\": true,\n" +
-                "   \"count\": 5,\n" +
                 "   \"steps\": [\n" +
                 "      {\n" +
                 "         \"title\": \"Behaviour and counselling\",\n" +
-                "         \"step_number\": 1,\n" +
                 "         \"fields\": [\n" +
                 "            {\n" +
                 "               \"name\": \"username\",\n" +
@@ -52,7 +49,6 @@ class `Test passing JSON files` {
                 "      },\n" +
                 "      {\n" +
                 "         \"title\": \"Woman Behavior\",\n" +
-                "         \"step_number\": 2,\n" +
                 "         \"fields\": [\n" +
                 "            {\n" +
                 "               \"name\": \"username\",\n" +
@@ -83,7 +79,6 @@ class `Test passing JSON files` {
                 "      },\n" +
                 "      {\n" +
                 "         \"title\": \"Physical Exam\",\n" +
-                "         \"step_number\": 3,\n" +
                 "         \"fields\": [\n" +
                 "            {\n" +
                 "               \"name\": \"username\",\n" +
@@ -114,7 +109,6 @@ class `Test passing JSON files` {
                 "      },\n" +
                 "      {\n" +
                 "         \"title\": \"Testing\",\n" +
-                "         \"step_number\": 4,\n" +
                 "         \"fields\": [\n" +
                 "            {\n" +
                 "               \"name\": \"username\",\n" +
@@ -145,7 +139,6 @@ class `Test passing JSON files` {
                 "      },\n" +
                 "      {\n" +
                 "         \"title\": \"Symptoms and Followup\",\n" +
-                "         \"step_number\": 5,\n" +
                 "         \"fields\": [\n" +
                 "            {\n" +
                 "               \"name\": \"username\",\n" +
@@ -216,7 +209,6 @@ class `Test passing JSON files` {
     fun `Should parse a valid JSON into NForm model`() {
         val nForm = JsonFormParser.parseJson(json)
         assertEquals(nForm!!.formName, "Profile")
-        assertEquals(nForm.count.toLong(), 5)
         assertEquals(nForm.steps.size.toLong(), 5)
         assertNotNull(nForm)
     }
@@ -226,7 +218,6 @@ class `Test passing JSON files` {
         val nForm = JsonFormParser.parseJson(json)
         val nFormContent = nForm!!.steps[0]
         assertEquals(nFormContent.stepName, "Behaviour and counselling")
-        assertEquals(nFormContent.stepNumber.toLong(), 1)
         assertEquals(nFormContent.fields.size.toLong(), 2)
     }
 

@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.robolectric.utils
+package com.nerdstone.neatformcore
 
 object TestConstants {
     private const val SAMPLE_DIR = "sample/"
@@ -7,13 +7,11 @@ object TestConstants {
         """
         {
           "form": "Profile",
-          "is_multi_step": true,
           "rules_file": "rules/yml/sample_one_form_rules.yml",
           "count": 1,
           "steps": [
             {
               "title": "Test and counselling",
-              "step_number": 1,
               "fields": [
                 {
                   "name": "adult",
@@ -29,7 +27,7 @@ object TestConstants {
                     "openmrs_entity_parent": ""
                   },
                   "validation": "length() < 8; !contains(@)",
-                  "subjects": "age:number, child:text",
+                  "subjects": "age:number, child:text, dob:number",
                   "required_status": "True:please add username"
                 },
                 {
@@ -209,6 +207,38 @@ object TestConstants {
                   },
                   "required_status": "true:Please specify your contributions",
                   "subjects": "wiki_contribution:map"
+                },
+                {
+                  "name": "dob",
+                  "type": "datetime_picker",
+                  "properties": {
+                    "hint": "Enter birth date",
+                    "type": "date_picker",
+                    "display_format": "dd/MM/YYYY"
+                  },
+                  "required_status": "true:Please specify your dob"
+                },
+                {
+                  "name": "time",
+                  "type": "datetime_picker",
+                  "properties": {
+                    "hint": "Enter time you clocked in",
+                    "type": "time_picker",
+                    "display_format": "hh:m a"
+                  },
+                  "required_status": "true:Please specify the time you clocked in"
+                },
+                 {
+                  "name": "no_prev_pregnancies",
+                  "type": "number_selector",
+                  "properties": {
+                    "visible_numbers": "5",
+                    "max_value": "18",
+                    "first_number": "0",
+                    "text": "Number of previous pregnancies"
+                  },
+                  "subjects": "email_subscription:map, gender:text",
+                  "required_status": "no:Please specify the time you clocked in"
                 }
               ]
             }

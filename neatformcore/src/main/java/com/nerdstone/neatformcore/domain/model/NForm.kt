@@ -9,14 +9,8 @@ class NForm : Serializable {
     @SerializedName("form")
     lateinit var formName: String
 
-    @SerializedName("is_multi_step")
-    var isMultiStep: Boolean = false
-
     @SerializedName("rules_file")
     var rulesFile: String? = null
-
-    @SerializedName("count")
-    var count: Int = 0
 
     @SerializedName("steps")
     lateinit var steps: List<NFormContent>
@@ -30,9 +24,6 @@ class NFormContent : Serializable {
 
     @SerializedName("title")
     var stepName: String? = null
-
-    @SerializedName("step_number")
-    var stepNumber: Int = 0
 
     @SerializedName("fields")
     lateinit var fields: List<NFormViewProperty>

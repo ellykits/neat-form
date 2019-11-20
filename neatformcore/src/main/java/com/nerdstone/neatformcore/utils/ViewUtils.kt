@@ -7,7 +7,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -16,10 +19,7 @@ import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
-import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-import com.nerdstone.neatformcore.views.widgets.NotesNFormView
-import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import com.nerdstone.neatformcore.views.widgets.*
 import java.util.*
 
 object ViewUtils {
@@ -30,36 +30,56 @@ object ViewUtils {
     ) {
 
         for (viewProperty in viewProperties) {
-            viewDispatcher.rulesFactory
-                    .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
-
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
                     rootView.addChild(
-                            EditTextNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(EditTextNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
                     rootView.addChild(
-                            MultiChoiceCheckBox(context).initView(viewProperty, viewDispatcher)
+                        getView(MultiChoiceCheckBox(context), viewProperty, viewDispatcher)
                     )
                 ViewType.CHECKBOX ->
                     rootView.addChild(
-                            CheckBoxNFormView(context).initView(viewProperty, viewDispatcher)
-                    )
-                ViewType.TOASTERS_NOTES ->
-                    rootView.addChild(
-                            NotesNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(CheckBoxNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.SPINNER ->
                     rootView.addChild(
-                        SpinnerNFormView(context).initView(viewProperty, viewDispatcher)
+                        getView(SpinnerNFormView(context), viewProperty, viewDispatcher)
                     )
                 ViewType.RADIO_GROUP ->
                     rootView.addChild(
-                        RadioGroupView(context).initView(viewProperty, viewDispatcher)
+                        getView(RadioGroupView(context), viewProperty, viewDispatcher)
+                    )
+                ViewType.DATETIME_PICKER ->
+                    rootView.addChild(
+                        getView(DateTimePickerNFormView(context), viewProperty, viewDispatcher)
+                    )
+                ViewType.NUMBER_SELECTOR ->
+                    rootView.addChild(
+                        getView(NumberSelectorNFormView(context), viewProperty, viewDispatcher)
                     )
             }
+
         }
+    }
+
+    private fun getView(
+        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+    ): NFormView {
+        if (viewProperty.subjects != null) {
+            viewDispatcher.rulesFactory
+                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+            val hasVisibilityRule = viewDispatcher.rulesFactory.viewHasVisibilityRule(
+                viewProperty
+            )
+            if (hasVisibilityRule) {
+                viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
+                    false, nFormView.viewDetails.view
+                )
+            }
+        }
+        return nFormView.initView(viewProperty, viewDispatcher)
     }
 
     fun splitText(text: String?, delimiter: String): List<String> {
@@ -121,5 +141,29 @@ object ViewUtils {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> checkBox.setTextAppearance(R.style.checkBoxStyle)
             else -> checkBox.setTextAppearance(context, R.style.checkBoxStyle)
         }
+    }
+
+    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): TextView {
+        val label = TextView((nFormView as View).context)
+
+        label.apply {
+            setPadding(0, 0, 0, 16)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
+            else setTextAppearance((nFormView as View).context, R.style.labelStyle)
+
+            layoutParams = ViewGroup.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            text = attribute.second as String
+
+            if (nFormView.viewProperties.requiredStatus != null
+                && Utils.isFieldRequired(nFormView)
+            ) {
+                text = addRedAsteriskSuffix(label.text.toString())
+            }
+        }
+        return label
     }
 }

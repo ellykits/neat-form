@@ -20,3 +20,59 @@ priority: 1
 condition: "age > 18 || child == 'adult'"
 actions:
   - "adult_visibility =  true"
+---
+name: "email_subscription_visibility"
+description: "Display email subscription checkbox"
+priority: 1
+condition: "age > 18"
+actions:
+  - "email_subscription_visibility =  true"
+---
+name: "language_none_visibility"
+description: "Specify language if none is chosen"
+priority: 1
+condition: "choose_language['none'] != null"
+actions:
+  - "language_none_visibility =  true"
+---
+name: "choose_language_visibility"
+description: "Ask the user the languages they are proficient in"
+priority: 1
+condition: "gender == 'Female'"
+actions:
+  - "choose_language_visibility =  true"
+---
+name: "gender_visibility"
+description: "Ask gender"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "gender_visibility =  true"
+---
+name: "no_prev_pregnancies_visibility"
+description: "Ask last pregnancies"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "no_prev_pregnancies_visibility =  true"
+---
+name: "wiki_contribution_yes_visibility"
+description: "Ask contribution"
+priority: 1
+condition: "wiki_contribution != null && wiki_contribution['wiki_contribution'] == 'Yes'"
+actions:
+  - "wiki_contribution_yes_visibility = true"
+---
+name: "wiki_contribution_visibility"
+description: "Wiki contribution"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "wiki_contribution_visibility =  true"
+---
+name: "delivery_methods_visibility"
+description: "Delivery method"
+priority: 1
+condition: "no_prev_pregnancies > 0"
+actions:
+  - "delivery_methods_visibility =  true"

@@ -49,6 +49,13 @@ condition: "email_subscription['email_subscription'] != null"
 actions:
   - "gender_visibility =  true"
 ---
+name: "no_prev_pregnancies_visibility"
+description: "Ask last pregnancies"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "no_prev_pregnancies_visibility =  true"
+---
 name: "wiki_contribution_yes_visibility"
 description: "Ask contribution"
 priority: 1
@@ -62,3 +69,10 @@ priority: 1
 condition: "email_subscription['email_subscription'] != null"
 actions:
   - "wiki_contribution_visibility =  true"
+---
+name: "delivery_methods_visibility"
+description: "Delivery method"
+priority: 1
+condition: "no_prev_pregnancies > 0"
+actions:
+  - "delivery_methods_visibility =  true"
