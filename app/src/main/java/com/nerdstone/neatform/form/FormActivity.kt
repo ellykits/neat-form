@@ -2,6 +2,7 @@ package com.nerdstone.neatform.form
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,8 +39,10 @@ class FormActivity : AppCompatActivity() {
 
             if (pageTitle.equals("Programmer Survey"))
                 formBuilder = JsonFormBuilder(mainLayout, path).buildForm(null)
-            else
-                formBuilder = JsonFormBuilder(mainLayout, path).buildForm(layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null))
+            else {
+                val views = listOf<View>(layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null))
+                formBuilder = JsonFormBuilder(mainLayout, path).buildForm(views)
+            }
         }
     }
 }

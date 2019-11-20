@@ -86,9 +86,11 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
 
         textInputEditTextNFormView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
+                //Implement
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //Implement
             }
 
             override fun onTextChanged(
@@ -103,7 +105,6 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
                 }
             }
         })
-
 
 
     }

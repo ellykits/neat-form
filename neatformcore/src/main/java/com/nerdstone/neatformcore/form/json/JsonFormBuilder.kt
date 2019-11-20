@@ -35,7 +35,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
-    override fun buildForm(view: View?): FormBuilder {
+    override fun buildForm(viewList: List<View>?): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
                 val async = async(coroutineContextProvider.default) {
@@ -52,10 +52,10 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
-                    if (view == null)
-                        createFormViews(mainLayout.context)
+                    if (viewList == null)
+                        createFormViews(mainLayout.context, arrayListOf())
                     else
-                        updateFormViews(mainLayout.context, view)
+                        createFormViews(mainLayout.context, viewList)
                 }
             }
         }
@@ -74,25 +74,17 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     /***
      * @param context android context
      */
-    override fun createFormViews(context: Context) {
+    override fun createFormViews(context: Context, views: List<View>?) {
         if (form != null) {
-            for (formContent in form!!.steps) {
+            for ((index, formContent) in form!!.steps.withIndex()) {
                 val rootView = VerticalRootView(context)
-                rootView.addChildren(formContent.fields, viewDispatcher)
-                mainLayout.addView(rootView.initRootView() as View)
-            }
-        }
-    }
-
-    /***
-     * @param context android context
-     */
-    fun updateFormViews(context: Context, view: View) {
-        if (form != null) {
-            for (formContent in form!!.steps) {
-                val rootView = VerticalRootView(context)
-                ViewUtils.updateViews(view, formContent.fields, context, viewDispatcher)
-                rootView.addView(view)
+                val view = views?.getOrNull(index)
+                if (view != null) {
+                    ViewUtils.updateViews(view, formContent.fields, context, viewDispatcher)
+                    rootView.addView(view)
+                } else {
+                    rootView.addChildren(formContent.fields, viewDispatcher)
+                }
                 mainLayout.addView(rootView.initRootView() as View)
             }
         }

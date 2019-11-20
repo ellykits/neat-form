@@ -70,78 +70,112 @@
         app:layout_constraintStart_toStartOf="@+id/email_subscription"
         app:layout_constraintTop_toBottomOf="@+id/email_subscription" />
 
-    <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
-        android:id="@+id/choose_language"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/language_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/gender" />
+        app:layout_constraintTop_toBottomOf="@+id/gender">
 
-    <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-        android:id="@+id/language_none"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/choose_language" />
+        <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+            android:id="@+id/choose_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1" />
 
-    <com.nerdstone.neatformcore.views.containers.RadioGroupView
-        android:id="@+id/wiki_contribution"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/language_none" />
+        <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+            android:id="@+id/language_none"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-
-    <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-        android:id="@+id/wiki_contribution_yes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/wiki_contribution" />
 
     <LinearLayout
+        android:id="@+id/wiki_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/gender"
+        app:layout_constraintTop_toBottomOf="@+id/language_layout">
+
+        <com.nerdstone.neatformcore.views.containers.RadioGroupView
+            android:id="@+id/wiki_contribution"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
+        <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+            android:id="@+id/wiki_contribution_yes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/date_time_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/wiki_contribution_yes">
+        app:layout_constraintTop_toBottomOf="@+id/wiki_layout">
+
         <com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
             android:id="@+id/dob"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_weight="1" />
 
         <com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
             android:id="@+id/time"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
-
-
-    <com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
-        android:id="@+id/no_prev_pregnancies"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/date_time_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/date_time_layout">
 
-    <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
-        android:id="@+id/delivery_methods"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/no_prev_pregnancies" />
+        <com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
+            android:id="@+id/no_prev_pregnancies"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            app:layout_constraintStart_toStartOf="@+id/gender"
+            app:layout_constraintTop_toBottomOf="@+id/date_time_layout" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1">
+
+            <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+                android:id="@+id/delivery_methods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>
