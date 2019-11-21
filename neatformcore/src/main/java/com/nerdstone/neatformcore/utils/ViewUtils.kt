@@ -33,67 +33,35 @@ object ViewUtils {
         for (viewProperty in viewProperties) {
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         EditTextNFormView::class
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         MultiChoiceCheckBox::class
                     )
                 ViewType.CHECKBOX ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         CheckBoxNFormView::class
                     )
                 ViewType.SPINNER ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         SpinnerNFormView::class
                     )
                 ViewType.RADIO_GROUP ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         RadioGroupView::class
                     )
                 ViewType.DATETIME_PICKER ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         DateTimePickerNFormView::class
                     )
                 ViewType.NUMBER_SELECTOR ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         NumberSelectorNFormView::class
                     )
                 ViewType.TEXT_INPUT_EDIT_TEXT ->
-                    buildView(
-                        buildFromLayout,
-                        rootView,
-                        viewProperty,
-                        viewDispatcher,
+                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
                         TextInputEditTextNFormView::class
                     )
             }
@@ -116,9 +84,9 @@ object ViewUtils {
             )
             getView(v as NFormView, viewProperty, viewDispatcher)
         } else {
-            val ctor = c.constructors.minBy { it.parameters.size }
+            val objectConstructor = c.constructors.minBy { it.parameters.size }
             rootView.addChild(
-                getView(ctor!!.call(context), viewProperty, viewDispatcher)
+                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
             )
         }
     }
