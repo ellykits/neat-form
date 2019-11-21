@@ -24,7 +24,7 @@
         },
         {
           "name": "age",
-          "type": "edit_text",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter your age (will be multiplied by 10)",
             "type": "name",

@@ -12,6 +12,6 @@ interface RootView {
 
     fun addChild(nFormView: NFormView)
 
-    fun addChildren(viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher)
+    fun addChildren(viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher,buildFromLayout: Boolean=false)
 
 }

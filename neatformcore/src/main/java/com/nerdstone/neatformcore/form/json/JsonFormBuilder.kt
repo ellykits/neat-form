@@ -34,7 +34,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
-    override fun buildForm(): FormBuilder {
+    override fun buildForm(viewList: List<View>?): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
                 val async = async(coroutineContextProvider.default) {
@@ -51,7 +51,10 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
-                    createFormViews(mainLayout.context)
+                    if (viewList == null)
+                        createFormViews(mainLayout.context, arrayListOf())
+                    else
+                        createFormViews(mainLayout.context, viewList)
                 }
             }
         }
@@ -70,15 +73,24 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     /***
      * @param context android context
      */
-    override fun createFormViews(context: Context) {
+    override fun createFormViews(context: Context, views: List<View>?) {
         if (form != null) {
-            for (formContent in form!!.steps) {
+            for ((index, formContent) in form!!.steps.withIndex()) {
                 val rootView = VerticalRootView(context)
-                rootView.addChildren(formContent.fields, viewDispatcher)
+                val view = views?.getOrNull(index)
+                when {
+                    view != null -> {
+                        rootView.addView(view)
+                        rootView.addChildren(formContent.fields, viewDispatcher, true)
+                    }
+                    else -> rootView.addChildren(formContent.fields, viewDispatcher)
+                }
+
                 mainLayout.addView(rootView.initRootView() as View)
             }
         }
     }
+
 
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
         form?.rulesFile?.also {

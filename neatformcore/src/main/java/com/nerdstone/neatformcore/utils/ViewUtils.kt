@@ -21,46 +21,80 @@ import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.*
 import java.util.*
+import kotlin.reflect.KClass
+
+const val ID = "id"
 
 object ViewUtils {
 
     fun createViews(
         rootView: RootView, viewProperties: List<NFormViewProperty>,
-        context: Context, viewDispatcher: ViewDispatcher
+        viewDispatcher: ViewDispatcher, buildFromLayout: Boolean = false
     ) {
 
         for (viewProperty in viewProperties) {
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
-                    rootView.addChild(
-                        getView(EditTextNFormView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        EditTextNFormView::class
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
-                    rootView.addChild(
-                        getView(MultiChoiceCheckBox(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        MultiChoiceCheckBox::class
                     )
                 ViewType.CHECKBOX ->
-                    rootView.addChild(
-                        getView(CheckBoxNFormView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        CheckBoxNFormView::class
                     )
                 ViewType.SPINNER ->
-                    rootView.addChild(
-                        getView(SpinnerNFormView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        SpinnerNFormView::class
                     )
                 ViewType.RADIO_GROUP ->
-                    rootView.addChild(
-                        getView(RadioGroupView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        RadioGroupView::class
                     )
                 ViewType.DATETIME_PICKER ->
-                    rootView.addChild(
-                        getView(DateTimePickerNFormView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        DateTimePickerNFormView::class
                     )
                 ViewType.NUMBER_SELECTOR ->
-                    rootView.addChild(
-                        getView(NumberSelectorNFormView(context), viewProperty, viewDispatcher)
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        NumberSelectorNFormView::class
+                    )
+                ViewType.TEXT_INPUT_EDIT_TEXT ->
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
+                        TextInputEditTextNFormView::class
                     )
             }
 
+        }
+    }
+
+    private fun <T : NFormView> buildView(
+        buildFromLayout: Boolean, rootView: RootView,
+        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher, kClass: KClass<T>
+    ) {
+        val androidView = rootView as View
+        val context = rootView.context
+        if (buildFromLayout) {
+            val v = androidView.findViewById<View>(
+                context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
+            )
+            getView(v as NFormView, viewProperty, viewDispatcher)
+        } else {
+            val objectConstructor = kClass.constructors.minBy { it.parameters.size }
+            rootView.addChild(
+                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
+            )
         }
     }
 
