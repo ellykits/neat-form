@@ -33,6 +33,6 @@ class VerticalRootView : LinearLayout, RootView {
     }
 
     override fun addChildren(
-        viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher
-    ) = ViewUtils.createViews(this, viewProperties, context, viewDispatcher)
+        viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher, buildFromLayout: Boolean
+    ) = ViewUtils.createViews(this, viewProperties, viewDispatcher,buildFromLayout)
 }
