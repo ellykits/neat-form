@@ -23,6 +23,8 @@ import com.nerdstone.neatformcore.views.widgets.*
 import java.util.*
 import kotlin.reflect.KClass
 
+const val ID = "id"
+
 object ViewUtils {
 
     fun createViews(
@@ -33,35 +35,43 @@ object ViewUtils {
         for (viewProperty in viewProperties) {
             when (viewProperty.type) {
                 ViewType.EDIT_TEXT ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         EditTextNFormView::class
                     )
                 ViewType.MULTI_CHOICE_CHECKBOX ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         MultiChoiceCheckBox::class
                     )
                 ViewType.CHECKBOX ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         CheckBoxNFormView::class
                     )
                 ViewType.SPINNER ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         SpinnerNFormView::class
                     )
                 ViewType.RADIO_GROUP ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         RadioGroupView::class
                     )
                 ViewType.DATETIME_PICKER ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         DateTimePickerNFormView::class
                     )
                 ViewType.NUMBER_SELECTOR ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         NumberSelectorNFormView::class
                     )
                 ViewType.TEXT_INPUT_EDIT_TEXT ->
-                    buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
+                    buildView(
+                        buildFromLayout, rootView, viewProperty, viewDispatcher,
                         TextInputEditTextNFormView::class
                     )
             }
@@ -70,21 +80,18 @@ object ViewUtils {
     }
 
     private fun <T : NFormView> buildView(
-        buildFromLayout: Boolean,
-        rootView: RootView,
-        viewProperty: NFormViewProperty,
-        viewDispatcher: ViewDispatcher,
-        c: KClass<T>
+        buildFromLayout: Boolean, rootView: RootView,
+        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher, kClass: KClass<T>
     ) {
         val androidView = rootView as View
         val context = rootView.context
         if (buildFromLayout) {
             val v = androidView.findViewById<View>(
-                context.resources.getIdentifier(viewProperty.name, "id", context.packageName)
+                context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
             getView(v as NFormView, viewProperty, viewDispatcher)
         } else {
-            val objectConstructor = c.constructors.minBy { it.parameters.size }
+            val objectConstructor = kClass.constructors.minBy { it.parameters.size }
             rootView.addChild(
                 getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
             )
