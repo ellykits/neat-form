@@ -59,9 +59,9 @@ object ViewUtils {
                     rootView.addChild(
                             getView(NumberSelectorNFormView(context), viewProperty, viewDispatcher)
                     )
-                ViewType.TEXT_INPUT_LAYOUT ->
+                ViewType.TEXT_INPUT_EDIT_TEXT ->
                     rootView.addChild(
-                            getView(TextInputLayoutNFormView(context), viewProperty, viewDispatcher)
+                            getView(TextInputEditTextNFormView(context), viewProperty, viewDispatcher)
                     )
             }
 
@@ -108,8 +108,8 @@ object ViewUtils {
                     getView(v, viewProperty, viewDispatcher)
                 }
 
-                ViewType.TEXT_INPUT_LAYOUT -> {
-                    val v = rootView.findViewById<TextInputLayoutNFormView>(context.resources.getIdentifier(viewProperty.name, "id", packageName))
+                ViewType.TEXT_INPUT_EDIT_TEXT -> {
+                    val v = rootView.findViewById<TextInputEditTextNFormView>(context.resources.getIdentifier(viewProperty.name, "id", packageName))
                     getView(v, viewProperty, viewDispatcher)
                 }
             }

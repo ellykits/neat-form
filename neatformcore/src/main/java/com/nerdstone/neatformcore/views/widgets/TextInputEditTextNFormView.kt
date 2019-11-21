@@ -10,14 +10,14 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.builders.TextInputLayoutBuilder
+import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
-class TextInputLayoutNFormView : TextInputLayout, NFormView {
+class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
-    override val viewBuilder = TextInputLayoutBuilder(this)
+    override val viewBuilder = TextInputEditTextBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override val nFormRootView get() = this.parent as RootView
 

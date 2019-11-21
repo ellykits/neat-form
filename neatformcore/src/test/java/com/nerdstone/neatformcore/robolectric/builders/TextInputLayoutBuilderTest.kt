@@ -4,8 +4,8 @@ import android.view.View
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.views.builders.TextInputLayoutBuilder
-import com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
+import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
 import org.junit.Assert
 import org.junit.Before
@@ -25,9 +25,9 @@ class `Text building InputLayout View` {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val textInputLayoutNFormView =
-            TextInputLayoutNFormView(ApplicationProvider.getApplicationContext())
+            TextInputEditTextNFormView(ApplicationProvider.getApplicationContext())
     private val testInputLayoutBuilder = spyk(
-            objToCopy = TextInputLayoutBuilder(textInputLayoutNFormView),
+            objToCopy = TextInputEditTextBuilder(textInputLayoutNFormView),
             recordPrivateCalls = true
     )
 

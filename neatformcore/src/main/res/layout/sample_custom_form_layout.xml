@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+        <com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
             android:id="@+id/age"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView>
+        </com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView>
 
         <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
             android:id="@+id/child"

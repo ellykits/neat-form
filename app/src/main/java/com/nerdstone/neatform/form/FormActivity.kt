@@ -37,11 +37,16 @@ class FormActivity : AppCompatActivity() {
                 }
             }
 
-            if (pageTitle.equals("Programmer Survey"))
-                formBuilder = JsonFormBuilder(mainLayout, path).buildForm(null)
+            formBuilder = if (pageTitle.equals("Programmer Survey"))
+                JsonFormBuilder(mainLayout, path).buildForm()
             else {
-                val views = listOf<View>(layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null))
-                formBuilder = JsonFormBuilder(mainLayout, path).buildForm(views)
+                val views = listOf<View>(
+                    layoutInflater.inflate(
+                        R.layout.sample_one_form_custom_layout,
+                        null
+                    )
+                )
+                JsonFormBuilder(mainLayout, path).buildForm(views)
             }
         }
     }

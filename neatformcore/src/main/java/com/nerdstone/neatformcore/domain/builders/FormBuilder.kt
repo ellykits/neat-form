@@ -11,9 +11,9 @@ interface FormBuilder {
 
     var mainLayout: ViewGroup
 
-    fun buildForm(viewList: List<View>?): FormBuilder
+    fun buildForm(viewList: List<View>? = null): FormBuilder
 
-    fun createFormViews(context: Context, views: List<View>?)
+    fun createFormViews(context: Context, views: List<View>? = null)
 
     fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
 }

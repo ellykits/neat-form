@@ -7,7 +7,7 @@
       "fields": [
         {
           "name": "adult",
-          "type": "text_input_layout",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "This is an adult",
             "type": "name",
@@ -25,7 +25,7 @@
         },
         {
           "name": "age",
-          "type": "text_input_layout",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter your age",
             "type": "name",
@@ -40,7 +40,7 @@
         },
         {
           "name": "child",
-          "type": "text_input_layout",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "I am a child",
             "type": "name",

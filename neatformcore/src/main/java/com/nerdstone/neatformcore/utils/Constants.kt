@@ -6,7 +6,7 @@ object Constants {
         const val NUMBER_SELECTOR = "number_selector"
         const val SPINNER = "spinner"
         const val EDIT_TEXT = "edit_text"
-        const val TEXT_INPUT_LAYOUT = "text_input_layout"
+        const val TEXT_INPUT_EDIT_TEXT = "text_input_edit_text"
         const val MULTI_CHOICE_CHECKBOX = "multi_choice_checkbox"
         const val CHECKBOX = "checkbox"
         const val RADIO_GROUP = "radio_group"

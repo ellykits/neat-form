@@ -9,41 +9,41 @@ import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.widgets.TextInputLayoutNFormView
+import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import java.util.*
 
 
-class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
-    private val textInputLayout = nFormView as TextInputLayoutNFormView
+class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder {
+    private val textInputLayout = nFormView as TextInputEditTextNFormView
 
-    enum class TextInputLayoutViewProperties {
+    enum class TextInputEditTextViewProperties {
         HINT, PADDING, TEXT_SIZE, TEXT
     }
 
-    override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputLayoutViewProperties::class.java)
+    override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputEditTextViewProperties::class.java)
 
 
     override fun buildView() {
         createEditText()
         ViewUtils.applyViewAttributes(
-                nFormView = textInputLayout,
-                acceptedAttributes = acceptedAttributes,
-                task = this::setViewProperties
+            nFormView = textInputLayout,
+            acceptedAttributes = acceptedAttributes,
+            task = this::setViewProperties
         )
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         textInputLayout.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
-                TextInputLayoutViewProperties.PADDING.name -> {
+                TextInputEditTextViewProperties.PADDING.name -> {
                     val value = Utils.pxToDp(
-                            (attribute.value as String).toFloat(),
-                            textInputLayout.context
+                        (attribute.value as String).toFloat(),
+                        textInputLayout.context
                     )
                     setPadding(value, value, value, value)
                 }
 
-                TextInputLayoutViewProperties.HINT.name -> {
+                TextInputEditTextViewProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
                     formatHintForRequiredFields();
                 }
@@ -53,10 +53,10 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
 
         textInputLayout.editText?.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
-                TextInputLayoutViewProperties.TEXT_SIZE.name ->
+                TextInputEditTextViewProperties.TEXT_SIZE.name ->
                     textSize = (attribute.value as String).toFloat()
 
-                TextInputLayoutViewProperties.TEXT.name -> {
+                TextInputEditTextViewProperties.TEXT.name -> {
                     setText(attribute.value.toString())
                     requestFocus()
                     textInputLayout.dataActionListener?.onPassData(textInputLayout.viewDetails)
@@ -69,8 +69,9 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
         var textInputEditTextNFormView = TextInputEditText(textInputLayout.context)
 
         val editTextParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
 
         if (textInputLayout.editText == null)
             textInputLayout.addView(textInputEditTextNFormView, editTextParams);
@@ -94,8 +95,8 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
             }
 
             override fun onTextChanged(
-                    text: CharSequence, start: Int, lengthBefore: Int,
-                    lengthAfter: Int
+                text: CharSequence, start: Int, lengthBefore: Int,
+                lengthAfter: Int
             ) {
                 if (text.isNotEmpty()) {
                     textInputLayout.dataActionListener?.also {
@@ -113,7 +114,7 @@ class TextInputLayoutBuilder(override val nFormView: NFormView) : ViewBuilder {
         if (textInputLayout.viewProperties.requiredStatus != null) {
             if (Utils.isFieldRequired(textInputLayout)) {
                 textInputLayout.hint =
-                        ViewUtils.addRedAsteriskSuffix(textInputLayout.hint.toString())
+                    ViewUtils.addRedAsteriskSuffix(textInputLayout.hint.toString())
             }
         }
     }
