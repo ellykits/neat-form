@@ -26,7 +26,7 @@ jobs:
           name: Run gradle clean
           command: ./gradlew clean
       - run:
-          name: Run JacocoTestReports for every module
+          name: Run JacocoTestReport for neat-form module
           command: ./gradlew jacocoTestReportDebug #for more info refer to this plugin: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin
 #      - run:
 #          name: Merge jacoco reports for codecov
