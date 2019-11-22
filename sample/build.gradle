@@ -54,7 +54,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation(project(":neatformcore"))
+    implementation(project(':neat-form-core'))
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:design:28.0.0'
