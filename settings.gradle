@@ -1,1 +1,2 @@
-include ':app', ':neatformcore'
+include ':sample', ':neat-form-core'
+rootProject.name='Neat Form'

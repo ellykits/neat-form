@@ -38,3 +38,4 @@ tmp/
 project.properties
 .settings
 build/
+github.properties
