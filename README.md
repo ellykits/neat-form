@@ -517,10 +517,10 @@ class FormActivity : AppCompatActivity() {
 Please check out the sample app for this demo.
 
 App rendered using the default view (`LinearLayout`).
-  <img src ="./pics/neat-form-demo.gif" width="360" />
+ <p><img src ="./pics/neat-form-demo.gif" width="360" /></p>
   
 App rendered using custom layout.
- <img src ="./pics/neat-form-demo2.gif" width="680" />
+ <p><img src ="./pics/neat-form-demo2.gif" width="680" /></p>
  
 Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 
