@@ -18,6 +18,7 @@
     android:layout_marginEnd="16dp"
     android:padding="8dp"
     android:src="@drawable/ic_edit_white"
+    app:backgroundTint="@color/colorWhite"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"/>
   <TextView
