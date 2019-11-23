@@ -1,6 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.utils
 
-import android.support.v7.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.utils.ViewUtils
 import io.mockk.mockkObject

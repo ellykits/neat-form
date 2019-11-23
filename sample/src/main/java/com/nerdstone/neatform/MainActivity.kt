@@ -2,11 +2,11 @@ package com.nerdstone.neatform
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.nerdstone.neatform.form.FormActivity
@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var formRecyclerView: RecyclerView
-    private lateinit var floatingActionButton: FloatingActionButton
+    private lateinit var formRecyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var floatingActionButton: com.google.android.material.floatingactionbutton.FloatingActionButton
     private lateinit var exitAppImageView: ImageView
 
     private var formRecyclerAdapter = FormRecyclerAdapter()
@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         floatingActionButton = findViewById(R.id.newFormFab)
         exitAppImageView = findViewById(R.id.exitAppImageView)
 
-        formRecyclerView.layoutManager = LinearLayoutManager(this)
+        formRecyclerView.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(this)
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         formRecyclerView.adapter = formRecyclerAdapter
         formRecyclerAdapter.listener = View.OnClickListener {
-            val viewHolder = it.tag as RecyclerView.ViewHolder
+            val viewHolder = it.tag as androidx.recyclerview.widget.RecyclerView.ViewHolder
             val formData = formRecyclerAdapter.formList[viewHolder.adapterPosition]
             val intent = Intent(this, FormActivity::class.java)
             intent.putExtra("path", formData.filePath)
@@ -65,10 +66,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when {
-            v?.id == R.id.newFormFab -> Snackbar.make(
+            v?.id == R.id.newFormFab -> com.google.android.material.snackbar.Snackbar.make(
                 findViewById(R.id.mainActivityConstraintLayout),
                 "Action not yet implemented",
-                Snackbar.LENGTH_SHORT
+                com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
             ).show()
             v?.id == R.id.exitAppImageView -> finish()
         }

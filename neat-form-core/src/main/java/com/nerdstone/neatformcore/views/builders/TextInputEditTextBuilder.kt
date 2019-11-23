@@ -1,6 +1,6 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.support.design.widget.TextInputEditText
+import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
@@ -66,7 +66,10 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
     }
 
     private fun createEditText() {
-        var textInputEditTextNFormView = TextInputEditText(textInputLayout.context)
+        var textInputEditTextNFormView =
+            com.google.android.material.textfield.TextInputEditText(
+                textInputLayout.context
+            )
 
         val editTextParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -76,7 +79,7 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
         if (textInputLayout.editText == null)
             textInputLayout.addView(textInputEditTextNFormView, editTextParams);
         else
-            textInputEditTextNFormView = textInputLayout.editText as TextInputEditText;
+            textInputEditTextNFormView = textInputLayout.editText as com.google.android.material.textfield.TextInputEditText;
 
         //Hide keyboard when focus is lost
         textInputEditTextNFormView.setOnFocusChangeListener { _, hasFocus ->

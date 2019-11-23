@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -88,10 +88,10 @@ class `Test building form with JSON` {
 
                 val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
                 Assert.assertTrue(verticalRootView.childCount == 1)
-                Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)
+                Assert.assertTrue((verticalRootView.getChildAt(0) as androidx.constraintlayout.widget.ConstraintLayout).getChildAt(4) is EditTextNFormView)
 
                 val editTextAttributes =
-                        ((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
+                        ((verticalRootView.getChildAt(0) as androidx.constraintlayout.widget.ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
 
                 Assert.assertTrue(editTextAttributes.containsKey("hint") && editTextAttributes["hint"] == "Specify your language")
             }

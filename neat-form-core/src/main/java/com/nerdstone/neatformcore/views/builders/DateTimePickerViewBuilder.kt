@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.views.builders
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.support.design.widget.TextInputEditText
+import com.google.android.material.textfield.TextInputEditText
 import android.widget.DatePicker
 import android.widget.TimePicker
 import com.nerdstone.neatformcore.R
@@ -23,7 +23,10 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
     private val selectedDate = Calendar.getInstance()
     private val calendar = Calendar.getInstance()
-    val textInputEditText = TextInputEditText(dateTimePickerNFormView.context)
+    val textInputEditText =
+        com.google.android.material.textfield.TextInputEditText(
+            dateTimePickerNFormView.context
+        )
 
     enum class DateTimePickerProperties {
         HINT, TYPE, DISPLAY_FORMAT

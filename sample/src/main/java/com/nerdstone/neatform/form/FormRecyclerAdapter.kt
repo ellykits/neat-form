@@ -1,13 +1,13 @@
 package com.nerdstone.neatform.form
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.nerdstone.neatform.R
 
-class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHolder>() {
+class FormRecyclerAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<FormRecyclerAdapter.MainViewHolder>() {
 
     var formList = mutableListOf<FormData>()
     lateinit var listener: View.OnClickListener
@@ -32,7 +32,7 @@ class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHol
         }
     }
 
-    inner class MainViewHolder(rowSection: View) : RecyclerView.ViewHolder(rowSection) {
+    inner class MainViewHolder(rowSection: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(rowSection) {
 
         val formTitleTextView = rowSection.findViewById<TextView?>(R.id.formTitleTextView)
         val formCategoryTextView = rowSection.findViewById<TextView?>(R.id.formCategoryTextView)
