@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-  <androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-      android:id="@+id/exitFormImageView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginEnd="16dp"
-      android:padding="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_clear"/>
-    <LinearLayout
-      android:id="@+id/mainLayout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:orientation="vertical"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/pageTitleTextView"/>
-    <TextView
-      android:id="@+id/pageTitleTextView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="16dp"
-      android:paddingBottom="8dp"
-      android:paddingTop="8dp"
-      android:drawableBottom="@color/colorDark"
-      android:maxLines="1"
-      android:text="Quantitative Survey"
-      android:textAlignment="textStart"
-      android:textColor="@color/colorBlack"
-      android:textSize="22sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/exitFormImageView"/>
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.core.widget.NestedScrollView>
+        <ImageView
+            android:id="@+id/exitFormImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="TODO"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_clear"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/pageTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/exitFormImageView"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableBottom="@color/colorDark"
+            android:maxLines="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="Quantitative Survey"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorBlack"
+            android:textSize="22sp" />
+
+        <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/pageTitleTextView"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical" />
+
+
+    </RelativeLayout>
+</FrameLayout>
