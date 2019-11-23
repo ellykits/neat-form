@@ -104,7 +104,7 @@ repositories {
 def githubProperties = new Properties()
 
 //Read the github properties content
-githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 def getVersionName = { ->
     return "1.0.1"
