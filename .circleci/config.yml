@@ -8,6 +8,9 @@ jobs:
       - image: circleci/android:api-28
     environment:
       JVM_OPTS: -Xmx3200m -noverify
+    checkout:
+      post:
+        - cp local.properties.ci local.properties
     steps:
       - checkout
       - restore_cache:
