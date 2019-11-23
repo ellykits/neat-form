@@ -22,11 +22,28 @@ buildscript {
     }
 }
 
+//For publishing dependency to GitHub package
+def githubProperties = new Properties()
+//Read the github properties content
+githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 allprojects {
     repositories {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven {
+            name = "GitHubPackages"
+            /**
+             * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */
+            url = uri("https://maven.pkg.github.com/ellykits/neat-android-stepper")
+            credentials {
+                /** get credentials from local.properties in root project folder file with
+                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
     }
 }
 
