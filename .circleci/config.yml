@@ -16,6 +16,9 @@ jobs:
       #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
       #         command: sudo chmod +x ./gradlew
       - run:
+          name: Create dummy local.properties file
+          command: cp local.properties.ci local.properties
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
