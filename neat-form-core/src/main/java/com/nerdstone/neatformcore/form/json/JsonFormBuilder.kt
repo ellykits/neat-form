@@ -38,6 +38,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     private val singleRunner = SingleRunner()
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
+    var neatStepperLayout : NeatStepperLayout? = null
 
     init {
         rulesHandler.formBuilder = this
@@ -85,7 +86,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
      */
     override fun createFormViews(context: Context, views: List<View>?) {
         if (form != null) {
-            val neatStepperLayout = NeatStepperLayout(context)
+            neatStepperLayout = NeatStepperLayout(context)
 
             val fragmentsList: MutableList<StepFragment> = mutableListOf()
 
@@ -99,8 +100,6 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
                     }
                     else -> rootView.addChildren(formContent.fields, viewDispatcher)
                 }
-
-
                 val stepFragment = StepFragment(
                     StepModel.Builder()
                         .title(formContent.stepName as CharSequence)
@@ -112,7 +111,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
 
 
-            neatStepperLayout.setUpViewWithAdapter(
+            neatStepperLayout?.setUpViewWithAdapter(
                 StepperPagerAdapter(
                     (context as AppCompatActivity).supportFragmentManager,
                     fragmentsList

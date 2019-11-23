@@ -1,50 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/exitFormImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="TODO"
-            android:padding="8dp"
-            app:srcCompat="@drawable/ic_clear"
-            tools:ignore="VectorDrawableCompat" />
-
-        <TextView
-            android:id="@+id/pageTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/exitFormImageView"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:drawableBottom="@color/colorDark"
-            android:maxLines="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="Quantitative Survey"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorBlack"
-            android:textSize="22sp" />
-
-        <LinearLayout
-            android:id="@+id/mainLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/pageTitleTextView"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical" />
-
-
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
 </FrameLayout>
