@@ -19,9 +19,6 @@ jobs:
           name: Create local.properties file
           command: cp local.properties.ci local.properties
       - run:
-          name: Gradle Libraries
-          command:  ./gradlew installDebug --stacktrace
-      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies --stacktrace
       - save_cache:
