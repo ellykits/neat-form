@@ -12,7 +12,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
-class DateTimePickerNFormView : com.google.android.material.textfield.TextInputLayout, NFormView {
+class DateTimePickerNFormView : TextInputLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
