@@ -84,7 +84,7 @@ class `Test building form with JSON` {
                 val view = inflater.inflate(R.layout.sample_custom_form_layout, null);
                 val viewsList = listOf<View>(view)
 
-                jsonFormBuilder.buildForm(viewsList)
+                jsonFormBuilder.buildForm(null,viewsList)
 
                 val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
                 Assert.assertTrue(verticalRootView.childCount == 1)
