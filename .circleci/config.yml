@@ -20,7 +20,7 @@ jobs:
           command: cp local.properties.ci local.properties
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies
+          command: ./gradlew androidDependencies --stacktrace
       - save_cache:
           paths:
             - ~/.gradle
@@ -30,7 +30,7 @@ jobs:
           command: ./gradlew clean
       - run:
           name: Run JacocoTestReport for neat-form module
-          command: ./gradlew jacocoTestReportDebug #for more info refer to this plugin: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin
+          command: ./gradlew jacocoTestReportDebug --stacktrace #for more info refer to this plugin: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin
 #      - run:
 #          name: Merge jacoco reports for codecov
 #          command: ./gradlew jacocoTestReportMerged
