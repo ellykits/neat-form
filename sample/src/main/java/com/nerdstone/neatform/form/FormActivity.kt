@@ -44,8 +44,6 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 )
                 JsonFormBuilder(mainLayout, path).buildForm(views)
             }
-
-            (formBuilder as JsonFormBuilder).neatStepperLayout?.stepperActions = this
         }
     }
 
