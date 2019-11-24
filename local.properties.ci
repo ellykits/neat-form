@@ -5,5 +5,5 @@
 # For customization when using a Version Control System, please read the
 # header note.
 #Fri Nov 22 16:31:53 EAT 2019
-gpr.usr=${GPR_USER}
-gpr.key=${GPR_API_KEY}
+gpr.usr=ellykits
+gpr.key=e8a61914e105e1e8526203f25419f517806dbf26
