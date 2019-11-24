@@ -13,7 +13,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
-class TextInputEditTextNFormView : com.google.android.material.textfield.TextInputLayout, NFormView {
+class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
