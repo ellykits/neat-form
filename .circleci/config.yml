@@ -16,7 +16,7 @@ jobs:
       #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
       #         command: sudo chmod +x ./gradlew
       - run:
-          name: Create dummy local.properties file
+          name: Create local.properties file
           command: cp local.properties.ci local.properties
       - run:
           name: Download Dependencies
@@ -31,9 +31,9 @@ jobs:
       - run:
           name: Run JacocoTestReport for neat-form module
           command: ./gradlew jacocoTestReportDebug --stacktrace #for more info refer to this plugin: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin
-#      - run:
-#          name: Merge jacoco reports for codecov
-#          command: ./gradlew jacocoTestReportMerged
+      #      - run:
+      #          name: Merge jacoco reports for codecov
+      #          command: ./gradlew jacocoTestReportMerged
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: sample/build/reports
           destination: reports
@@ -41,4 +41,4 @@ jobs:
           path: sample/build/test-results
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
       - codecov/upload:
-            file: neat-form-core/build/reports/jacoco/debug/jacoco.xml #For code coverage
+          file: neat-form-core/build/reports/jacoco/debug/jacoco.xml #For code coverage
