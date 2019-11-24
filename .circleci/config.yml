@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
       #      - run:
       #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
       #         command: sudo chmod +x ./gradlew
@@ -24,7 +24,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "sample/build.gradle" }}
       - run:
           name: Run gradle clean
           command: ./gradlew clean
@@ -35,10 +35,10 @@ jobs:
 #          name: Merge jacoco reports for codecov
 #          command: ./gradlew jacocoTestReportMerged
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: app/build/reports
+          path: sample/build/reports
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: app/build/test-results
+          path: sample/build/test-results
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
       - codecov/upload:
             file: neat-form-core/build/reports/jacoco/debug/jacoco.xml #For code coverage
