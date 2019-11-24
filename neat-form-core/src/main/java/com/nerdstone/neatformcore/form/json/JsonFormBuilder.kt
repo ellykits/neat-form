@@ -115,7 +115,8 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
                 }
                 val stepFragment = StepFragment(
                     StepModel.Builder()
-                        .title(formContent.stepName as CharSequence)
+                        .title(form!!.formName)
+                        .subTitle(formContent.stepName as CharSequence)
                         .bottomNavigationColorResource(R.color.colorBlack)
                         .build(), rootView
                 )
