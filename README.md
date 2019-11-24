@@ -28,9 +28,8 @@ At the moment GitHub requires you to be authenticated in order to download Andro
 **Step 1** : Generate a Personal Access Token for GitHub [How to generate GitHub personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)  
   
 **Step 2** : Store your GitHub — Personal Access Token details   
-Create a file **`github.properties`** inside the root directory of your project. (Add this file to `.gitignore` file for public  repositories  to keep your secrets safe)  
-  
-Add these content to the file.  
+Add these content to the **`local.properties`** file inside the root directory of your project.   
+
 ```  
 gpr.usr=YOUR_GITHUB_USERID  
 gpr.key=YOUR_PERSONAL_ACCESS_TOKEN  
@@ -41,7 +40,7 @@ gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
 //For publishing dependency to GitHub package  
 def githubProperties = new Properties()  
 //Read the github properties content  
-githubProperties.load(new FileInputStream(rootProject.file("github.properties")))  
+githubProperties.load(new FileInputStream(rootProject.file("local.properties")))  
   
 android {  
      //...  
@@ -53,7 +52,7 @@ android {
              * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */    
               url = uri("https://maven.pkg.github.com/ellykits/neat-form")   
               credentials {    
-                  /** get credentials from github.properties in root project folder file with    
+                  /** get credentials from local.properties in root project folder file with    
                  ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/    
                   username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")    
                   password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")    
@@ -700,4 +699,4 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
   
 ## License  
   
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](./LICENSE.md) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](./LICENSE) file for details
