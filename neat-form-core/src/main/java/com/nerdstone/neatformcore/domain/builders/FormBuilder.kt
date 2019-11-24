@@ -13,8 +13,8 @@ interface FormBuilder {
     var mainLayout: ViewGroup
 
     fun buildForm(
-        viewList: List<View>? = null,
-        jsonFormBuilderModel: JsonFormBuilderModel? = null
+        jsonFormBuilderModel: JsonFormBuilderModel? = null,
+        viewList: List<View>? = null
     ): FormBuilder
 
     fun createFormViews(

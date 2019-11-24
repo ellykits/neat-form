@@ -46,8 +46,8 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     }
 
     override fun buildForm(
-        viewList: List<View>?,
-        jsonFormBuilderModel: JsonFormBuilderModel?
+        jsonFormBuilderModel: JsonFormBuilderModel?,
+        viewList: List<View>?
     ): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {

@@ -30,6 +30,10 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
         mainLayout = findViewById(R.id.mainLayout)
 
+        val stepperModel = StepperModel.Builder().build()
+        stepperModel.toolbarColorResId = R.color.colorPrimaryDark
+        stepperModel.exitButtonDrawableResId = R.drawable.ic_clear_white
+
 
         if (intent.extras != null) {
             val path = intent?.extras?.getString("path") ?: ""
@@ -39,7 +43,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 pageTitle.equals("Programmer Survey") -> JsonFormBuilder(
                     mainLayout,
                     path
-                ).buildForm()
+                ).buildForm(JsonFormBuilderModel.Builder(this, stepperModel).build())
                 pageTitle.equals("Customer feedback") -> {
                     val views = listOf<View>(
                         layoutInflater.inflate(
@@ -47,7 +51,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
                             null
                         )
                     )
-                    JsonFormBuilder(mainLayout, path).buildForm(views)
+                    JsonFormBuilder(mainLayout, path).buildForm(
+                        JsonFormBuilderModel.Builder(this, stepperModel).build(), views
+                    )
                 }
                 else -> {
                     val views = listOf<View>(
@@ -57,15 +63,8 @@ class FormActivity : AppCompatActivity(), StepperActions {
                         )
                     )
 
-                    val stepperModel = StepperModel.Builder().build()
-                    stepperModel.toolbarColorResId = R.color.colorPrimaryDark
-                    stepperModel.exitButtonDrawableResId = R.drawable.ic_clear_white
-
                     JsonFormBuilder(mainLayout, path).buildForm(
-                        views,
-                        JsonFormBuilderModel.Builder(
-                            this, stepperModel
-                        ).build()
+                        JsonFormBuilderModel.Builder(this, stepperModel).build(), views
                     )
                 }
             }
