@@ -1,3 +1,2 @@
-include ':sample', ':neat-form-core',':neat-android-stepper'
+include ':sample', ':neat-form-core'
 rootProject.name='Neat Form'
-project(":neat-android-stepper").projectDir = new File(settingsDir, "../neat-android-stepper/neat-android-stepper")

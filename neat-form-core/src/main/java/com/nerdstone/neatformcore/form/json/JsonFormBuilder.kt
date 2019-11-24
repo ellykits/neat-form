@@ -15,6 +15,7 @@ import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import com.nerdstone.neatformcore.domain.model.JsonFormBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
@@ -44,7 +45,10 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
-    override fun buildForm(viewList: List<View>?): FormBuilder {
+    override fun buildForm(
+        viewList: List<View>?,
+        jsonFormBuilderModel: JsonFormBuilderModel?
+    ): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
                 val async = async(coroutineContextProvider.default) {
@@ -62,9 +66,9 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
                     if (viewList == null)
-                        createFormViews(mainLayout.context, arrayListOf())
+                        createFormViews(mainLayout.context, arrayListOf(), jsonFormBuilderModel)
                     else
-                        createFormViews(mainLayout.context, viewList)
+                        createFormViews(mainLayout.context, viewList, jsonFormBuilderModel)
                 }
             }
         }
@@ -83,9 +87,19 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     /***
      * @param context android context
      */
-    override fun createFormViews(context: Context, views: List<View>?) {
+    override fun createFormViews(
+        context: Context,
+        views: List<View>?,
+        jsonFormBuilderModel: JsonFormBuilderModel?
+    ) {
         if (form != null) {
-            var neatStepperLayout = NeatStepperLayout(context)
+            val neatStepperLayout = NeatStepperLayout(context)
+
+            if (jsonFormBuilderModel != null) {
+                neatStepperLayout.stepperModel = jsonFormBuilderModel.stepperModel
+                if (jsonFormBuilderModel.stepperActions != null)
+                    neatStepperLayout.stepperActions = jsonFormBuilderModel.stepperActions
+            }
 
             val fragmentsList: MutableList<StepFragment> = mutableListOf()
 
@@ -109,9 +123,9 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
                 fragmentsList.add(stepFragment)
             }
 
-            neatStepperLayout?.stepperModel
+            neatStepperLayout.stepperModel
 
-            neatStepperLayout?.setUpViewWithAdapter(
+            neatStepperLayout.setUpViewWithAdapter(
                 StepperPagerAdapter(
                     (context as AppCompatActivity).supportFragmentManager,
                     fragmentsList
@@ -143,7 +157,7 @@ class StepFragment : Step {
     private var myView: View
 
     constructor(stepModel: StepModel, v: View) : super(stepModel) {
-        myView = v;
+        myView = v
     }
 
 

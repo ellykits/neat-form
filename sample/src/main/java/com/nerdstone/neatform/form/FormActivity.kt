@@ -9,10 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatandroidstepper.core.domain.StepperActions
+import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import com.nerdstone.neatformcore.domain.model.JsonFormBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 
 
@@ -33,16 +35,39 @@ class FormActivity : AppCompatActivity(), StepperActions {
             val path = intent?.extras?.getString("path") ?: ""
             val pageTitle = intent?.extras?.getString("page")?.capitalizeWords()
 
-            formBuilder = if (pageTitle.equals("Programmer Survey"))
-                JsonFormBuilder(mainLayout, path).buildForm()
-            else {
-                val views = listOf<View>(
-                    layoutInflater.inflate(
-                        R.layout.sample_one_form_custom_layout,
-                        null
+            formBuilder = when {
+                pageTitle.equals("Programmer Survey") -> JsonFormBuilder(
+                    mainLayout,
+                    path
+                ).buildForm()
+                pageTitle.equals("Customer feedback") -> {
+                    val views = listOf<View>(
+                        layoutInflater.inflate(
+                            R.layout.sample_one_form_custom_layout,
+                            null
+                        )
                     )
-                )
-                JsonFormBuilder(mainLayout, path).buildForm(views)
+                    JsonFormBuilder(mainLayout, path).buildForm(views)
+                }
+                else -> {
+                    val views = listOf<View>(
+                        layoutInflater.inflate(
+                            R.layout.sample_one_form_custom_layout,
+                            null
+                        )
+                    )
+
+                    val stepperModel = StepperModel.Builder().build()
+                    stepperModel.toolbarColorResId = R.color.colorPrimaryDark
+                    stepperModel.exitButtonDrawableResId = R.drawable.ic_clear_white
+
+                    JsonFormBuilder(mainLayout, path).buildForm(
+                        views,
+                        JsonFormBuilderModel.Builder(
+                            this, stepperModel
+                        ).build()
+                    )
+                }
             }
         }
     }

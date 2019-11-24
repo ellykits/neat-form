@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var formRecyclerView: androidx.recyclerview.widget.RecyclerView
-    private lateinit var floatingActionButton: com.google.android.material.floatingactionbutton.FloatingActionButton
+    private lateinit var formRecyclerView: RecyclerView
+    private lateinit var floatingActionButton: FloatingActionButton
     private lateinit var exitAppImageView: ImageView
 
     private var formRecyclerAdapter = FormRecyclerAdapter()
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         exitAppImageView = findViewById(R.id.exitAppImageView)
 
         formRecyclerView.layoutManager =
-            androidx.recyclerview.widget.LinearLayoutManager(this)
+            LinearLayoutManager(this)
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
@@ -47,12 +47,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     formTitle = "Customer feedback",
                     formCategory = "Marketing",
                     filePath = "sample/sample_one_form.json"
+                ),
+                FormData(
+                    formTitle = "Multi step form",
+                    formCategory = "Marketing",
+                    filePath = "sample/sample_two_form.json"
                 )
             )
 
         formRecyclerView.adapter = formRecyclerAdapter
         formRecyclerAdapter.listener = View.OnClickListener {
-            val viewHolder = it.tag as androidx.recyclerview.widget.RecyclerView.ViewHolder
+            val viewHolder = it.tag as RecyclerView.ViewHolder
             val formData = formRecyclerAdapter.formList[viewHolder.adapterPosition]
             val intent = Intent(this, FormActivity::class.java)
             intent.putExtra("path", formData.filePath)
@@ -65,13 +70,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when {
-            v?.id == R.id.newFormFab -> com.google.android.material.snackbar.Snackbar.make(
+        when (v?.id) {
+            R.id.newFormFab -> Snackbar.make(
                 findViewById(R.id.mainActivityConstraintLayout),
                 "Action not yet implemented",
-                com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                Snackbar.LENGTH_SHORT
             ).show()
-            v?.id == R.id.exitAppImageView -> finish()
+            R.id.exitAppImageView -> finish()
         }
     }
 }

@@ -263,6 +263,27 @@
           "subjects": "no_prev_pregnancies:number"
         }
       ]
+    },
+    {
+      "title": "Results",
+      "fields": [
+        {
+          "name": "condition",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "Enter your condition",
+            "type": "name",
+            "padding": "8"
+          },
+          "meta_data": {
+            "openmrs_entity": "",
+            "openmrs_entity_id": "",
+            "openmrs_entity_parent": ""
+          },
+          "validation": "length() < 8; !contains(@)",
+          "required_status": "True:please enter your current condition"
+        }
+      ]
     }
   ]
 }
