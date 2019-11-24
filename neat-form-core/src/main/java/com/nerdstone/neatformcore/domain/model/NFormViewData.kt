@@ -1,6 +1,6 @@
 package com.nerdstone.neatformcore.domain.model
 
-import android.arch.persistence.room.Entity
+import androidx.room.Entity
 
 import java.io.Serializable
 
