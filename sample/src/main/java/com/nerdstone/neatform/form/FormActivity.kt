@@ -29,6 +29,8 @@ class FormActivity : AppCompatActivity(), StepperActions {
         setContentView(R.layout.form_activity)
 
         mainLayout = findViewById(R.id.mainLayout)
+        pageTitleTextView = findViewById(R.id.pageTitleTextView)
+        exitFormImageView = findViewById(R.id.exitFormImageView)
 
         val stepperModel = StepperModel.Builder()
             .exitButtonDrawableResource(R.drawable.ic_clear_white)
@@ -40,29 +42,37 @@ class FormActivity : AppCompatActivity(), StepperActions {
             val path = intent?.extras?.getString("path") ?: ""
             val pageTitle = intent?.extras?.getString("page")?.capitalizeWords()
 
+            pageTitleTextView.text = pageTitle
+            exitFormImageView.setOnClickListener {
+                if (it.id == R.id.exitFormImageView) {
+                    finish()
+                }
+            }
+
+
             formBuilder = when {
-                pageTitle.equals("Programmer Survey") -> JsonFormBuilder(
+                pageTitle.equals("Default Forms") -> JsonFormBuilder(
                     mainLayout, path
                 ).buildForm()
-                pageTitle.equals("Customer feedback") -> {
+                pageTitle.equals("Default Forms with Stepper") -> {
+                    JsonFormBuilder(mainLayout, path).buildForm(
+                        JsonFormStepBuilderModel.Builder(this, stepperModel).build()
+                    )
+                }
+                pageTitle.equals("Customized Forms") -> {
                     val views = listOf<View>(
                         layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
-                    JsonFormBuilder(mainLayout, path).buildForm(
-                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
-                        views
-                    )
+                    JsonFormBuilder(mainLayout, path).buildForm(null, views)
                 }
                 else -> {
                     val views = listOf<View>(
-                        layoutInflater.inflate(
-                            R.layout.sample_one_form_custom_layout,
-                            null
-                        )
+                        layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
 
                     JsonFormBuilder(mainLayout, path).buildForm(
-                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(), views
+                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
+                        views
                     )
                 }
             }

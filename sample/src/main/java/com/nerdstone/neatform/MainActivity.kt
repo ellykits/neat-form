@@ -39,17 +39,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
-                    formTitle = "Programmer Survey",
+                    formTitle = "Default Forms",
                     formCategory = "IT Computer",
                     filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
-                    formTitle = "Customer feedback",
+                    formTitle = "Default Forms with Stepper",
+                    formCategory = "Marketing",
+                    filePath = "sample/sample_two_form.json"
+                ),
+                FormData(
+                    formTitle = "Customized Forms",
                     formCategory = "Marketing",
                     filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
-                    formTitle = "Multi step form",
+                    formTitle = "Customized Forms with Stepper",
                     formCategory = "Marketing",
                     filePath = "sample/sample_two_form.json"
                 )
