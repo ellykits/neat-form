@@ -52,10 +52,10 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             formBuilder = when {
                 pageTitle.equals("Default Forms") -> JsonFormBuilder(
-                    mainLayout, path
+                    this, path, mainLayout
                 ).buildForm()
                 pageTitle.equals("Default Forms with Stepper") -> {
-                    JsonFormBuilder(mainLayout, path).buildForm(
+                    JsonFormBuilder(this, path, null).buildForm(
                         JsonFormStepBuilderModel.Builder(this, stepperModel).build()
                     )
                 }
@@ -63,14 +63,14 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     val views = listOf<View>(
                         layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
-                    JsonFormBuilder(mainLayout, path).buildForm(null, views)
+                    JsonFormBuilder(this, path, mainLayout).buildForm(null, views)
                 }
                 else -> {
                     val views = listOf<View>(
                         layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
 
-                    JsonFormBuilder(mainLayout, path).buildForm(
+                    JsonFormBuilder(this, path, mainLayout).buildForm(
                         JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
                         views
                     )

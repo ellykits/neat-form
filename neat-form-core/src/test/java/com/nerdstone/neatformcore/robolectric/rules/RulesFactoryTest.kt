@@ -55,7 +55,7 @@ class `Test Rules Engine functionality` {
 
         //Setup rules handler with form builder and views map
         rulesHandler.viewIdsMap["adult"] = 1
-        rulesHandler.formBuilder = JsonFormBuilder(mainLayout, TestConstants.SAMPLE_ONE_FORM_FILE)
+        rulesHandler.formBuilder = JsonFormBuilder(, TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
 

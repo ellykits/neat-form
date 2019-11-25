@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">neatformcore</string>
+    <string name="form_builder_error">No root view provided for the form builder</string>
 </resources>

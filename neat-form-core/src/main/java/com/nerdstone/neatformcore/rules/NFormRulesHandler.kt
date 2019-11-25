@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.rules
 
+import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.view.RulesHandler
@@ -64,13 +65,15 @@ class NFormRulesHandler private constructor() : RulesHandler {
     }
 
      fun hideOrShowField(key: String, isVisible: Boolean?) {
+         val activity  = formBuilder.context as Activity
         if (viewIdsMap.containsKey(key)) {
-            viewIdsMap[key]?.let { id -> formBuilder.mainLayout.findViewById<View>(id) }
+            viewIdsMap[key]?.let { id -> activity.findViewById<View>(id) }
                 ?.also { view -> changeVisibility(isVisible, view) }
         }
     }
 
     override fun refreshViews(allRules: Rules?) {
+        val activity  = formBuilder.context as Activity
         allRules?.also {
             it.toMutableList()
                 .filter { rule ->
@@ -78,7 +81,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
                         .endsWith(Constants.RuleActions.VISIBILITY)
                 }.forEach { item ->
                     val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                    val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)
+                    val view = activity.findViewById<View>(viewIdsMap[key]!!)
                     changeVisibility(false, view)
                 }
         }

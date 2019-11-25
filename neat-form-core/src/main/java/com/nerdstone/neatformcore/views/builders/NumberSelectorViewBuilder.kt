@@ -1,11 +1,11 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.os.Build
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView

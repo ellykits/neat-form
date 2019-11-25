@@ -38,7 +38,7 @@ class `Test building form with JSON` {
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private val jsonFormBuilder: JsonFormBuilder =
-            spyk(JsonFormBuilder(mainLayout, TestConstants.SAMPLE_ONE_FORM_FILE))
+            spyk(JsonFormBuilder(, TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout))
     private val testDispatcher = TestCoroutineDispatcher()
 
     @Before

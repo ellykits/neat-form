@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
@@ -17,6 +18,7 @@ import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
+import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
@@ -30,7 +32,9 @@ import kotlinx.coroutines.launch
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSource: String) :
+class JsonFormBuilder(
+    override val context: Context, override var fileSource: String, var mainLayout: ViewGroup?
+) :
     FormBuilder {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
@@ -39,6 +43,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     private val singleRunner = SingleRunner()
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
+    var neatStepperLayout = NeatStepperLayout(context)
 
     init {
         rulesHandler.formBuilder = this
@@ -46,8 +51,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     }
 
     override fun buildForm(
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel?,
-        viewList: List<View>?
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
             if (form == null) {
@@ -60,15 +64,15 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             }
             launch(coroutineContextProvider.io) {
                 singleRunner.afterPrevious {
-                    registerFormRules(mainLayout.context, RulesFileType.YAML)
+                    registerFormRules(context, RulesFileType.YAML)
                 }
             }
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
                     if (viewList == null)
-                        createFormViews(mainLayout.context, arrayListOf(), jsonFormStepBuilderModel)
+                        createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
                     else
-                        createFormViews(mainLayout.context, viewList, jsonFormStepBuilderModel)
+                        createFormViews(context, viewList, jsonFormStepBuilderModel)
                 }
             }
         }
@@ -76,85 +80,67 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     }
 
     private fun parseJsonForm(source: String): NForm? {
-        return JsonFormParser.parseJson(
-            AssetFile.readAssetFileAsString(
-                mainLayout.context,
-                source
-            )
-        )
+        return JsonFormParser.parseJson(AssetFile.readAssetFileAsString(context, source))
     }
 
     /***
      * @param context android context
      */
     override fun createFormViews(
-        context: Context,
-        views: List<View>?,
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel?
+        context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
     ) {
         if (form != null) {
 
-            if (jsonFormStepBuilderModel != null) {
-                val neatStepperLayout = NeatStepperLayout(context)
-                neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
-                
-                if (jsonFormStepBuilderModel.stepperActions != null)
-                    neatStepperLayout.stepperActions = jsonFormStepBuilderModel.stepperActions
+            when {
+                jsonFormStepBuilderModel != null -> {
+                    neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
 
-                val fragmentsList: MutableList<StepFragment> = mutableListOf()
+                    if (jsonFormStepBuilderModel.stepperActions != null)
+                        neatStepperLayout.stepperActions = jsonFormStepBuilderModel.stepperActions
 
-                for ((index, formContent) in form!!.steps.withIndex()) {
-                    val rootView = VerticalRootView(context)
-                    val view = views?.getOrNull(index)
-                    when {
-                        view != null -> {
-                            rootView.addView(view)
-                            rootView.addChildren(formContent.fields, viewDispatcher, true)
-                        }
-                        else -> rootView.addChildren(formContent.fields, viewDispatcher)
+                    val fragmentsList: MutableList<StepFragment> = mutableListOf()
+
+                    form!!.steps.withIndex().forEach { (index, formContent) ->
+                        val rootView = addViewsToVerticalRootView(views, index, formContent)
+                        val stepFragment = StepFragment(
+                            StepModel.Builder()
+                                .title(form!!.formName)
+                                .subTitle(formContent.stepName as CharSequence)
+                                .build(), rootView
+                        )
+                        fragmentsList.add(stepFragment)
                     }
-                    val stepFragment = StepFragment(
-                        StepModel.Builder()
-                            .title(form!!.formName)
-                            .subTitle(formContent.stepName as CharSequence)
-                            .build(), rootView
+                    neatStepperLayout.stepperModel
+                    neatStepperLayout.setUpViewWithAdapter(
+                        StepperPagerAdapter(
+                            (context as AppCompatActivity).supportFragmentManager,
+                            fragmentsList
+                        )
                     )
-
-                    fragmentsList.add(stepFragment)
                 }
-
-                neatStepperLayout.stepperModel
-
-                neatStepperLayout.setUpViewWithAdapter(
-                    StepperPagerAdapter(
-                        (context as AppCompatActivity).supportFragmentManager,
-                        fragmentsList
-                    )
-                )
-
-                val params = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-                )
-                mainLayout.addView(neatStepperLayout, params)
-            }else{
-                for ((index, formContent) in form!!.steps.withIndex()) {
-                    val rootView = VerticalRootView(context)
-                    val view = views?.getOrNull(index)
-                    when {
-                        view != null -> {
-                            rootView.addView(view)
-                            rootView.addChildren(formContent.fields, viewDispatcher, true)
-                        }
-                        else -> rootView.addChildren(formContent.fields, viewDispatcher)
-                    }
-
-                    mainLayout.addView(rootView.initRootView() as View)
+                mainLayout != null -> form!!.steps.withIndex().forEach { (index, formContent) ->
+                    val rootView = addViewsToVerticalRootView(views, index, formContent)
+                    mainLayout?.addView(rootView.initRootView() as View)
                 }
+                else -> Toast.makeText(context, R.string.form_builder_error, Toast.LENGTH_LONG).show()
             }
         }
     }
 
+    private fun addViewsToVerticalRootView(
+        customViews: List<View>?, stepIndex: Int, formContent: NFormContent
+    ): VerticalRootView {
+        val rootView = VerticalRootView(context)
+        val view = customViews?.getOrNull(stepIndex)
+        when {
+            view != null -> {
+                rootView.addView(view)
+                rootView.addChildren(formContent.fields, viewDispatcher, true)
+            }
+            else -> rootView.addChildren(formContent.fields, viewDispatcher)
+        }
+        return rootView
+    }
 
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
         form?.rulesFile?.also {
