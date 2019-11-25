@@ -14,6 +14,13 @@ import com.nerdstone.neatform.form.FormData
 import com.nerdstone.neatform.form.FormRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
+object FormType {
+    const val embeddableDefault = "embeddable - default"
+    const val embeddableCustomized = "embeddable - customised"
+    const val stepperDefault = "stepper - default"
+    const val stepperCustomized = "stepper - customised"
+}
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var formRecyclerView: RecyclerView
@@ -33,29 +40,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         formRecyclerView = findViewById(R.id.formRecyclerView)
         floatingActionButton = findViewById(R.id.newFormFab)
         exitAppImageView = findViewById(R.id.exitAppImageView)
-
         formRecyclerView.layoutManager =
             LinearLayoutManager(this)
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
-                    formTitle = "Default Forms",
-                    formCategory = "IT Computer",
+                    formTitle = "Profile - Sample",
+                    formCategory = FormType.embeddableDefault,
                     filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
-                    formTitle = "Default Forms with Stepper",
-                    formCategory = "Marketing",
+                    formTitle = "Profile - Customized Sample",
+                    formCategory = FormType.embeddableCustomized,
+                    filePath = "sample/sample_one_form.json"
+                ),
+                FormData(
+                    formTitle = "Profile - Sample 2",
+                    formCategory = FormType.stepperDefault,
                     filePath = "sample/sample_two_form.json"
                 ),
                 FormData(
-                    formTitle = "Customized Forms",
-                    formCategory = "Marketing",
-                    filePath = "sample/sample_one_form.json"
-                ),
-                FormData(
-                    formTitle = "Customized Forms with Stepper",
-                    formCategory = "Marketing",
+                    formTitle = "Profile - Customized Sample 2",
+                    formCategory = FormType.stepperCustomized,
                     filePath = "sample/sample_two_form.json"
                 )
             )
@@ -65,8 +71,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val viewHolder = it.tag as RecyclerView.ViewHolder
             val formData = formRecyclerAdapter.formList[viewHolder.adapterPosition]
             val intent = Intent(this, FormActivity::class.java)
-            intent.putExtra("path", formData.filePath)
-            intent.putExtra("page", formData.formTitle)
+            intent.putExtra("formData", formData)
             startActivity(intent)
         }
 

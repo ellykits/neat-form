@@ -29,6 +29,9 @@ class VerticalRootView : LinearLayout, RootView {
         val view = nFormView.viewDetails.view
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         params.bottomMargin = Utils.pxToDp(16f, context)
+        params.topMargin = Utils.pxToDp(8f, context)
+        params.marginStart = Utils.pxToDp(16f, context)
+        params.marginEnd = Utils.pxToDp(16f, context)
         view.layoutParams = params
         this.addView(view)
     }

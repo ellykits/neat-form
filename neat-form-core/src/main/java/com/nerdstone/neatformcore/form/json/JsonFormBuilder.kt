@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatandroidstepper.core.model.StepModel
@@ -90,9 +91,8 @@ class JsonFormBuilder(
         context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
     ) {
         if (form != null) {
-
             when {
-                jsonFormStepBuilderModel != null -> {
+                jsonFormStepBuilderModel != null && (mainLayout == null || mainLayout != null) -> {
                     neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
 
                     if (jsonFormStepBuilderModel.stepperActions != null)
@@ -110,7 +110,6 @@ class JsonFormBuilder(
                         )
                         fragmentsList.add(stepFragment)
                     }
-                    neatStepperLayout.stepperModel
                     neatStepperLayout.setUpViewWithAdapter(
                         StepperPagerAdapter(
                             (context as AppCompatActivity).supportFragmentManager,
@@ -118,11 +117,17 @@ class JsonFormBuilder(
                         )
                     )
                 }
-                mainLayout != null -> form!!.steps.withIndex().forEach { (index, formContent) ->
-                    val rootView = addViewsToVerticalRootView(views, index, formContent)
-                    mainLayout?.addView(rootView.initRootView() as View)
+                mainLayout != null && jsonFormStepBuilderModel == null -> {
+                    val formViews = ScrollView(context)
+                    form!!.steps.withIndex().forEach { (index, formContent) ->
+                        val rootView = addViewsToVerticalRootView(views, index, formContent)
+                        formViews.addView(rootView.initRootView() as View)
+                    }
+                    mainLayout?.addView(formViews)
                 }
-                else -> Toast.makeText(context, R.string.form_builder_error, Toast.LENGTH_LONG).show()
+                else -> Toast.makeText(
+                    context, R.string.form_builder_error, Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -149,16 +154,16 @@ class JsonFormBuilder(
     }
 }
 
+const val FRAGMENT_VIEW = "fragment_view"
 
 class StepFragment : Step {
-    constructor() {
-        myView = View(context)
-    }
 
-    private var myView: View
+    private lateinit var fragmentView: View
 
-    constructor(stepModel: StepModel, v: View) : super(stepModel) {
-        myView = v
+    constructor()
+
+    constructor(stepModel: StepModel, rootView: View) : super(stepModel) {
+        fragmentView = rootView
     }
 
 
@@ -167,7 +172,9 @@ class StepFragment : Step {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_step, container, false)
         val linearLayout = view.findViewById<LinearLayout>(R.id.fragmentLinearLayout)
-        linearLayout.addView(myView)
+        if (::fragmentView.isInitialized) {
+            linearLayout.addView(fragmentView)
+        }
         return view
     }
 

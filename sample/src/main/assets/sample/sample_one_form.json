@@ -3,7 +3,7 @@
   "rules_file": "rules/yml/sample_one_form_rules.yml",
   "steps": [
     {
-      "title": "Test and counselling",
+      "title": "Demographics",
       "fields": [
         {
           "name": "adult",

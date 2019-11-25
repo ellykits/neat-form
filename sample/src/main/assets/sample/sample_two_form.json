@@ -3,7 +3,7 @@
   "rules_file": "rules/yml/sample_one_form_rules.yml",
   "steps": [
     {
-      "title": "Test and counselling",
+      "title": "Demographics",
       "fields": [
         {
           "name": "adult",
@@ -265,13 +265,13 @@
       ]
     },
     {
-      "title": "Results",
+      "title": "Other Information",
       "fields": [
         {
           "name": "condition",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Enter your condition",
+            "hint": "Add any extra information",
             "type": "name",
             "padding": "8"
           },
@@ -280,8 +280,7 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": "length() < 8; !contains(@)",
-          "required_status": "True:please enter your current condition"
+          "validation": "length() < 8; !contains(@)"
         }
       ]
     }

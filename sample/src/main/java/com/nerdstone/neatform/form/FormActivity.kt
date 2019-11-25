@@ -8,13 +8,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.Toolbar
 import com.nerdstone.neatandroidstepper.core.domain.StepperActions
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
+import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
-import com.nerdstone.neatform.utils.ViewGroupUtils
+import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
@@ -22,7 +23,8 @@ import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 
 class FormActivity : AppCompatActivity(), StepperActions {
     private lateinit var formLayout: LinearLayout
-    private lateinit var mainLayout: ConstraintLayout
+    private lateinit var mainLayout: LinearLayout
+    private lateinit var sampleToolBar: Toolbar
     private lateinit var pageTitleTextView: TextView
     private lateinit var exitFormImageView: ImageView
     private var formBuilder: FormBuilder? = null
@@ -33,6 +35,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
         mainLayout = findViewById(R.id.mainLayout)
         formLayout = findViewById(R.id.formLayout)
+        sampleToolBar = findViewById(R.id.sampleToolBar)
         pageTitleTextView = findViewById(R.id.pageTitleTextView)
         exitFormImageView = findViewById(R.id.exitFormImageView)
 
@@ -44,48 +47,46 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
 
         if (intent.extras != null) {
-            val path = intent?.extras?.getString("path") ?: ""
-            val pageTitle = intent?.extras?.getString("page")?.capitalizeWords()
-
-            pageTitleTextView.text = pageTitle
+            val formData = intent?.extras?.getSerializable("formData") as FormData
+            pageTitleTextView.text = formData.formTitle
             exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     finish()
                 }
             }
 
-
-            formBuilder = when {
-                pageTitle.equals("Default Forms") -> JsonFormBuilder(
-                    this, path, formLayout
-                ).buildForm()
-                pageTitle.equals("Default Forms with Stepper") -> {
-                    JsonFormBuilder(this, path, null).buildForm(
-                        JsonFormStepBuilderModel.Builder(this, stepperModel).build()
-                    )
+            val views = listOf<View>(
+                layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
+            )
+            when (formData.formCategory) {
+                FormType.embeddableDefault -> {
+                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
+                        .buildForm()
                 }
-                pageTitle.equals("Customized Forms") -> {
-                    val views = listOf<View>(
-                        layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
-                    )
-                    JsonFormBuilder(this, path, formLayout).buildForm(null, views)
+                FormType.embeddableCustomized -> {
+                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
+                        .buildForm(viewList = views)
                 }
-                else -> {
-                    val views = listOf<View>(
-                        layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
-                    )
-
-                    JsonFormBuilder(this, path, formLayout).buildForm(
-                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
-                        views
-                    )
+                FormType.stepperDefault -> {
+                    sampleToolBar.visibility = View.GONE
+                    formBuilder = JsonFormBuilder(this, formData.filePath, null)
+                        .buildForm(JsonFormStepBuilderModel.Builder(this, stepperModel).build())
+                    replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
+                FormType.stepperCustomized -> {
+                    sampleToolBar.visibility = View.GONE
+                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
+                        .buildForm(
+                            JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
+                            views
+                        )
+                    replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
+                }
+                else -> Toast.makeText(
+                    this, "Please provide the right form type",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
-
-            if(pageTitle!!.contains("Stepper"))
-                ViewGroupUtils.replaceView(mainLayout,(formBuilder as JsonFormBuilder).neatStepperLayout)
-
         }
     }
 

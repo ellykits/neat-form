@@ -4,7 +4,7 @@ import com.nerdstone.neatandroidstepper.core.domain.StepperActions
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 
 class JsonFormStepBuilderModel private constructor() {
-    var stepperModel: StepperModel = StepperModel.Builder().build()
+    var stepperModel = StepperModel.Builder().build()
     var stepperActions: StepperActions? = null
 
     data class Builder(
