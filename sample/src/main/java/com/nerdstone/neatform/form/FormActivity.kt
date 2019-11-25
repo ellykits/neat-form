@@ -8,18 +8,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.nerdstone.neatandroidstepper.core.domain.StepperActions
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.R
+import com.nerdstone.neatform.utils.ViewGroupUtils
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 
 
 class FormActivity : AppCompatActivity(), StepperActions {
-    private lateinit var mainLayout: LinearLayout
+    private lateinit var formLayout: LinearLayout
+    private lateinit var mainLayout: ConstraintLayout
     private lateinit var pageTitleTextView: TextView
     private lateinit var exitFormImageView: ImageView
     private var formBuilder: FormBuilder? = null
@@ -29,6 +32,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
         setContentView(R.layout.form_activity)
 
         mainLayout = findViewById(R.id.mainLayout)
+        formLayout = findViewById(R.id.formLayout)
         pageTitleTextView = findViewById(R.id.pageTitleTextView)
         exitFormImageView = findViewById(R.id.exitFormImageView)
 
@@ -52,7 +56,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             formBuilder = when {
                 pageTitle.equals("Default Forms") -> JsonFormBuilder(
-                    this, path, mainLayout
+                    this, path, formLayout
                 ).buildForm()
                 pageTitle.equals("Default Forms with Stepper") -> {
                     JsonFormBuilder(this, path, null).buildForm(
@@ -63,19 +67,24 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     val views = listOf<View>(
                         layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
-                    JsonFormBuilder(this, path, mainLayout).buildForm(null, views)
+                    JsonFormBuilder(this, path, formLayout).buildForm(null, views)
                 }
                 else -> {
                     val views = listOf<View>(
                         layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
 
-                    JsonFormBuilder(this, path, mainLayout).buildForm(
+                    JsonFormBuilder(this, path, formLayout).buildForm(
                         JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
                         views
                     )
                 }
             }
+
+
+            if(pageTitle!!.contains("Stepper"))
+                ViewGroupUtils.replaceView(mainLayout,(formBuilder as JsonFormBuilder).neatStepperLayout)
+
         }
     }
 
