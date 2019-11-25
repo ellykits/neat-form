@@ -11,11 +11,14 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
+import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -85,17 +88,22 @@ object ViewUtils {
     ) {
         val androidView = rootView as View
         val context = rootView.context
+        val viewModel =
+            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+        val view: NFormView
         if (buildFromLayout) {
-            val v = androidView.findViewById<View>(
+            view = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
-            )
-            getView(v as NFormView, viewProperty, viewDispatcher)
+            ) as NFormView
+            getView(view, viewProperty, viewDispatcher)
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
+            view = objectConstructor!!.call(context)
             rootView.addChild(
-                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
+                getView(view, viewProperty, viewDispatcher)
             )
         }
+        viewModel.values[view.viewProperties.name] = view.viewDetails
     }
 
     private fun getView(

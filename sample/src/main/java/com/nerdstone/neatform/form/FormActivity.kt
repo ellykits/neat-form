@@ -1,11 +1,11 @@
 package com.nerdstone.neatform.form
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatform.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
