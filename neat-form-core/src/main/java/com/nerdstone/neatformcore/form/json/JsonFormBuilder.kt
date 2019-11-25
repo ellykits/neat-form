@@ -15,7 +15,7 @@ import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.model.JsonFormBuilderModel
+import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
@@ -46,7 +46,7 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     }
 
     override fun buildForm(
-        jsonFormBuilderModel: JsonFormBuilderModel?,
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel?,
         viewList: List<View>?
     ): FormBuilder {
         GlobalScope.launch(coroutineContextProvider.main) {
@@ -66,9 +66,9 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             launch(coroutineContextProvider.main) {
                 singleRunner.afterPrevious {
                     if (viewList == null)
-                        createFormViews(mainLayout.context, arrayListOf(), jsonFormBuilderModel)
+                        createFormViews(mainLayout.context, arrayListOf(), jsonFormStepBuilderModel)
                     else
-                        createFormViews(mainLayout.context, viewList, jsonFormBuilderModel)
+                        createFormViews(mainLayout.context, viewList, jsonFormStepBuilderModel)
                 }
             }
         }
@@ -90,53 +90,67 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     override fun createFormViews(
         context: Context,
         views: List<View>?,
-        jsonFormBuilderModel: JsonFormBuilderModel?
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel?
     ) {
         if (form != null) {
-            val neatStepperLayout = NeatStepperLayout(context)
 
-            if (jsonFormBuilderModel != null) {
-                neatStepperLayout.stepperModel = jsonFormBuilderModel.stepperModel
-                if (jsonFormBuilderModel.stepperActions != null)
-                    neatStepperLayout.stepperActions = jsonFormBuilderModel.stepperActions
-            }
+            if (jsonFormStepBuilderModel != null) {
+                val neatStepperLayout = NeatStepperLayout(context)
+                neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
+                if (jsonFormStepBuilderModel.stepperActions != null)
+                    neatStepperLayout.stepperActions = jsonFormStepBuilderModel.stepperActions
 
-            val fragmentsList: MutableList<StepFragment> = mutableListOf()
+                val fragmentsList: MutableList<StepFragment> = mutableListOf()
 
-            for ((index, formContent) in form!!.steps.withIndex()) {
-                val rootView = VerticalRootView(context)
-                val view = views?.getOrNull(index)
-                when {
-                    view != null -> {
-                        rootView.addView(view)
-                        rootView.addChildren(formContent.fields, viewDispatcher, true)
+                for ((index, formContent) in form!!.steps.withIndex()) {
+                    val rootView = VerticalRootView(context)
+                    val view = views?.getOrNull(index)
+                    when {
+                        view != null -> {
+                            rootView.addView(view)
+                            rootView.addChildren(formContent.fields, viewDispatcher, true)
+                        }
+                        else -> rootView.addChildren(formContent.fields, viewDispatcher)
                     }
-                    else -> rootView.addChildren(formContent.fields, viewDispatcher)
+                    val stepFragment = StepFragment(
+                        StepModel.Builder()
+                            .title(form!!.formName)
+                            .subTitle(formContent.stepName as CharSequence)
+                            .build(), rootView
+                    )
+
+                    fragmentsList.add(stepFragment)
                 }
-                val stepFragment = StepFragment(
-                    StepModel.Builder()
-                        .title(form!!.formName)
-                        .subTitle(formContent.stepName as CharSequence)
-                        .build(), rootView
+
+                neatStepperLayout.stepperModel
+
+                neatStepperLayout.setUpViewWithAdapter(
+                    StepperPagerAdapter(
+                        (context as AppCompatActivity).supportFragmentManager,
+                        fragmentsList
+                    )
                 )
 
-                fragmentsList.add(stepFragment)
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                mainLayout.addView(neatStepperLayout, params)
+            }else{
+                for ((index, formContent) in form!!.steps.withIndex()) {
+                    val rootView = VerticalRootView(context)
+                    val view = views?.getOrNull(index)
+                    when {
+                        view != null -> {
+                            rootView.addView(view)
+                            rootView.addChildren(formContent.fields, viewDispatcher, true)
+                        }
+                        else -> rootView.addChildren(formContent.fields, viewDispatcher)
+                    }
+
+                    mainLayout.addView(rootView.initRootView() as View)
+                }
             }
-
-            neatStepperLayout.stepperModel
-
-            neatStepperLayout.setUpViewWithAdapter(
-                StepperPagerAdapter(
-                    (context as AppCompatActivity).supportFragmentManager,
-                    fragmentsList
-                )
-            )
-
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-            mainLayout.addView(neatStepperLayout, params)
         }
     }
 

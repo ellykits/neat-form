@@ -14,7 +14,7 @@ import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.model.JsonFormBuilderModel
+import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 
 
@@ -44,7 +44,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 pageTitle.equals("Programmer Survey") -> JsonFormBuilder(
                     mainLayout,
                     path
-                ).buildForm(JsonFormBuilderModel.Builder(this, stepperModel).build())
+                ).buildForm()
                 pageTitle.equals("Customer feedback") -> {
                     val views = listOf<View>(
                         layoutInflater.inflate(
@@ -53,7 +53,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                         )
                     )
                     JsonFormBuilder(mainLayout, path).buildForm(
-                        JsonFormBuilderModel.Builder(this, stepperModel).build(), views
+                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(), views
                     )
                 }
                 else -> {
@@ -65,7 +65,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     )
 
                     JsonFormBuilder(mainLayout, path).buildForm(
-                        JsonFormBuilderModel.Builder(this, stepperModel).build(), views
+                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(), views
                     )
                 }
             }
