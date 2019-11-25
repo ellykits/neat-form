@@ -42,18 +42,15 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             formBuilder = when {
                 pageTitle.equals("Programmer Survey") -> JsonFormBuilder(
-                    mainLayout,
-                    path
+                    mainLayout, path
                 ).buildForm()
                 pageTitle.equals("Customer feedback") -> {
                     val views = listOf<View>(
-                        layoutInflater.inflate(
-                            R.layout.sample_one_form_custom_layout,
-                            null
-                        )
+                        layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
                     )
                     JsonFormBuilder(mainLayout, path).buildForm(
-                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(), views
+                        JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
+                        views
                     )
                 }
                 else -> {
