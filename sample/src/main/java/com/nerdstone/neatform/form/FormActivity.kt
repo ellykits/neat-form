@@ -6,9 +6,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.nerdstone.neatform.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
+import timber.log.Timber
 
 
 class FormActivity : AppCompatActivity() {
@@ -34,6 +36,8 @@ class FormActivity : AppCompatActivity() {
             exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     finish()
+                    Timber.d("value = %s",formBuilder?.getFormDetails()?.get("age")?.value)
+                    Timber.d("subjects = %s",Gson().toJson(formBuilder?.getFormDetails()?.get("age")?.subjects))
                 }
             }
 
