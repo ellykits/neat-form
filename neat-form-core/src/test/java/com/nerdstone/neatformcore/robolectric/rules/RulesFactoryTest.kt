@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.rules
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentActivity
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
@@ -23,6 +24,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -33,7 +35,10 @@ import org.robolectric.annotation.Config
 class `Test Rules Engine functionality` {
 
     private val view: View = View(RuntimeEnvironment.systemContext)
-    private val mainLayout: ViewGroup = LinearLayout(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(
+        FragmentActivity::class.java
+    ).setup()
+    private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
     private val rulesHandler = NFormRulesHandler.INSTANCE
