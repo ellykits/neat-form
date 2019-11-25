@@ -3,13 +3,17 @@ package com.nerdstone.neatformcore.form.json
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NForm
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
+import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -28,6 +32,8 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
     private val singleRunner = SingleRunner()
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
+    private val viewModel =
+        ViewModelProviders.of(mainLayout.context as FragmentActivity)[DataViewModel::class.java]
 
     init {
         rulesHandler.formBuilder = this
@@ -96,5 +102,9 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
         }
+    }
+
+    override fun getFormDetails(): HashMap<String, NFormViewDetails> {
+        return viewModel.details
     }
 }

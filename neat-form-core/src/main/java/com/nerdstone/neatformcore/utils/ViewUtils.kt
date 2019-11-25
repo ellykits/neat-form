@@ -103,7 +103,7 @@ object ViewUtils {
                 getView(view, viewProperty, viewDispatcher)
             )
         }
-        viewModel.values[view.viewProperties.name] = view.viewDetails
+        viewModel.details[view.viewProperties.name] = view.viewDetails
     }
 
     private fun getView(
