@@ -38,7 +38,7 @@ class `Test building form with JSON` {
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private val jsonFormBuilder: JsonFormBuilder =
-            spyk(JsonFormBuilder(, TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout))
+        spyk(JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout))
     private val testDispatcher = TestCoroutineDispatcher()
 
     @Before
@@ -49,55 +49,56 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json, create views and register form rules`() =
-            runBlockingTest {
-                jsonFormBuilder.buildForm(null)
-                Assert.assertNotNull(jsonFormBuilder.form)
-                Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
-                Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
+        runBlockingTest {
+            jsonFormBuilder.buildForm(null)
+            Assert.assertNotNull(jsonFormBuilder.form)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
 
-                //Main layout has on element: VerticalRootView
-                Assert.assertTrue(mainLayout.childCount == 1)
-                Assert.assertTrue(mainLayout.getChildAt(0) is VerticalRootView)
-                //VerticalRootView has 3 EditTextNFormView
-                val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
-                Assert.assertTrue(verticalRootView.childCount == 13)
-                Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
-                Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
-                Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
-                Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
-                Assert.assertTrue(verticalRootView.getChildAt(5) is MultiChoiceCheckBox)
-                Assert.assertTrue(verticalRootView.getChildAt(7) is RadioGroupView)
-                Assert.assertTrue(verticalRootView.getChildAt(9) is DateTimePickerNFormView)
-                val datePickerAttributes =
-                        (verticalRootView.getChildAt(9) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
-                Assert.assertTrue(datePickerAttributes.containsKey("type") && datePickerAttributes["type"] == "date_picker")
-                Assert.assertTrue(verticalRootView.getChildAt(10) is DateTimePickerNFormView)
-                val timePickerAttributes =
-                        (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
-                Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
-                Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
-            }
+            //Main layout has on element: VerticalRootView
+            Assert.assertTrue(mainLayout.childCount == 1)
+            Assert.assertTrue(mainLayout.getChildAt(0) is VerticalRootView)
+            //VerticalRootView has 3 EditTextNFormView
+            val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
+            Assert.assertTrue(verticalRootView.childCount == 13)
+            Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(5) is MultiChoiceCheckBox)
+            Assert.assertTrue(verticalRootView.getChildAt(7) is RadioGroupView)
+            Assert.assertTrue(verticalRootView.getChildAt(9) is DateTimePickerNFormView)
+            val datePickerAttributes =
+                (verticalRootView.getChildAt(9) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
+            Assert.assertTrue(datePickerAttributes.containsKey("type") && datePickerAttributes["type"] == "date_picker")
+            Assert.assertTrue(verticalRootView.getChildAt(10) is DateTimePickerNFormView)
+            val timePickerAttributes =
+                (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
+            Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
+            Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
+        }
 
     @Test
     fun `Should parse json, update views from provided layout view with form rules`() =
-            runBlockingTest {
+        runBlockingTest {
 
-                val inflater = ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater =
+                ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-                val view = inflater.inflate(R.layout.sample_custom_form_layout, null);
-                val viewsList = listOf<View>(view)
+            val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
+            val viewsList = listOf<View>(view)
 
-                jsonFormBuilder.buildForm(null,viewsList)
+            jsonFormBuilder.buildForm(null, viewsList)
 
-                val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
-                Assert.assertTrue(verticalRootView.childCount == 1)
-                Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)
+            val verticalRootView = mainLayout.getChildAt(0) as VerticalRootView
+            Assert.assertTrue(verticalRootView.childCount == 1)
+            Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)
 
-                val editTextAttributes =
-                        ((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
+            val editTextAttributes =
+                ((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
 
-                Assert.assertTrue(editTextAttributes.containsKey("hint") && editTextAttributes["hint"] == "Specify your language")
-            }
+            Assert.assertTrue(editTextAttributes.containsKey("hint") && editTextAttributes["hint"] == "Specify your language")
+        }
 
 
     @After

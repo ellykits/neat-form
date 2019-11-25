@@ -38,6 +38,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
         val stepperModel = StepperModel.Builder()
             .exitButtonDrawableResource(R.drawable.ic_clear_white)
+            .indicatorType(StepperModel.IndicatorType.DOT_INDICATOR)
             .toolbarColorResource(R.color.colorPrimaryDark)
             .build()
 
