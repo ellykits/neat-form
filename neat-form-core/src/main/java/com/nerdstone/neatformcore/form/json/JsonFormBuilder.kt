@@ -97,7 +97,6 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
             if (jsonFormStepBuilderModel != null) {
                 val neatStepperLayout = NeatStepperLayout(context)
                 neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
-                
                 if (jsonFormStepBuilderModel.stepperActions != null)
                     neatStepperLayout.stepperActions = jsonFormStepBuilderModel.stepperActions
 
