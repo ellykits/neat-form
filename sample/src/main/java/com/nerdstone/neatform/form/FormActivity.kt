@@ -30,9 +30,10 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
         mainLayout = findViewById(R.id.mainLayout)
 
-        val stepperModel = StepperModel.Builder().build()
-        stepperModel.toolbarColorResId = R.color.colorPrimaryDark
-        stepperModel.exitButtonDrawableResId = R.drawable.ic_clear_white
+        val stepperModel = StepperModel.Builder()
+            .exitButtonDrawableResource(R.drawable.ic_clear_white)
+            .toolbarColorResource(R.color.colorPrimaryDark)
+            .build()
 
 
         if (intent.extras != null) {

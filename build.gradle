@@ -25,7 +25,7 @@ buildscript {
 //For publishing dependency to GitHub package
 def githubProperties = new Properties()
 //Read the github properties content
-githubProperties.load(new FileInputStream(rootProject.file("local.properties.ci")))
+githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 allprojects {
     repositories {

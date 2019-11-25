@@ -117,7 +117,6 @@ class JsonFormBuilder(override var mainLayout: ViewGroup, override var fileSourc
                     StepModel.Builder()
                         .title(form!!.formName)
                         .subTitle(formContent.stepName as CharSequence)
-                        .bottomNavigationColorResource(R.color.colorBlack)
                         .build(), rootView
                 )
 
