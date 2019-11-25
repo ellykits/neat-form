@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentActivity
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
@@ -26,6 +27,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -33,7 +35,8 @@ import org.robolectric.annotation.Config
 @Config(application = TestNeatFormApp::class)
 class `Test building form with JSON` {
 
-    private val mainLayout: LinearLayout = LinearLayout(ApplicationProvider.getApplicationContext())
+    private val activity = Robolectric.buildActivity(FragmentActivity::class.java).setup()
+    private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private val jsonFormBuilder: JsonFormBuilder =
             spyk(JsonFormBuilder(mainLayout, TestConstants.SAMPLE_ONE_FORM_FILE))
     private val testDispatcher = TestCoroutineDispatcher()
