@@ -1,12 +1,12 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.content.Context
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
@@ -16,9 +16,13 @@ import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
-import com.nerdstone.neatformcore.views.widgets.*
+import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
+import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
+import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
-import kotlinx.android.synthetic.main.sample_custom_form_layout.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -60,8 +64,9 @@ class `Test building form with JSON` {
             //Main layout has on element: VerticalRootView inside a ScrollView
             Assert.assertTrue(mainLayout.childCount == 1)
             Assert.assertTrue(mainLayout.getChildAt(0) is ScrollView)
+            val scrollView = mainLayout.getChildAt(0) as ScrollView
             //VerticalRootView has 3 EditTextNFormView
-            val verticalRootView = mainLayout.getChildAt(0).rootView as VerticalRootView
+            val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
             Assert.assertTrue(verticalRootView.childCount == 13)
             Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
@@ -92,7 +97,8 @@ class `Test building form with JSON` {
 
             jsonFormBuilder.buildForm(null, viewsList)
             Assert.assertTrue(mainLayout.getChildAt(0) is ScrollView)
-            val verticalRootView = mainLayout.getChildAt(1) as VerticalRootView
+            val scrollView = mainLayout.getChildAt(0) as ScrollView
+            val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
             Assert.assertTrue(verticalRootView.childCount == 1)
             Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)
 
