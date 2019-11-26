@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -16,8 +17,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
@@ -28,7 +29,8 @@ class `Test building RadioGroup view` {
     private val radioOption1 = spyk(NFormSubViewProperty())
     private val radioOption2 = spyk(NFormSubViewProperty())
     private val radioOption3 = spyk(NFormSubViewProperty())
-    private val radioGroupView = RadioGroupView(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    private val radioGroupView = RadioGroupView(activity.get())
     private val radioGroupViewBuilder = spyk(RadioGroupViewBuilder(radioGroupView))
 
     @Before

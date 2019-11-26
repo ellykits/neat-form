@@ -104,7 +104,7 @@ class `Test building form with JSON` {
             )
             jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
             val inflater =
-                ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
             val viewsList = listOf<View>(view)
@@ -186,7 +186,7 @@ class `Test building form with JSON` {
             )
             jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
             val inflater =
-                ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
             val viewsList = listOf<View>(view)
             val stepperModel = StepperModel.Builder()
