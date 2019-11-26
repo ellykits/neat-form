@@ -2,6 +2,7 @@ package com.nerdstone.neatformcore.form.json
 
 import android.content.Context
 import android.os.Bundle
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
@@ -29,6 +31,8 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
+
 
 /***
  * @author Elly Nerdstone
@@ -45,6 +49,7 @@ class JsonFormBuilder(
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
     var neatStepperLayout = NeatStepperLayout(context)
+    var sparseArray: SparseArray<View> = SparseArray<View>()
 
     init {
         rulesHandler.formBuilder = this
@@ -102,11 +107,14 @@ class JsonFormBuilder(
 
                     form!!.steps.withIndex().forEach { (index, formContent) ->
                         val rootView = addViewsToVerticalRootView(views, index, formContent)
-                        val stepFragment = StepFragment(
+                        sparseArray.put(index, rootView)
+                        val stepFragment = StepFragment.newInstance(
+                            index,
                             StepModel.Builder()
                                 .title(form!!.formName)
                                 .subTitle(formContent.stepName as CharSequence)
-                                .build(), rootView
+                                .build(),
+                            rootView
                         )
                         fragmentsList.add(stepFragment)
                     }
@@ -155,15 +163,41 @@ class JsonFormBuilder(
 }
 
 const val FRAGMENT_VIEW = "fragment_view"
+const val FRAGMENT_INDEX = "index"
 
 class StepFragment : Step {
-
-    private lateinit var fragmentView: View
+    var index: Int? = null
+    var formView: View? = null
 
     constructor()
 
-    constructor(stepModel: StepModel, rootView: View) : super(stepModel) {
-        fragmentView = rootView
+    constructor(stepModel: StepModel) : super(stepModel)
+
+    companion object {
+        fun newInstance(
+            index: Int,
+            stepModel: StepModel,
+            verticalRootView: VerticalRootView
+        ): StepFragment {
+            val myFragment = StepFragment(stepModel)
+            val args = Bundle()
+            args.putInt(FRAGMENT_INDEX, index)
+            args.putSerializable(FRAGMENT_VIEW, verticalRootView)
+
+            myFragment.arguments=args
+
+            return myFragment
+        }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("on create called")
+        if (arguments != null) {
+            index = arguments!!.getInt(FRAGMENT_INDEX)
+            formView = arguments!!.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
+        }
     }
 
 
@@ -172,9 +206,10 @@ class StepFragment : Step {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_step, container, false)
         val linearLayout = view.findViewById<LinearLayout>(R.id.fragmentLinearLayout)
-        if (::fragmentView.isInitialized) {
-            linearLayout.addView(fragmentView)
-        }
+
+        val myV = formView
+        if (myV != null)
+            linearLayout.addView(myV)
         return view
     }
 
