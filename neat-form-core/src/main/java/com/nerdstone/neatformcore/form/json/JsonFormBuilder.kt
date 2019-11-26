@@ -158,7 +158,7 @@ const val FRAGMENT_VIEW = "fragment_view"
 
 class StepFragment : Step {
 
-    private lateinit var fragmentView: View
+    lateinit var fragmentView: View
 
     constructor()
 
