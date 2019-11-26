@@ -155,8 +155,7 @@ object ViewUtils {
 
         //Add listener and build view
         nFormView.viewDetails.view.id = View.generateViewId()
-        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] =
-            nFormView.viewDetails.view.id
+        nFormView.viewDetails.view.tag = viewProperty.name
         nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
     }

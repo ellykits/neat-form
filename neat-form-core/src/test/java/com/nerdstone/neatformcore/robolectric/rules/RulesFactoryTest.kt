@@ -53,6 +53,7 @@ class `Test Rules Engine functionality` {
         //Setup view details
         view.id = 1
         view.visibility = View.GONE
+        view.tag = "adult"
 
         //When age changes then adult field is affected
         rulesFactory.subjectsRegistry["age"] =
@@ -60,7 +61,6 @@ class `Test Rules Engine functionality` {
         mainLayout.addView(view)
 
         //Setup rules handler with form builder and views map
-        rulesHandler.viewIdsMap["adult"] = 1
         rulesHandler.formBuilder = JsonFormBuilder(
             activity.get(),
             TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout

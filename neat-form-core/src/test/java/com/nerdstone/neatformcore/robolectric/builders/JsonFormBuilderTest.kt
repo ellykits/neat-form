@@ -18,6 +18,7 @@ import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestCoroutineContextProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
+import com.nerdstone.neatformcore.form.json.FRAGMENT_VIEW
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.StepFragment
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
@@ -154,20 +155,25 @@ class `Test building form with JSON` {
             //There are only 2 steps for the form
             Assert.assertTrue(stepperPageAdapter.fragmentList.size == 2)
 
-            //Test step one - check first and last
-            val stepOneView =
-                (stepperPageAdapter.fragmentList[0] as StepFragment).formView as VerticalRootView
+            //Test step one - check first and last view on the passed fragment view argument
+            val stepOneView = (stepperPageAdapter.fragmentList[0] as StepFragment)
             Assert.assertNotNull(stepOneView)
-            Assert.assertTrue(stepOneView.childCount == 13)
-            Assert.assertTrue(stepOneView.getChildAt(0) is TextInputEditTextNFormView)
-            Assert.assertTrue(stepOneView.getChildAt(12) is MultiChoiceCheckBox)
+            Assert.assertNotNull(stepOneView.arguments)
+            val stepOneVerticalRootView =
+                stepOneView.arguments?.get(FRAGMENT_VIEW) as VerticalRootView
+            Assert.assertTrue(stepOneVerticalRootView.childCount == 13)
+            Assert.assertTrue(stepOneVerticalRootView.getChildAt(0) is TextInputEditTextNFormView)
+            Assert.assertTrue(stepOneVerticalRootView.getChildAt(12) is MultiChoiceCheckBox)
 
-            //Test step two - only has one item
+            //Test step two - only has one item on the passed fragment view argument
             val stepTwoView =
-                (stepperPageAdapter.fragmentList[1] as StepFragment).formView as VerticalRootView
-            Assert.assertNotNull(stepOneView)
-            Assert.assertTrue(stepTwoView.childCount == 1)
-            Assert.assertTrue(stepTwoView.getChildAt(0) is TextInputEditTextNFormView)
+                (stepperPageAdapter.fragmentList[1] as StepFragment)
+            Assert.assertNotNull(stepTwoView)
+            Assert.assertNotNull(stepTwoView.arguments)
+            val stepTwoVerticalRootView =
+                stepTwoView.arguments?.get(FRAGMENT_VIEW) as VerticalRootView
+            Assert.assertTrue(stepTwoVerticalRootView.childCount == 1)
+            Assert.assertTrue(stepTwoVerticalRootView.getChildAt(0) is TextInputEditTextNFormView)
         }
 
     @Test
@@ -206,18 +212,23 @@ class `Test building form with JSON` {
             Assert.assertTrue(stepsViewPager.adapter is StepperPagerAdapter)
             val stepperPageAdapter = stepsViewPager.adapter as StepperPagerAdapter
 
-            //There are only 2 steps for the form
+            //There is only one step in the form
             Assert.assertTrue(stepperPageAdapter.fragmentList.size == 1)
 
-            //Test step one - check first and last
-            val verticalRootView =
-                ((stepperPageAdapter.fragmentList[0] as StepFragment).formView as ScrollView).getChildAt(0) as VerticalRootView
-            Assert.assertNotNull(verticalRootView)
-            Assert.assertTrue(verticalRootView.childCount == 1)
-            Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)
+            val stepOneView = (stepperPageAdapter.fragmentList[0] as StepFragment)
+            Assert.assertNotNull(stepOneView)
+            Assert.assertNotNull(stepOneView.arguments)
+            val stepOneVerticalRootView =
+                stepOneView.arguments?.get(FRAGMENT_VIEW) as VerticalRootView
+
+            Assert.assertNotNull(stepOneVerticalRootView)
+            Assert.assertTrue(stepOneVerticalRootView.childCount == 1)
+            Assert.assertTrue(
+                (stepOneVerticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView
+            )
 
             val editTextAttributes =
-                ((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
+                ((stepOneVerticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) as EditTextNFormView).viewProperties.viewAttributes as Map<*, *>
 
             Assert.assertTrue(editTextAttributes.containsKey("hint") && editTextAttributes["hint"] == "Specify your language")
         }
