@@ -90,17 +90,15 @@ object ViewUtils {
     ) {
         val androidView = rootView as View
         val context = rootView.context
-        val view: NFormView
         if (buildFromLayout) {
-            view = androidView.findViewById<View>(
+            val v = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
-            ) as NFormView
-            getView(view, viewProperty, viewDispatcher)
+            )
+            getView(v as NFormView, viewProperty, viewDispatcher)
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
-            view = objectConstructor!!.call(context)
             rootView.addChild(
-                getView(view, viewProperty, viewDispatcher)
+                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
             )
         }
     }
