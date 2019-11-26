@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -16,6 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -29,7 +31,8 @@ class `Test building MultiChoiceCheckBox view` {
     private val checkBoxOption2 = spyk(NFormSubViewProperty())
     private val checkBoxOption3 = spyk(NFormSubViewProperty())
     private val checkBoxOption4 = spyk(NFormSubViewProperty())
-    private val multiChoiceCheckBox = MultiChoiceCheckBox(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    private val multiChoiceCheckBox = MultiChoiceCheckBox(activity.get())
     private val multiChoiceCheckBoxViewBuilder =
         spyk(MultiChoiceCheckBoxViewBuilder(multiChoiceCheckBox))
 
