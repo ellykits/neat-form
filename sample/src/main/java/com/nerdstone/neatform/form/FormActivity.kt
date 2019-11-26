@@ -54,8 +54,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
             exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     finish()
-                    Timber.d("value = %s",formBuilder?.getFormDetails()?.get("age")?.value)
-                    Timber.d("subjects = %s",Gson().toJson(formBuilder?.getFormDetails()?.get("age")?.subjects))
+                    Timber.d("Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
                 }
             }
 

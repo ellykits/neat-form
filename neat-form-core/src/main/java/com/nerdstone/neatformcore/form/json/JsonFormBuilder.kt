@@ -21,7 +21,6 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
-import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
@@ -160,7 +159,7 @@ class JsonFormBuilder(
         }
     }
 
-    override fun getFormDetails(): HashMap<String, NFormViewDetails> {
+    override fun getFormDetails(): HashMap<String, Any?> {
         return viewModel.details
     }
 }

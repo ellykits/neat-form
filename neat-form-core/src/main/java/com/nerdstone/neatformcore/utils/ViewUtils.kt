@@ -11,14 +11,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
-import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -93,8 +90,6 @@ object ViewUtils {
     ) {
         val androidView = rootView as View
         val context = rootView.context
-        val viewModel =
-            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
         val view: NFormView
         if (buildFromLayout) {
             view = androidView.findViewById<View>(
@@ -108,7 +103,6 @@ object ViewUtils {
                 getView(view, viewProperty, viewDispatcher)
             )
         }
-        viewModel.details[view.viewProperties.name] = view.viewDetails
     }
 
     private fun getView(

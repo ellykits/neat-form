@@ -10,5 +10,5 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
  */
 
 class DataViewModel : ViewModel() {
-    var details: HashMap<String, NFormViewDetails> = HashMap()
+    var details: HashMap<String, Any?> = HashMap()
 }
