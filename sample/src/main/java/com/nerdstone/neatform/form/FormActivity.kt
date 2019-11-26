@@ -54,7 +54,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
             exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     finish()
-                    Timber.d("Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
+                    Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
                 }
             }
 
@@ -119,6 +119,6 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onCompleteStepper() {
-        Toast.makeText(this, "Completed entire step", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Completed entire step with data "+Gson().toJson(formBuilder?.getFormDetails()), Toast.LENGTH_SHORT).show()
     }
 }
