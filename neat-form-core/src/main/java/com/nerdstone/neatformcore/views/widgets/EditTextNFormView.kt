@@ -1,9 +1,9 @@
 package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
-import androidx.appcompat.widget.AppCompatEditText
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty

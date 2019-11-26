@@ -38,7 +38,6 @@ class `Test View Dispacher action` {
     fun `Verify that field value is passed to the dispatcher`() {
         editTextNFormView.setText("Sample text")
         verifyOrder {
-            viewDispatcher.rulesFactory
             viewDispatcher.onPassData(editTextNFormView.viewDetails)
         }
         confirmVerified(viewDispatcher)

@@ -1,9 +1,0 @@
-## This file must *NOT* be checked into Version Control Systems,
-# as it contains information specific to your local configuration.
-#
-# Location of the SDK. This is only used by Gradle.
-# For customization when using a Version Control System, please read the
-# header note.
-#Fri Nov 22 16:31:53 EAT 2019
-gpr.usr=YOUR_GIT_USER_ID
-gpr.key=YOUR_GIT_PERSONAL_ACCESS_TOKEN

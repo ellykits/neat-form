@@ -2,18 +2,28 @@ package com.nerdstone.neatformcore.domain.builders
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
+import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
+import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.rules.RulesFactory
 
 interface FormBuilder {
 
     var fileSource: String
 
-    var mainLayout: ViewGroup
+    val context: Context
 
-    fun buildForm(viewList: List<View>? = null): FormBuilder
+    var neatStepperLayout: NeatStepperLayout
 
-    fun createFormViews(context: Context, views: List<View>? = null)
+    fun buildForm(
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null,
+        viewList: List<View>? = null
+    ): FormBuilder
+
+    fun createFormViews(
+        context: Context,
+        views: List<View>? = null,
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
+    )
 
     fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
 }

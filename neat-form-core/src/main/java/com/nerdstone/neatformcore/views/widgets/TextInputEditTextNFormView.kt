@@ -1,9 +1,9 @@
 package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
-import com.google.android.material.textfield.TextInputLayout
 import android.util.AttributeSet
 import android.view.View
+import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty

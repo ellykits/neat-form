@@ -3,6 +3,8 @@ package com.nerdstone.neatformcore.robolectric.rules
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
@@ -23,6 +25,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -31,9 +34,9 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test Rules Engine functionality` {
-
-    private val view: View = View(RuntimeEnvironment.systemContext)
-    private val mainLayout: ViewGroup = LinearLayout(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    private val view: View = View(activity.get())
+    private val mainLayout: ViewGroup = LinearLayout(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
     private val rulesHandler = NFormRulesHandler.INSTANCE
@@ -44,9 +47,13 @@ class `Test Rules Engine functionality` {
     fun `Before doing anything else`() {
         setupRules()
 
+        //set activity layout
+        activity.get().setContentView(mainLayout)
+
         //Setup view details
         view.id = 1
         view.visibility = View.GONE
+        view.tag = "adult"
 
         //When age changes then adult field is affected
         rulesFactory.subjectsRegistry["age"] =
@@ -54,8 +61,10 @@ class `Test Rules Engine functionality` {
         mainLayout.addView(view)
 
         //Setup rules handler with form builder and views map
-        rulesHandler.viewIdsMap["adult"] = 1
-        rulesHandler.formBuilder = JsonFormBuilder(mainLayout, TestConstants.SAMPLE_ONE_FORM_FILE)
+        rulesHandler.formBuilder = JsonFormBuilder(
+            activity.get(),
+            TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout
+        )
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
 

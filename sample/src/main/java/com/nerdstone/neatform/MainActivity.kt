@@ -14,6 +14,13 @@ import com.nerdstone.neatform.form.FormData
 import com.nerdstone.neatform.form.FormRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
+object FormType {
+    const val embeddableDefault = "embeddable - default"
+    const val embeddableCustomized = "embeddable - customised"
+    const val stepperDefault = "stepper - default"
+    const val stepperCustomized = "stepper - customised"
+}
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var formRecyclerView: RecyclerView
@@ -33,19 +40,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         formRecyclerView = findViewById(R.id.formRecyclerView)
         floatingActionButton = findViewById(R.id.newFormFab)
         exitAppImageView = findViewById(R.id.exitAppImageView)
-
         formRecyclerView.layoutManager =
             LinearLayoutManager(this)
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
-                    formTitle = "Programmer Survey",
-                    formCategory = "IT Computer",
+                    formTitle = "Profile - Sample",
+                    formCategory = FormType.embeddableDefault,
                     filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
-                    formTitle = "Customer feedback",
-                    formCategory = "Marketing",
+                    formTitle = "Profile - Customized Sample",
+                    formCategory = FormType.embeddableCustomized,
+                    filePath = "sample/sample_one_form.json"
+                ),
+                FormData(
+                    formTitle = "Profile - Sample 2",
+                    formCategory = FormType.stepperDefault,
+                    filePath = "sample/sample_two_form.json"
+                ),
+                FormData(
+                    formTitle = "Profile - Customized Sample 2",
+                    formCategory = FormType.stepperCustomized,
+                    filePath = "sample/sample_two_form.json"
+                ),
+                FormData(
+                    formTitle = "Profile - Single Step",
+                    formCategory = FormType.stepperDefault,
                     filePath = "sample/sample_one_form.json"
                 )
             )
@@ -55,8 +76,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val viewHolder = it.tag as RecyclerView.ViewHolder
             val formData = formRecyclerAdapter.formList[viewHolder.adapterPosition]
             val intent = Intent(this, FormActivity::class.java)
-            intent.putExtra("path", formData.filePath)
-            intent.putExtra("page", formData.formTitle)
+            intent.putExtra("formData", formData)
             startActivity(intent)
         }
 
@@ -65,13 +85,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when {
-            v?.id == R.id.newFormFab -> Snackbar.make(
+        when (v?.id) {
+            R.id.newFormFab -> Snackbar.make(
                 findViewById(R.id.mainActivityConstraintLayout),
                 "Action not yet implemented",
                 Snackbar.LENGTH_SHORT
             ).show()
-            v?.id == R.id.exitAppImageView -> finish()
+            R.id.exitAppImageView -> finish()
         }
     }
 }
