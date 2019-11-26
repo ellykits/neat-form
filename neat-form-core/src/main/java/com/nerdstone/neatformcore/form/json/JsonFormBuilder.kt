@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
