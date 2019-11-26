@@ -5,16 +5,10 @@
     android:layout_height="wrap_content"
     tools:ignore="MissingDefaultResource">
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
+        android:id="@+id/fragmentScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/fragmentLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-    </androidx.core.widget.NestedScrollView>
+        android:layout_height="match_parent" />
 
 
 </FrameLayout>

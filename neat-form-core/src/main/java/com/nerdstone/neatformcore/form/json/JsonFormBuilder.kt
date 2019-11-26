@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+
 /***
  * @author Elly Nerdstone
  */
@@ -44,7 +44,7 @@ class JsonFormBuilder(
     private val singleRunner = SingleRunner()
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
-    var neatStepperLayout = NeatStepperLayout(context)
+    override var neatStepperLayout = NeatStepperLayout(context)
 
     init {
         rulesHandler.formBuilder = this
@@ -169,46 +169,37 @@ class StepFragment : Step {
 
     companion object {
         fun newInstance(
-            index: Int,
-            stepModel: StepModel,
-            verticalRootView: VerticalRootView
+            index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
         ): StepFragment {
-            val myFragment = StepFragment(stepModel)
-            val args = Bundle()
-            args.putInt(FRAGMENT_INDEX, index)
-            args.putSerializable(FRAGMENT_VIEW, verticalRootView)
 
-            myFragment.arguments=args
-
-            return myFragment
+            val args = Bundle().apply {
+                putInt(FRAGMENT_INDEX, index)
+                putSerializable(FRAGMENT_VIEW, verticalRootView)
+            }
+            return StepFragment(stepModel).apply { arguments = args }
         }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            index = arguments!!.getInt(FRAGMENT_INDEX)
-            formView = arguments!!.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
+        arguments?.also {
+            index = it.getInt(FRAGMENT_INDEX)
+            formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
         }
+
     }
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_step, container, false)
-        val linearLayout = view.findViewById<LinearLayout>(R.id.fragmentLinearLayout)
-
-        if(formView?.parent!=null) {
-            (formView?.parent as ViewGroup).also {
-                it.removeView(formView)
-            }
+        if (formView != null && formView?.parent != null) {
+            return formView?.parent as View
         }
-
-        if (formView != null)
-            linearLayout.addView(formView)
-        return view
+        val scroller = ScrollView(activity)
+        scroller.addView(formView)
+        return scroller
     }
 
     override fun verifyStep(): StepVerificationState {

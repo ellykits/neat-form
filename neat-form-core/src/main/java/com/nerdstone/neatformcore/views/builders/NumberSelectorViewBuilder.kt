@@ -191,7 +191,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
 
     private fun showPopupMenu(textView: TextView) {
         val popupMenu = PopupMenu(numberSelectorNFormView.context, textView)
-        for (i in visibleNumbers + 1..maxValue) {
+        for (i in visibleNumbers..maxValue) {
             popupMenu.menu.add(i.toString())
         }
         popupMenu.setOnMenuItemClickListener { item ->

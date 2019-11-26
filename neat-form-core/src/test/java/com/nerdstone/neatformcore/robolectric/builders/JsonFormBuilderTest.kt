@@ -156,7 +156,7 @@ class `Test building form with JSON` {
 
             //Test step one - check first and last
             val stepOneView =
-                (stepperPageAdapter.fragmentList[0] as StepFragment).fragmentView as VerticalRootView
+                (stepperPageAdapter.fragmentList[0] as StepFragment).formView as VerticalRootView
             Assert.assertNotNull(stepOneView)
             Assert.assertTrue(stepOneView.childCount == 13)
             Assert.assertTrue(stepOneView.getChildAt(0) is TextInputEditTextNFormView)
@@ -164,7 +164,7 @@ class `Test building form with JSON` {
 
             //Test step two - only has one item
             val stepTwoView =
-                (stepperPageAdapter.fragmentList[1] as StepFragment).fragmentView as VerticalRootView
+                (stepperPageAdapter.fragmentList[1] as StepFragment).formView as VerticalRootView
             Assert.assertNotNull(stepOneView)
             Assert.assertTrue(stepTwoView.childCount == 1)
             Assert.assertTrue(stepTwoView.getChildAt(0) is TextInputEditTextNFormView)
@@ -211,7 +211,7 @@ class `Test building form with JSON` {
 
             //Test step one - check first and last
             val verticalRootView =
-                (stepperPageAdapter.fragmentList[0] as StepFragment).fragmentView as VerticalRootView
+                ((stepperPageAdapter.fragmentList[0] as StepFragment).formView as ScrollView).getChildAt(0) as VerticalRootView
             Assert.assertNotNull(verticalRootView)
             Assert.assertTrue(verticalRootView.childCount == 1)
             Assert.assertTrue((verticalRootView.getChildAt(0) as ConstraintLayout).getChildAt(4) is EditTextNFormView)

@@ -3,8 +3,9 @@ package com.nerdstone.neatformcore.domain.view
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import java.io.Serializable
 
-interface RootView {
+interface RootView: Serializable{
 
     val viewsData: List<NFormViewData>
 

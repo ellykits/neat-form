@@ -12,7 +12,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import java.io.Serializable
 
-class VerticalRootView : LinearLayout, RootView, Serializable {
+class VerticalRootView : LinearLayout, RootView {
 
     init {
         orientation = VERTICAL
