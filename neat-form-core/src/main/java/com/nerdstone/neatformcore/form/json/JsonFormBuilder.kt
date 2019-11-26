@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.form.json
 
 import android.content.Context
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +29,6 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import timber.log.Timber
-
 
 /***
  * @author Elly Nerdstone
@@ -48,7 +45,6 @@ class JsonFormBuilder(
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
     var neatStepperLayout = NeatStepperLayout(context)
-    var sparseArray: SparseArray<View> = SparseArray<View>()
 
     init {
         rulesHandler.formBuilder = this
@@ -106,7 +102,6 @@ class JsonFormBuilder(
 
                     form!!.steps.withIndex().forEach { (index, formContent) ->
                         val rootView = addViewsToVerticalRootView(views, index, formContent)
-                        sparseArray.put(index, rootView)
                         val stepFragment = StepFragment.newInstance(
                             index,
                             StepModel.Builder()
@@ -192,7 +187,6 @@ class StepFragment : Step {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("on create called")
         if (arguments != null) {
             index = arguments!!.getInt(FRAGMENT_INDEX)
             formView = arguments!!.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
@@ -206,9 +200,14 @@ class StepFragment : Step {
         val view = inflater.inflate(R.layout.fragment_step, container, false)
         val linearLayout = view.findViewById<LinearLayout>(R.id.fragmentLinearLayout)
 
-        val myV = formView
-        if (myV != null)
-            linearLayout.addView(myV)
+        if(formView?.parent!=null) {
+            (formView?.parent as ViewGroup).also {
+                it.removeView(formView)
+            }
+        }
+
+        if (formView != null)
+            linearLayout.addView(formView)
         return view
     }
 

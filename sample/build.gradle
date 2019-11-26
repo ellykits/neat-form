@@ -55,7 +55,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation(project(':neat-form-core'))
-    implementation "com.nerdstone:neat-android-stepper:1.0.0"
+    implementation "com.nerdstone:neat-android-stepper:1.0.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.material:material:1.0.0'

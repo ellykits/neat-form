@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     formTitle = "Profile - Customized Sample 2",
                     formCategory = FormType.stepperCustomized,
                     filePath = "sample/sample_two_form.json"
+                ),
+                FormData(
+                    formTitle = "Profile - Single Step",
+                    formCategory = FormType.stepperDefault,
+                    filePath = "sample/sample_one_form.json"
                 )
             )
 
