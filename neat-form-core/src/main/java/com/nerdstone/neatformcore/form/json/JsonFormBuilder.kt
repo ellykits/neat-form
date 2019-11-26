@@ -187,7 +187,7 @@ class StepFragment : Step {
             index = it.getInt(FRAGMENT_INDEX)
             formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
         }
-
+        retainInstance=true
     }
 
 
