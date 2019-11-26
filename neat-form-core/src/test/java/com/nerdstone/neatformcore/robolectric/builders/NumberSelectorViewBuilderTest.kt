@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -15,15 +16,16 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test building NumberSelector view` {
-
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val numberSelector =
-        NumberSelectorNFormView(ApplicationProvider.getApplicationContext())
+        NumberSelectorNFormView(activity.get())
     private val numberSelectorViewBuilder = spyk(NumberSelectorViewBuilder(numberSelector))
     private val viewProperty = spyk(NFormViewProperty())
 
