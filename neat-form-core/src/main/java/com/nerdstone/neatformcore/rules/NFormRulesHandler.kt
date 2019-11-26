@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.rules
 
+import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.view.RulesHandler
@@ -12,7 +13,6 @@ import java.util.*
 
 class NFormRulesHandler private constructor() : RulesHandler {
 
-    override val viewIdsMap: HashMap<String, Int> = hashMapOf()
     override lateinit var formBuilder: FormBuilder
     override lateinit var executableRulesList: HashSet<Rule>
 
@@ -37,7 +37,9 @@ class NFormRulesHandler private constructor() : RulesHandler {
         TODO("implement functionality for filtering")
     }
 
-    override fun updateSkipLogicFactAfterEvaluate(evaluationResult: Boolean, rule: Rule?, facts: Facts?) {
+    override fun updateSkipLogicFactAfterEvaluate(
+        evaluationResult: Boolean, rule: Rule?, facts: Facts?
+    ) {
         if (rule != null && facts != null && !evaluationResult) {
             if (facts.asMap().containsKey(rule.name) && rule.name.toLowerCase(Locale.getDefault())
                     .endsWith(Constants.RuleActions.VISIBILITY)
@@ -63,14 +65,20 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
     }
 
-     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        if (viewIdsMap.containsKey(key)) {
-            viewIdsMap[key]?.let { id -> formBuilder.mainLayout.findViewById<View>(id) }
-                ?.also { view -> changeVisibility(isVisible, view) }
+    fun hideOrShowField(key: String, isVisible: Boolean?) {
+        if (findViewWithKey(key) != null) {
+            changeVisibility(isVisible, findViewWithKey(key)!!)
         }
     }
 
+    private fun findViewWithKey(key: String): View? {
+        val activity = formBuilder.context as Activity
+        val activityRootView = activity.findViewById<View>(android.R.id.content).rootView
+        return activityRootView.findViewWithTag(key)
+    }
+
     override fun refreshViews(allRules: Rules?) {
+        val activity = formBuilder.context as Activity
         allRules?.also {
             it.toMutableList()
                 .filter { rule ->
@@ -78,8 +86,8 @@ class NFormRulesHandler private constructor() : RulesHandler {
                         .endsWith(Constants.RuleActions.VISIBILITY)
                 }.forEach { item ->
                     val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                    val view = formBuilder.mainLayout.findViewById<View>(viewIdsMap[key]!!)
-                    changeVisibility(false, view)
+                    val view = findViewWithKey(key)
+                    if (view != null) changeVisibility(false, view)
                 }
         }
     }

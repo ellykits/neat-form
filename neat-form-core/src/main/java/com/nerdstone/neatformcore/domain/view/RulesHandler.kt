@@ -12,8 +12,6 @@ interface RulesHandler {
 
     var formBuilder: FormBuilder
 
-    val viewIdsMap: HashMap<String, Int>
-
     fun handleReadOnlyState()
 
     fun handleFilter(filterItems: List<String>)

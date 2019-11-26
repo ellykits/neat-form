@@ -22,7 +22,12 @@ import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import com.nerdstone.neatformcore.views.widgets.*
+import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
+import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
+import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
+import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -158,8 +163,7 @@ object ViewUtils {
 
         //Add listener and build view
         nFormView.viewDetails.view.id = View.generateViewId()
-        viewDispatcher.rulesFactory.rulesHandler.viewIdsMap[viewProperty.name] =
-            nFormView.viewDetails.view.id
+        nFormView.viewDetails.view.tag = viewProperty.name
         nFormView.dataActionListener = viewDispatcher
         nFormView.viewBuilder.buildView()
     }

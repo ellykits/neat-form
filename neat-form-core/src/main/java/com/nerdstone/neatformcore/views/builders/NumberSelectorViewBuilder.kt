@@ -1,11 +1,11 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.os.Build
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -191,7 +191,7 @@ class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder
 
     private fun showPopupMenu(textView: TextView) {
         val popupMenu = PopupMenu(numberSelectorNFormView.context, textView)
-        for (i in visibleNumbers + 1..maxValue) {
+        for (i in visibleNumbers..maxValue) {
             popupMenu.menu.add(i.toString())
         }
         popupMenu.setOnMenuItemClickListener { item ->
