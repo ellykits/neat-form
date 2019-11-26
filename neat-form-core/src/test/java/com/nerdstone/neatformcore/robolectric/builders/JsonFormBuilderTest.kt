@@ -156,7 +156,7 @@ class `Test building form with JSON` {
             Assert.assertTrue(stepperPageAdapter.fragmentList.size == 2)
 
             //Test step one - check first and last view on the passed fragment view argument
-            val stepOneView = (stepperPageAdapter.fragmentList[0] as StepFragment)
+            val stepOneView = stepperPageAdapter.fragmentList[0] as StepFragment
             Assert.assertNotNull(stepOneView)
             Assert.assertNotNull(stepOneView.arguments)
             val stepOneVerticalRootView =
@@ -166,8 +166,7 @@ class `Test building form with JSON` {
             Assert.assertTrue(stepOneVerticalRootView.getChildAt(12) is MultiChoiceCheckBox)
 
             //Test step two - only has one item on the passed fragment view argument
-            val stepTwoView =
-                (stepperPageAdapter.fragmentList[1] as StepFragment)
+            val stepTwoView = stepperPageAdapter.fragmentList[1] as StepFragment
             Assert.assertNotNull(stepTwoView)
             Assert.assertNotNull(stepTwoView.arguments)
             val stepTwoVerticalRootView =
@@ -215,7 +214,7 @@ class `Test building form with JSON` {
             //There is only one step in the form
             Assert.assertTrue(stepperPageAdapter.fragmentList.size == 1)
 
-            val stepOneView = (stepperPageAdapter.fragmentList[0] as StepFragment)
+            val stepOneView = stepperPageAdapter.fragmentList[0] as StepFragment
             Assert.assertNotNull(stepOneView)
             Assert.assertNotNull(stepOneView.arguments)
             val stepOneVerticalRootView =
