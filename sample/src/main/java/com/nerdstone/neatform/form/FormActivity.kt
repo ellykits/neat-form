@@ -29,6 +29,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
     private lateinit var sampleToolBar: Toolbar
     private lateinit var pageTitleTextView: TextView
     private lateinit var exitFormImageView: ImageView
+    private lateinit var completeButton: ImageView
     private var formBuilder: FormBuilder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
         sampleToolBar = findViewById(R.id.sampleToolBar)
         pageTitleTextView = findViewById(R.id.pageTitleTextView)
         exitFormImageView = findViewById(R.id.exitFormImageView)
+        completeButton = findViewById(R.id.completeButton)
 
         val stepperModel = StepperModel.Builder()
             .exitButtonDrawableResource(R.drawable.ic_clear_white)
@@ -54,6 +56,12 @@ class FormActivity : AppCompatActivity(), StepperActions {
             exitFormImageView.setOnClickListener {
                 if (it.id == R.id.exitFormImageView) {
                     finish()
+                }
+            }
+
+            completeButton.setOnClickListener {
+                if (it.id == R.id.completeButton) {
+                    Toast.makeText(this, "Completed the form", Toast.LENGTH_LONG).show()
                     Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
                 }
             }
@@ -119,6 +127,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onCompleteStepper() {
-        Toast.makeText(this, "Completed entire step with data "+Gson().toJson(formBuilder?.getFormDetails()), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
+        Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
     }
 }
