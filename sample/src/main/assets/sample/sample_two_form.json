@@ -293,7 +293,7 @@
           "validation": [
             {
               "validation_name": "special characters",
-              "condition": "!value.contains(@)",
+              "condition": "!value.contains('@')",
               "error_message": "value should not contain special character"
             }
           ]

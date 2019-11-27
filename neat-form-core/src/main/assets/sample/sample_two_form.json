@@ -7,11 +7,12 @@
       "fields": [
         {
           "name": "adult",
-          "type": "edit_text",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text": "Catch me if you can"
+            "text": "",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -25,7 +26,7 @@
               "error_message": "value should be less than eight digits"
             },{
               "validation_name": "special characters",
-              "condition": "!value.contains(@)",
+              "condition": "!value.contains('@')",
               "error_message": "value should not contain special character"
             }
           ],
@@ -36,8 +37,9 @@
           "name": "age",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Enter your age (will be multiplied by 10)",
-            "type": "name"
+            "hint": "Enter your age",
+            "type": "name",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -48,10 +50,11 @@
         },
         {
           "name": "child",
-          "type": "edit_text",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "I am a child",
-            "type": "name"
+            "type": "name",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -235,7 +238,7 @@
           "properties": {
             "visible_numbers": "5",
             "max_value": "10",
-            "first_number": "1",
+            "first_number": "0",
             "text": "Number of previous pregnancies"
           },
           "subjects": "email_subscription:map, gender:text",
@@ -290,7 +293,7 @@
           "validation": [
             {
               "validation_name": "special characters",
-              "condition": "!value.contains(@)",
+              "condition": "!value.contains('@')",
               "error_message": "value should not contain special character"
             }
           ]

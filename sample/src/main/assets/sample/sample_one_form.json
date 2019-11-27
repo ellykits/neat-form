@@ -23,7 +23,7 @@
             {
               "validation_name": "length",
               "condition": "value.length() < 11",
-              "error_message": "value should be less than eight digits"
+              "error_message": "value should be less than ten digits"
             },
             {
               "validation_name": "phone number",

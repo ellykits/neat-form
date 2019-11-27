@@ -3,15 +3,16 @@
   "rules_file": "rules/yml/sample_one_form_rules.yml",
   "steps": [
     {
-      "title": "Test and counselling",
+      "title": "Demographics",
       "fields": [
         {
           "name": "adult",
-          "type": "edit_text",
+          "type": "text_input_edit_text",
           "properties": {
-            "hint": "This is an adult",
+            "hint": "Enter adult's phone number",
             "type": "name",
-            "text": "Catch me if you can"
+            "text": "",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -21,12 +22,13 @@
           "validation": [
             {
               "validation_name": "length",
-              "condition": "value.length() < 8",
-              "error_message": "value should be less than eight digits"
-            },{
-              "validation_name": "special characters",
-              "condition": "!value.contains(@)",
-              "error_message": "value should not contain special character"
+              "condition": "value.length() < 11",
+              "error_message": "value should be less than ten digits"
+            },
+            {
+              "validation_name": "phone number",
+              "condition": "value.matches(\"\\\\d{10}\")",
+              "error_message": "Not a valid phone number"
             }
           ],
           "subjects": "age:number, child:text, dob:number",
@@ -36,22 +38,31 @@
           "name": "age",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Enter your age (will be multiplied by 10)",
-            "type": "name"
+            "hint": "Enter your age",
+            "type": "name",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
+          "validation": [
+            {
+              "validation_name": "two digits number",
+              "condition": "value.matches(\"^\\\\d{1,2}?$\")",
+              "error_message": "Not a valid age"
+            }
+          ],
           "required_status": "yes:Please add age"
         },
         {
           "name": "child",
-          "type": "edit_text",
+          "type": "text_input_edit_text",
           "properties": {
             "hint": "I am a child",
-            "type": "name"
+            "type": "name",
+            "padding": "8"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -235,7 +246,7 @@
           "properties": {
             "visible_numbers": "5",
             "max_value": "10",
-            "first_number": "1",
+            "first_number": "0",
             "text": "Number of previous pregnancies"
           },
           "subjects": "email_subscription:map, gender:text",
