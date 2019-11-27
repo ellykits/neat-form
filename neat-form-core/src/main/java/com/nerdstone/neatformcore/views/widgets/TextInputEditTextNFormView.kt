@@ -19,6 +19,7 @@ import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRule
+import timber.log.Timber
 
 class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
@@ -67,15 +68,17 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         val rulesEngine = DefaultRulesEngine()
         rulesEngine.fire(rules, facts)
 
-        if (facts.get<Boolean>("validationResults"))
+        if (facts.get<Boolean>("validationResults")) {
+            this.error = ""
             return true
+        }
 
         this.error = validation.errorMessage
         return false
     }
 
     override fun validaValues(): Boolean {
-        if (viewProperties.validations != null) {
+        if (viewProperties.validations != null && editText?.text!!.isNotEmpty()) {
             viewProperties.validations?.forEach { validation ->
                 if (!validate(validation))
                     return false
