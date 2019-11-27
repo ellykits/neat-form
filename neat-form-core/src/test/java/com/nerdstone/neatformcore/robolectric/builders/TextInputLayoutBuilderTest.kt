@@ -68,10 +68,7 @@ class `Text building InputLayout View` {
     }
 
     @Test
-    fun `Should validate TextInputEditTet `() {
-
-
-
+    fun `Should validate TextInputEditText `() {
         val validation = NFormFieldValidation()
         validation.name = "email validation"
         validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
