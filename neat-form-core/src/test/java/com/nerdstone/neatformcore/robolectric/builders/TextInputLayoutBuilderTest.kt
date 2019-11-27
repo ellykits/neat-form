@@ -2,7 +2,10 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import androidx.test.core.app.ApplicationProvider
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.nerdstone.neatformcore.TestNeatFormApp
+import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
@@ -13,6 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.lang.reflect.Type
 
 /**
  * Created by cozej4 on 2019-11-20.
@@ -58,8 +62,32 @@ class `Text building InputLayout View` {
 
 
     @Test
-    fun `Should reset the EditText value when visibility is gone`() {
+    fun `Should reset the TextInputEditTet value when visibility is gone`() {
         textInputLayoutNFormView.visibility = View.GONE
         Assert.assertTrue(textInputLayoutNFormView.editText?.text==null)
+    }
+
+    @Test
+    fun `Should validate TextInputEditTet `() {
+
+
+
+        val validation = NFormFieldValidation()
+        validation.name = "email validation"
+        validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
+        validation.errorMessage = "Please enter a valid email address"
+
+
+        viewProperty.validations = arrayListOf(validation)
+        viewProperty.requiredStatus = "yes:Am required"
+        testInputLayoutBuilder.buildView()
+        textInputLayoutNFormView.editText?.setText("johndoe@gmail.com")
+        Assert.assertTrue(textInputLayoutNFormView.validaValues())
+
+
+        textInputLayoutNFormView.editText?.setText("johndoegmail.com")
+        Assert.assertFalse(textInputLayoutNFormView.validaValues())
+        Assert.assertTrue(textInputLayoutNFormView.error=="Please enter a valid email address")
+
     }
 }
