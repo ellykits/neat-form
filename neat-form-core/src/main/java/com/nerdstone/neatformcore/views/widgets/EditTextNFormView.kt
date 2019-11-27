@@ -65,13 +65,14 @@ class EditTextNFormView : AppCompatEditText, NFormView {
     private fun validate(validation: NFormFieldValidation): Boolean {
         val facts = Facts()
         facts.put("value", (viewDetails.view as AppCompatEditText).text.toString())
+        facts.put("validationResults", false)
 
         // define rules
         val customRule: Rule = MVELRule()
             .name(validation.name)
             .description(validation.name)
             .`when`(validation.condition)
-            .then("value = \"true\"")
+            .then("validationResults = true")
 
         val rules = Rules(customRule)
 
@@ -79,14 +80,14 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         val rulesEngine = DefaultRulesEngine()
         rulesEngine.fire(rules, facts)
 
-        if (facts.get<String>("value") == "true")
+        if (facts.get<Boolean>("validationResults"))
             return true
 
         this.error = validation.errorMessage
         return false
     }
 
-    fun validaValues(): Boolean {
+    override fun validaValues(): Boolean {
         if (viewProperties.validations != null) {
 
             viewProperties.validations?.forEach { validation ->

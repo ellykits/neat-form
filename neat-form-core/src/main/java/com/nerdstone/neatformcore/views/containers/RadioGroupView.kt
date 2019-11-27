@@ -47,4 +47,8 @@ class RadioGroupView : LinearLayout, NFormView {
             viewBuilder.resetRadioButtonsValue()
         }
     }
+
+    override fun validaValues(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

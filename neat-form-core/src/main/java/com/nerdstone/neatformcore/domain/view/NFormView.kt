@@ -21,4 +21,6 @@ interface NFormView {
     fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher): NFormView
 
     fun resetValueWhenHidden()
+
+    fun validaValues() : Boolean
 }

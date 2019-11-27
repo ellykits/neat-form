@@ -96,7 +96,7 @@ class `Test building EditText view` {
         Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
                 editTextNFormView.error.toString() == "value should be less than eight digits")
 
-        editTextNFormView.setText("new@gmail.com")
+        editTextNFormView.setText("w@gmail")
         Assert.assertFalse(editTextNFormView.validaValues())
         Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
                 editTextNFormView.error.toString() == "value should not contain special character")
