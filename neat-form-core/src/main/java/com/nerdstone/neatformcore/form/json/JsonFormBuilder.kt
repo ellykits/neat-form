@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.form.json
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,29 +9,38 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
 import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.R
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import com.nerdstone.neatformcore.domain.data.FormActionListener
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
+import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /***
  * @author Elly Nerdstone
@@ -38,7 +48,7 @@ import kotlinx.coroutines.launch
 class JsonFormBuilder(
     override val context: Context, override var fileSource: String, var mainLayout: ViewGroup?
 ) :
-    FormBuilder {
+    FormBuilder, FormActionListener {
 
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -160,9 +170,42 @@ class JsonFormBuilder(
     }
 
     override fun getFormDetails(): HashMap<String, Any?> {
+        onComplete()
         return viewModel.details
     }
+
+    override fun onComplete() {
+
+        val activity = context as Activity
+        val activityRootView = activity.findViewById<View>(android.R.id.content).rootView
+
+        form!!.steps.withIndex().forEach { (index, formContent) ->
+            formContent.fields.withIndex().forEach { (index2, field) ->
+                if(viewModel.details[field.name]==null) {
+                    when (field.type) {
+                        Constants.ViewType.EDIT_TEXT ->
+                            Timber.e("Edit text ${field.name} is required")
+                        Constants.ViewType.MULTI_CHOICE_CHECKBOX ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.CHECKBOX ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.SPINNER ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.RADIO_GROUP ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.DATETIME_PICKER ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.NUMBER_SELECTOR ->
+                            Timber.e("View  ${field.name} is required")
+                        Constants.ViewType.TEXT_INPUT_EDIT_TEXT ->
+                            Timber.e("Text Input Edit Text  ${field.name} is required")
+                    }
+                }
+            }
+        }
+    }
 }
+
 
 const val FRAGMENT_VIEW = "fragment_view"
 const val FRAGMENT_INDEX = "index"
@@ -195,7 +238,7 @@ class StepFragment : Step {
             index = it.getInt(FRAGMENT_INDEX)
             formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
         }
-        retainInstance=true
+        retainInstance = true
     }
 
 

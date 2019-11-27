@@ -52,7 +52,7 @@ class NFormViewProperty : Serializable {
     var requiredStatus: String? = null
 
     @SerializedName("validation")
-    var validations: String? = null
+    var validations: List<NFormFieldValidation>? = null
 
     @SerializedName("subjects")
     var subjects: String? = null
@@ -85,4 +85,16 @@ class NFormSubViewProperty : Serializable {
 
     @SerializedName("properties")
     var viewAttributes: Map<String, Any>? = null
+}
+
+class NFormFieldValidation : Serializable {
+
+    @SerializedName("validation_name")
+    lateinit var name: String
+
+    @SerializedName("condition")
+    lateinit var condition: String
+
+    @SerializedName("error_message")
+    lateinit var errorMessage: String
 }

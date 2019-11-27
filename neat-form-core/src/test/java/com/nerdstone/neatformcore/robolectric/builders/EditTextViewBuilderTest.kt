@@ -1,7 +1,10 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.nerdstone.neatformcore.TestNeatFormApp
+import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
@@ -15,6 +18,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import java.lang.reflect.Type
+
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
@@ -71,6 +76,31 @@ class `Test building EditText view` {
     fun `Should reset the EditText value when visibility is gone`() {
         editTextNFormView.visibility = View.GONE
         Assert.assertTrue(editTextNFormView.text.toString().isEmpty())
+    }
+
+    @Test
+    fun `Should validate EditText `() {
+        val validations = "[{\"validation_name\":\"length\",\"condition\":\"value.length() < 8\",\"error_message\":\"value should be less than eight digits\"},{\"validation_name\":\"special characters\",\"condition\":\"!value.contains('@')\",\"error_message\":\"value should not contain special character\"}]"
+        val listType: Type =
+            object : TypeToken<List<NFormFieldValidation?>?>() {}.type
+        viewProperty.validations =Gson().fromJson(validations,listType)
+        viewProperty.requiredStatus = "yes:Am required"
+        editTextViewBuilder.buildView()
+        editTextNFormView.setText("yes")
+
+        Assert.assertTrue(editTextNFormView.validaValues())
+
+
+        editTextNFormView.setText("1234567890")
+        Assert.assertFalse(editTextNFormView.validaValues())
+        Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
+                editTextNFormView.error.toString() == "value should be less than eight digits")
+
+        editTextNFormView.setText("new@gmail.com")
+        Assert.assertFalse(editTextNFormView.validaValues())
+        Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
+                editTextNFormView.error.toString() == "value should not contain special character")
+
     }
 
     @After

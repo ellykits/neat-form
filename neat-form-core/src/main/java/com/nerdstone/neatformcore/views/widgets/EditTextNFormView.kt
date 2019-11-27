@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -12,6 +13,12 @@ import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import org.jeasy.rules.api.Facts
+import org.jeasy.rules.api.Rule
+import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.DefaultRulesEngine
+import org.jeasy.rules.mvel.MVELRule
+
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
@@ -53,5 +60,47 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         if (visibility == View.GONE) {
             setText("")
         }
+    }
+
+    private fun validate(validation: NFormFieldValidation): Boolean {
+        val facts = Facts()
+        facts.put("value", (viewDetails.view as AppCompatEditText).text.toString())
+
+        // define rules
+        val customRule: Rule = MVELRule()
+            .name(validation.name)
+            .description(validation.name)
+            .`when`(validation.condition)
+            .then("value = \"true\"")
+
+        val rules = Rules(customRule)
+
+        // fire rules on known facts
+        val rulesEngine = DefaultRulesEngine()
+        rulesEngine.fire(rules, facts)
+
+        if (facts.get<String>("value") == "true")
+            return true
+
+        this.error = validation.errorMessage
+        return false
+    }
+
+    fun validaValues(): Boolean {
+        if (viewProperties.validations != null) {
+
+            viewProperties.validations?.forEach { validation ->
+                if (!validate(validation))
+                    return false
+            }
+
+
+        }
+
+        return true
+    }
+
+    fun print(message: String) {
+        System.out.println(message)
     }
 }
