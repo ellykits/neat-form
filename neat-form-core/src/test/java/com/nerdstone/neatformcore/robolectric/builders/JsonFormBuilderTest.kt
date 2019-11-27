@@ -79,7 +79,7 @@ class `Test building form with JSON` {
             //VerticalRootView has 3 EditTextNFormView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
             Assert.assertTrue(verticalRootView.childCount == 13)
-            Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(0) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
