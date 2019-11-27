@@ -25,8 +25,8 @@
               "condition": "value.length() < 8",
               "error_message": "value should be less than eight digits"
             },{
-              "validation_name": "special characters",
-              "condition": "!value.contains(@)",
+              "validation_name": "phone number",
+              "condition": "value.match(\"\\\\d{10}|(?:\\\\d{3}-){2}\\\\d{4}|\\\\(\\\\d{3}\\\\)\\\\d{3}-?\\\\d{4}\")",
               "error_message": "value should not contain special character"
             }
           ],
