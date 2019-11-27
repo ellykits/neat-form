@@ -63,7 +63,6 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
         val rules = Rules(customRule)
 
-        // fire rules on known facts
         val rulesEngine = DefaultRulesEngine()
         rulesEngine.fire(rules, facts)
 
