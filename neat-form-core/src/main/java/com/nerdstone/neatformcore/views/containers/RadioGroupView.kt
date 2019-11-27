@@ -49,6 +49,6 @@ class RadioGroupView : LinearLayout, NFormView {
     }
 
     override fun validaValues(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 }

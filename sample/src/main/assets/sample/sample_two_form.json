@@ -11,7 +11,7 @@
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text": "Catch me if you can",
+            "text": "",
             "padding": "8"
           },
           "meta_data": {
@@ -26,7 +26,7 @@
               "error_message": "value should be less than eight digits"
             },{
               "validation_name": "special characters",
-              "condition": "!value.contains(@)",
+              "condition": "!value.contains('@')",
               "error_message": "value should not contain special character"
             }
           ],
@@ -290,7 +290,13 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": "length() < 8; !contains(@)"
+          "validation": [
+            {
+              "validation_name": "special characters",
+              "condition": "!value.contains(@)",
+              "error_message": "value should not contain special character"
+            }
+          ]
         }
       ]
     }
