@@ -9,12 +9,13 @@ import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import java.util.*
 
 
 class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder {
-    private val textInputLayout = nFormView as TextInputEditTextNFormView
+    private val textInputEditTextNFormView = nFormView as TextInputEditTextNFormView
 
     enum class TextInputEditTextViewProperties {
         HINT, PADDING, TEXT_SIZE, TEXT
@@ -26,19 +27,19 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
     override fun buildView() {
         createEditText()
         ViewUtils.applyViewAttributes(
-            nFormView = textInputLayout,
+            nFormView = textInputEditTextNFormView,
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
-        textInputLayout.apply {
+        textInputEditTextNFormView.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 TextInputEditTextViewProperties.PADDING.name -> {
                     val value = Utils.pxToDp(
                         (attribute.value as String).toFloat(),
-                        textInputLayout.context
+                        textInputEditTextNFormView.context
                     )
                     setPadding(value, value, value, value)
                 }
@@ -51,7 +52,7 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
             }
         }
 
-        textInputLayout.editText?.apply {
+        textInputEditTextNFormView.editText?.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 TextInputEditTextViewProperties.TEXT_SIZE.name ->
                     textSize = (attribute.value as String).toFloat()
@@ -59,36 +60,35 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
                 TextInputEditTextViewProperties.TEXT.name -> {
                     setText(attribute.value.toString())
                     requestFocus()
-                    textInputLayout.dataActionListener?.onPassData(textInputLayout.viewDetails)
+                    textInputEditTextNFormView.dataActionListener?.onPassData(
+                        textInputEditTextNFormView.viewDetails
+                    )
                 }
             }
         }
     }
 
     private fun createEditText() {
-        var textInputEditTextNFormView =
-            TextInputEditText(
-                textInputLayout.context
-            )
+        var textInputEditText = TextInputEditText(textInputEditTextNFormView.context)
 
         val editTextParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        if (textInputLayout.editText == null)
-            textInputLayout.addView(textInputEditTextNFormView, editTextParams);
+        if (textInputEditTextNFormView.editText == null)
+            textInputEditTextNFormView.addView(textInputEditText, editTextParams)
         else
-            textInputEditTextNFormView = textInputLayout.editText as TextInputEditText
+            textInputEditText = textInputEditTextNFormView.editText as TextInputEditText
 
         //Hide keyboard when focus is lost
-        textInputEditTextNFormView.setOnFocusChangeListener { _, hasFocus ->
+        textInputEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                Utils.hideSoftKeyBoard(textInputEditTextNFormView)
+                Utils.hideSoftKeyBoard(textInputEditText)
             }
         }
 
-        textInputEditTextNFormView.addTextChangedListener(object : TextWatcher {
+        textInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 //Implement
             }
@@ -102,22 +102,21 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
                 lengthAfter: Int
             ) {
                 if (text.isNotEmpty()) {
-                    textInputLayout.dataActionListener?.also {
-                        textInputLayout.viewDetails.value = text.toString()
-                        it.onPassData(textInputLayout.viewDetails)
+                    textInputEditTextNFormView.dataActionListener?.also {
+                        textInputEditTextNFormView.viewDetails.value =
+                            text.toString().removeAsterisk()
+                        it.onPassData(textInputEditTextNFormView.viewDetails)
                     }
                 }
             }
         })
-
-
     }
 
     private fun formatHintForRequiredFields() {
-        if (textInputLayout.viewProperties.requiredStatus != null) {
-            if (Utils.isFieldRequired(textInputLayout)) {
-                textInputLayout.hint =
-                    ViewUtils.addRedAsteriskSuffix(textInputLayout.hint.toString())
+        if (textInputEditTextNFormView.viewProperties.requiredStatus != null) {
+            if (Utils.isFieldRequired(textInputEditTextNFormView)) {
+                textInputEditTextNFormView.hint =
+                    ViewUtils.addRedAsteriskSuffix(textInputEditTextNFormView.hint.toString())
             }
         }
     }

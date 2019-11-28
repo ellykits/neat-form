@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
@@ -37,7 +38,8 @@ class CheckBoxNFormView : CheckBox, NFormView {
         super.setChecked(checked)
         dataActionListener?.also {
             if (checked) {
-                this.viewDetails.value = mutableMapOf(viewDetails.name to text.toString())
+                this.viewDetails.value =
+                    mutableMapOf(viewDetails.name to text.toString().removeAsterisk())
             } else {
                 this.viewDetails.value = mutableMapOf(viewDetails.name to null)
             }

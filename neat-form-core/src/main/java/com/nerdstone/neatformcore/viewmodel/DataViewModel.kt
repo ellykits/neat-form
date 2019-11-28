@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.nerdstone.neatformcore.domain.model.NFormViewDetails
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 
 /**
  * Created by cozej4 on 2019-11-25.
@@ -10,5 +10,5 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
  */
 
 class DataViewModel : ViewModel() {
-    var details: HashMap<String, Any?> = HashMap()
+    var details: HashMap<String, NFormViewData> = HashMap()
 }
