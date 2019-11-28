@@ -71,7 +71,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
                     if (position > 0) {
-                        spinnerNFormView.viewDetails.value = item
+                        spinnerNFormView.viewDetails.value = item[position]
                     } else {
                         spinnerNFormView.viewDetails.value = null
                     }
