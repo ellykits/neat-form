@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
@@ -38,7 +39,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
         if (text.isNotEmpty()) {
             dataActionListener?.also {
-                this.viewDetails.value = text.toString()
+                this.viewDetails.value = text.toString().removeAsterisk()
                 it.onPassData(viewDetails)
             }
         }

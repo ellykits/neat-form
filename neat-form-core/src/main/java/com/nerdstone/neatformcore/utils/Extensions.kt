@@ -20,3 +20,7 @@ fun View.getViewsByTagValue(tag: Int, value: Any): List<View> {
     }
     return viewResults
 }
+
+fun String.removeAsterisk(): String {
+    return this.trim().removeSuffix("*").trim()
+}
