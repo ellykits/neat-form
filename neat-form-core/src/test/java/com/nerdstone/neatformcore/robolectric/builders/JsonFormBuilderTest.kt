@@ -9,7 +9,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
@@ -248,8 +247,8 @@ class `Test building form with JSON` {
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             //VerticalRootView has 3 EditTextNFormView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            val editTextNFormView = verticalRootView.getChildAt(0) as EditTextNFormView
-            editTextNFormView.setText("24")
+            val editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
+            editTextNFormView.editText?.setText("24")
             Assert.assertTrue(jsonFormBuilder.getFormDetails().size == 1)
             Assert.assertTrue(jsonFormBuilder.getFormDetails().containsKey("adult"))
             val nFormViewData = jsonFormBuilder.getFormDetails()["adult"]
