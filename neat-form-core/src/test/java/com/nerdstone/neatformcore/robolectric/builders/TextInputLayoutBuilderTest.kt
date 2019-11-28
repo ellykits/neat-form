@@ -2,8 +2,6 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import androidx.test.core.app.ApplicationProvider
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -16,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.lang.reflect.Type
 
 /**
  * Created by cozej4 on 2019-11-20.
@@ -79,11 +76,11 @@ class `Text building InputLayout View` {
         viewProperty.requiredStatus = "yes:Am required"
         testInputLayoutBuilder.buildView()
         textInputLayoutNFormView.editText?.setText("johndoe@gmail.com")
-        Assert.assertTrue(textInputLayoutNFormView.validaValues())
+        Assert.assertTrue(textInputLayoutNFormView.validateValue())
 
 
         textInputLayoutNFormView.editText?.setText("johndoegmail.com")
-        Assert.assertFalse(textInputLayoutNFormView.validaValues())
+        Assert.assertFalse(textInputLayoutNFormView.validateValue())
         Assert.assertTrue(textInputLayoutNFormView.error=="Please enter a valid email address")
 
     }

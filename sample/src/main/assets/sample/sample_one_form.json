@@ -26,9 +26,9 @@
               "error_message": "value should be less than ten digits"
             },
             {
-              "validation_name": "phone number",
-              "condition": "value.matches(\"\\\\d{10}\")",
-              "error_message": "Not a valid phone number"
+              "validation_name": "cool",
+              "condition": "value == 'cool'",
+              "error_message": "No, your word is not cool enough. Type cool"
             }
           ],
           "subjects": "age:number, child:text, dob:number",
@@ -88,10 +88,6 @@
             "text": "Choose your gender"
           },
           "options": [
-            {
-              "name": "none",
-              "text": "Select gender"
-            },
             {
               "name": "female",
               "text": "Female",

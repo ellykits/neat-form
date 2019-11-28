@@ -77,7 +77,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         return false
     }
 
-    override fun validaValues(): Boolean {
+    override fun validateValue(): Boolean {
         if (viewProperties.validations != null && editText?.text!!.isNotEmpty()) {
             viewProperties.validations?.forEach { validation ->
                 if (!validate(validation))

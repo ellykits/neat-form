@@ -7,10 +7,10 @@ import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.utils.ThemeColor
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
-import timber.log.Timber
 import java.util.*
 
 class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -20,7 +20,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     private val materialSpinner = SmartMaterialSpinner<String>(spinnerNFormView.context)
 
     enum class SpinnerProperties {
-        TEXT,SEARCHABLE
+        TEXT, SEARCHABLE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(SpinnerProperties::class.java)
@@ -42,11 +42,12 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                     formatHintForRequiredFields()
                 }
                 SpinnerProperties.SEARCHABLE.name -> {
-                    isSearchable=true
-                    searchHeaderText=attribute.value as String
-                    setSearchHeaderBackgroundColor(Utils.getThemeAccentColors(spinnerNFormView.context))
+                    isSearchable = true
+                    searchHeaderText = attribute.value as String
+                    setSearchHeaderBackgroundColor(
+                        Utils.getThemeColor(spinnerNFormView.context, ThemeColor.COLOR_PRIMARY)
+                    )
                 }
-
             }
         }
     }
@@ -61,35 +62,33 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+        params.bottomMargin = 0
 
         materialSpinner.apply {
             layoutParams = params
-
             item = spinnerOptions
-            hintColor = R.color.colorBlack
+            selectedItemListColor = Utils.getThemeColor(this.context, ThemeColor.COLOR_ACCENT)
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                    if (position > 0) {
-                        spinnerNFormView.viewDetails.value = item[position]
-                    } else {
-                        spinnerNFormView.viewDetails.value = null
-                    }
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>, view: View, position: Int, id: Long
+                ) {
+                    spinnerNFormView.viewDetails.value = item[position]
                     spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
 
                 override fun onNothingSelected(adapterView: AdapterView<*>) {
-                    errorText = "Nothing Selected"
+                    errorText = context.getString(R.string.nothing_selected)
+                    spinnerNFormView.viewDetails.value = null
+                    spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
             }
-
         }
-
         spinnerNFormView.addView(materialSpinner)
     }
 
     fun resetSpinnerValue() {
-        if(materialSpinner.item.size>0) {
+        if (materialSpinner.item.size > 0) {
             materialSpinner.setSelection(0)
             spinnerNFormView.viewDetails.value = null
             spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)

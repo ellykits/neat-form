@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">neatformcore</string>
     <string name="form_builder_error">Provide root view or stepper for form builder </string>
+    <string name="nothing_selected">Nothing Selected</string>
 </resources>

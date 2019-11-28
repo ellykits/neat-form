@@ -88,16 +88,16 @@ class `Test building EditText view` {
         editTextViewBuilder.buildView()
         editTextNFormView.setText("yes")
 
-        Assert.assertTrue(editTextNFormView.validaValues())
+        Assert.assertTrue(editTextNFormView.validateValue())
 
 
         editTextNFormView.setText("1234567890")
-        Assert.assertFalse(editTextNFormView.validaValues())
+        Assert.assertFalse(editTextNFormView.validateValue())
         Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
                 editTextNFormView.error.toString() == "value should be less than eight digits")
 
         editTextNFormView.setText("w@gmail")
-        Assert.assertFalse(editTextNFormView.validaValues())
+        Assert.assertFalse(editTextNFormView.validateValue())
         Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
                 editTextNFormView.error.toString() == "value should not contain special character")
 

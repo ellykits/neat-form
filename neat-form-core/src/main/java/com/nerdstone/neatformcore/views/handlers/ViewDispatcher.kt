@@ -13,20 +13,23 @@ class ViewDispatcher private constructor() : DataActionListener {
 
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
+    /**
+     * Validates view data if it passes proceed to save the view data and fire rules
+     * Otherwise do nothing at all
+     * @param viewDetails the details of the view that has just dispatched a value
+     */
     override fun onPassData(viewDetails: NFormViewDetails) {
 
-        //Save the passed data to view model
         val viewModel =
             ViewModelProviders.of(viewDetails.view.context as FragmentActivity)[DataViewModel::class.java]
 
-        viewModel.details[viewDetails.name] = NFormViewData(viewDetails.value, viewDetails.metadata)
+        if ((viewDetails.view as NFormView).validateValue()) {
+            viewModel.details[viewDetails.name] =
+                NFormViewData(viewDetails.value, viewDetails.metadata)
 
-        //validate the view's data
-        (viewDetails.view as NFormView).validaValues()
-
-        //Only execute rule if view has dependants
-        if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
-            rulesFactory.updateFactsAndExecuteRules(viewDetails)
+            if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
+                rulesFactory.updateFactsAndExecuteRules(viewDetails)
+            }
         }
     }
 

@@ -63,6 +63,17 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         }
     }
 
+    override fun validateValue(): Boolean {
+        if (viewProperties.validations != null) {
+
+            viewProperties.validations?.forEach { validation ->
+                if (!validate(validation))
+                    return false
+            }
+        }
+        return true
+    }
+
     private fun validate(validation: NFormFieldValidation): Boolean {
         val facts = Facts()
         facts.put("value", (viewDetails.view as AppCompatEditText).text.toString())
@@ -88,21 +99,4 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         return false
     }
 
-    override fun validaValues(): Boolean {
-        if (viewProperties.validations != null) {
-
-            viewProperties.validations?.forEach { validation ->
-                if (!validate(validation))
-                    return false
-            }
-
-
-        }
-
-        return true
-    }
-
-    fun print(message: String) {
-        System.out.println(message)
-    }
 }

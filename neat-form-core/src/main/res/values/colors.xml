@@ -5,6 +5,7 @@
   <color name="colorDark">#212121</color>
   <color name="colorDarkGrey">#6C7066</color>
   <color name="colorWhite">#FFFFFF</color>
+  <color name="colorRed">#f44336</color>
 
   <!--Custom -->
   <color name="numberSelectorItemDefault">#F0F3F7</color>

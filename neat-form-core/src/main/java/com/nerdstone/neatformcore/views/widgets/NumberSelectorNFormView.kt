@@ -47,7 +47,7 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
         }
     }
 
-    override fun validaValues(): Boolean {
+    override fun validateValue(): Boolean {
         return true
     }
 }

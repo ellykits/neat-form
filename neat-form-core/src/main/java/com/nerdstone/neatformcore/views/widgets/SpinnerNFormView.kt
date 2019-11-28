@@ -49,7 +49,7 @@ class SpinnerNFormView : LinearLayout, NFormView {
         }
     }
 
-    override fun validaValues(): Boolean {
+    override fun validateValue(): Boolean {
         val materialSpinner =
             (viewDetails.view as ViewGroup).getChildAt(0) as SmartMaterialSpinner<*>
         if (viewProperties.requiredStatus != null && viewDetails.value == null) {

@@ -22,5 +22,5 @@ interface NFormView {
 
     fun resetValueWhenHidden()
 
-    fun validaValues() : Boolean
+    fun validateValue() : Boolean
 }
