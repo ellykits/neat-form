@@ -38,4 +38,16 @@ object Utils {
             view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
+
+    fun getThemeAccentColors(context: Context): Int {
+        val colorAttr: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            R.attr.colorAccent
+        } else { //Get colorAccent defined for AppCompat
+            context.resources
+                .getIdentifier("colorAccent", "attr", context.packageName)
+        }
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(colorAttr, outValue, true)
+        return outValue.data
+    }
 }

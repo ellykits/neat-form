@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+import timber.log.Timber
 import java.util.*
 
 class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -43,6 +44,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                 SpinnerProperties.SEARCHABLE.name -> {
                     isSearchable=true
                     searchHeaderText=attribute.value as String
+                    setSearchHeaderBackgroundColor(Utils.getThemeAccentColors(spinnerNFormView.context))
                 }
 
             }
