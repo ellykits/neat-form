@@ -89,9 +89,11 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     }
 
     fun resetSpinnerValue() {
-        materialSpinner.setSelection(0)
-        spinnerNFormView.viewDetails.value = null
-        spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+        if(materialSpinner.item.size>0) {
+            materialSpinner.setSelection(0)
+            spinnerNFormView.viewDetails.value = null
+            spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+        }
     }
 
     private fun formatHintForRequiredFields() {

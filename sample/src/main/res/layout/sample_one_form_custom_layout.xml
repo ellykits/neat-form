@@ -80,13 +80,13 @@
         app:layout_constraintStart_toStartOf="@+id/gender"
         app:layout_constraintTop_toBottomOf="@+id/gender" />
 
-    <com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+    <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
         android:id="@+id/choose_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/gender" />
+        app:layout_constraintTop_toBottomOf="@+id/country" />
 
     <com.nerdstone.neatformcore.views.widgets.EditTextNFormView
         android:id="@+id/language_none"

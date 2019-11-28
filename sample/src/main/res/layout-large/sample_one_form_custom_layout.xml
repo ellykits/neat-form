@@ -70,14 +70,23 @@
         app:layout_constraintStart_toStartOf="@+id/email_subscription"
         app:layout_constraintTop_toBottomOf="@+id/email_subscription" />
 
+    <com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
+        android:id="@+id/country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/gender"
+        app:layout_constraintTop_toBottomOf="@+id/gender" />
+
+
     <LinearLayout
         android:id="@+id/language_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/gender">
+        app:layout_constraintStart_toStartOf="@+id/country"
+        app:layout_constraintTop_toBottomOf="@+id/country">
 
         <com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
             android:id="@+id/choose_language"
