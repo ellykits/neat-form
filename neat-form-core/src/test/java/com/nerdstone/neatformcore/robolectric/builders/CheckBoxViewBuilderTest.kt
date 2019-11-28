@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
@@ -12,16 +13,17 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test building CheckBox view` {
 
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val viewProperty = spyk(NFormViewProperty())
-    private val checkBoxNFormView = CheckBoxNFormView(RuntimeEnvironment.systemContext)
+    private val checkBoxNFormView = CheckBoxNFormView(activity.get())
     private val checkBoxViewBuilder = spyk(CheckBoxViewBuilder(checkBoxNFormView))
 
     @Before
@@ -38,7 +40,7 @@ class `Test building CheckBox view` {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(checkBoxNFormView.text.isNotEmpty() && checkBoxNFormView.text.toString() == text)
-        Assert.assertTrue(checkBoxNFormView.textSize.toInt() == 16)
+        Assert.assertTrue(checkBoxNFormView.textSize.toInt() == 18)
     }
 
     @Test

@@ -17,13 +17,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topNavigationLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/exitFormImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:contentDescription="@string/go_back"
                 android:padding="@dimen/toolbar_buttons_padding"
                 android:src="@drawable/ic_clear_white"
@@ -34,13 +33,28 @@
 
             <TextView
                 android:id="@+id/pageTitleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/colorWhite"
+                android:src="@drawable/ic_check"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/exitFormImageView"
+                app:layout_constraintEnd_toStartOf="@+id/completeButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageButton
+                android:id="@+id/completeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_check"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/finish"
+                android:padding="@dimen/toolbar_buttons_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

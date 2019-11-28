@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
@@ -27,7 +26,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 

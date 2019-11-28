@@ -104,7 +104,7 @@ class `Test building form with JSON` {
             )
             jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
             val inflater =
-                ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
             val viewsList = listOf<View>(view)
@@ -186,7 +186,7 @@ class `Test building form with JSON` {
             )
             jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
             val inflater =
-                ApplicationProvider.getApplicationContext<Context>().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
             val viewsList = listOf<View>(view)
             val stepperModel = StepperModel.Builder()
@@ -232,6 +232,33 @@ class `Test building form with JSON` {
             Assert.assertTrue(editTextAttributes.containsKey("hint") && editTextAttributes["hint"] == "Specify your language")
         }
     }
+
+    @Test
+    fun `Should update the FormDetails when value changes`() =
+        runBlockingTest {
+            jsonFormBuilder = spyk(
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+            )
+            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.buildForm()
+            Assert.assertNotNull(jsonFormBuilder.form)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
+
+            val scrollView = mainLayout.getChildAt(0) as ScrollView
+            //VerticalRootView has 3 EditTextNFormView
+            val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
+            val editTextNFormView = verticalRootView.getChildAt(0) as EditTextNFormView
+            editTextNFormView.setText("24")
+            Assert.assertTrue(jsonFormBuilder.getFormDetails().size == 1)
+            Assert.assertTrue(jsonFormBuilder.getFormDetails().containsKey("adult"))
+            val nFormViewData = jsonFormBuilder.getFormDetails()["adult"]
+            Assert.assertTrue(nFormViewData?.value == "24")
+            Assert.assertTrue(nFormViewData?.metadata is Map<*, *>)
+            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity"))
+            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_id"))
+            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_parent"))
+        }
 
     @After
     fun `Tearing everything down`() {

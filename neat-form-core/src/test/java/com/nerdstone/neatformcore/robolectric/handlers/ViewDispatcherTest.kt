@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.handlers
 
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.rules.RulesFactory
@@ -10,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -22,7 +24,8 @@ class `Test View Dispacher action` {
     private val viewProperty = NFormViewProperty()
     private val viewDispatcher = spyk<ViewDispatcher>()
     private val rulesFactory = RulesFactory.INSTANCE
-    private val editTextNFormView = EditTextNFormView(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    private val editTextNFormView = EditTextNFormView(activity.get())
 
     @Before
     fun `Before doing anything else`() {

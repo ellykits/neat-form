@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
@@ -19,16 +21,17 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
+import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-
 
 /***
  * @author Elly Nerdstone
@@ -45,6 +48,8 @@ class JsonFormBuilder(
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
     override var neatStepperLayout = NeatStepperLayout(context)
+    private val viewModel =
+        ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
 
     init {
         rulesHandler.formBuilder = this
@@ -153,6 +158,10 @@ class JsonFormBuilder(
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
         }
+    }
+
+    override fun getFormDetails(): HashMap<String, NFormViewData> {
+        return viewModel.details
     }
 }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.rules.RulesFactory
 
 interface FormBuilder {
@@ -26,4 +27,6 @@ interface FormBuilder {
     )
 
     fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
+
+    fun getFormDetails():HashMap<String, NFormViewData>
 }
