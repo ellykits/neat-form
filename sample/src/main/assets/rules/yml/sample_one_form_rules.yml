@@ -49,6 +49,13 @@ condition: "email_subscription['email_subscription'] != null"
 actions:
   - "gender_visibility =  true"
 ---
+name: "country_visibility"
+description: "Ask country"
+priority: 1
+condition: "email_subscription['email_subscription'] != null"
+actions:
+  - "country_visibility =  true"
+---
 name: "no_prev_pregnancies_visibility"
 description: "Ask last pregnancies"
 priority: 1

@@ -45,7 +45,7 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
 
                 TextInputEditTextViewProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
-                    formatHintForRequiredFields();
+                    formatHintForRequiredFields()
                 }
 
             }

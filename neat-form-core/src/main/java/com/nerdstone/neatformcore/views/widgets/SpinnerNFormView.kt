@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -50,13 +50,13 @@ class SpinnerNFormView : LinearLayout, NFormView {
     }
 
     override fun validaValues(): Boolean {
-        if (viewProperties.requiredStatus != null && viewDetails.value==null) {
-
-            val materialSpinner = (viewDetails.view as ViewGroup).getChildAt(0) as TextView
-            materialSpinner.error=viewProperties.requiredStatus?.split(":")!![1]
+        val materialSpinner =
+            (viewDetails.view as ViewGroup).getChildAt(0) as SmartMaterialSpinner<*>
+        if (viewProperties.requiredStatus != null && viewDetails.value == null) {
+            materialSpinner.errorText = viewProperties.requiredStatus?.split(":")!![1]
             return false
         }
-
+        materialSpinner.errorText = ""
         return true
     }
 }

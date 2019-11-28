@@ -115,6 +115,90 @@
           "required_status": "yes:Please specify your gender"
         },
         {
+          "name": "country",
+          "type": "spinner",
+          "properties": {
+            "text": "Choose your country of Origin",
+            "searchable": "Search country"
+          },
+          "options": [
+            {
+              "name": "none",
+              "text": "Select country"
+            },
+            {
+              "name": "america",
+              "text": "United States Of America",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },
+            {
+              "name": "canada",
+              "text": "Canada",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },{
+              "name": "uk",
+              "text": "United Kingdom",
+              "meta_data": {
+                "country_code": "+44"
+              }
+            },{
+              "name": "australia",
+              "text": "Australia",
+              "meta_data": {
+                "country_code": "+61"
+              }
+            },{
+              "name": "Kenya",
+              "text": "Kenya",
+              "meta_data": {
+                "country_code": "+254"
+              }
+            },{
+              "name": "tanzania",
+              "text": "Tanzania",
+              "meta_data": {
+                "country_code": "+255"
+              }
+            },{
+              "name": "china",
+              "text": "China",
+              "meta_data": {
+                "country_code": "+86"
+              }
+            },{
+              "name": "sweden",
+              "text": "Sweden",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },{
+              "name": "russia",
+              "text": "Russia",
+              "meta_data": {
+                "country_code": "+7"
+              }
+            },{
+              "name": "japan",
+              "text": "Japan",
+              "meta_data": {
+                "country_code": "+81"
+              }
+            },{
+              "name": "singapore",
+              "text": "Singapore",
+              "meta_data": {
+                "country_code": "+65"
+              }
+            }
+          ],
+          "subjects": "email_subscription:map",
+          "required_status": "yes:Please specify your country"
+        },
+        {
           "name": "choose_language",
           "type": "multi_choice_checkbox",
           "properties": {
