@@ -18,8 +18,6 @@ class VerticalRootView : LinearLayout, RootView {
         orientation = VERTICAL
     }
 
-    override val viewsData: List<NFormViewData> = listOf()
-
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
