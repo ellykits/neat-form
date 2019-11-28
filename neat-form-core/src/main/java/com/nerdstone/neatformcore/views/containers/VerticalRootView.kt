@@ -3,14 +3,12 @@ package com.nerdstone.neatformcore.views.containers
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import java.io.Serializable
 
 class VerticalRootView : LinearLayout, RootView {
 

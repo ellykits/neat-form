@@ -76,45 +76,40 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        textInputEditText.apply {
+        if (textInputEditTextNFormView.editText == null)
+            textInputEditTextNFormView.addView(textInputEditText, editTextParams)
+        else
+            textInputEditText = textInputEditTextNFormView.editText as TextInputEditText
 
-            if (textInputEditTextNFormView.editText == null) {
-                textInputEditTextNFormView.addView(this, editTextParams)
-            } else {
-                textInputEditText = textInputEditTextNFormView.editText as TextInputEditText
+        //Hide keyboard when focus is lost
+        textInputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                Utils.hideSoftKeyBoard(textInputEditText)
             }
-
-            //Hide keyboard when focus is lost
-            setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    Utils.hideSoftKeyBoard(textInputEditText)
-                }
-            }
-
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
-                    //Implement
-                }
-
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    //Implement
-                }
-
-                override fun onTextChanged(
-                    text: CharSequence, start: Int, lengthBefore: Int,
-                    lengthAfter: Int
-                ) {
-                    if (text.isNotEmpty()) {
-                        textInputEditTextNFormView.dataActionListener?.also {
-                            textInputEditTextNFormView.viewDetails.value =
-                                text.toString().removeAsterisk()
-                            it.onPassData(textInputEditTextNFormView.viewDetails)
-                        }
-                    }
-                }
-            })
         }
 
+        textInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                //Implement
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //Implement
+            }
+
+            override fun onTextChanged(
+                text: CharSequence, start: Int, lengthBefore: Int,
+                lengthAfter: Int
+            ) {
+                if (text.isNotEmpty()) {
+                    textInputEditTextNFormView.dataActionListener?.also {
+                        textInputEditTextNFormView.viewDetails.value =
+                            text.toString().removeAsterisk()
+                        it.onPassData(textInputEditTextNFormView.viewDetails)
+                    }
+                }
+            }
+        })
     }
 
     private fun formatHintForRequiredFields() {
