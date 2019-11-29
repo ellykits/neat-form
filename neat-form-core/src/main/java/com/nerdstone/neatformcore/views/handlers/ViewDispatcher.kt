@@ -25,7 +25,11 @@ class ViewDispatcher private constructor() : DataActionListener {
 
         if ((viewDetails.view as NFormView).validateValue()) {
             viewModel.details[viewDetails.name] =
-                NFormViewData(viewDetails.value, viewDetails.metadata)
+                NFormViewData(
+                    viewDetails.view.javaClass.simpleName,
+                    viewDetails.value,
+                    viewDetails.metadata
+                )
 
             if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
                 rulesFactory.updateFactsAndExecuteRules(viewDetails)

@@ -29,4 +29,6 @@ interface FormBuilder {
     fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
 
     fun getFormDetails():HashMap<String, NFormViewData>
+
+    fun getFormMetaData(): Map<String, Any>
 }

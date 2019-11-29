@@ -3,7 +3,6 @@ package com.nerdstone.neatformcore.views.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
@@ -12,6 +11,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import org.jeasy.rules.api.Facts
@@ -19,7 +19,7 @@ import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRule
-import timber.log.Timber
+import java.util.*
 
 class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
@@ -51,40 +51,11 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         }
     }
 
-    private fun validate(validation: NFormFieldValidation): Boolean {
-        val facts = Facts()
-        facts.put("value", editText?.text.toString())
-        facts.put("validationResults", false)
-
-        // define rules
-        val customRule: Rule = MVELRule()
-            .name(validation.name)
-            .description(validation.name)
-            .`when`(validation.condition)
-            .then("validationResults = true")
-
-        val rules = Rules(customRule)
-
-        val rulesEngine = DefaultRulesEngine()
-        rulesEngine.fire(rules, facts)
-
-        if (facts.get<Boolean>("validationResults")) {
-            this.error = ""
-            return true
-        }
-
-        this.error = validation.errorMessage
-        return false
-    }
-
     override fun validateValue(): Boolean {
-        if (viewProperties.validations != null && editText?.text!!.isNotEmpty()) {
-            viewProperties.validations?.forEach { validation ->
-                if (!validate(validation))
-                    return false
-            }
-        }
-
-        return true
+        val validationPair = ViewUtils.runAllValidations(viewProperties, viewDetails.value)
+        if (!validationPair.first) {
+            this.error = validationPair.second
+        } else this.error = null
+        return validationPair.first
     }
 }

@@ -65,12 +65,10 @@ class `Text building InputLayout View` {
     }
 
     @Test
-    fun `Should validate TextInputEditText `() {
+    fun `Should validate TextInputEditText value`() {
         val validation = NFormFieldValidation()
-        validation.name = "email validation"
         validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
-        validation.errorMessage = "Please enter a valid email address"
-
+        validation.message = "Please enter a valid email address"
 
         viewProperty.validations = arrayListOf(validation)
         viewProperty.requiredStatus = "yes:Am required"
@@ -78,10 +76,8 @@ class `Text building InputLayout View` {
         textInputLayoutNFormView.editText?.setText("johndoe@gmail.com")
         Assert.assertTrue(textInputLayoutNFormView.validateValue())
 
-
         textInputLayoutNFormView.editText?.setText("johndoegmail.com")
         Assert.assertFalse(textInputLayoutNFormView.validateValue())
         Assert.assertTrue(textInputLayoutNFormView.error=="Please enter a valid email address")
-
     }
 }

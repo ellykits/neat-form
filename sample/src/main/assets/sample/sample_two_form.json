@@ -81,10 +81,6 @@
           },
           "options": [
             {
-              "name": "none",
-              "text": "Select gender"
-            },
-            {
               "name": "female",
               "text": "Female",
               "meta_data": {

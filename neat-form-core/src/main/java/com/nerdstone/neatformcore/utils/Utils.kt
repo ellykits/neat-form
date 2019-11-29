@@ -5,8 +5,10 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.gson.GsonBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import java.util.*
+
 
 object ThemeColor {
     const val COLOR_ACCENT = "colorAccent"
@@ -58,4 +60,8 @@ object Utils {
         context.theme.resolveAttribute(colorAttr, outValue, true)
         return outValue.data
     }
+
+    fun getJsonFromModel(model: Any): String = GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation()
+        .create().toJson(model)
 }

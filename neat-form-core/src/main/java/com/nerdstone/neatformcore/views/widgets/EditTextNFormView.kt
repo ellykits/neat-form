@@ -19,6 +19,7 @@ import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRule
+import java.util.*
 
 
 class EditTextNFormView : AppCompatEditText, NFormView {
@@ -64,39 +65,10 @@ class EditTextNFormView : AppCompatEditText, NFormView {
     }
 
     override fun validateValue(): Boolean {
-        if (viewProperties.validations != null) {
-
-            viewProperties.validations?.forEach { validation ->
-                if (!validate(validation))
-                    return false
-            }
-        }
-        return true
+        val validationPair = ViewUtils.runAllValidations(viewProperties, viewDetails.value)
+        if (!validationPair.first) {
+            this.error = validationPair.second
+        } else this.error = null
+        return validationPair.first
     }
-
-    private fun validate(validation: NFormFieldValidation): Boolean {
-        val facts = Facts()
-        facts.put("value", (viewDetails.view as AppCompatEditText).text.toString())
-        facts.put("validationResults", false)
-
-        // define rules
-        val customRule: Rule = MVELRule()
-            .name(validation.name)
-            .description(validation.name)
-            .`when`(validation.condition)
-            .then("validationResults = true")
-
-        val rules = Rules(customRule)
-
-        // fire rules on known facts
-        val rulesEngine = DefaultRulesEngine()
-        rulesEngine.fire(rules, facts)
-
-        if (facts.get<Boolean>("validationResults"))
-            return true
-
-        this.error = validation.errorMessage
-        return false
-    }
-
 }

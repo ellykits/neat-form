@@ -79,27 +79,21 @@ class `Test building EditText view` {
     }
 
     @Test
-    fun `Should validate EditText `() {
-        val validations = "[{\"validation_name\":\"length\",\"condition\":\"value.length() < 8\",\"error_message\":\"value should be less than eight digits\"},{\"validation_name\":\"special characters\",\"condition\":\"!value.contains('@')\",\"error_message\":\"value should not contain special character\"}]"
-        val listType: Type =
-            object : TypeToken<List<NFormFieldValidation?>?>() {}.type
-        viewProperty.validations =Gson().fromJson(validations,listType)
+    fun `Should validate EditText value`() {
+        val validation = NFormFieldValidation()
+        validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
+        validation.message = "Please enter a valid email address"
+
+        viewProperty.validations = arrayListOf(validation)
         viewProperty.requiredStatus = "yes:Am required"
         editTextViewBuilder.buildView()
-        editTextNFormView.setText("yes")
-
+        editTextNFormView.setText("johndoe@gmail.com")
         Assert.assertTrue(editTextNFormView.validateValue())
 
 
-        editTextNFormView.setText("1234567890")
+        editTextNFormView.setText("johndoegmail.com")
         Assert.assertFalse(editTextNFormView.validateValue())
-        Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
-                editTextNFormView.error.toString() == "value should be less than eight digits")
-
-        editTextNFormView.setText("w@gmail")
-        Assert.assertFalse(editTextNFormView.validateValue())
-        Assert.assertTrue(editTextNFormView.error.toString().isNotEmpty() &&
-                editTextNFormView.error.toString() == "value should not contain special character")
+        Assert.assertTrue(editTextNFormView.error=="Please enter a valid email address")
 
     }
 

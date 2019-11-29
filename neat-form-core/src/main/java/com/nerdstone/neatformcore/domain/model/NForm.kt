@@ -28,7 +28,6 @@ class NFormContent : Serializable {
     @SerializedName("fields")
     lateinit var fields: List<NFormViewProperty>
 
-
 }
 
 class NFormViewProperty : Serializable {
@@ -89,12 +88,9 @@ class NFormSubViewProperty : Serializable {
 
 class NFormFieldValidation : Serializable {
 
-    @SerializedName("validation_name")
-    lateinit var name: String
-
     @SerializedName("condition")
-    lateinit var condition: String
+    var condition: String? = null
 
-    @SerializedName("error_message")
-    lateinit var errorMessage: String
+    @SerializedName("message")
+    var message: String? = null
 }

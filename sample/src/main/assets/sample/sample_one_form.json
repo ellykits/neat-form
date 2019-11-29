@@ -11,7 +11,6 @@
           "properties": {
             "hint": "Enter adult's phone number",
             "type": "name",
-            "text": "",
             "padding": "8"
           },
           "meta_data": {
@@ -21,18 +20,16 @@
           },
           "validation": [
             {
-              "validation_name": "length",
               "condition": "value.length() < 11",
-              "error_message": "value should be less than ten digits"
+              "message": "value should be less than ten digits"
             },
             {
-              "validation_name": "cool",
               "condition": "value == 'cool'",
-              "error_message": "No, your word is not cool enough. Type cool"
+              "message": "No, your word is not cool enough. Type cool"
             }
           ],
           "subjects": "age:number, child:text, dob:number",
-          "required_status": "True:please add username"
+          "required_status": "Yes:please add username"
         },
         {
           "name": "age",
@@ -49,9 +46,8 @@
           },
           "validation": [
             {
-              "validation_name": "two digits number",
               "condition": "value.matches(\"^\\\\d{1,2}?$\")",
-              "error_message": "Not a valid age"
+              "message": "Not a valid age"
             }
           ],
           "required_status": "yes:Please add age"
@@ -135,55 +131,64 @@
               "meta_data": {
                 "country_code": "+1"
               }
-            },{
+            },
+            {
               "name": "uk",
               "text": "United Kingdom",
               "meta_data": {
                 "country_code": "+44"
               }
-            },{
+            },
+            {
               "name": "australia",
               "text": "Australia",
               "meta_data": {
                 "country_code": "+61"
               }
-            },{
+            },
+            {
               "name": "Kenya",
               "text": "Kenya",
               "meta_data": {
                 "country_code": "+254"
               }
-            },{
+            },
+            {
               "name": "tanzania",
               "text": "Tanzania",
               "meta_data": {
                 "country_code": "+255"
               }
-            },{
+            },
+            {
               "name": "china",
               "text": "China",
               "meta_data": {
                 "country_code": "+86"
               }
-            },{
+            },
+            {
               "name": "sweden",
               "text": "Sweden",
               "meta_data": {
                 "country_code": "+1"
               }
-            },{
+            },
+            {
               "name": "russia",
               "text": "Russia",
               "meta_data": {
                 "country_code": "+7"
               }
-            },{
+            },
+            {
               "name": "japan",
               "text": "Japan",
               "meta_data": {
                 "country_code": "+81"
               }
-            },{
+            },
+            {
               "name": "singapore",
               "text": "Singapore",
               "meta_data": {
@@ -297,6 +302,12 @@
             "hint": "What was your contribution?",
             "type": "name"
           },
+          "validation": [
+            {
+              "condition": "value.startsWith('I')",
+              "message": "Your statement must start with I"
+            }
+          ],
           "required_status": "true:Please specify your contributions",
           "subjects": "wiki_contribution:map"
         },

@@ -247,16 +247,16 @@ class `Test building form with JSON` {
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             //VerticalRootView has 3 EditTextNFormView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            val editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
+            val editTextNFormView = verticalRootView.getChildAt(1) as TextInputEditTextNFormView
             editTextNFormView.editText?.setText("24")
             Assert.assertTrue(jsonFormBuilder.getFormDetails().size == 1)
-            Assert.assertTrue(jsonFormBuilder.getFormDetails().containsKey("adult"))
-            val nFormViewData = jsonFormBuilder.getFormDetails()["adult"]
+            Assert.assertTrue(jsonFormBuilder.getFormDetails().containsKey("age"))
+            val nFormViewData = jsonFormBuilder.getFormDetails()["age"]
             Assert.assertTrue(nFormViewData?.value == "24")
             Assert.assertTrue(nFormViewData?.metadata is Map<*, *>)
             Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity"))
-            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_id"))
-            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_parent"))
+            Assert.assertTrue((nFormViewData.metadata as Map<*, *>).containsKey("openmrs_entity_id"))
+            Assert.assertTrue((nFormViewData.metadata as Map<*, *>).containsKey("openmrs_entity_parent"))
         }
 
     @After

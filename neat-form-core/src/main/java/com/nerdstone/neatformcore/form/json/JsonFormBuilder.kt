@@ -154,6 +154,10 @@ class JsonFormBuilder(
         return rootView
     }
 
+    override fun getFormMetaData(): Map<String, Any> {
+        return form?.formMetadata ?: mutableMapOf()
+    }
+
     override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
@@ -211,6 +215,10 @@ class StepFragment : Step {
         val scroller = ScrollView(activity)
         scroller.addView(formView)
         return scroller
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        //No call for super(). Bug on API Level > 11.
     }
 
     override fun verifyStep(): StepVerificationState {

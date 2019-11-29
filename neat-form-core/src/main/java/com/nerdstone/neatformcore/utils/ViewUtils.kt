@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.R
+import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
@@ -25,10 +27,17 @@ import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
+import org.jeasy.rules.api.Facts
+import org.jeasy.rules.api.Rule
+import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.DefaultRulesEngine
+import org.jeasy.rules.mvel.MVELRule
 import java.util.*
 import kotlin.reflect.KClass
 
 const val ID = "id"
+const val VALUE = "value"
+const val VALIDATION_RESULT = "validationResults"
 
 object ViewUtils {
 
@@ -203,5 +212,39 @@ object ViewUtils {
             }
         }
         return label
+    }
+
+
+    fun runAllValidations(viewProperties: NFormViewProperty, value: Any?): Pair<Boolean, String?> {
+        if (viewProperties.validations != null) {
+            viewProperties.validations?.forEach { validation ->
+                if (!validateField(validation, value))
+                    return Pair(false, validation.message)
+            }
+        }
+        return Pair(true, "")
+    }
+
+    private fun validateField(validation: NFormFieldValidation, value: Any?): Boolean {
+
+        val facts = Facts()
+        facts.put(VALUE, value)
+        facts.put(VALIDATION_RESULT, false)
+
+        // define rules
+        val customRule: Rule = MVELRule()
+            .name(UUID.randomUUID().toString())
+            .description(validation.condition)
+            .`when`(validation.condition)
+            .then("$VALIDATION_RESULT = true")
+
+        val rules = Rules(customRule)
+
+        // fire rules on known facts
+        val rulesEngine = DefaultRulesEngine()
+        rulesEngine.fire(rules, facts)
+
+        if (facts.get<Boolean>(VALIDATION_RESULT)) return true
+        return false
     }
 }

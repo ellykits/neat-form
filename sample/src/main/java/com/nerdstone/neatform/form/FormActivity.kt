@@ -20,6 +20,7 @@ import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
+import com.nerdstone.neatformcore.utils.Utils
 import timber.log.Timber
 
 
@@ -62,7 +63,11 @@ class FormActivity : AppCompatActivity(), StepperActions {
             completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
                     Toast.makeText(this, "Completed the form", Toast.LENGTH_LONG).show()
-                    Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
+                    Timber.d(
+                        "Saved Data = %s",
+                        Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
+                    )
+                    finish()
                 }
             }
 
@@ -111,7 +116,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onStepComplete(step: Step) {
-        Toast.makeText(this, "Stepper completed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
+        Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+        finish()
     }
 
     override fun onExitStepper() {
@@ -128,6 +135,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
     override fun onCompleteStepper() {
         Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-        Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
+        Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+        finish()
     }
 }
