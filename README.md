@@ -685,6 +685,7 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 * [Easy Rules](https://github.com/j-easy/easy-rules) - Rules Engine library   
 * [Mockk](https://mockk.io/) - Testing Framework Kotlin  
 * [GSON](https://github.com/google/gson) - Parsing JSON files  
+* [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library  
   
 ## RoadMap  
   
