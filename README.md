@@ -67,7 +67,7 @@ Add the library in the dependency section of your application's `build.gradle` f
 ```groovy  
 dependencies {  
    //consume library - use the latest version available on github packages  
-   implementation "com.nerdstone:neat-form-core:1.0.1"  
+   implementation "com.nerdstone:neat-form-core:1.0.3"  
    //....  
   
 }  
@@ -685,14 +685,15 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 * [Easy Rules](https://github.com/j-easy/easy-rules) - Rules Engine library   
 * [Mockk](https://mockk.io/) - Testing Framework Kotlin  
 * [GSON](https://github.com/google/gson) - Parsing JSON files  
+* [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library  
   
 ## RoadMap  
   
 ✔️  Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*   
-❌ Data management - saving data from the input fields  
+✔️ Data management - saving data from the input fields  
 ❌ Multi language support  
 ❌ Ability to obtain and render `JSON`form from server  
-❌ Support Multi-Step Forms  
+✔️ Support Multi-Step Forms  
 ✔️ Rules Engine integration - handle form skip logic and calculations  
   
 >Neat form is currently in the infancy stage; a lot will change with addition of many cool features. Be sure to check in once in a while for updates.😄  
