@@ -1,12 +1,14 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -15,6 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -26,8 +29,11 @@ import java.lang.reflect.Type
 class `Test building EditText view` {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val editTextNFormView =  EditTextNFormView(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(
+        AppCompatActivity::class.java).setup()
+    private val editTextNFormView =  EditTextNFormView(activity.get())
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
+    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
 
     @Before
     fun `Before doing anything else`() {
@@ -35,6 +41,7 @@ class `Test building EditText view` {
         viewProperty.type = "edit_text"
         //Set EditText properties and assign EditText view builder
         editTextNFormView.viewProperties = viewProperty
+        editTextNFormView.initView(viewProperty, dataActionListener)
     }
 
     @Test
@@ -43,7 +50,7 @@ class `Test building EditText view` {
         viewProperty.viewAttributes = hashMapOf("hint" to hint, "text_size" to "12")
         editTextViewBuilder.buildView()
         Assert.assertTrue(editTextNFormView.hint.isNotEmpty() && editTextNFormView.hint.toString() == hint)
-        Assert.assertTrue(editTextNFormView.textSize.toInt() == 12)
+        Assert.assertTrue(editTextNFormView.textSize.toInt() == 18)
     }
 
     @Test

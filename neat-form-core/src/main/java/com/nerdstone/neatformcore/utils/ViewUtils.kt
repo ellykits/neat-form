@@ -6,14 +6,16 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
@@ -190,28 +192,23 @@ object ViewUtils {
         }
     }
 
-    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): TextView {
-        val label = TextView((nFormView as View).context)
+    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): LinearLayout {
+        val layoutInflater =
+            (nFormView as View).context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = layoutInflater.inflate(R.layout.custom_label_layout, null) as LinearLayout
 
-        label.apply {
-            setPadding(0, 0, 0, 16)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
-            else setTextAppearance((nFormView as View).context, R.style.labelStyle)
-
-            layoutParams = ViewGroup.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+        layout.findViewById<TextView>(R.id.labelTextView).apply {
 
             text = attribute.second as String
 
             if (nFormView.viewProperties.requiredStatus != null
                 && Utils.isFieldRequired(nFormView)
             ) {
-                text = addRedAsteriskSuffix(label.text.toString())
+                text = addRedAsteriskSuffix(text.toString())
             }
         }
-        return label
+
+        return layout
     }
 
 
@@ -246,5 +243,32 @@ object ViewUtils {
 
         if (facts.get<Boolean>(VALIDATION_RESULT)) return true
         return false
+    }
+
+    fun showErrorMessage(anchorView: View, errorMessage: String?) {
+        anchorView.findViewById<TextView>(R.id.errorMessageTextView).apply {
+            text = errorMessage
+            visibility = View.VISIBLE
+        }
+    }
+
+    fun validateLabeledViews(
+        viewProperties: NFormViewProperty, viewDetails: NFormViewDetails, anchorView: ViewGroup
+    ): Boolean {
+        val validationPair = runAllValidations(viewProperties, viewDetails.value)
+        val labelTextView =
+            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
+        if (!validationPair.first) {
+            labelTextView.apply {
+                error = validationPair.second
+            }
+            showErrorMessage(anchorView, validationPair.second)
+        } else {
+            labelTextView.error = null
+            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.errorMessageTextView)
+                .visibility =
+                View.GONE
+        }
+        return validationPair.first
     }
 }

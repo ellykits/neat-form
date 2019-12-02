@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.domain.data.DataActionListener
-import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -14,12 +13,6 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import org.jeasy.rules.api.Facts
-import org.jeasy.rules.api.Rule
-import org.jeasy.rules.api.Rules
-import org.jeasy.rules.core.DefaultRulesEngine
-import org.jeasy.rules.mvel.MVELRule
-import java.util.*
 
 
 class EditTextNFormView : AppCompatEditText, NFormView {

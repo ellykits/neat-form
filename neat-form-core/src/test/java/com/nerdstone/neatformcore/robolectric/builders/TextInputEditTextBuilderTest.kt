@@ -1,17 +1,20 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -22,21 +25,26 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Text building InputLayout View` {
+class `Test building TextInputEditText View` {
 
+    private val activity = Robolectric.buildActivity(
+        AppCompatActivity::class.java
+    ).setup()
     private val viewProperty = spyk(NFormViewProperty())
-    private val textInputLayoutNFormView =
-            TextInputEditTextNFormView(ApplicationProvider.getApplicationContext())
+    private val textInputEditTextNFormView = TextInputEditTextNFormView(activity.get())
     private val testInputLayoutBuilder = spyk(
-            objToCopy = TextInputEditTextBuilder(textInputLayoutNFormView),
-            recordPrivateCalls = true
+        objToCopy = TextInputEditTextBuilder(textInputEditTextNFormView),
+        recordPrivateCalls = true
     )
+    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
+
 
     @Before
     fun `Before doing anything else`() {
         viewProperty.name = "first_name"
         viewProperty.type = "text_input_layout"
-        textInputLayoutNFormView.viewProperties = viewProperty
+        textInputEditTextNFormView.viewProperties = viewProperty
+        textInputEditTextNFormView.initView(viewProperty, dataActionListener)
     }
 
     @Test
@@ -44,8 +52,8 @@ class `Text building InputLayout View` {
         val hint = "Am a hint"
         viewProperty.viewAttributes = hashMapOf("hint" to hint, "text_size" to "12")
         testInputLayoutBuilder.buildView()
-        Assert.assertTrue(textInputLayoutNFormView.hint.toString() == hint)
-        Assert.assertTrue(textInputLayoutNFormView.editText?.textSize?.toInt() == 12)
+        Assert.assertTrue(textInputEditTextNFormView.hint.toString() == hint)
+        Assert.assertTrue(textInputEditTextNFormView.editText?.textSize?.toInt() == 12)
     }
 
     @Test
@@ -54,30 +62,31 @@ class `Text building InputLayout View` {
         viewProperty.viewAttributes = hashMapOf("hint" to hint)
         viewProperty.requiredStatus = "yes:Am required"
         testInputLayoutBuilder.buildView()
-        Assert.assertTrue(textInputLayoutNFormView.hint!!.endsWith("*"))
+        Assert.assertTrue(textInputEditTextNFormView.hint!!.endsWith("*"))
     }
 
 
     @Test
     fun `Should reset the TextInputEditTet value when visibility is gone`() {
-        textInputLayoutNFormView.visibility = View.GONE
-        Assert.assertTrue(textInputLayoutNFormView.editText?.text==null)
+        textInputEditTextNFormView.visibility = View.GONE
+        Assert.assertTrue(textInputEditTextNFormView.editText?.text.toString().isEmpty())
     }
 
     @Test
     fun `Should validate TextInputEditText value`() {
         val validation = NFormFieldValidation()
-        validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
+        validation.condition =
+            " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
         validation.message = "Please enter a valid email address"
 
         viewProperty.validations = arrayListOf(validation)
         viewProperty.requiredStatus = "yes:Am required"
         testInputLayoutBuilder.buildView()
-        textInputLayoutNFormView.editText?.setText("johndoe@gmail.com")
-        Assert.assertTrue(textInputLayoutNFormView.validateValue())
+        textInputEditTextNFormView.editText?.setText("johndoe@gmail.com")
+        Assert.assertTrue(textInputEditTextNFormView.validateValue())
 
-        textInputLayoutNFormView.editText?.setText("johndoegmail.com")
-        Assert.assertFalse(textInputLayoutNFormView.validateValue())
-        Assert.assertTrue(textInputLayoutNFormView.error=="Please enter a valid email address")
+        textInputEditTextNFormView.editText?.setText("johndoegmail.com")
+        Assert.assertFalse(textInputEditTextNFormView.validateValue())
+        Assert.assertTrue(textInputEditTextNFormView.error == "Please enter a valid email address")
     }
 }

@@ -79,7 +79,7 @@ class NFormSubViewProperty : Serializable {
     @SerializedName("is_exclusive")
     var isExclusive: Boolean? = null
 
-    @SerializedName("metadata")
+    @SerializedName("meta_data")
     var viewMetadata: Map<String, Any>? = null
 
     @SerializedName("properties")

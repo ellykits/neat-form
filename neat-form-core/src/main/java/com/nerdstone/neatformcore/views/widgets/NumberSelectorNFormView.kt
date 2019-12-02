@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -47,7 +49,6 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
         }
     }
 
-    override fun validateValue(): Boolean {
-        return true
-    }
+    override fun validateValue(): Boolean =
+        ViewUtils.validateLabeledViews(viewProperties, viewDetails, this)
 }

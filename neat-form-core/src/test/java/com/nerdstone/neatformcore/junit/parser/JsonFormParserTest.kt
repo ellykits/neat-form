@@ -187,7 +187,7 @@ class `Test passing JSON files` {
                 "         \"name\": \"female\",\n" +
                 "         \"text\": \"Female\",\n" +
                 "         \"is_exclusive\": false,\n" +
-                "         \"metadata\": {\n" +
+                "         \"meta_data\": {\n" +
                 "            \"openmrs_entity\": \"120192AAAAAAAAAAAAAA\",\n" +
                 "            \"openmrs_entity_id\": \"\",\n" +
                 "            \"openmrs_entity_parent\": \"\"\n" +
@@ -197,7 +197,7 @@ class `Test passing JSON files` {
                 "         \"name\": \"male\",\n" +
                 "         \"text\": \"Male\",\n" +
                 "         \"is_exclusive\": false,\n" +
-                "         \"metadata\": {\n" +
+                "         \"meta_data\": {\n" +
                 "            \"openmrs_entity\": \"120191AAAAAAAAAAAAAA\",\n" +
                 "            \"openmrs_entity_id\": \"\",\n" +
                 "            \"openmrs_entity_parent\": \"\"\n" +

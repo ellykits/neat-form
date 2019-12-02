@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- Common-->
-  <dimen name="horizontalMargin">8dp</dimen>
-  <dimen name="verticalMargin">8dp</dimen>
-  <dimen name="defaultMargin">8dp</dimen>
+    <!-- Common-->
+    <dimen name="horizontalMargin">8dp</dimen>
+    <dimen name="verticalMargin">8dp</dimen>
+    <dimen name="defaultMargin">8dp</dimen>
 
-  <!-- Defaults -->
-  <dimen name="defaultTextSize">18sp</dimen>
-  <dimen name="defaultPadding">8dp</dimen>
-  <dimen name="defaultTextViewPadding">16dp</dimen>
-  <dimen name="number_selector_padding">40dp</dimen>
+    <!-- Defaults -->
+    <dimen name="defaultTextSize">18sp</dimen>
+    <dimen name="defaultPadding">8dp</dimen>
+    <dimen name="defaultTextViewPadding">16dp</dimen>
+    <dimen name="number_selector_padding">40dp</dimen>
+    <dimen name="error_text_view_padding">8dp</dimen>
 
 </resources>

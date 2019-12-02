@@ -58,9 +58,9 @@ class `Test building RadioGroup view` {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
-
-        Assert.assertTrue(view != null && view is TextView)
-        Assert.assertTrue((view as TextView).text.toString() == text)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
+        Assert.assertTrue(textView != null)
+        Assert.assertTrue(textView.text.toString() == text)
     }
 
     @Test
@@ -70,8 +70,9 @@ class `Test building RadioGroup view` {
         viewProperty.requiredStatus = "yes:Am required"
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(
-            (view as TextView).text.toString().isNotEmpty() && view.text.toString().endsWith("*")
+            textView.text.toString().isNotEmpty() && textView.text.toString().endsWith("*")
         )
     }
 
@@ -83,7 +84,7 @@ class `Test building RadioGroup view` {
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
         //First item is Label the rest are radio buttons
-        Assert.assertTrue(view is TextView)
+        Assert.assertTrue(view.findViewById<View>(R.id.labelTextView) is TextView)
         (1 until radioGroupView.childCount).forEach { i ->
             Assert.assertTrue(radioGroupView.getChildAt(i) is RadioButton)
         }

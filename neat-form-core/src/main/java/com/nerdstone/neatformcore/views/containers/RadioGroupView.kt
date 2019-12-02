@@ -48,7 +48,6 @@ class RadioGroupView : LinearLayout, NFormView {
         }
     }
 
-    override fun validateValue(): Boolean {
-        return true
-    }
+    override fun validateValue(): Boolean =
+        ViewUtils.validateLabeledViews(viewProperties, viewDetails, this)
 }

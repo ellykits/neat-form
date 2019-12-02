@@ -20,12 +20,8 @@
           },
           "validation": [
             {
-              "condition": "value.length() < 11",
-              "message": "value should be less than ten digits"
-            },
-            {
-              "condition": "value == 'cool'",
-              "message": "No, your word is not cool enough. Type cool"
+              "condition": "value.length() <= 10",
+              "message": "value should be less than or equal to ten digits"
             }
           ],
           "subjects": "age:number, child:text, dob:number",
@@ -254,6 +250,12 @@
               }
             }
           ],
+          "validation": [
+            {
+              "condition": "value['need_help'] == null",
+              "message": "You should be speaking at least one of the languages man!"
+            }
+          ],
           "required_status": "yes:Please specify your languages",
           "subjects": "email_subscription:map, gender:text"
         },
@@ -289,7 +291,13 @@
             },
             {
               "name": "dont_know",
-              "text": "Don't know"
+              "text": "Dont know"
+            }
+          ],
+          "validation": [
+            {
+              "condition": "!value.containsKey('dont_know')",
+              "message": "Don't know is not an option"
             }
           ],
           "required_status": "yes:Wiki contribution field is required.",
@@ -340,6 +348,12 @@
             "first_number": "0",
             "text": "Number of previous pregnancies"
           },
+          "validation": [
+            {
+              "condition": "value < 4",
+              "message": "Advice woman to register for Family Planning"
+            }
+          ],
           "subjects": "email_subscription:map, gender:text",
           "required_status": "no:Please specify the time you clocked in"
         },

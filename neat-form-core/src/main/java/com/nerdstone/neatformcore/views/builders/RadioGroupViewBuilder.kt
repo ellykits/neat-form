@@ -59,7 +59,7 @@ class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             setOnCheckedChangeListener { radioButton, isChecked ->
                 if (isChecked) {
                     radioGroupView.viewDetails.value =
-                        mutableMapOf(radioGroupView.viewDetails.name to radioButton.text.toString())
+                        mutableMapOf(radioButton.getTag(R.id.field_name) to radioButton.text.toString())
                     handleExclusiveChecks(this, radioButton.getTag(R.id.field_name) as String)
                     radioGroupView.dataActionListener?.onPassData(radioGroupView.viewDetails)
                 }
