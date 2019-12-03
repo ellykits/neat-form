@@ -45,6 +45,10 @@ allprojects {
             }
         }
     }
+
+    tasks.withType(Javadoc) {
+        excludes = ['**/*.kt'] // < ---- Exclude all kotlin files from javadoc file.
+    }
 }
 
 task clean(type: Delete) {

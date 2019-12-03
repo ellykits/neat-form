@@ -1,2 +1,2 @@
 include ':sample', ':neat-form-core'
-rootProject.name='Neat Form'
+rootProject.name='neat-form'

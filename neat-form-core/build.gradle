@@ -64,29 +64,23 @@ android {
 
 dependencies {
     implementation "com.nerdstone:neat-android-stepper:1.0.3"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    api 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     //Presentation and core layer
     api 'androidx.appcompat:appcompat:1.1.0'
     api 'androidx.recyclerview:recyclerview:1.1.0'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
     api 'com.google.android.material:material:1.0.0'
     api 'com.jakewharton.timber:timber:4.7.1'
-    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    api 'io.reactivex.rxjava2:rxjava:2.2.10'
-    api 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
     api 'org.jeasy:easy-rules-core:3.3.0'
     api 'org.jeasy:easy-rules-mvel:3.3.0'
     api 'com.google.code.gson:gson:2.8.5'
     api 'com.jaredrummler:material-spinner:1.3.1'
-    //Data layer
-    api 'androidx.room:room-runtime:2.2.2'
-    api 'androidx.room:room-rxjava2:2.2.2'
 
     annotationProcessor 'androidx.room:room-compiler:2.2.2'
 
@@ -94,7 +88,6 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation "org.robolectric:shadows-multidex:3.8"
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation 'androidx.room:room-testing:2.2.2'
     testImplementation "io.mockk:mockk:$mockKVersion"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2'
 
@@ -119,11 +112,37 @@ repositories {
 }
 
 def getVersionName = { ->
-    return "1.0.4"
+    return "1.0.5"
 }
 
 def getArtifactId = { ->
     return "neat-form-core"
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            if (variant.hasProperty('javaCompileProvider')) {
+                // Android 3.3.0+
+                owner.classpath += variant.javaCompileProvider.get().classpath
+            } else {
+                owner.classpath += variant.javaCompile.classpath
+            }
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
 }
 
 publishing {
@@ -133,6 +152,58 @@ publishing {
             artifactId getArtifactId()
             version getVersionName()
             artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
+            artifact androidJavadocsJar
+            artifact androidSourcesJar
+
+            pom {
+                name = 'Neat Form'
+                description = 'Build basic android UI using JSON standard. Generate repetitive views with different configurations in easy steps.'
+                url = 'https://github.com/ellykits/neat-form'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+            }
+            //Refer to this gist https://gist.github.com/Robyer/a6578e60127418b380ca133a1291f017
+            pom.withXml {
+                final dependenciesNode = asNode().appendNode('dependencies')
+
+                ext.addDependency = { dep, String scope ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+
+                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+                    dependencyNode.appendNode('scope', scope)
+
+                    if (!dep.transitive) {
+                        // If this dependency is not transitive, we should force exclude all its dependencies from the POM
+                        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                        exclusionNode.appendNode('groupId', '*')
+                        exclusionNode.appendNode('artifactId', '*')
+                    } else if (!dep.properties.excludeRules.empty) {
+                        // Otherwise add specified exclude rules
+                        final exclusionsNode = dependencyNode.appendNode('exclusions')
+                        dep.properties.excludeRules.each { rule ->
+                            final exclusionNode = exclusionsNode.appendNode('exclusion')
+                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                        }
+                    }
+                }
+
+                // List all "implementation" dependencies (for old Gradle)
+                configurations.implementation.getDependencies().each { dep -> addDependency(dep, "implementation") }
+                // List all "api" dependencies (for new Gradle) as "implementation" dependencies
+                configurations.api.getDependencies().each { dep -> addDependency(dep, "implementation") }
+                // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+                configurations.implementation.getDependencies().each { dep -> addDependency(dep, "runtime") }
+            }
+
         }
     }
 
