@@ -687,15 +687,17 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 * [GSON](https://github.com/google/gson) - Parsing JSON files  
 * [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library  
   
-## RoadMap  
-  
-✔️  Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*
-✔️ Data management - saving data from the input fields
-❌ Multi language support
-❌ Form Fields Validation
-❌ Ability to obtain and render `JSON`form from server
-✔️ Support Multi-Step Forms
-✔️ Rules Engine integration - handle form skip logic and calculations
+## RoadMap 
+ 
+| Status        | Action                                                                             |  
+| ----------------------|:--------------------------------------------------------------------------------- |  
+| ✔️  |️  Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*|
+| ✔️  |️ Data management - saving data from the input fields |
+| ❌  |️ Multi language support |
+| ❌  |️ Form Fields Validation |
+| ❌  |️ Ability to obtain and render `JSON`form from server |
+| ✔️  |️ Support Multi-Step Forms |
+| ✔️  |️ Rules Engine integration - handle form skip logic and calculations |
   
 >Neat form is currently in the infancy stage; a lot will change with addition of many cool features. Be sure to check in once in a while for updates.😄  
   
