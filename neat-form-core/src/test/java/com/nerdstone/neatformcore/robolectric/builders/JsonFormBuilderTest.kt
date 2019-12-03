@@ -9,7 +9,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
@@ -61,7 +60,7 @@ class `Test building form with JSON` {
     }
 
     @Test
-    fun `Should parse json, create views and register form rules`() =
+    fun `Should parse json from file source, create views and register form rules`() =
         runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
@@ -95,9 +94,44 @@ class `Test building form with JSON` {
             Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
             Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
         }
+    @Test
+    fun `Should parse json from json string, create views and register form rules`() =
+        runBlockingTest {
+            jsonFormBuilder = spyk(
+                JsonFormBuilder(TestConstants.SAMPLE_JSON, activity.get(), mainLayout)
+            )
+            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.buildForm()
+            Assert.assertNotNull(jsonFormBuilder.form)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
+            Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
+
+            //Main layout has on element: VerticalRootView inside a ScrollView
+            Assert.assertTrue(mainLayout.childCount == 1)
+            Assert.assertTrue(mainLayout.getChildAt(0) is ScrollView)
+            val scrollView = mainLayout.getChildAt(0) as ScrollView
+            //VerticalRootView has 3 EditTextNFormView
+            val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
+            Assert.assertTrue(verticalRootView.childCount == 13)
+            Assert.assertTrue(verticalRootView.getChildAt(0) is EditTextNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(4) is SpinnerNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(5) is MultiChoiceCheckBox)
+            Assert.assertTrue(verticalRootView.getChildAt(7) is RadioGroupView)
+            Assert.assertTrue(verticalRootView.getChildAt(9) is DateTimePickerNFormView)
+            val datePickerAttributes =
+                (verticalRootView.getChildAt(9) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
+            Assert.assertTrue(datePickerAttributes.containsKey("type") && datePickerAttributes["type"] == "date_picker")
+            Assert.assertTrue(verticalRootView.getChildAt(10) is DateTimePickerNFormView)
+            val timePickerAttributes =
+                (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
+            Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
+            Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
+        }
 
     @Test
-    fun `Should parse json, update views from provided layout view with form rules`() =
+    fun `Should parse json from file source, update views from provided layout view with form rules`() =
         runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
@@ -256,8 +290,8 @@ class `Test building form with JSON` {
             Assert.assertTrue(nFormViewData?.value == "24")
             Assert.assertTrue(nFormViewData?.metadata is Map<*, *>)
             Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity"))
-            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_id"))
-            Assert.assertTrue((nFormViewData?.metadata as Map<*, *>).containsKey("openmrs_entity_parent"))
+            Assert.assertTrue((nFormViewData.metadata as Map<*, *>).containsKey("openmrs_entity_id"))
+            Assert.assertTrue((nFormViewData.metadata as Map<*, *>).containsKey("openmrs_entity_parent"))
         }
 
     @After
