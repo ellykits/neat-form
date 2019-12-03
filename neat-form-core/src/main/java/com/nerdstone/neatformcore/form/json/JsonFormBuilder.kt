@@ -36,20 +36,40 @@ import kotlinx.coroutines.launch
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder(
-    override val context: Context, override var fileSource: String, var mainLayout: ViewGroup?
-) :
-    FormBuilder {
-
+class JsonFormBuilder() : FormBuilder {
+    private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
     private val singleRunner = SingleRunner()
     var coroutineContextProvider: CoroutineContextProvider
     var form: NForm? = null
-    override var neatStepperLayout = NeatStepperLayout(context)
-    private val viewModel =
-        ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+    var fileSource: String? = null
+    override var jsonString: String? = null
+    override lateinit var neatStepperLayout: NeatStepperLayout
+    override lateinit var context: Context
+    private lateinit var viewModel: DataViewModel
+
+
+    constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
+            : this() {
+        this.context = context
+        this.fileSource = fileSource
+        this.mainLayout = mainLayout
+        this.neatStepperLayout = NeatStepperLayout(context)
+        this.viewModel =
+            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+    }
+
+    constructor(jsonString: String, context: Context, mainLayout: ViewGroup?)
+            : this() {
+        this.jsonString = jsonString
+        this.context = context
+        this.mainLayout = mainLayout
+        this.neatStepperLayout = NeatStepperLayout(context)
+        this.viewModel =
+            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+    }
 
     init {
         rulesHandler.formBuilder = this
@@ -63,7 +83,7 @@ class JsonFormBuilder(
             if (form == null) {
                 val async = async(coroutineContextProvider.default) {
                     singleRunner.afterPrevious {
-                        parseJsonForm(fileSource)
+                        parseJsonForm()
                     }
                 }
                 form = async.await()
@@ -85,8 +105,14 @@ class JsonFormBuilder(
         return this
     }
 
-    private fun parseJsonForm(source: String): NForm? {
-        return JsonFormParser.parseJson(AssetFile.readAssetFileAsString(context, source))
+    private fun parseJsonForm(): NForm? {
+        return when {
+            jsonString != null -> JsonFormParser.parseJson(jsonString)
+            fileSource != null -> JsonFormParser.parseJson(
+                AssetFile.readAssetFileAsString(context, fileSource!!)
+            )
+            else -> null
+        }
     }
 
     /***
@@ -196,7 +222,7 @@ class StepFragment : Step {
             index = it.getInt(FRAGMENT_INDEX)
             formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
         }
-        retainInstance=true
+        retainInstance = true
     }
 
 

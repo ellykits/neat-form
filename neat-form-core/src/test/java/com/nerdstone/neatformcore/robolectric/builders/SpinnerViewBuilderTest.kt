@@ -3,7 +3,6 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.test.core.app.ApplicationProvider
 import com.jaredrummler.materialspinner.MaterialSpinner
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
