@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.datasource
 
 import android.content.Context
+import android.os.Build
 import com.nerdstone.neatformcore.domain.data.FileSource
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -13,7 +14,11 @@ object AssetFile : FileSource {
         val buffer = ByteArray(size)
         inputStream.read(buffer)
         inputStream.close()
-        return String(buffer, StandardCharsets.UTF_8)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String(buffer, StandardCharsets.UTF_8)
+        } else {
+            String(buffer)
+        }
     }
 
     fun openFileAsset(context: Context, path: String): InputStream {

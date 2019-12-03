@@ -1,7 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.TestNeatFormApp

@@ -15,7 +15,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -63,7 +63,7 @@ android {
 }
 
 dependencies {
-    implementation "com.nerdstone:neat-android-stepper:1.0.2"
+    implementation "com.nerdstone:neat-android-stepper:1.0.3"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -119,7 +119,7 @@ repositories {
 }
 
 def getVersionName = { ->
-    return "1.0.2"
+    return "1.0.4"
 }
 
 def getArtifactId = { ->

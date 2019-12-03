@@ -9,7 +9,7 @@ import com.nerdstone.neatformcore.rules.RulesFactory
 
 interface FormBuilder {
 
-    var fileSource: String
+    var jsonString: String?
 
     val context: Context
 
