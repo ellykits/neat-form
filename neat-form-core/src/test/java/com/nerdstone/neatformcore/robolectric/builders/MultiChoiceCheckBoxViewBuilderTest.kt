@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building MultiChoiceCheckBox view` {
+class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxOption1 = spyk(NFormSubViewProperty())
@@ -55,7 +55,7 @@ class `Test building MultiChoiceCheckBox view` {
         checkBoxOption4.isExclusive = true
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
-
+        multiChoiceCheckBox.formValidator = this.formValidator
         multiChoiceCheckBox.viewProperties = viewProperty
     }
 

@@ -12,11 +12,11 @@ interface NFormView {
 
     val viewDetails: NFormViewDetails
 
-    val nFormRootView: RootView
-
     var viewProperties: NFormViewProperty
 
     val viewBuilder: ViewBuilder
+
+    var formValidator: FormValidator
 
     fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher): NFormView
 

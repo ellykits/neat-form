@@ -22,7 +22,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building NumberSelector view` {
+class `Test building NumberSelector view` : BaseJsonViewBuilderTest(){
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val numberSelector =
         NumberSelectorNFormView(activity.get())
@@ -31,6 +31,7 @@ class `Test building NumberSelector view` {
 
     @Before
     fun `Before doing anything else`() {
+        numberSelector.formValidator = this.formValidator
         viewProperty.name = "number_selector_test"
         viewProperty.type = "number_selector"
         numberSelector.viewProperties = viewProperty

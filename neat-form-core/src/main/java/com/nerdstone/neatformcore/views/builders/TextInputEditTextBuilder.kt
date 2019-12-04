@@ -59,10 +59,6 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
 
                 TextInputEditTextViewProperties.TEXT.name -> {
                     setText(attribute.value.toString())
-                    requestFocus()
-                    textInputEditTextNFormView.dataActionListener?.onPassData(
-                        textInputEditTextNFormView.viewDetails
-                    )
                 }
             }
         }

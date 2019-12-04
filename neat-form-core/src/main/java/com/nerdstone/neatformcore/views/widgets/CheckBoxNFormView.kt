@@ -7,8 +7,8 @@ import android.widget.CheckBox
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
@@ -20,7 +20,7 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = CheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
-    override val nFormRootView get() = this.parent as RootView
+    override lateinit var formValidator: FormValidator
 
     constructor(context: Context) : super(context)
 
@@ -59,6 +59,6 @@ class CheckBoxNFormView : CheckBox, NFormView {
     }
 
     override fun validateValue(): Boolean {
-        return true
+        return formValidator.validateField(this).first
     }
 }

@@ -1,12 +1,15 @@
 package com.nerdstone.neatformcore.domain.view
 
+import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import java.io.Serializable
 
 interface RootView: Serializable{
 
-    fun initRootView(): RootView
+    var formBuilder: FormBuilder
+
+    fun initRootView(formBuilder: FormBuilder): RootView
 
     fun addChild(nFormView: NFormView)
 

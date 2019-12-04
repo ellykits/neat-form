@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building CheckBox view` {
+class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val viewProperty = spyk(NFormViewProperty())
@@ -31,6 +31,7 @@ class `Test building CheckBox view` {
         viewProperty.name = "name"
         viewProperty.type = "checkbox"
         //Set EditText properties and assign EditText view builder
+        checkBoxNFormView.formValidator = this.formValidator
         checkBoxNFormView.viewProperties = viewProperty
     }
 

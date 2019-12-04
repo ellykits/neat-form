@@ -21,7 +21,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building Spinner view` {
+class `Test building Spinner view` : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val spinnerOption1 = spyk(NFormSubViewProperty())
@@ -34,6 +34,7 @@ class `Test building Spinner view` {
 
     @Before
     fun `Before doing anything else`() {
+        spinnerNFormView.formValidator = this.formValidator
         viewProperty.name = "gender"
         viewProperty.type = "spinner"
         spinnerNFormView.viewProperties = viewProperty
@@ -47,8 +48,6 @@ class `Test building Spinner view` {
 
         spinnerOption3.name = "male"
         spinnerOption3.text = "Male"
-
-
     }
 
     @Test

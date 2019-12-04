@@ -22,6 +22,7 @@ import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.domain.model.NFormViewData
+import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
@@ -48,8 +49,8 @@ class JsonFormBuilder() : FormBuilder {
     override var jsonString: String? = null
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
-    private lateinit var viewModel: DataViewModel
-
+    override lateinit var viewModel: DataViewModel
+    override var formValidator: FormValidator = JsonFormValidator.getInstance(this)
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {
@@ -132,7 +133,9 @@ class JsonFormBuilder() : FormBuilder {
                     val fragmentsList: MutableList<StepFragment> = mutableListOf()
 
                     form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = addViewsToVerticalRootView(views, index, formContent)
+                        val rootView = VerticalRootView(context)
+                        rootView.formBuilder = this
+                        addViewsToVerticalRootView(views, index, formContent, rootView)
                         val stepFragment = StepFragment.newInstance(
                             index,
                             StepModel.Builder()
@@ -153,8 +156,9 @@ class JsonFormBuilder() : FormBuilder {
                 mainLayout != null && jsonFormStepBuilderModel == null -> {
                     val formViews = ScrollView(context)
                     form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = addViewsToVerticalRootView(views, index, formContent)
-                        formViews.addView(rootView.initRootView() as View)
+                        val rootView = VerticalRootView(context)
+                        formViews.addView(rootView.initRootView(this) as View)
+                        addViewsToVerticalRootView(views, index, formContent, rootView)
                     }
                     mainLayout?.addView(formViews)
                 }
@@ -166,18 +170,18 @@ class JsonFormBuilder() : FormBuilder {
     }
 
     private fun addViewsToVerticalRootView(
-        customViews: List<View>?, stepIndex: Int, formContent: NFormContent
-    ): VerticalRootView {
-        val rootView = VerticalRootView(context)
+        customViews: List<View>?, stepIndex: Int,
+        formContent: NFormContent, verticalRootView: VerticalRootView
+    ) {
+
         val view = customViews?.getOrNull(stepIndex)
         when {
             view != null -> {
-                rootView.addView(view)
-                rootView.addChildren(formContent.fields, viewDispatcher, true)
+                verticalRootView.addView(view)
+                verticalRootView.addChildren(formContent.fields, viewDispatcher, true)
             }
-            else -> rootView.addChildren(formContent.fields, viewDispatcher)
+            else -> verticalRootView.addChildren(formContent.fields, viewDispatcher)
         }
-        return rootView
     }
 
     override fun getFormMetaData(): Map<String, Any> {

@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building DateTimePicker view` {
+class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val dateTimePickerNFormView =
@@ -33,6 +33,7 @@ class `Test building DateTimePicker view` {
         viewProperty.name = "dob"
         viewProperty.type = "datetime_picker"
         //Set EditText properties and assign EditText view builder
+        dateTimePickerNFormView.formValidator = this.formValidator
         dateTimePickerNFormView.viewProperties = viewProperty
     }
 

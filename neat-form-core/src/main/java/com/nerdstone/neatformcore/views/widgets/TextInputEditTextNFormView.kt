@@ -7,8 +7,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -19,7 +19,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = TextInputEditTextBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override val nFormRootView get() = this.parent as RootView
+    override lateinit var formValidator: FormValidator
 
     constructor(context: Context) : super(context)
 
@@ -44,7 +44,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
     }
 
     override fun validateValue(): Boolean {
-        val validationPair = ViewUtils.runAllValidations(viewProperties, viewDetails.value)
+        val validationPair = formValidator.validateField(this)
         if (!validationPair.first) {
             this.error = validationPair.second
         } else this.error = null

@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.views.containers
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
@@ -12,6 +13,8 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class VerticalRootView : LinearLayout, RootView {
 
+    override lateinit var formBuilder: FormBuilder
+
     init {
         orientation = VERTICAL
     }
@@ -20,7 +23,10 @@ class VerticalRootView : LinearLayout, RootView {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    override fun initRootView(): RootView = this
+    override fun initRootView(formBuilder: FormBuilder): RootView {
+        this.formBuilder = formBuilder
+        return this
+    }
 
     override fun addChild(nFormView: NFormView) {
         val view = nFormView.viewDetails.view

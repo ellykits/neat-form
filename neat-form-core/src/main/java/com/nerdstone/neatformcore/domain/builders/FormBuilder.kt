@@ -5,7 +5,9 @@ import android.view.View
 import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NFormViewData
+import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
 interface FormBuilder {
 
@@ -14,6 +16,10 @@ interface FormBuilder {
     val context: Context
 
     var neatStepperLayout: NeatStepperLayout
+
+    var viewModel: DataViewModel
+
+    var formValidator: FormValidator
 
     fun buildForm(
         jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null,
@@ -31,4 +37,5 @@ interface FormBuilder {
     fun getFormDetails():HashMap<String, NFormViewData>
 
     fun getFormMetaData(): Map<String, Any>
+
 }

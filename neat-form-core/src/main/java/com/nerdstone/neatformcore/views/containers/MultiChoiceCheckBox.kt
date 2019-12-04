@@ -4,13 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
-import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -21,7 +19,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
-    override val nFormRootView get() = this.parent as RootView
+    override lateinit var formValidator: FormValidator
 
     init {
         orientation = VERTICAL
@@ -51,5 +49,5 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     }
 
     override fun validateValue(): Boolean =
-        ViewUtils.validateLabeledViews(viewProperties, viewDetails, this)
+        formValidator.validateLabeledField( this)
 }

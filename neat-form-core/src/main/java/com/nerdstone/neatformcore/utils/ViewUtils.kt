@@ -8,14 +8,10 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
-import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
@@ -29,11 +25,6 @@ import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
-import org.jeasy.rules.api.Facts
-import org.jeasy.rules.api.Rule
-import org.jeasy.rules.api.Rules
-import org.jeasy.rules.core.DefaultRulesEngine
-import org.jeasy.rules.mvel.MVELRule
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -102,15 +93,16 @@ object ViewUtils {
         val androidView = rootView as View
         val context = rootView.context
         if (buildFromLayout) {
-            val v = androidView.findViewById<View>(
+            val view = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
-            getView(v as NFormView, viewProperty, viewDispatcher)
+            val nFormView = getView(view as NFormView, viewProperty, viewDispatcher)
+            nFormView.formValidator = rootView.formBuilder.formValidator
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
-            rootView.addChild(
-                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
-            )
+            val nFormView = getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
+            nFormView.formValidator = rootView.formBuilder.formValidator
+            rootView.addChild(nFormView)
         }
     }
 
@@ -209,66 +201,5 @@ object ViewUtils {
         }
 
         return layout
-    }
-
-
-    fun runAllValidations(viewProperties: NFormViewProperty, value: Any?): Pair<Boolean, String?> {
-        if (viewProperties.validations != null) {
-            viewProperties.validations?.forEach { validation ->
-                if (!validateField(validation, value))
-                    return Pair(false, validation.message)
-            }
-        }
-        return Pair(true, "")
-    }
-
-    private fun validateField(validation: NFormFieldValidation, value: Any?): Boolean {
-
-        val facts = Facts()
-        facts.put(VALUE, value)
-        facts.put(VALIDATION_RESULT, false)
-
-        // define rules
-        val customRule: Rule = MVELRule()
-            .name(UUID.randomUUID().toString())
-            .description(validation.condition)
-            .`when`(validation.condition)
-            .then("$VALIDATION_RESULT = true")
-
-        val rules = Rules(customRule)
-
-        // fire rules on known facts
-        val rulesEngine = DefaultRulesEngine()
-        rulesEngine.fire(rules, facts)
-
-        if (facts.get<Boolean>(VALIDATION_RESULT)) return true
-        return false
-    }
-
-    fun showErrorMessage(anchorView: View, errorMessage: String?) {
-        anchorView.findViewById<TextView>(R.id.errorMessageTextView).apply {
-            text = errorMessage
-            visibility = View.VISIBLE
-        }
-    }
-
-    fun validateLabeledViews(
-        viewProperties: NFormViewProperty, viewDetails: NFormViewDetails, anchorView: ViewGroup
-    ): Boolean {
-        val validationPair = runAllValidations(viewProperties, viewDetails.value)
-        val labelTextView =
-            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
-        if (!validationPair.first) {
-            labelTextView.apply {
-                error = validationPair.second
-            }
-            showErrorMessage(anchorView, validationPair.second)
-        } else {
-            labelTextView.error = null
-            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.errorMessageTextView)
-                .visibility =
-                View.GONE
-        }
-        return validationPair.first
     }
 }
