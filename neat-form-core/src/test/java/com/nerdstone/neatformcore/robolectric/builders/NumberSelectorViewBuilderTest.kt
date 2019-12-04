@@ -49,6 +49,7 @@ class `Test building NumberSelector view` : BaseJsonViewBuilderTest(){
         val view = numberSelector.getChildAt(0)
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView.text.toString() == "Number of previous pregnancies")
+        Assert.assertTrue(numberSelector.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test

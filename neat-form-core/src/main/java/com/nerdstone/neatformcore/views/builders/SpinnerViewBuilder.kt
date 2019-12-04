@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.ThemeColor
@@ -70,15 +69,15 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             selectedItemListColor = Utils.getThemeColor(this.context, ThemeColor.COLOR_ACCENT)
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
                 override fun onItemSelected(
                     adapterView: AdapterView<*>, view: View, position: Int, id: Long
                 ) {
-                    spinnerNFormView.viewDetails.value = item[position]
-                    spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+                        spinnerNFormView.viewDetails.value = item[position]
+                        spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
 
                 override fun onNothingSelected(adapterView: AdapterView<*>) {
-                    errorText = context.getString(R.string.nothing_selected)
                     spinnerNFormView.viewDetails.value = null
                     spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
@@ -88,11 +87,9 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     }
 
     fun resetSpinnerValue() {
-        if (materialSpinner.item.size > 0) {
-            materialSpinner.setSelection(0)
-            spinnerNFormView.viewDetails.value = null
-            spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
-        }
+        materialSpinner.clearSelection()
+        spinnerNFormView.viewDetails.value = null
+        spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
     }
 
     private fun formatHintForRequiredFields() {

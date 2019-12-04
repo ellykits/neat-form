@@ -14,7 +14,6 @@ import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
-import com.google.gson.Gson
 import com.nerdstone.neatform.R
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder

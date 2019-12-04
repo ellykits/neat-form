@@ -252,7 +252,7 @@
           ],
           "validation": [
             {
-              "condition": "value['need_help'] == null",
+              "condition": " value != null && value['need_help'] == null",
               "message": "You should be speaking at least one of the languages man!"
             }
           ],
@@ -296,7 +296,7 @@
           ],
           "validation": [
             {
-              "condition": "!value.containsKey('dont_know')",
+              "condition": "value != null && !value.containsKey('dont_know')",
               "message": "Don't know is not an option"
             }
           ],
@@ -325,7 +325,7 @@
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
+            "display_format": "dd/MM/yyyy"
           },
           "required_status": "true:Please specify your dob"
         },
@@ -335,7 +335,7 @@
           "properties": {
             "hint": "Enter time you clocked in",
             "type": "time_picker",
-            "display_format": "hh:m a"
+            "display_format": "hh:mm a"
           },
           "required_status": "true:Please specify the time you clocked in"
         },

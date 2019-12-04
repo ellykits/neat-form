@@ -50,7 +50,7 @@ class JsonFormBuilder() : FormBuilder {
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
     override lateinit var viewModel: DataViewModel
-    override var formValidator: FormValidator = JsonFormValidator.getInstance(this)
+    override var formValidator: FormValidator = JsonFormValidator(this)
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {

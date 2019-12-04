@@ -198,8 +198,14 @@ object ViewUtils {
             ) {
                 text = addRedAsteriskSuffix(text.toString())
             }
+            error = null
         }
-
+        (nFormView as View).findViewById<TextView>(R.id.errorMessageTextView)?.visibility =
+            View.GONE
         return layout
+    }
+
+    fun hideErrorTextView(nFormView: NFormView) {
+
     }
 }

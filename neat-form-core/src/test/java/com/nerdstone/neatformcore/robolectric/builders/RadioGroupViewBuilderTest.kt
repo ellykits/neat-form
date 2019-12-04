@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building RadioGroup view` : BaseJsonViewBuilderTest(){
+class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val radioOption1 = spyk(NFormSubViewProperty())
@@ -62,6 +62,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest(){
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView != null)
         Assert.assertTrue(textView.text.toString() == text)
+        Assert.assertTrue(radioGroupView.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test

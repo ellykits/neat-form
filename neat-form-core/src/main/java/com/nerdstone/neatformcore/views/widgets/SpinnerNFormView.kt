@@ -3,9 +3,7 @@ package com.nerdstone.neatformcore.views.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.domain.data.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -49,14 +47,5 @@ class SpinnerNFormView : LinearLayout, NFormView {
         }
     }
 
-    override fun validateValue(): Boolean {
-        val materialSpinner =
-            (viewDetails.view as ViewGroup).getChildAt(0) as SmartMaterialSpinner<*>
-        if (viewProperties.requiredStatus != null && viewDetails.value == null) {
-            materialSpinner.errorText = viewProperties.requiredStatus?.split(":")!![1]
-            return false
-        }
-        materialSpinner.errorText = ""
-        return true
-    }
+    override fun validateValue(): Boolean = formValidator.validateField(this).first
 }

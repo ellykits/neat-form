@@ -68,6 +68,7 @@ class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
 
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView.text.toString() == text)
+        Assert.assertTrue(multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test
