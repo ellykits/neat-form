@@ -122,12 +122,8 @@ class `Test building RadioGroup view` {
         radioButton1.isChecked = true
 
         Assert.assertTrue(radioGroupView.viewDetails.value != null && (radioGroupView.viewDetails.value as HashMap<*, *>).size == 1)
-        Assert.assertTrue(
-            (radioGroupView.viewDetails.value as HashMap<*, *>).containsKey(
-                viewProperty.name
-            )
-        )
-        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>)[viewProperty.name]!! == radioButton1.text)
+        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
+        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>)["kotlin"]!! == radioButton1.text)
     }
 
     @Test
