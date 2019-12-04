@@ -34,6 +34,8 @@ class ViewDispatcher private constructor() : DataActionListener {
             if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
                 rulesFactory.updateFactsAndExecuteRules(viewDetails)
             }
+        } else {
+            viewModel.details.remove(viewDetails.name)
         }
     }
 

@@ -204,8 +204,4 @@ object ViewUtils {
             View.GONE
         return layout
     }
-
-    fun hideErrorTextView(nFormView: NFormView) {
-
-    }
 }
