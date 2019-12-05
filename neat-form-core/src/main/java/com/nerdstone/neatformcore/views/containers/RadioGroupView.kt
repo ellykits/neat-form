@@ -48,6 +48,8 @@ class RadioGroupView : LinearLayout, NFormView {
         }
     }
 
+    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+
     override fun validateValue(): Boolean =
         formValidator.validateLabeledField(this)
 }

@@ -118,7 +118,8 @@ class RulesFactory private constructor() : RuleListener {
 
     fun viewHasVisibilityRule(viewProperty: NFormViewProperty): Boolean {
         val hasVisibilityRule =
-            allRules?.map { it.name }?.contains("${viewProperty.name}${Constants.RuleActions.VISIBILITY}")
+            allRules?.map { it.name }
+                ?.contains("${viewProperty.name}${Constants.RuleActions.VISIBILITY}")
         return hasVisibilityRule != null && hasVisibilityRule
     }
 

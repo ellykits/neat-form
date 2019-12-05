@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.form.json
+package com.nerdstone.neatformcore.views.handlers
 
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.VALIDATION_RESULT
 import com.nerdstone.neatformcore.utils.VALUE
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
@@ -26,19 +27,31 @@ import java.util.*
  * This class is used to handle form validations
  * @property formBuilder Form builder that validation is performed on
  */
-class JsonFormValidator (override var formBuilder: FormBuilder) : FormValidator {
-
+class NeatFormValidator private constructor() : FormValidator {
+    override lateinit var formBuilder: FormBuilder
     private val rulesEngine = DefaultRulesEngine()
     private val facts = Facts()
+    override val invalidFields = hashSetOf<String>()
+    override val requiredFields = hashSetOf<String>()
 
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
+        if (isRequiredFieldMissing(nFormView)) {
+            invalidFields.add(nFormView.viewDetails.name)
+            val errorMessage =
+                nFormView.viewProperties.requiredStatus?.let { Utils.extractKeyValue(it).second }
+            return Pair(false, errorMessage)
+        }
         if (nFormView.viewProperties.validations != null) {
             nFormView.viewProperties.validations?.forEach { validation ->
-                if (!performValidation(validation, nFormView.viewDetails.value))
+                if (!performValidation(validation, nFormView.viewDetails.value)) {
+                    invalidFields.add(nFormView.viewDetails.name)
                     return Pair(false, validation.message)
+                }
             }
         }
-        return Pair(true, "")
+        invalidFields.remove(nFormView.viewDetails.name)
+        requiredFields.remove(nFormView.viewDetails.name)
+        return Pair(true, null)
     }
 
     /***
@@ -78,22 +91,20 @@ class JsonFormValidator (override var formBuilder: FormBuilder) : FormValidator 
      * @return true if validation passes false otherwise
      */
     private fun performValidation(validation: NFormFieldValidation, value: Any?): Boolean {
-        value?.also {
-            facts.put(VALIDATION_RESULT, false)
-            facts.asMap().putAll(getFormData())
-            facts.put(VALUE, value)
+        facts.put(VALIDATION_RESULT, false)
+        facts.asMap().putAll(getFormData())
+        facts.put(VALUE, value)
 
-            val customRule: Rule = MVELRule()
-                .name(UUID.randomUUID().toString())
-                .description(validation.condition)
-                .`when`(validation.condition)
-                .then("$VALIDATION_RESULT = true")
+        val customRule: Rule = MVELRule()
+            .name(UUID.randomUUID().toString())
+            .description(validation.condition)
+            .`when`(validation.condition)
+            .then("$VALIDATION_RESULT = true")
 
-            val rules = Rules(customRule)
-            rulesEngine.fire(rules, facts)
-            return facts.get<Boolean>(VALIDATION_RESULT)
-        }
-        return true
+        val rules = Rules(customRule)
+        rulesEngine.fire(rules, facts)
+
+        return facts.get<Boolean>(VALIDATION_RESULT)
     }
 
     private fun getFormData(): MutableMap<String, Any?> {
@@ -103,4 +114,23 @@ class JsonFormValidator (override var formBuilder: FormBuilder) : FormValidator 
             entry.value.value
         })
     }
+
+    override fun isRequiredFieldMissing(nFormView: NFormView): Boolean {
+        if (Utils.isFieldRequired(nFormView) && requiredFields.contains(nFormView.viewDetails.name))
+            return getFormData()[nFormView.viewDetails.name] == null
+        return false
+    }
+
+    companion object {
+        @Volatile
+        private var instance: NeatFormValidator? = null
+
+        val INSTANCE: NeatFormValidator
+            get() = instance ?: synchronized(this) {
+                NeatFormValidator().also {
+                    instance = it
+                }
+            }
+    }
+
 }

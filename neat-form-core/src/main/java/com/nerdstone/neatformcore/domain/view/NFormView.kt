@@ -23,4 +23,6 @@ interface NFormView {
     fun resetValueWhenHidden()
 
     fun validateValue() : Boolean
+
+    fun trackRequiredField()
 }

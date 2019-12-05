@@ -181,7 +181,7 @@ class `Test building form with JSON` {
 
             //Get view pager inside the frameLayout and inspect its content
             val stepsViewPager =
-                (innerStepperLayout.getChildAt(1) as FrameLayout).getChildAt(0) as ViewPager
+                (innerStepperLayout.getChildAt(1) as FrameLayout).getChildAt(2) as ViewPager
             Assert.assertTrue(stepsViewPager.adapter is StepperPagerAdapter)
             val stepperPageAdapter = stepsViewPager.adapter as StepperPagerAdapter
 
@@ -240,7 +240,7 @@ class `Test building form with JSON` {
 
             //Get view pager inside the frameLayout and inspect its content
             val stepsViewPager =
-                (innerStepperLayout.getChildAt(1) as FrameLayout).getChildAt(0) as ViewPager
+                (innerStepperLayout.getChildAt(1) as FrameLayout).getChildAt(2) as ViewPager
             Assert.assertTrue(stepsViewPager.adapter is StepperPagerAdapter)
             val stepperPageAdapter = stepsViewPager.adapter as StepperPagerAdapter
 

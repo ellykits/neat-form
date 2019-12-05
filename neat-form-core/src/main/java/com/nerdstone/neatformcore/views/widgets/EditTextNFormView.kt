@@ -38,11 +38,15 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         lengthAfter: Int
     ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
-        if (text.isNotEmpty() && this::formValidator.isInitialized) {
-            dataActionListener?.also {
-                this.viewDetails.value = text.toString().removeAsterisk()
-                it.onPassData(viewDetails)
+        this.dataActionListener?.also {
+            if (text.isNotEmpty()) {
+                this.viewDetails.value =
+                    text.toString().removeAsterisk()
+
+            } else {
+                this.viewDetails.value = null
             }
+            it.onPassData(this.viewDetails)
         }
     }
 
@@ -56,6 +60,8 @@ class EditTextNFormView : AppCompatEditText, NFormView {
             setText("")
         }
     }
+
+    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
     override fun validateValue(): Boolean {
         val validationPair = formValidator.validateField(this)

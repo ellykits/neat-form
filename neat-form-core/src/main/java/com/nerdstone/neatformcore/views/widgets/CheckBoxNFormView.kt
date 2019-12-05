@@ -58,6 +58,8 @@ class CheckBoxNFormView : CheckBox, NFormView {
         }
     }
 
+    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+
     override fun validateValue(): Boolean {
         return formValidator.validateField(this).first
     }

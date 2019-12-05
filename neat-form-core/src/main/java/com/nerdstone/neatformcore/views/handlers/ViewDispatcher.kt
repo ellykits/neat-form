@@ -14,8 +14,8 @@ class ViewDispatcher private constructor() : DataActionListener {
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
     /**
-     * Validates view data if it passes proceed to save the view data and fire rules
-     * Otherwise do nothing at all
+     * Dispatches an action when view value changes. If value is the same as what had already been
+     * dispatched then do nothing
      * @param viewDetails the details of the view that has just dispatched a value
      */
     override fun onPassData(viewDetails: NFormViewDetails) {
@@ -23,19 +23,17 @@ class ViewDispatcher private constructor() : DataActionListener {
         val viewModel =
             ViewModelProviders.of(viewDetails.view.context as FragmentActivity)[DataViewModel::class.java]
 
-        if ((viewDetails.view as NFormView).validateValue()) {
+        if (viewModel.details[viewDetails.name] != viewDetails.value) {
             viewModel.details[viewDetails.name] =
                 NFormViewData(
-                    viewDetails.view.javaClass.simpleName,
-                    viewDetails.value,
-                    viewDetails.metadata
+                    viewDetails.view.javaClass.simpleName, viewDetails.value, viewDetails.metadata
                 )
+
+            (viewDetails.view as NFormView).validateValue()
 
             if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
                 rulesFactory.updateFactsAndExecuteRules(viewDetails)
             }
-        } else {
-            viewModel.details.remove(viewDetails.name)
         }
     }
 

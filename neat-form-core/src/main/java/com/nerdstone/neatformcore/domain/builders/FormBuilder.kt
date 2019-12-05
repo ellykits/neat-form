@@ -32,9 +32,11 @@ interface FormBuilder {
         jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
     )
 
-    fun registerFormRules(context: Context, rulesFileType: RulesFactory.RulesFileType)
+    fun registerFormRulesFromFile(
+        context: Context, rulesFileType: RulesFactory.RulesFileType
+    ): Boolean
 
-    fun getFormDetails():HashMap<String, NFormViewData>
+    fun getFormDetails(): HashMap<String, NFormViewData>
 
     fun getFormMetaData(): Map<String, Any>
 

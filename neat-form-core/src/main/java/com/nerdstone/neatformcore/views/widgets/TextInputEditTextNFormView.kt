@@ -37,6 +37,8 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         resetValueWhenHidden()
     }
 
+    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+
     override fun resetValueWhenHidden() {
         if (visibility == View.GONE) {
             editText?.setText("")

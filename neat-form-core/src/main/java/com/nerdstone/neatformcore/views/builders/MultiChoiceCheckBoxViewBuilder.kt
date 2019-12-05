@@ -124,6 +124,8 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                     view.isChecked = false
                 }
             }
+        multiChoiceCheckBox.viewDetails.value = valuesMap
+        multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
     }
 }
 

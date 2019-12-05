@@ -34,9 +34,12 @@ object Utils {
     }
 
     fun isFieldRequired(nFormView: NFormView): Boolean {
-        val isRequired = extractKeyValue(nFormView.viewProperties.requiredStatus!!)
-            .first.toLowerCase(Locale.getDefault())
-        return isRequired == "yes" || isRequired == "true"
+        nFormView.viewProperties.requiredStatus?.also {
+            val isRequired = extractKeyValue(nFormView.viewProperties.requiredStatus!!)
+                .first.toLowerCase(Locale.getDefault())
+            return isRequired == "yes" || isRequired == "true"
+        }
+        return false
     }
 
     fun hideSoftKeyBoard(view: View) {

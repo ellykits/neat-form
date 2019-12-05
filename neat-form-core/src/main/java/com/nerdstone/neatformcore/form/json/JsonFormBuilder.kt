@@ -29,6 +29,7 @@ import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
+import com.nerdstone.neatformcore.views.handlers.NeatFormValidator
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -38,6 +39,7 @@ import kotlinx.coroutines.launch
  * @author Elly Nerdstone
  */
 class JsonFormBuilder() : FormBuilder {
+
     private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -50,7 +52,7 @@ class JsonFormBuilder() : FormBuilder {
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
     override lateinit var viewModel: DataViewModel
-    override var formValidator: FormValidator = JsonFormValidator(this)
+    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {
@@ -70,10 +72,12 @@ class JsonFormBuilder() : FormBuilder {
         this.neatStepperLayout = NeatStepperLayout(context)
         this.viewModel =
             ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+
     }
 
     init {
         rulesHandler.formBuilder = this
+        formValidator.formBuilder = this
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
@@ -89,17 +93,19 @@ class JsonFormBuilder() : FormBuilder {
                 }
                 form = async.await()
             }
-            launch(coroutineContextProvider.io) {
-                singleRunner.afterPrevious {
-                    registerFormRules(context, RulesFileType.YAML)
-                }
-            }
             launch(coroutineContextProvider.main) {
-                singleRunner.afterPrevious {
-                    if (viewList == null)
-                        createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
-                    else
-                        createFormViews(context, viewList, jsonFormStepBuilderModel)
+                val rulesAsync = async {
+                    singleRunner.afterPrevious {
+                        registerFormRulesFromFile(context, RulesFileType.YAML)
+                    }
+                }
+                if (rulesAsync.await()) {
+                    launch(coroutineContextProvider.main) {
+                        if (viewList == null)
+                            createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
+                        else
+                            createFormViews(context, viewList, jsonFormStepBuilderModel)
+                    }
                 }
             }
         }
@@ -152,6 +158,7 @@ class JsonFormBuilder() : FormBuilder {
                             fragmentsList
                         )
                     )
+                    neatStepperLayout.showLoadingIndicators(false)
                 }
                 mainLayout != null && jsonFormStepBuilderModel == null -> {
                     val formViews = ScrollView(context)
@@ -188,10 +195,14 @@ class JsonFormBuilder() : FormBuilder {
         return form?.formMetadata ?: mutableMapOf()
     }
 
-    override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
+    override fun registerFormRulesFromFile(
+        context: Context,
+        rulesFileType: RulesFileType
+    ): Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
         }
+        return true
     }
 
     override fun getFormDetails(): HashMap<String, NFormViewData> {
@@ -252,15 +263,15 @@ class StepFragment : Step {
     }
 
     override fun verifyStep(): StepVerificationState {
-        TODO("not implemented")
+        return StepVerificationState(true, null)
     }
 
     override fun onSelected() {
-        TODO("not implemented")
+        //Overridden not useful at the moment
     }
 
     override fun onError(stepVerificationState: StepVerificationState) {
-        TODO("not implemented")
+        //Overridden not useful at the moment
     }
 
 }

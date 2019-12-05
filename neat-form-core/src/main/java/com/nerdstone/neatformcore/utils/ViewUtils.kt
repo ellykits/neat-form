@@ -18,6 +18,7 @@ import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
+import com.nerdstone.neatformcore.views.handlers.NeatFormValidator
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
@@ -96,13 +97,12 @@ object ViewUtils {
             val view = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
-            val nFormView = getView(view as NFormView, viewProperty, viewDispatcher)
-            nFormView.formValidator = rootView.formBuilder.formValidator
+            getView(view as NFormView, viewProperty, viewDispatcher)
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
-            val nFormView = getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
-            nFormView.formValidator = rootView.formBuilder.formValidator
-            rootView.addChild(nFormView)
+            rootView.addChild(
+                getView(objectConstructor!!.call(context), viewProperty, viewDispatcher)
+            )
         }
     }
 
@@ -160,12 +160,19 @@ object ViewUtils {
         nFormView.viewDetails.view.id = View.generateViewId()
         nFormView.viewDetails.view.tag = viewProperty.name
         nFormView.dataActionListener = viewDispatcher
+        nFormView.formValidator = NeatFormValidator.INSTANCE
+        addRequiredFields(nFormView)
+        nFormView.trackRequiredField()
         nFormView.viewBuilder.buildView()
     }
 
+    private fun addRequiredFields(nFormView: NFormView) {
+        if (Utils.isFieldRequired(nFormView))
+            nFormView.formValidator.requiredFields.add(nFormView.viewDetails.name)
+    }
+
     fun applyViewAttributes(
-        nFormView: NFormView,
-        acceptedAttributes: HashSet<String>,
+        nFormView: NFormView, acceptedAttributes: HashSet<String>,
         task: (attribute: Map.Entry<String, Any>) -> Unit
     ) {
         if (nFormView.viewProperties.viewAttributes != null) {
@@ -193,9 +200,7 @@ object ViewUtils {
 
             text = attribute.second as String
 
-            if (nFormView.viewProperties.requiredStatus != null
-                && Utils.isFieldRequired(nFormView)
-            ) {
+            if (Utils.isFieldRequired(nFormView)) {
                 text = addRedAsteriskSuffix(text.toString())
             }
             error = null
@@ -203,5 +208,23 @@ object ViewUtils {
         (nFormView as View).findViewById<TextView>(R.id.errorMessageTextView)?.visibility =
             View.GONE
         return layout
+    }
+
+    fun handleRequiredStatus(nFormView: NFormView) {
+        (nFormView as View).tag?.let {
+            val requiredFields = nFormView.formValidator.requiredFields
+            if (requiredFields.contains(it as String)) {
+                (nFormView as View).also { view ->
+                    when {
+                        view.visibility == View.GONE -> {
+                            nFormView.formValidator.invalidFields.remove(it)
+                            requiredFields.remove(it)
+                        }
+                        view.visibility == View.VISIBLE -> requiredFields.add(it)
+                        view.visibility == View.INVISIBLE -> requiredFields.remove(it)
+                    }
+                }
+            }
+        }
     }
 }

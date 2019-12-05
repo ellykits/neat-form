@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.rules
 import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -78,7 +79,6 @@ class NFormRulesHandler private constructor() : RulesHandler {
     }
 
     override fun refreshViews(allRules: Rules?) {
-        val activity = formBuilder.context as Activity
         allRules?.also {
             it.toMutableList()
                 .filter { rule ->
@@ -110,6 +110,10 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
         } else {
             view.visibility = View.GONE
+        }
+
+        if (view is NFormView) {
+            view.trackRequiredField()
         }
     }
 }

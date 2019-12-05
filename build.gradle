@@ -8,6 +8,7 @@ buildscript {
     ext.room_version = "1.1.1"
 
     repositories {
+        mavenLocal()
         google()
         jcenter()
     }
@@ -29,6 +30,7 @@ githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         jcenter()
         maven { url "https://jitpack.io" }

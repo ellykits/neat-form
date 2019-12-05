@@ -15,6 +15,7 @@ import java.util.*
 
 
 class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder {
+
     private val textInputEditTextNFormView = nFormView as TextInputEditTextNFormView
 
     enum class TextInputEditTextViewProperties {
@@ -97,12 +98,15 @@ class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder 
                 text: CharSequence, start: Int, lengthBefore: Int,
                 lengthAfter: Int
             ) {
-                if (text.isNotEmpty()) {
-                    textInputEditTextNFormView.dataActionListener?.also {
+                textInputEditTextNFormView.dataActionListener?.also {
+                    if (text.isNotEmpty()) {
                         textInputEditTextNFormView.viewDetails.value =
                             text.toString().removeAsterisk()
-                        it.onPassData(textInputEditTextNFormView.viewDetails)
+
+                    } else {
+                        textInputEditTextNFormView.viewDetails.value = null
                     }
+                    it.onPassData(textInputEditTextNFormView.viewDetails)
                 }
             }
         })
