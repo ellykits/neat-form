@@ -74,7 +74,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     } else {
                         DialogUtil.createAlertDialog(
                             context = this, title = "Invalid Form",
-                            message = """You have ${formBuilder?.formValidator?.invalidFields!!.size} invalid field (s)  
+                            message = """You have ${formBuilder?.formValidator?.invalidFields!!.size} invalid field (s)
                                 |and ${formBuilder?.formValidator?.requiredFields!!.size} required fields missing""".trimMargin()
                         ).apply {
                             setPositiveButton("Ok") { _, _ -> return@setPositiveButton }
