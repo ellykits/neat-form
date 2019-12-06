@@ -3,7 +3,6 @@ package com.nerdstone.neatformcore.rules
 import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -60,7 +59,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
                 ViewUtils.getKey(name, Constants.RuleActions.VISIBILITY)
             }
             .forEach { key ->
-                facts?.let {
+                facts?.also {
                     hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
                 }
             }
@@ -92,28 +91,10 @@ class NFormRulesHandler private constructor() : RulesHandler {
         }
     }
 
-    override fun changeVisibility(value: Boolean?, view: View) {
-        if (value != null) {
-            when {
-                value -> {
-                    view.animate()
-                        .alpha(1.0f)
-                        .duration = 800
-                    view.visibility = View.VISIBLE
-                }
-                else -> {
-                    view.animate()
-                        .alpha(0.0f)
-                        .duration = 800
-                    view.visibility = View.GONE
-                }
-            }
-        } else {
-            view.visibility = View.GONE
-        }
-
-        if (view is NFormView) {
-            view.trackRequiredField()
-        }
+    override fun changeVisibility(value: Boolean?, view: View) = if (value != null) when {
+        value -> view.visibility = View.VISIBLE
+        else -> view.visibility = View.GONE
+    } else {
+        view.visibility = View.GONE
     }
 }

@@ -4,24 +4,29 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
-import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
+    override var visibilityChangeListener: VisibilityChangeListener? =
+        ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = EditTextViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override lateinit var formValidator: FormValidator
+    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
     constructor(context: Context) : super(context)
 
@@ -50,15 +55,8 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         }
     }
 
-    override fun setVisibility(visibility: Int) {
-        super.setVisibility(visibility)
-        resetValueWhenHidden()
-    }
-
     override fun resetValueWhenHidden() {
-        if (visibility == View.GONE) {
-            setText("")
-        }
+        setText("")
     }
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
@@ -69,5 +67,10 @@ class EditTextNFormView : AppCompatEditText, NFormView {
             this.error = validationPair.second
         } else this.error = null
         return validationPair.first
+    }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility( visibility)
+        visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.views.handlers
+package com.nerdstone.neatformcore.rules
 
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +28,7 @@ import java.util.*
  * @property formBuilder Form builder that validation is performed on
  */
 class NeatFormValidator private constructor() : FormValidator {
+
     override lateinit var formBuilder: FormBuilder
     private val rulesEngine = DefaultRulesEngine()
     private val facts = Facts()
@@ -38,7 +39,7 @@ class NeatFormValidator private constructor() : FormValidator {
         if (isRequiredFieldMissing(nFormView)) {
             invalidFields.add(nFormView.viewDetails.name)
             val errorMessage =
-                nFormView.viewProperties.requiredStatus?.let { Utils.extractKeyValue(it).second }
+                nFormView.viewProperties.requiredStatus?.also { Utils.extractKeyValue(it).second }
             return Pair(false, errorMessage)
         }
         if (nFormView.viewProperties.validations != null) {

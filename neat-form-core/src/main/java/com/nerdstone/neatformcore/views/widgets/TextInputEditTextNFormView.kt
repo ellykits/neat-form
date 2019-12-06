@@ -4,22 +4,27 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.google.android.material.textfield.TextInputLayout
-import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
+    override var visibilityChangeListener: VisibilityChangeListener? =
+        ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = TextInputEditTextBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override lateinit var formValidator: FormValidator
+    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
     constructor(context: Context) : super(context)
 
@@ -31,18 +36,10 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         return this
     }
 
-
-    override fun setVisibility(visibility: Int) {
-        super.setVisibility(visibility)
-        resetValueWhenHidden()
-    }
-
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
     override fun resetValueWhenHidden() {
-        if (visibility == View.GONE) {
-            editText?.setText("")
-        }
+        editText?.setText("")
     }
 
     override fun validateValue(): Boolean {
@@ -51,5 +48,10 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
             this.error = validationPair.second
         } else this.error = null
         return validationPair.first
+    }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility( visibility)
+        visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

@@ -1,15 +1,18 @@
 package com.nerdstone.neatformcore.views.handlers
 
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
-class ViewDispatcher private constructor() : DataActionListener {
+class ViewDispatcher private constructor() :
+    DataActionListener {
 
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
@@ -29,10 +32,17 @@ class ViewDispatcher private constructor() : DataActionListener {
                     viewDetails.view.javaClass.simpleName, viewDetails.value, viewDetails.metadata
                 )
 
-            (viewDetails.view as NFormView).validateValue()
+            val nFormView = viewDetails.view as NFormView
+            nFormView.validateValue()
 
             if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
                 rulesFactory.updateFactsAndExecuteRules(viewDetails)
+            }
+
+            if (viewDetails.value == null && Utils.isFieldRequired(nFormView)
+                && viewDetails.view.visibility == View.VISIBLE
+            ) {
+                nFormView.formValidator.requiredFields.add(viewDetails.name)
             }
         }
     }

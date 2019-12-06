@@ -1,6 +1,5 @@
 package com.nerdstone.neatform.form
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -15,6 +14,7 @@ import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
+import com.nerdstone.neatform.utils.DialogUtil
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
@@ -24,6 +24,7 @@ import timber.log.Timber
 
 
 class FormActivity : AppCompatActivity(), StepperActions {
+
     private lateinit var formLayout: LinearLayout
     private lateinit var mainLayout: LinearLayout
     private lateinit var sampleToolBar: Toolbar
@@ -61,12 +62,25 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
-                    Toast.makeText(this, "Completed the form", Toast.LENGTH_LONG).show()
-                    Timber.d(
-                        "Saved Data = %s",
-                        Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
-                    )
-                    finish()
+                    if (formBuilder?.formValidator?.requiredFields?.isEmpty()!! &&
+                        formBuilder?.formValidator?.invalidFields?.isEmpty()!!
+                    ) {
+                        Toast.makeText(this, "Completed the form", Toast.LENGTH_LONG).show()
+                        Timber.d(
+                            "Saved Data = %s",
+                            Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
+                        )
+                        finish()
+                    } else {
+                        DialogUtil.createAlertDialog(
+                            context = this, title = "Invalid Form",
+                            message = """You have ${formBuilder?.formValidator?.invalidFields!!.size} invalid field (s)  
+                                |and ${formBuilder?.formValidator?.requiredFields!!.size} required fields missing""".trimMargin()
+                        ).apply {
+                            setPositiveButton("Ok") { _, _ -> return@setPositiveButton }
+                            create()
+                        }.show()
+                    }
                 }
             }
 
@@ -121,15 +135,14 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onExitStepper() {
-        val confirmCloseDialog = AlertDialog.Builder(this)
-        confirmCloseDialog.apply {
-            setTitle("Confirm close")
-            setMessage("All the unsaved data will get lost if you quit")
+        DialogUtil.createAlertDialog(
+            context = this, title = "Confirm close",
+            message = "All the unsaved data will get lost if you quit"
+        ).apply {
             setPositiveButton("Exit") { _, _ -> finish() }
             setNegativeButton("Cancel") { _, _ -> return@setNegativeButton }
             create()
-        }
-        confirmCloseDialog.show()
+        }.show()
     }
 
     override fun onCompleteStepper() {

@@ -69,6 +69,8 @@ class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
 
     @Test
     fun `Should reset the TextInputEditTet value when visibility is gone`() {
+        textInputEditTextNFormView.visibility = View.VISIBLE
+        textInputEditTextNFormView.editText?.setText("Some text")
         textInputEditTextNFormView.visibility = View.GONE
         Assert.assertTrue(textInputEditTextNFormView.editText?.text.toString().isEmpty())
     }

@@ -11,11 +11,12 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import java.util.*
+import kotlin.collections.HashMap
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
-    private val valuesMap = mutableMapOf<String, String?>()
+    private var valuesMap: HashMap<String, String?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
         TEXT
@@ -82,10 +83,13 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
      */
     private fun handleCheckBoxValues(checkBox: CheckBox) {
         val nameTag = checkBox.getTag(R.id.field_name) as String
+        if (valuesMap == null) {
+            valuesMap = hashMapOf()
+        }
         if (checkBox.isChecked) {
-            valuesMap[nameTag] = checkBox.text.toString()
+            valuesMap?.put(nameTag, checkBox.text.toString())
         } else {
-            valuesMap[nameTag] = null
+            valuesMap?.put(nameTag, null)
         }
 
         multiChoiceCheckBox.viewDetails.value = valuesMap
@@ -124,6 +128,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                     view.isChecked = false
                 }
             }
+        valuesMap = null
         multiChoiceCheckBox.viewDetails.value = valuesMap
         multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
     }

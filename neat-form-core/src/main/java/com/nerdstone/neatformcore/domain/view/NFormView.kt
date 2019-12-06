@@ -1,7 +1,8 @@
 package com.nerdstone.neatformcore.domain.view
 
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
-import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -9,6 +10,8 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 interface NFormView {
 
     var dataActionListener: DataActionListener?
+
+    var visibilityChangeListener: VisibilityChangeListener?
 
     val viewDetails: NFormViewDetails
 

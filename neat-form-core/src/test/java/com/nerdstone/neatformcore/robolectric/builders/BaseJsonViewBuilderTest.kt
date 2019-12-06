@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.views.handlers.NeatFormValidator
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import org.robolectric.Robolectric
 
 

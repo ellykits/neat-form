@@ -18,7 +18,7 @@ import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
-import com.nerdstone.neatformcore.views.handlers.NeatFormValidator
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
@@ -160,7 +160,6 @@ object ViewUtils {
         nFormView.viewDetails.view.id = View.generateViewId()
         nFormView.viewDetails.view.tag = viewProperty.name
         nFormView.dataActionListener = viewDispatcher
-        nFormView.formValidator = NeatFormValidator.INSTANCE
         addRequiredFields(nFormView)
         nFormView.trackRequiredField()
         nFormView.viewBuilder.buildView()
@@ -211,19 +210,31 @@ object ViewUtils {
     }
 
     fun handleRequiredStatus(nFormView: NFormView) {
-        (nFormView as View).tag?.let {
-            val requiredFields = nFormView.formValidator.requiredFields
-            if (requiredFields.contains(it as String)) {
-                (nFormView as View).also { view ->
-                    when {
-                        view.visibility == View.GONE -> {
-                            nFormView.formValidator.invalidFields.remove(it)
-                            requiredFields.remove(it)
-                        }
-                        view.visibility == View.VISIBLE -> requiredFields.add(it)
-                        view.visibility == View.INVISIBLE -> requiredFields.remove(it)
-                    }
-                }
+        (nFormView as View).tag?.also {
+            val formValidator = nFormView.formValidator
+            if (Utils.isFieldRequired(nFormView) &&
+                nFormView.viewDetails.value == null &&
+                nFormView.viewDetails.view.visibility == View.VISIBLE
+            ) {
+                formValidator.requiredFields.add(nFormView.viewDetails.name)
+            } else {
+                formValidator.invalidFields.remove(it)
+                formValidator.requiredFields.remove(it)
+            }
+        }
+    }
+
+    fun animateView(view: View) {
+        when (view.visibility) {
+            View.VISIBLE -> {
+                view.animate()
+                    .alpha(1.0f)
+                    .duration = 800
+            }
+            View.GONE -> {
+                view.animate()
+                    .alpha(0.0f)
+                    .duration = 800
             }
         }
     }
