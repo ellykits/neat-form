@@ -1,10 +1,12 @@
 package com.nerdstone.neatformcore.views.builders
 
+import android.view.View
+import android.widget.AdapterView
 import android.widget.LinearLayout
-import com.jaredrummler.materialspinner.MaterialSpinner
-import com.nerdstone.neatformcore.R
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.utils.ThemeColor
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
@@ -14,10 +16,10 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val spinnerNFormView = nFormView as SpinnerNFormView
     private val spinnerOptions = mutableListOf<String>()
-    private val materialSpinner = MaterialSpinner(spinnerNFormView.context)
+    private val materialSpinner = SmartMaterialSpinner<String>(spinnerNFormView.context)
 
     enum class SpinnerProperties {
-        TEXT
+        TEXT, SEARCHABLE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(SpinnerProperties::class.java)
@@ -34,12 +36,17 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         materialSpinner.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
-                SpinnerProperties.TEXT.name -> spinnerNFormView.addView(
-                    ViewUtils.addViewLabel(
-                        attribute.toPair(),
-                        spinnerNFormView
+                SpinnerProperties.TEXT.name -> {
+                    materialSpinner.hint = attribute.value as String
+                    formatHintForRequiredFields()
+                }
+                SpinnerProperties.SEARCHABLE.name -> {
+                    isSearchable = true
+                    searchHeaderText = attribute.value as String
+                    setSearchHeaderBackgroundColor(
+                        Utils.getThemeColor(spinnerNFormView.context, ThemeColor.COLOR_PRIMARY)
                     )
-                )
+                }
             }
         }
     }
@@ -54,29 +61,43 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+        params.bottomMargin = 0
 
         materialSpinner.apply {
             layoutParams = params
-            setItems(spinnerOptions)
-            setBackgroundResource(R.drawable.spinner_bg)
-            setHintColor(R.color.colorBlack)
-            setOnItemSelectedListener { _, pos, _, item ->
-                if (pos > 0) {
-                    spinnerNFormView.viewDetails.value = item
-                } else {
-                    spinnerNFormView.viewDetails.value = null
+            item = spinnerOptions
+            selectedItemListColor = Utils.getThemeColor(this.context, ThemeColor.COLOR_ACCENT)
+
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>, view: View, position: Int, id: Long
+                ) {
+                        spinnerNFormView.viewDetails.value = item[position]
+                        spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
-                spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+
+                override fun onNothingSelected(adapterView: AdapterView<*>) {
+                    spinnerNFormView.viewDetails.value = null
+                    spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+                }
             }
-
         }
-
         spinnerNFormView.addView(materialSpinner)
     }
 
     fun resetSpinnerValue() {
-        materialSpinner.selectedIndex = 0
+        materialSpinner.clearSelection()
         spinnerNFormView.viewDetails.value = null
         spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+    }
+
+    private fun formatHintForRequiredFields() {
+        if (spinnerNFormView.viewProperties.requiredStatus != null) {
+            if (Utils.isFieldRequired(spinnerNFormView)) {
+                materialSpinner.hint =
+                    ViewUtils.addRedAsteriskSuffix(materialSpinner.hint.toString())
+            }
+        }
     }
 }

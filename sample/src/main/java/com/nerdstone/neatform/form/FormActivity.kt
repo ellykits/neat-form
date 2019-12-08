@@ -1,6 +1,5 @@
 package com.nerdstone.neatform.form
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -14,16 +13,18 @@ import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
-import com.google.gson.Gson
 import com.nerdstone.neatform.R
+import com.nerdstone.neatform.utils.DialogUtil
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
+import com.nerdstone.neatformcore.utils.Utils
 import timber.log.Timber
 
 
 class FormActivity : AppCompatActivity(), StepperActions {
+
     private lateinit var formLayout: LinearLayout
     private lateinit var mainLayout: LinearLayout
     private lateinit var sampleToolBar: Toolbar
@@ -61,8 +62,14 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
-                    Toast.makeText(this, "Completed the form", Toast.LENGTH_LONG).show()
-                    Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
+                    if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+                        Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
+                        Timber.d(
+                            "Saved Data = %s",
+                            Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
+                        )
+                        finish()
+                    }
                 }
             }
 
@@ -111,23 +118,29 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onStepComplete(step: Step) {
-        Toast.makeText(this, "Stepper completed", Toast.LENGTH_SHORT).show()
+        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+            Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
+            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            finish()
+        }
     }
 
     override fun onExitStepper() {
-        val confirmCloseDialog = AlertDialog.Builder(this)
-        confirmCloseDialog.apply {
-            setTitle("Confirm close")
-            setMessage("All the unsaved data will get lost if you quit")
+        DialogUtil.createAlertDialog(
+            context = this, title = "Confirm close",
+            message = "All the unsaved data will get lost if you quit"
+        ).apply {
             setPositiveButton("Exit") { _, _ -> finish() }
             setNegativeButton("Cancel") { _, _ -> return@setNegativeButton }
             create()
-        }
-        confirmCloseDialog.show()
+        }.show()
     }
 
     override fun onCompleteStepper() {
-        Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-        Timber.d("Saved Data = %s",Gson().toJson(formBuilder?.getFormDetails()))
+        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+            Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
+            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            finish()
+        }
     }
 }

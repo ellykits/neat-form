@@ -9,9 +9,8 @@
           "name": "adult",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "This is an adult",
+            "hint": "Enter adult's phone number",
             "type": "name",
-            "text": "Catch me if you can",
             "padding": "8"
           },
           "meta_data": {
@@ -19,9 +18,14 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": "length() < 8; !contains(@)",
-          "subjects": "age:number, child:text, dob:number",
-          "required_status": "True:please add username"
+          "validation": [
+            {
+              "condition": "value.length() <= 10",
+              "message": "value should be less than or equal to ten digits"
+            }
+          ],
+          "subjects": "age:number, child:text",
+          "required_status": "Yes:please add phone number"
         },
         {
           "name": "age",
@@ -36,6 +40,12 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
+          "validation": [
+            {
+              "condition": "value.matches(\"^\\\\d{1,2}?$\")",
+              "message": "Not a valid age"
+            }
+          ],
           "required_status": "yes:Please add age"
         },
         {
@@ -52,7 +62,7 @@
             "openmrs_entity_parent": ""
           },
           "required_status": "yes:Please add age",
-          "subjects": "age:number, adult:text, email_subscription:map"
+          "subjects": "age:number"
         },
         {
           "name": "email_subscription",
@@ -70,10 +80,6 @@
             "text": "Choose your gender"
           },
           "options": [
-            {
-              "name": "none",
-              "text": "Select gender"
-            },
             {
               "name": "female",
               "text": "Female",
@@ -95,6 +101,99 @@
           ],
           "subjects": "email_subscription:map",
           "required_status": "yes:Please specify your gender"
+        },
+        {
+          "name": "country",
+          "type": "spinner",
+          "properties": {
+            "text": "Choose your country of Origin",
+            "searchable": "Search country"
+          },
+          "options": [
+            {
+              "name": "none",
+              "text": "Select country"
+            },
+            {
+              "name": "america",
+              "text": "United States Of America",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },
+            {
+              "name": "canada",
+              "text": "Canada",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },
+            {
+              "name": "uk",
+              "text": "United Kingdom",
+              "meta_data": {
+                "country_code": "+44"
+              }
+            },
+            {
+              "name": "australia",
+              "text": "Australia",
+              "meta_data": {
+                "country_code": "+61"
+              }
+            },
+            {
+              "name": "Kenya",
+              "text": "Kenya",
+              "meta_data": {
+                "country_code": "+254"
+              }
+            },
+            {
+              "name": "tanzania",
+              "text": "Tanzania",
+              "meta_data": {
+                "country_code": "+255"
+              }
+            },
+            {
+              "name": "china",
+              "text": "China",
+              "meta_data": {
+                "country_code": "+86"
+              }
+            },
+            {
+              "name": "sweden",
+              "text": "Sweden",
+              "meta_data": {
+                "country_code": "+1"
+              }
+            },
+            {
+              "name": "russia",
+              "text": "Russia",
+              "meta_data": {
+                "country_code": "+7"
+              }
+            },
+            {
+              "name": "japan",
+              "text": "Japan",
+              "meta_data": {
+                "country_code": "+81"
+              }
+            },
+            {
+              "name": "singapore",
+              "text": "Singapore",
+              "meta_data": {
+                "country_code": "+65"
+              }
+            }
+          ],
+          "subjects": "email_subscription:map",
+          "required_status": "yes:Please specify your country"
         },
         {
           "name": "choose_language",
@@ -151,6 +250,12 @@
               }
             }
           ],
+          "validation": [
+            {
+              "condition": " value != null && value['need_help'] == null",
+              "message": "You should be speaking at least one of the languages man!"
+            }
+          ],
           "required_status": "yes:Please specify your languages",
           "subjects": "email_subscription:map, gender:text"
         },
@@ -186,11 +291,17 @@
             },
             {
               "name": "dont_know",
-              "text": "Don't know"
+              "text": "Dont know"
+            }
+          ],
+          "validation": [
+            {
+              "condition": "value != null && !value.containsKey('dont_know')",
+              "message": "Don't know is not an option"
             }
           ],
           "required_status": "yes:Wiki contribution field is required.",
-          "subjects": "email_subscription:map, gender:text"
+          "subjects": "email_subscription:map"
         },
         {
           "name": "wiki_contribution_yes",
@@ -199,6 +310,12 @@
             "hint": "What was your contribution?",
             "type": "name"
           },
+          "validation": [
+            {
+              "condition": "value.startsWith('I')",
+              "message": "Your statement must start with I"
+            }
+          ],
           "required_status": "true:Please specify your contributions",
           "subjects": "wiki_contribution:map"
         },
@@ -208,7 +325,7 @@
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
+            "display_format": "dd/MM/yyyy"
           },
           "required_status": "true:Please specify your dob"
         },
@@ -218,7 +335,7 @@
           "properties": {
             "hint": "Enter time you clocked in",
             "type": "time_picker",
-            "display_format": "hh:m a"
+            "display_format": "hh:mm a"
           },
           "required_status": "true:Please specify the time you clocked in"
         },
@@ -231,8 +348,14 @@
             "first_number": "0",
             "text": "Number of previous pregnancies"
           },
-          "subjects": "email_subscription:map, gender:text",
-          "required_status": "no:Please specify the time you clocked in"
+          "validation": [
+            {
+              "condition": "value < 4",
+              "message": "Advice woman to register for Family Planning"
+            }
+          ],
+          "subjects": "email_subscription:map",
+          "required_status": "yes:Please number of previous pregnancy"
         },
         {
           "name": "delivery_methods",

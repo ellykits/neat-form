@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building CheckBox view` {
+class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val viewProperty = spyk(NFormViewProperty())
@@ -31,6 +31,7 @@ class `Test building CheckBox view` {
         viewProperty.name = "name"
         viewProperty.type = "checkbox"
         //Set EditText properties and assign EditText view builder
+        checkBoxNFormView.formValidator = this.formValidator
         checkBoxNFormView.viewProperties = viewProperty
     }
 
@@ -59,9 +60,10 @@ class `Test building CheckBox view` {
     @Test
     fun `Should uncheck the checkbox when visibility is gone`() {
         checkBoxNFormView.initView(viewProperty, spyk())
+        checkBoxViewBuilder.buildView()
         checkBoxNFormView.isChecked = true
         checkBoxNFormView.visibility = View.GONE
-        Assert.assertTrue(!checkBoxNFormView.isChecked)
+        Assert.assertFalse(checkBoxNFormView.isChecked)
     }
 
     @Test
@@ -77,17 +79,13 @@ class `Test building CheckBox view` {
     }
 
     @Test
-    fun `Should set ViewDetails value to a map of name and null when state changes`() {
+    fun `Should set ViewDetails value to null when unchecked`() {
         checkBoxNFormView.initView(viewProperty, spyk())
         val text = "Am a checkbox"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         checkBoxViewBuilder.buildView()
         checkBoxNFormView.isChecked = false
-        Assert.assertTrue(checkBoxNFormView.viewDetails.value != null)
-        Assert.assertTrue(
-            (checkBoxNFormView.viewDetails.value as HashMap<String, String?>).containsKey("name")
-        )
-        Assert.assertTrue((checkBoxNFormView.viewDetails.value as HashMap<String, String?>)["name"] == null)
+        Assert.assertNull(checkBoxNFormView.viewDetails.value)
     }
 
     @After

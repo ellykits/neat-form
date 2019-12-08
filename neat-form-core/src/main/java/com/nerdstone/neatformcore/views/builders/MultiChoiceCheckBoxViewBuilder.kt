@@ -15,7 +15,7 @@ import java.util.*
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
-    private val valuesMap = mutableMapOf<String, String?>()
+    private var valuesMap: HashMap<String, String?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
         TEXT
@@ -36,7 +36,9 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
             MultiChoiceCheckBoxProperties.TEXT.name -> {
-                multiChoiceCheckBox.addView(ViewUtils.addViewLabel(attribute.toPair(), multiChoiceCheckBox))
+                multiChoiceCheckBox.addView(
+                    ViewUtils.addViewLabel(attribute.toPair(), multiChoiceCheckBox)
+                )
             }
         }
     }
@@ -80,10 +82,13 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
      */
     private fun handleCheckBoxValues(checkBox: CheckBox) {
         val nameTag = checkBox.getTag(R.id.field_name) as String
+        if (valuesMap == null) {
+            valuesMap = hashMapOf()
+        }
         if (checkBox.isChecked) {
-            valuesMap[nameTag] = checkBox.text.toString()
+            valuesMap?.put(nameTag, checkBox.text.toString())
         } else {
-            valuesMap[nameTag] = null
+            valuesMap?.put(nameTag, null)
         }
 
         multiChoiceCheckBox.viewDetails.value = valuesMap
@@ -122,6 +127,9 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                     view.isChecked = false
                 }
             }
+        valuesMap = null
+        multiChoiceCheckBox.viewDetails.value = valuesMap
+        multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
     }
 }
 

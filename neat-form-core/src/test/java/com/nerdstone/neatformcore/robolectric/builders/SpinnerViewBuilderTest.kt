@@ -1,9 +1,8 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.jaredrummler.materialspinner.MaterialSpinner
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -22,7 +21,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building Spinner view` {
+class `Test building Spinner view` : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val spinnerOption1 = spyk(NFormSubViewProperty())
@@ -35,6 +34,7 @@ class `Test building Spinner view` {
 
     @Before
     fun `Before doing anything else`() {
+        spinnerNFormView.formValidator = this.formValidator
         viewProperty.name = "gender"
         viewProperty.type = "spinner"
         spinnerNFormView.viewProperties = viewProperty
@@ -48,8 +48,6 @@ class `Test building Spinner view` {
 
         spinnerOption3.name = "male"
         spinnerOption3.text = "Male"
-
-
     }
 
     @Test
@@ -59,8 +57,8 @@ class `Test building Spinner view` {
         spinnerViewBuilder.buildView()
         val view = spinnerNFormView.getChildAt(0)
 
-        Assert.assertTrue(view != null && view is TextView)
-        Assert.assertTrue((view as TextView).text.toString() == text)
+        Assert.assertTrue(view != null && view is SmartMaterialSpinner<*>)
+        Assert.assertTrue((view as SmartMaterialSpinner<*>).hint.toString() == text)
     }
 
     @Test
@@ -71,7 +69,7 @@ class `Test building Spinner view` {
         spinnerViewBuilder.buildView()
         val view = spinnerNFormView.getChildAt(0)
         Assert.assertTrue(
-            (view as TextView).text.toString().isNotEmpty() && view.text.toString().endsWith("*")
+            (view as SmartMaterialSpinner<*>).hint.toString().isNotEmpty() &&  view.hint.toString().endsWith("*")
         )
     }
 
@@ -83,16 +81,16 @@ class `Test building Spinner view` {
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
         spinnerViewBuilder.buildView()
 
-        Assert.assertTrue(spinnerNFormView.childCount == 2)
+        Assert.assertTrue(spinnerNFormView.childCount == 1)
         val view = spinnerNFormView.getChildAt(0)
         //First item is Label and the other
-        Assert.assertTrue(view is TextView)
-        Assert.assertTrue(spinnerNFormView.getChildAt(1) is MaterialSpinner)
+        Assert.assertTrue(view is SmartMaterialSpinner<*>)
+        Assert.assertTrue(spinnerNFormView.getChildAt(0) is SmartMaterialSpinner<*>)
         //Testing that spinner options were created
-        val materialSpinner = spinnerNFormView.getChildAt(1) as MaterialSpinner
-        Assert.assertTrue(materialSpinner.getItems<String>()[0] == "Don't know")
-        Assert.assertTrue(materialSpinner.getItems<String>()[1] == "Female")
-        Assert.assertTrue(materialSpinner.getItems<String>()[2] == "Male")
+        val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
+        Assert.assertTrue(materialSpinner.item[0] == "Don't know")
+        Assert.assertTrue(materialSpinner.item[1] == "Female")
+        Assert.assertTrue(materialSpinner.item[2] == "Male")
     }
 
     @Test
@@ -113,10 +111,10 @@ class `Test building Spinner view` {
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
         spinnerNFormView.initView(viewProperty, spyk())
-        val materialSpinner = spinnerNFormView.getChildAt(1) as MaterialSpinner
-        materialSpinner.selectedIndex = 1
+        val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
+        materialSpinner.setSelection(1)
         materialSpinner.isSelected = true
-        Assert.assertTrue(materialSpinner.getItems<String>()[materialSpinner.selectedIndex]  == "Female")
+        Assert.assertTrue(materialSpinner.item[materialSpinner.selectedItemPosition]  == "Female")
     }
 
     @After

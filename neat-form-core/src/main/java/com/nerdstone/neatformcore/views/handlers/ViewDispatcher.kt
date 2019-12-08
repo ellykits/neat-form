@@ -1,28 +1,49 @@
 package com.nerdstone.neatformcore.views.handlers
 
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.nerdstone.neatformcore.domain.data.DataActionListener
+import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
-class ViewDispatcher private constructor() : DataActionListener {
+class ViewDispatcher private constructor() :
+    DataActionListener {
 
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
 
+    /**
+     * Dispatches an action when view value changes. If value is the same as what had already been
+     * dispatched then do nothing
+     * @param viewDetails the details of the view that has just dispatched a value
+     */
     override fun onPassData(viewDetails: NFormViewDetails) {
 
-        //Save the passed data to view model
         val viewModel =
             ViewModelProviders.of(viewDetails.view.context as FragmentActivity)[DataViewModel::class.java]
 
-        viewModel.details[viewDetails.name] = NFormViewData(viewDetails.value, viewDetails.metadata)
+        if (viewModel.details[viewDetails.name] != viewDetails.value) {
+            viewModel.details[viewDetails.name] =
+                NFormViewData(
+                    viewDetails.view.javaClass.simpleName, viewDetails.value, viewDetails.metadata
+                )
 
-        //Only execute rule if view has dependants
-        if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
-            rulesFactory.updateFactsAndExecuteRules(viewDetails)
+            val nFormView = viewDetails.view as NFormView
+            nFormView.validateValue()
+
+            if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
+                rulesFactory.updateFactsAndExecuteRules(viewDetails)
+            }
+
+            if (viewDetails.value == null && Utils.isFieldRequired(nFormView)
+                && viewDetails.view.visibility == View.VISIBLE
+            ) {
+                nFormView.formValidator.requiredFields.add(viewDetails.name)
+            }
         }
     }
 

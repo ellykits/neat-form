@@ -1,10 +1,10 @@
 package com.nerdstone.neatform.form
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.nerdstone.neatform.R
 
 class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHolder>() {

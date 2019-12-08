@@ -59,7 +59,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
                 ViewUtils.getKey(name, Constants.RuleActions.VISIBILITY)
             }
             .forEach { key ->
-                facts?.let {
+                facts?.also {
                     hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
                 }
             }
@@ -78,7 +78,6 @@ class NFormRulesHandler private constructor() : RulesHandler {
     }
 
     override fun refreshViews(allRules: Rules?) {
-        val activity = formBuilder.context as Activity
         allRules?.also {
             it.toMutableList()
                 .filter { rule ->
@@ -92,24 +91,10 @@ class NFormRulesHandler private constructor() : RulesHandler {
         }
     }
 
-    override fun changeVisibility(value: Boolean?, view: View) {
-        if (value != null) {
-            when {
-                value -> {
-                    view.animate()
-                        .alpha(1.0f)
-                        .duration = 800
-                    view.visibility = View.VISIBLE
-                }
-                else -> {
-                    view.animate()
-                        .alpha(0.0f)
-                        .duration = 800
-                    view.visibility = View.GONE
-                }
-            }
-        } else {
-            view.visibility = View.GONE
-        }
+    override fun changeVisibility(value: Boolean?, view: View) = if (value != null) when {
+        value -> view.visibility = View.VISIBLE
+        else -> view.visibility = View.GONE
+    } else {
+        view.visibility = View.GONE
     }
 }

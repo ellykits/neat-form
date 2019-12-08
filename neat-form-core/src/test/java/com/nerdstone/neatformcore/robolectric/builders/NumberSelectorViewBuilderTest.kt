@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.NumberSelectorViewBuilder
@@ -21,7 +22,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building NumberSelector view` {
+class `Test building NumberSelector view` : BaseJsonViewBuilderTest(){
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val numberSelector =
         NumberSelectorNFormView(activity.get())
@@ -30,6 +31,7 @@ class `Test building NumberSelector view` {
 
     @Before
     fun `Before doing anything else`() {
+        numberSelector.formValidator = this.formValidator
         viewProperty.name = "number_selector_test"
         viewProperty.type = "number_selector"
         numberSelector.viewProperties = viewProperty
@@ -45,8 +47,9 @@ class `Test building NumberSelector view` {
     fun `Should set label for number selector`() {
         numberSelectorViewBuilder.buildView()
         val view = numberSelector.getChildAt(0)
-        Assert.assertTrue(view != null && view is TextView)
-        Assert.assertTrue((view as TextView).text.toString() == "Number of previous pregnancies")
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
+        Assert.assertTrue(textView.text.toString() == "Number of previous pregnancies")
+        Assert.assertTrue(numberSelector.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test
@@ -54,8 +57,9 @@ class `Test building NumberSelector view` {
         viewProperty.requiredStatus = "yes:Am required"
         numberSelectorViewBuilder.buildView()
         val view = numberSelector.getChildAt(0)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(
-            (view as TextView).text.toString().isNotEmpty() && view.text.toString().endsWith("*")
+            textView.text.toString().isNotEmpty() && textView.text.toString().endsWith("*")
         )
     }
 

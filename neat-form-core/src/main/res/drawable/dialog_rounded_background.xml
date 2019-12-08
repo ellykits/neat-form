@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid
+        android:color="@color/colorWhite"/>
+    <corners
+        android:radius="@dimen/error_dialog_corner_radius" />
+    <padding
+        android:left="@dimen/error_dialog_corner_padding"
+        android:top="@dimen/error_dialog_corner_padding"
+        android:right="@dimen/error_dialog_corner_padding"
+        android:bottom="@dimen/error_dialog_corner_padding" />
+</shape>

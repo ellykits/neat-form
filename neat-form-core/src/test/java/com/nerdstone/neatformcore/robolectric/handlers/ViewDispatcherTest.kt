@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.handlers
 import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
@@ -22,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test View Dispacher action` {
+class `Test View Dispacher action` : BaseJsonViewBuilderTest(){
 
     private val viewProperty = NFormViewProperty()
     private val viewDispatcher = spyk<ViewDispatcher>()
@@ -36,6 +37,7 @@ class `Test View Dispacher action` {
         viewProperty.type = "edit_text"
         viewProperty.viewAttributes = hashMapOf("hint" to "Am a sample hint on field")
         editTextNFormView.viewProperties = viewProperty
+        editTextNFormView.formValidator = this.formValidator
         every { viewDispatcher.rulesFactory } returns rulesFactory
         editTextNFormView.initView(viewProperty, viewDispatcher)
     }

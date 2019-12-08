@@ -1,9 +1,12 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestNeatFormApp
+import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -12,24 +15,29 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building EditText view` {
+class `Test building EditText view`: BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val editTextNFormView =  EditTextNFormView(RuntimeEnvironment.systemContext)
+    private val activity = Robolectric.buildActivity(
+        AppCompatActivity::class.java).setup()
+    private val editTextNFormView =  EditTextNFormView(activity.get())
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
+    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
 
     @Before
     fun `Before doing anything else`() {
         viewProperty.name = "name"
         viewProperty.type = "edit_text"
         //Set EditText properties and assign EditText view builder
+        editTextNFormView.formValidator = this.formValidator
         editTextNFormView.viewProperties = viewProperty
+        editTextNFormView.initView(viewProperty, dataActionListener)
     }
 
     @Test
@@ -38,7 +46,7 @@ class `Test building EditText view` {
         viewProperty.viewAttributes = hashMapOf("hint" to hint, "text_size" to "12")
         editTextViewBuilder.buildView()
         Assert.assertTrue(editTextNFormView.hint.isNotEmpty() && editTextNFormView.hint.toString() == hint)
-        Assert.assertTrue(editTextNFormView.textSize.toInt() == 12)
+        Assert.assertTrue(editTextNFormView.textSize.toInt() == 18)
     }
 
     @Test
@@ -69,8 +77,28 @@ class `Test building EditText view` {
 
     @Test
     fun `Should reset the EditText value when visibility is gone`() {
+        editTextNFormView.setText("Some text")
         editTextNFormView.visibility = View.GONE
         Assert.assertTrue(editTextNFormView.text.toString().isEmpty())
+    }
+
+    @Test
+    fun `Should validate EditText value`() {
+        val validation = NFormFieldValidation()
+        validation.condition = " value.matches(\"^[\\\\w-_\\\\.+]*[\\\\w-_\\\\.]\\\\@([\\\\w]+\\\\.)+[\\\\w]+[\\\\w]\$\")"
+        validation.message = "Please enter a valid email address"
+
+        viewProperty.validations = arrayListOf(validation)
+        viewProperty.requiredStatus = "yes:Am required"
+        editTextViewBuilder.buildView()
+        editTextNFormView.setText("johndoe@gmail.com")
+        Assert.assertTrue(editTextNFormView.validateValue())
+
+
+        editTextNFormView.setText("johndoegmail.com")
+        Assert.assertFalse(editTextNFormView.validateValue())
+        Assert.assertTrue(editTextNFormView.error=="Please enter a valid email address")
+
     }
 
     @After

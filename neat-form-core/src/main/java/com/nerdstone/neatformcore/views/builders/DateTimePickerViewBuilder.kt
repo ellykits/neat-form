@@ -17,7 +17,7 @@ import java.util.*
 class DateTimePickerViewBuilder(override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
-    private var dateDisplayFormat = "YYYY-MM-dd"
+    private var dateDisplayFormat = "yyyy-MM-dd"
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
     private val selectedDate = Calendar.getInstance()
@@ -133,8 +133,7 @@ class DateTimePickerViewBuilder(override val nFormView: NFormView) :
 
     private fun getFormattedDate(): String =
         SimpleDateFormat(
-            dateDisplayFormat,
-            Locale.getDefault()
+            dateDisplayFormat, Locale.getDefault()
         ).format(Date(selectedDate.timeInMillis))
 
     fun resetDatetimePickerValue() {

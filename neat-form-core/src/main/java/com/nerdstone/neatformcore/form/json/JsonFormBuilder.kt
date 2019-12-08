@@ -22,6 +22,9 @@ import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.domain.model.NFormViewData
+import com.nerdstone.neatformcore.domain.view.FormValidator
+import com.nerdstone.neatformcore.form.common.FormErrorDialog
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
@@ -37,6 +40,7 @@ import kotlinx.coroutines.launch
  * @author Elly Nerdstone
  */
 class JsonFormBuilder() : FormBuilder {
+
     private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -48,8 +52,8 @@ class JsonFormBuilder() : FormBuilder {
     override var jsonString: String? = null
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
-    private lateinit var viewModel: DataViewModel
-
+    override lateinit var viewModel: DataViewModel
+    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {
@@ -69,10 +73,12 @@ class JsonFormBuilder() : FormBuilder {
         this.neatStepperLayout = NeatStepperLayout(context)
         this.viewModel =
             ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+
     }
 
     init {
         rulesHandler.formBuilder = this
+        formValidator.formBuilder = this
         coroutineContextProvider = CoroutineContextProvider.Default()
     }
 
@@ -88,17 +94,19 @@ class JsonFormBuilder() : FormBuilder {
                 }
                 form = async.await()
             }
-            launch(coroutineContextProvider.io) {
-                singleRunner.afterPrevious {
-                    registerFormRules(context, RulesFileType.YAML)
-                }
-            }
             launch(coroutineContextProvider.main) {
-                singleRunner.afterPrevious {
-                    if (viewList == null)
-                        createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
-                    else
-                        createFormViews(context, viewList, jsonFormStepBuilderModel)
+                val rulesAsync = async {
+                    singleRunner.afterPrevious {
+                        registerFormRulesFromFile(context, RulesFileType.YAML)
+                    }
+                }
+                if (rulesAsync.await()) {
+                    launch(coroutineContextProvider.main) {
+                        if (viewList == null)
+                            createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
+                        else
+                            createFormViews(context, viewList, jsonFormStepBuilderModel)
+                    }
                 }
             }
         }
@@ -132,7 +140,9 @@ class JsonFormBuilder() : FormBuilder {
                     val fragmentsList: MutableList<StepFragment> = mutableListOf()
 
                     form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = addViewsToVerticalRootView(views, index, formContent)
+                        val rootView = VerticalRootView(context)
+                        rootView.formBuilder = this
+                        addViewsToVerticalRootView(views, index, formContent, rootView)
                         val stepFragment = StepFragment.newInstance(
                             index,
                             StepModel.Builder()
@@ -149,12 +159,14 @@ class JsonFormBuilder() : FormBuilder {
                             fragmentsList
                         )
                     )
+                    neatStepperLayout.showLoadingIndicators(false)
                 }
                 mainLayout != null && jsonFormStepBuilderModel == null -> {
                     val formViews = ScrollView(context)
                     form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = addViewsToVerticalRootView(views, index, formContent)
-                        formViews.addView(rootView.initRootView() as View)
+                        val rootView = VerticalRootView(context)
+                        formViews.addView(rootView.initRootView(this) as View)
+                        addViewsToVerticalRootView(views, index, formContent, rootView)
                     }
                     mainLayout?.addView(formViews)
                 }
@@ -166,30 +178,44 @@ class JsonFormBuilder() : FormBuilder {
     }
 
     private fun addViewsToVerticalRootView(
-        customViews: List<View>?, stepIndex: Int, formContent: NFormContent
-    ): VerticalRootView {
-        val rootView = VerticalRootView(context)
+        customViews: List<View>?, stepIndex: Int,
+        formContent: NFormContent, verticalRootView: VerticalRootView
+    ) {
+
         val view = customViews?.getOrNull(stepIndex)
         when {
             view != null -> {
-                rootView.addView(view)
-                rootView.addChildren(formContent.fields, viewDispatcher, true)
+                verticalRootView.addView(view)
+                verticalRootView.addChildren(formContent.fields, viewDispatcher, true)
             }
-            else -> rootView.addChildren(formContent.fields, viewDispatcher)
+            else -> verticalRootView.addChildren(formContent.fields, viewDispatcher)
         }
-        return rootView
     }
 
-    override fun registerFormRules(context: Context, rulesFileType: RulesFileType) {
+    override fun getFormMetaData(): Map<String, Any> {
+        return form?.formMetadata ?: mutableMapOf()
+    }
+
+    override fun registerFormRulesFromFile(
+        context: Context,
+        rulesFileType: RulesFileType
+    ): Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
         }
+        return true
     }
 
     override fun getFormDetails(): HashMap<String, NFormViewData> {
-        return viewModel.details
+        if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
+            return viewModel.details
+        }
+        FormErrorDialog(context).show()
+        return hashMapOf()
     }
+
 }
+
 
 const val FRAGMENT_VIEW = "fragment_view"
 const val FRAGMENT_INDEX = "index"
@@ -237,16 +263,20 @@ class StepFragment : Step {
         return scroller
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        //No call for super(). Bug on API Level > 11.
+    }
+
     override fun verifyStep(): StepVerificationState {
-        TODO("not implemented")
+        return StepVerificationState(true, null)
     }
 
     override fun onSelected() {
-        TODO("not implemented")
+        //Overridden not useful at the moment
     }
 
     override fun onError(stepVerificationState: StepVerificationState) {
-        TODO("not implemented")
+        //Overridden not useful at the moment
     }
 
 }

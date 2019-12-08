@@ -11,7 +11,7 @@
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text": "Catch me if you can",
+            "text": "",
             "padding": "8"
           },
           "meta_data": {
@@ -19,7 +19,17 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": "length() < 8; !contains(@)",
+          "validation": [
+            {
+              "validation_name": "length",
+              "condition": "value.length() < 8",
+              "error_message": "value should be less than eight digits"
+            },{
+              "validation_name": "special characters",
+              "condition": "!value.contains('@')",
+              "error_message": "value should not contain special character"
+            }
+          ],
           "subjects": "age:number, child:text, dob:number",
           "required_status": "True:please add username"
         },
@@ -70,10 +80,6 @@
             "text": "Choose your gender"
           },
           "options": [
-            {
-              "name": "none",
-              "text": "Select gender"
-            },
             {
               "name": "female",
               "text": "Female",
@@ -280,7 +286,13 @@
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
           },
-          "validation": "length() < 8; !contains(@)"
+          "validation": [
+            {
+              "validation_name": "special characters",
+              "condition": "!value.contains('@')",
+              "error_message": "value should not contain special character"
+            }
+          ]
         }
       ]
     }

@@ -36,7 +36,18 @@ class `Test passing JSON files` {
                 "                     \"condition\": \"{age} > 30\"\n" +
                 "                  }\n" +
                 "               ],\n" +
-                "               \"validation\": \"{username}.length() < 8\",\n" +
+                "               \"validation\": [\n" +
+                "                   {\n" +
+                "                       \"validation_name\": \"length\",\n" +
+                "                       \"condition\": \"value.length() < 11\",\n" +
+                "                       \"error_message\": \"value should be less than ten digits\"\n" +
+                "                   },\n" +
+                "                   {\n" +
+                "                       \"validation_name\": \"phone number\",\n" +
+                "                       \"condition\": \"value.matches(\\\"\\\\\\\\d{10}\\\")\",\n" +
+                "                       \"error_message\": \"Not a valid phone number\"\n" +
+                "                   }\n" +
+                "               ],\n" +
                 "                \"subjects\": \"age, medications\",\n" +
                 "               \"required_status\": \"yes -> Please add username\" " +
                 "            },\n" +
@@ -176,7 +187,7 @@ class `Test passing JSON files` {
                 "         \"name\": \"female\",\n" +
                 "         \"text\": \"Female\",\n" +
                 "         \"is_exclusive\": false,\n" +
-                "         \"metadata\": {\n" +
+                "         \"meta_data\": {\n" +
                 "            \"openmrs_entity\": \"120192AAAAAAAAAAAAAA\",\n" +
                 "            \"openmrs_entity_id\": \"\",\n" +
                 "            \"openmrs_entity_parent\": \"\"\n" +
@@ -186,7 +197,7 @@ class `Test passing JSON files` {
                 "         \"name\": \"male\",\n" +
                 "         \"text\": \"Male\",\n" +
                 "         \"is_exclusive\": false,\n" +
-                "         \"metadata\": {\n" +
+                "         \"meta_data\": {\n" +
                 "            \"openmrs_entity\": \"120191AAAAAAAAAAAAAA\",\n" +
                 "            \"openmrs_entity_id\": \"\",\n" +
                 "            \"openmrs_entity_parent\": \"\"\n" +
@@ -226,14 +237,14 @@ class `Test passing JSON files` {
         val nForm = JsonFormParser.parseJson(json)
         val property = nForm!!.steps[0].fields[0]
         assertEquals(property.name, "username")
-        assertEquals("{username}.length() < 8", property.validations)
+        assertEquals(2, property.validations?.size)
         assertTrue(property.subjects!!.contains("age"))
         assertEquals(property.requiredStatus, "yes -> Please add username")
         assertEquals(property.type, "edit_text")
     }
 
     @Test
-    fun `Should properly parse sub view properties` () {
+    fun `Should properly parse sub view properties`() {
         val nForm = JsonFormParser.parseJson(json)
         val property = nForm!!.steps[4].fields[1]
         assertEquals(property.options!!.size.toLong(), 2)

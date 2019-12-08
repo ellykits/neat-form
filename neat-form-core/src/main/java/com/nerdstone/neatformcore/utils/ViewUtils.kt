@@ -6,8 +6,8 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -29,6 +29,8 @@ import java.util.*
 import kotlin.reflect.KClass
 
 const val ID = "id"
+const val VALUE = "value"
+const val VALIDATION_RESULT = "validationResults"
 
 object ViewUtils {
 
@@ -91,10 +93,10 @@ object ViewUtils {
         val androidView = rootView as View
         val context = rootView.context
         if (buildFromLayout) {
-            val v = androidView.findViewById<View>(
+            val view = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
-            getView(v as NFormView, viewProperty, viewDispatcher)
+            getView(view as NFormView, viewProperty, viewDispatcher)
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
             rootView.addChild(
@@ -157,12 +159,18 @@ object ViewUtils {
         nFormView.viewDetails.view.id = View.generateViewId()
         nFormView.viewDetails.view.tag = viewProperty.name
         nFormView.dataActionListener = viewDispatcher
+        addRequiredFields(nFormView)
+        nFormView.trackRequiredField()
         nFormView.viewBuilder.buildView()
     }
 
+    private fun addRequiredFields(nFormView: NFormView) {
+        if (Utils.isFieldRequired(nFormView))
+            nFormView.formValidator.requiredFields.add(nFormView.viewDetails.name)
+    }
+
     fun applyViewAttributes(
-        nFormView: NFormView,
-        acceptedAttributes: HashSet<String>,
+        nFormView: NFormView, acceptedAttributes: HashSet<String>,
         task: (attribute: Map.Entry<String, Any>) -> Unit
     ) {
         if (nFormView.viewProperties.viewAttributes != null) {
@@ -181,27 +189,52 @@ object ViewUtils {
         }
     }
 
-    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): TextView {
-        val label = TextView((nFormView as View).context)
+    fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): LinearLayout {
+        val layoutInflater =
+            (nFormView as View).context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = layoutInflater.inflate(R.layout.custom_label_layout, null) as LinearLayout
 
-        label.apply {
-            setPadding(0, 0, 0, 16)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.labelStyle)
-            else setTextAppearance((nFormView as View).context, R.style.labelStyle)
-
-            layoutParams = ViewGroup.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+        layout.findViewById<TextView>(R.id.labelTextView).apply {
 
             text = attribute.second as String
 
-            if (nFormView.viewProperties.requiredStatus != null
-                && Utils.isFieldRequired(nFormView)
+            if (Utils.isFieldRequired(nFormView)) {
+                text = addRedAsteriskSuffix(text.toString())
+            }
+            error = null
+        }
+        (nFormView as View).findViewById<TextView>(R.id.errorMessageTextView)?.visibility =
+            View.GONE
+        return layout
+    }
+
+    fun handleRequiredStatus(nFormView: NFormView) {
+        (nFormView as View).tag?.also {
+            val formValidator = nFormView.formValidator
+            if (Utils.isFieldRequired(nFormView) &&
+                nFormView.viewDetails.value == null &&
+                nFormView.viewDetails.view.visibility == View.VISIBLE
             ) {
-                text = addRedAsteriskSuffix(label.text.toString())
+                formValidator.requiredFields.add(nFormView.viewDetails.name)
+            } else {
+                formValidator.invalidFields.remove(it)
+                formValidator.requiredFields.remove(it)
             }
         }
-        return label
+    }
+
+    fun animateView(view: View) {
+        when (view.visibility) {
+            View.VISIBLE -> {
+                view.animate()
+                    .alpha(1.0f)
+                    .duration = 800
+            }
+            View.GONE -> {
+                view.animate()
+                    .alpha(0.0f)
+                    .duration = 800
+            }
+        }
     }
 }

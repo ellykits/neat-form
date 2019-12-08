@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building RadioGroup view` {
+class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val radioOption1 = spyk(NFormSubViewProperty())
@@ -35,6 +35,7 @@ class `Test building RadioGroup view` {
 
     @Before
     fun `Before doing anything else`() {
+        radioGroupView.formValidator = this.formValidator
         viewProperty.name = "choose_language"
         viewProperty.type = "radio_group"
 
@@ -58,9 +59,10 @@ class `Test building RadioGroup view` {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
-
-        Assert.assertTrue(view != null && view is TextView)
-        Assert.assertTrue((view as TextView).text.toString() == text)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
+        Assert.assertTrue(textView != null)
+        Assert.assertTrue(textView.text.toString() == text)
+        Assert.assertTrue(radioGroupView.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test
@@ -70,8 +72,9 @@ class `Test building RadioGroup view` {
         viewProperty.requiredStatus = "yes:Am required"
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(
-            (view as TextView).text.toString().isNotEmpty() && view.text.toString().endsWith("*")
+            textView.text.toString().isNotEmpty() && textView.text.toString().endsWith("*")
         )
     }
 
@@ -83,7 +86,7 @@ class `Test building RadioGroup view` {
         radioGroupViewBuilder.buildView()
         val view = radioGroupView.getChildAt(0)
         //First item is Label the rest are radio buttons
-        Assert.assertTrue(view is TextView)
+        Assert.assertTrue(view.findViewById<View>(R.id.labelTextView) is TextView)
         (1 until radioGroupView.childCount).forEach { i ->
             Assert.assertTrue(radioGroupView.getChildAt(i) is RadioButton)
         }
@@ -121,12 +124,8 @@ class `Test building RadioGroup view` {
         radioButton1.isChecked = true
 
         Assert.assertTrue(radioGroupView.viewDetails.value != null && (radioGroupView.viewDetails.value as HashMap<*, *>).size == 1)
-        Assert.assertTrue(
-            (radioGroupView.viewDetails.value as HashMap<*, *>).containsKey(
-                viewProperty.name
-            )
-        )
-        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>)[viewProperty.name]!! == radioButton1.text)
+        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
+        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>)["kotlin"]!! == radioButton1.text)
     }
 
     @Test

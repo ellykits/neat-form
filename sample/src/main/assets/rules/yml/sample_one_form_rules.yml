@@ -45,28 +45,35 @@ actions:
 name: "gender_visibility"
 description: "Ask gender"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "gender_visibility =  true"
+---
+name: "country_visibility"
+description: "Ask country"
+priority: 1
+condition: "email_subscription != null"
+actions:
+  - "country_visibility =  true"
 ---
 name: "no_prev_pregnancies_visibility"
 description: "Ask last pregnancies"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "no_prev_pregnancies_visibility =  true"
 ---
 name: "wiki_contribution_yes_visibility"
 description: "Ask contribution"
 priority: 1
-condition: "wiki_contribution != null && wiki_contribution['wiki_contribution'] == 'Yes'"
+condition: "wiki_contribution != null && wiki_contribution.containsKey('yes')"
 actions:
   - "wiki_contribution_yes_visibility = true"
 ---
 name: "wiki_contribution_visibility"
 description: "Wiki contribution"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "wiki_contribution_visibility =  true"
 ---

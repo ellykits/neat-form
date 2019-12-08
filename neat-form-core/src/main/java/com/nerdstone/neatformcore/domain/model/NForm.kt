@@ -9,6 +9,9 @@ class NForm : Serializable {
     @SerializedName("form")
     lateinit var formName: String
 
+    @SerializedName("form_version")
+    var formVersion: String? = null
+
     @SerializedName("rules_file")
     var rulesFile: String? = null
 
@@ -27,7 +30,6 @@ class NFormContent : Serializable {
 
     @SerializedName("fields")
     lateinit var fields: List<NFormViewProperty>
-
 
 }
 
@@ -52,7 +54,7 @@ class NFormViewProperty : Serializable {
     var requiredStatus: String? = null
 
     @SerializedName("validation")
-    var validations: String? = null
+    var validations: List<NFormFieldValidation>? = null
 
     @SerializedName("subjects")
     var subjects: String? = null
@@ -80,9 +82,18 @@ class NFormSubViewProperty : Serializable {
     @SerializedName("is_exclusive")
     var isExclusive: Boolean? = null
 
-    @SerializedName("metadata")
+    @SerializedName("meta_data")
     var viewMetadata: Map<String, Any>? = null
 
     @SerializedName("properties")
     var viewAttributes: Map<String, Any>? = null
+}
+
+class NFormFieldValidation : Serializable {
+
+    @SerializedName("condition")
+    var condition: String? = null
+
+    @SerializedName("message")
+    var message: String? = null
 }

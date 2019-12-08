@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building MultiChoiceCheckBox view` {
+class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxOption1 = spyk(NFormSubViewProperty())
@@ -55,7 +55,7 @@ class `Test building MultiChoiceCheckBox view` {
         checkBoxOption4.isExclusive = true
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
-
+        multiChoiceCheckBox.formValidator = this.formValidator
         multiChoiceCheckBox.viewProperties = viewProperty
     }
 
@@ -66,8 +66,9 @@ class `Test building MultiChoiceCheckBox view` {
         multiChoiceCheckBoxViewBuilder.buildView()
         val view = multiChoiceCheckBox.getChildAt(0)
 
-        Assert.assertTrue(view != null && view is TextView)
-        Assert.assertTrue((view as TextView).text.toString() == text)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
+        Assert.assertTrue(textView.text.toString() == text)
+        Assert.assertTrue(multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
     @Test
@@ -77,8 +78,9 @@ class `Test building MultiChoiceCheckBox view` {
         viewProperty.requiredStatus = "yes:Am required"
         multiChoiceCheckBoxViewBuilder.buildView()
         val view = multiChoiceCheckBox.getChildAt(0)
+        val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(
-            (view as TextView).text.toString().isNotEmpty() && view.text.toString().endsWith("*")
+            textView.text.toString().isNotEmpty() && textView.text.toString().endsWith("*")
         )
     }
 
@@ -91,7 +93,7 @@ class `Test building MultiChoiceCheckBox view` {
         multiChoiceCheckBoxViewBuilder.buildView()
         val view = multiChoiceCheckBox.getChildAt(0)
         //First item is Label the rest are checkboxes
-        Assert.assertTrue(view is TextView)
+        Assert.assertTrue(view.findViewById<View>(R.id.labelTextView) is TextView)
         (1 until multiChoiceCheckBox.childCount).forEach { i ->
             Assert.assertTrue(multiChoiceCheckBox.getChildAt(i) is CheckBox)
         }
