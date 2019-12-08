@@ -24,8 +24,8 @@
               "message": "value should be less than or equal to ten digits"
             }
           ],
-          "subjects": "age:number, child:text, dob:number",
-          "required_status": "Yes:please add username"
+          "subjects": "age:number, child:text",
+          "required_status": "Yes:please add phone number"
         },
         {
           "name": "age",
@@ -355,7 +355,7 @@
             }
           ],
           "subjects": "email_subscription:map",
-          "required_status": "no:Please specify the time you clocked in"
+          "required_status": "yes:Please number of previous pregnancy"
         },
         {
           "name": "delivery_methods",

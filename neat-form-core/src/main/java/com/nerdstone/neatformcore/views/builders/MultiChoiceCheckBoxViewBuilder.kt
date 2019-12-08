@@ -11,7 +11,6 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import java.util.*
-import kotlin.collections.HashMap
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 

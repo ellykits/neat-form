@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.views.containers
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.widget.LinearLayout
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener

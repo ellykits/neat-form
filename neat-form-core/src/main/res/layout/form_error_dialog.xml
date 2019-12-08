@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_rounded_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <FrameLayout
+        android:id="@+id/error_frame"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="5dp"
+        android:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dialog_error_circle" />
+
+        <ImageView
+            android:id="@+id/error_x"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="center"
+            android:src="@drawable/dialog_error_cross" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
+        android:text="Errors found"
+        android:textColor="@color/colorBlack"
+        android:textSize="19sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/content_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/error_dialog_content_margin"
+        android:gravity="center"
+        android:textColor="@color/colorDarkGrey"
+        android:text="Please fill in a valid value for all the required fields."
+        android:textAlignment="center"
+        android:textSize="@dimen/default_error_text_size"
+        android:visibility="visible" />
+
+
+    <Button
+        android:id="@+id/error_dialog_button"
+        style="@style/errorDialogButton"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:text="OK" />
+
+</LinearLayout>

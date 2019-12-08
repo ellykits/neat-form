@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener

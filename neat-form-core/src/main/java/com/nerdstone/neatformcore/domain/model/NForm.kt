@@ -9,6 +9,9 @@ class NForm : Serializable {
     @SerializedName("form")
     lateinit var formName: String
 
+    @SerializedName("form_version")
+    var formVersion: String? = null
+
     @SerializedName("rules_file")
     var rulesFile: String? = null
 

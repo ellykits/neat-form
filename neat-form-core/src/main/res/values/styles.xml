@@ -1,32 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="labelStyle" parent="android:Widget.TextView">
-    <item name="android:textStyle">bold</item>
-    <item name="android:textColor">@color/colorDark</item>
-    <item name="android:textSize">@dimen/defaultTextSize</item>
-    <item name="android:layout_marginBottom">@dimen/verticalMargin</item>
-  </style>
+    <style name="labelStyle" parent="android:Widget.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorDark</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
+    </style>
 
-  <style name="checkBoxStyle" parent="android:Widget.CompoundButton.CheckBox">
-    <item name="android:textSize">@dimen/defaultTextSize</item>
-    <item name="android:layout_marginStart">0dp</item>
-    <item name="android:textColor">@color/colorBlack</item>
-  </style>
+    <style name="checkBoxStyle" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
 
-  <style name="radioButtonStyle" parent="android:Widget.CompoundButton.RadioButton">
-    <item name="android:textSize">@dimen/defaultTextSize</item>
-    <item name="android:layout_marginStart">0dp</item>
-    <item name="android:textColor">@color/colorBlack</item>
-  </style>
+    <style name="radioButtonStyle" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
 
-  <style name="editTextStyle" parent="android:Widget.EditText">
-    <item name="android:textSize">@dimen/defaultTextSize</item>
-    <item name="android:layout_marginStart">0dp</item>
-    <item name="android:paddingEnd">8dp</item>
-    <item name="android:paddingStart">8dp</item>
-  </style>
+    <style name="editTextStyle" parent="android:Widget.EditText">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
 
-  <!-- Base application theme for Test -->
-  <style name="CustomTestTheme" parent="Theme.AppCompat" />
+    <style name="errorDialogButton" parent="android:Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">@drawable/error_button_background</item>
+        <item name="android:textSize">@dimen/default_error_text_size</item>
+        <item name="android:paddingLeft">@dimen/error_button_padding</item>
+        <item name="android:paddingRight">@dimen/error_button_padding</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="ErrorDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@color/colorTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowAnimationStyle">@style/ErrorDialogAnimation</item>
+    </style>
+
+    <style name="ErrorDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/modal_in</item>
+        <item name="android:windowExitAnimation">@anim/modal_out</item>
+    </style>
+
+    <!-- Base application theme for Test -->
+    <style name="CustomTestTheme" parent="Theme.AppCompat" />
 </resources>

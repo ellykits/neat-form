@@ -14,6 +14,4 @@ interface FormValidator {
 
     fun validateLabeledField(nFormView: NFormView): Boolean
 
-    fun isRequiredFieldMissing(nFormView: NFormView): Boolean
-
 }

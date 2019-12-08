@@ -35,18 +35,27 @@ class NeatFormValidator private constructor() : FormValidator {
     override val invalidFields = hashSetOf<String>()
     override val requiredFields = hashSetOf<String>()
 
+    /***
+     * Validates only visible fields
+     * @param nFormView view to be validated
+     * @return [Pair] of true if validation succeeds and a string of the error message
+     */
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
-        if (isRequiredFieldMissing(nFormView)) {
-            invalidFields.add(nFormView.viewDetails.name)
-            val errorMessage =
-                nFormView.viewProperties.requiredStatus?.also { Utils.extractKeyValue(it).second }
-            return Pair(false, errorMessage)
-        }
-        if (nFormView.viewProperties.validations != null) {
-            nFormView.viewProperties.validations?.forEach { validation ->
-                if (!performValidation(validation, nFormView.viewDetails.value)) {
-                    invalidFields.add(nFormView.viewDetails.name)
-                    return Pair(false, validation.message)
+        if (nFormView.viewDetails.view.visibility == View.VISIBLE) {
+            if (nFormView.viewDetails.value == null && Utils.isFieldRequired(nFormView)) {
+                invalidFields.add(nFormView.viewDetails.name)
+                val errorMessage =
+                    nFormView.viewProperties.requiredStatus?.let {
+                        Utils.extractKeyValue(it).second
+                    }
+                return Pair(false, errorMessage)
+            }
+            if (nFormView.viewProperties.validations != null) {
+                nFormView.viewProperties.validations?.forEach { validation ->
+                    if (!performValidation(validation, nFormView.viewDetails.value)) {
+                        invalidFields.add(nFormView.viewDetails.name)
+                        return Pair(false, validation.message)
+                    }
                 }
             }
         }
@@ -112,14 +121,8 @@ class NeatFormValidator private constructor() : FormValidator {
         val viewModel =
             ViewModelProviders.of(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
         return viewModel.details.mapValuesTo(mutableMapOf(), { entry ->
-            entry.value.value
+            entry.value
         })
-    }
-
-    override fun isRequiredFieldMissing(nFormView: NFormView): Boolean {
-        if (Utils.isFieldRequired(nFormView) && requiredFields.contains(nFormView.viewDetails.name))
-            return getFormData()[nFormView.viewDetails.name] == null
-        return false
     }
 
     companion object {

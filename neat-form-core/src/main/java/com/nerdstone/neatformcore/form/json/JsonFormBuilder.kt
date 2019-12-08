@@ -23,13 +23,14 @@ import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
+import com.nerdstone.neatformcore.form.common.FormErrorDialog
+import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
 import com.nerdstone.neatformcore.utils.CoroutineContextProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
-import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -206,7 +207,11 @@ class JsonFormBuilder() : FormBuilder {
     }
 
     override fun getFormDetails(): HashMap<String, NFormViewData> {
-        return viewModel.details
+        if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
+            return viewModel.details
+        }
+        FormErrorDialog(context).show()
+        return hashMapOf()
     }
 
 }

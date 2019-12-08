@@ -45,21 +45,21 @@ actions:
 name: "gender_visibility"
 description: "Ask gender"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "gender_visibility =  true"
 ---
 name: "country_visibility"
 description: "Ask country"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "country_visibility =  true"
 ---
 name: "no_prev_pregnancies_visibility"
 description: "Ask last pregnancies"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "no_prev_pregnancies_visibility =  true"
 ---
@@ -73,7 +73,7 @@ actions:
 name: "wiki_contribution_visibility"
 description: "Wiki contribution"
 priority: 1
-condition: "email_subscription['email_subscription'] != null"
+condition: "email_subscription != null"
 actions:
   - "wiki_contribution_visibility =  true"
 ---

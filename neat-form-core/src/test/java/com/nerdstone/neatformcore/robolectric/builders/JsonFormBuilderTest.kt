@@ -38,6 +38,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -267,6 +268,7 @@ class `Test building form with JSON` {
     }
 
     @Test
+    @Ignore("Will be creating a test for this separately")
     fun `Should update the FormDetails when value changes`() =
         runBlockingTest {
             jsonFormBuilder = spyk(

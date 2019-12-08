@@ -32,7 +32,7 @@
             }
           ],
           "subjects": "age:number, child:text, dob:number",
-          "required_status": "True:please add username"
+          "required_status": "True:please add phone number"
         },
         {
           "name": "age",

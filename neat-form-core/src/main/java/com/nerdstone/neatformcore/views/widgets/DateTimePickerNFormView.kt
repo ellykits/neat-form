@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
@@ -45,7 +44,11 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
     override fun validateValue(): Boolean {
-        return formValidator.validateField(this).first
+        val validationPair = formValidator.validateField(this)
+        if (!validationPair.first) {
+            this.error = validationPair.second
+        } else this.error = null
+        return validationPair.first
     }
 
     override fun setVisibility(visibility: Int) {
