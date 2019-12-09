@@ -5,6 +5,7 @@ import android.widget.AdapterView
 import android.widget.LinearLayout
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.ThemeColor
 import com.nerdstone.neatformcore.utils.Utils
@@ -17,6 +18,7 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     private val spinnerNFormView = nFormView as SpinnerNFormView
     private val spinnerOptions = mutableListOf<String>()
     private val materialSpinner = SmartMaterialSpinner<String>(spinnerNFormView.context)
+    private val optionsNamesMap = hashMapOf<Int, String>()
 
     enum class SpinnerProperties {
         TEXT, SEARCHABLE
@@ -54,7 +56,10 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     private fun addSpinnerOptions() {
         val options = spinnerNFormView.viewProperties.options
         options?.also {
-            options.forEach { spinnerOptions.add(it.text) }
+            options.forEachIndexed { index, subViewProperty ->
+                spinnerOptions.add(subViewProperty.text)
+                optionsNamesMap[index] = subViewProperty.name
+            }
         }
 
         val params = LinearLayout.LayoutParams(
@@ -73,8 +78,16 @@ class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                 override fun onItemSelected(
                     adapterView: AdapterView<*>, view: View, position: Int, id: Long
                 ) {
-                        spinnerNFormView.viewDetails.value = item[position]
-                        spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
+                    spinnerNFormView.viewDetails.value =
+                        NFormViewData(
+                            type = null,
+                            value = item[position],
+                            metadata = optionsNamesMap[position]?.let {
+                                Utils.getOptionMetadata(spinnerNFormView, it)
+                            }
+
+                        )
+                    spinnerNFormView.dataActionListener?.onPassData(spinnerNFormView.viewDetails)
                 }
 
                 override fun onNothingSelected(adapterView: AdapterView<*>) {

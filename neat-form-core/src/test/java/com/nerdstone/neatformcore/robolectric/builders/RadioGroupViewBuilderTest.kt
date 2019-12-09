@@ -3,10 +3,10 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
@@ -17,7 +17,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -29,7 +28,6 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
     private val radioOption1 = spyk(NFormSubViewProperty())
     private val radioOption2 = spyk(NFormSubViewProperty())
     private val radioOption3 = spyk(NFormSubViewProperty())
-    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val radioGroupView = RadioGroupView(activity.get())
     private val radioGroupViewBuilder = spyk(RadioGroupViewBuilder(radioGroupView))
 
@@ -125,7 +123,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
 
         Assert.assertTrue(radioGroupView.viewDetails.value != null && (radioGroupView.viewDetails.value as HashMap<*, *>).size == 1)
         Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        Assert.assertTrue((radioGroupView.viewDetails.value as HashMap<*, *>)["kotlin"]!! == radioButton1.text)
+        Assert.assertTrue(((radioGroupView.viewDetails.value as HashMap<*, *>)["kotlin"]!! as NFormViewData).value == radioButton1.text)
     }
 
     @Test

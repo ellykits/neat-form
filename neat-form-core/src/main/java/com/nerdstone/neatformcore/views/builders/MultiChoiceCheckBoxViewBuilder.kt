@@ -5,6 +5,7 @@ import android.widget.CheckBox
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -15,7 +16,7 @@ import java.util.*
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
-    private var valuesMap: HashMap<String, String?>? = null
+    private var valuesMap: HashMap<String, NFormViewData?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
         TEXT
@@ -57,16 +58,28 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_checkbox_option, true)
             ViewUtils.applyCheckBoxStyle(multiChoiceCheckBox.context, checkBox)
-            setOnCheckedChangeListener { buttonView, isChecked ->
+            setOnCheckedChangeListener { compoundButton, isChecked ->
+                if (valuesMap == null) {
+                    valuesMap = hashMapOf()
+                }
                 if (isChecked) {
-                    multiChoiceCheckBox.viewDetails.value =
-                        mutableMapOf(buttonView.getTag(R.id.field_name) to buttonView.text.toString())
+                    valuesMap?.put(
+                        compoundButton.getTag(R.id.field_name) as String,
+                        NFormViewData(
+                            type = null,
+                            value = compoundButton.text.toString(),
+                            metadata = Utils.getOptionMetadata(
+                                multiChoiceCheckBox,
+                                compoundButton.getTag(R.id.field_name) as String
+                            )
+                        )
+                    )
                     handleExclusiveChecks(this)
                 } else {
-                    multiChoiceCheckBox.viewDetails.value =
-                        mutableMapOf(buttonView.getTag(R.id.field_name) to null)
+                    valuesMap?.put(compoundButton.getTag(R.id.field_name) as String, null)
                 }
-                handleCheckBoxValues(this)
+                multiChoiceCheckBox.viewDetails.value = valuesMap
+                multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
             }
 
             if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
@@ -74,25 +87,6 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             }
         }
         multiChoiceCheckBox.addView(checkBox)
-    }
-
-    /**
-     * Save the name of the checkbox option plus the label as key-value pair when the checkbox
-     * is selected
-     */
-    private fun handleCheckBoxValues(checkBox: CheckBox) {
-        val nameTag = checkBox.getTag(R.id.field_name) as String
-        if (valuesMap == null) {
-            valuesMap = hashMapOf()
-        }
-        if (checkBox.isChecked) {
-            valuesMap?.put(nameTag, checkBox.text.toString())
-        } else {
-            valuesMap?.put(nameTag, null)
-        }
-
-        multiChoiceCheckBox.viewDetails.value = valuesMap
-        multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)
     }
 
     /**

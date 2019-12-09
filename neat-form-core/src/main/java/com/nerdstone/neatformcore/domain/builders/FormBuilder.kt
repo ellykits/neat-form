@@ -36,8 +36,10 @@ interface FormBuilder {
         context: Context, rulesFileType: RulesFactory.RulesFileType
     ): Boolean
 
-    fun getFormDetails(): HashMap<String, NFormViewData>
+    fun getFormData(): HashMap<String, NFormViewData>
 
     fun getFormMetaData(): Map<String, Any>
+
+    fun getFormDataAsJson(): String
 
 }

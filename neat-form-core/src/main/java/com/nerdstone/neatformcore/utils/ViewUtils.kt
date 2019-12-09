@@ -217,7 +217,6 @@ object ViewUtils {
             ) {
                 formValidator.requiredFields.add(nFormView.viewDetails.name)
             } else {
-                formValidator.invalidFields.remove(it)
                 formValidator.requiredFields.remove(it)
             }
         }

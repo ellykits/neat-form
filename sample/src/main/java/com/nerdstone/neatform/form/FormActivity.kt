@@ -22,7 +22,6 @@ import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.utils.Utils
 import timber.log.Timber
 
-
 class FormActivity : AppCompatActivity(), StepperActions {
 
     private lateinit var formLayout: LinearLayout
@@ -62,12 +61,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
-                    if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+                    if (formBuilder?.getFormDataAsJson() != "") {
                         Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-                        Timber.d(
-                            "Saved Data = %s",
-                            Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
-                        )
+                        Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
                         finish()
                     }
                 }
@@ -118,9 +114,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onStepComplete(step: Step) {
-        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+        if (formBuilder?.getFormDataAsJson() != "") {
             Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
             finish()
         }
     }
@@ -137,9 +133,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onCompleteStepper() {
-        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+        if (formBuilder?.getFormDataAsJson() != "") {
             Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
             finish()
         }
     }

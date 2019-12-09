@@ -7,12 +7,14 @@ import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import org.robolectric.Robolectric
+import org.robolectric.android.controller.ActivityController
 
 
 open class BaseJsonViewBuilderTest {
-    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    protected val activity: ActivityController<AppCompatActivity> =
+        Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: ViewGroup = LinearLayout(activity.get())
-    private val formBuilder = JsonFormBuilder(TestConstants.SAMPLE_JSON, activity.get(), mainLayout)
+    var formBuilder = JsonFormBuilder(TestConstants.SAMPLE_JSON, activity.get(), mainLayout)
     val formValidator = NeatFormValidator.INSTANCE
 
     init {

@@ -27,26 +27,37 @@ import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
-import com.nerdstone.neatformcore.utils.CoroutineContextProvider
+import com.nerdstone.neatformcore.utils.DefaultDispatcherProvider
+import com.nerdstone.neatformcore.utils.DispatcherProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+
+object JsonFormConstants {
+    const val FORM_VERSION = "form_version"
+    const val FORM_METADATA = "form_metadata"
+    const val FORM_DATA = "form_data"
+    const val FORM_NAME = "form_name"
+}
 
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder() : FormBuilder {
-
+class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
     private val singleRunner = SingleRunner()
-    var coroutineContextProvider: CoroutineContextProvider
+    var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
     override var jsonString: String? = null
@@ -79,34 +90,45 @@ class JsonFormBuilder() : FormBuilder {
     init {
         rulesHandler.formBuilder = this
         formValidator.formBuilder = this
-        coroutineContextProvider = CoroutineContextProvider.Default()
+        defaultContextProvider = DefaultDispatcherProvider()
     }
 
     override fun buildForm(
         jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
-        GlobalScope.launch(coroutineContextProvider.main) {
-            if (form == null) {
-                val async = async(coroutineContextProvider.default) {
-                    singleRunner.afterPrevious {
-                        parseJsonForm()
+        launch(defaultContextProvider.main()) {
+            coroutineScope {
+                try {
+                    if (form == null) {
+                        form = withContext(defaultContextProvider.default()) {
+                            singleRunner.afterPrevious {
+                                parseJsonForm()
+                            }
+                        }
                     }
-                }
-                form = async.await()
-            }
-            launch(coroutineContextProvider.main) {
-                val rulesAsync = async {
-                    singleRunner.afterPrevious {
-                        registerFormRulesFromFile(context, RulesFileType.YAML)
+                    launch {
+                        val rulesAsync = withContext(defaultContextProvider.io()) {
+                            singleRunner.afterPrevious {
+                                registerFormRulesFromFile(context, RulesFileType.YAML)
+                            }
+                        }
+                        if (rulesAsync) {
+                            launch {
+                                withContext(defaultContextProvider.main()) {
+                                    if (viewList == null)
+                                        createFormViews(
+                                            context,
+                                            arrayListOf(),
+                                            jsonFormStepBuilderModel
+                                        )
+                                    else
+                                        createFormViews(context, viewList, jsonFormStepBuilderModel)
+                                }
+                            }
+                        }
                     }
-                }
-                if (rulesAsync.await()) {
-                    launch(coroutineContextProvider.main) {
-                        if (viewList == null)
-                            createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
-                        else
-                            createFormViews(context, viewList, jsonFormStepBuilderModel)
-                    }
+                } catch (throwable: Throwable) {
+                    Timber.e(throwable)
                 }
             }
         }
@@ -196,6 +218,22 @@ class JsonFormBuilder() : FormBuilder {
         return form?.formMetadata ?: mutableMapOf()
     }
 
+    override fun getFormDataAsJson(): String {
+        if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
+
+            val formDetails = hashMapOf<String, Any?>().also {
+                it[JsonFormConstants.FORM_NAME] = form?.formName
+                it[JsonFormConstants.FORM_METADATA] = form?.formMetadata
+                it[JsonFormConstants.FORM_VERSION] = form?.formVersion
+                it[JsonFormConstants.FORM_DATA] = viewModel.details
+            }
+
+            return Utils.getJsonFromModel(formDetails)
+        }
+        FormErrorDialog(context).show()
+        return ""
+    }
+
     override fun registerFormRulesFromFile(
         context: Context,
         rulesFileType: RulesFileType
@@ -206,7 +244,7 @@ class JsonFormBuilder() : FormBuilder {
         return true
     }
 
-    override fun getFormDetails(): HashMap<String, NFormViewData> {
+    override fun getFormData(): HashMap<String, NFormViewData> {
         if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
             return viewModel.details
         }

@@ -1,7 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -15,7 +14,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -24,8 +22,6 @@ import org.robolectric.annotation.Config
 class `Test building EditText view`: BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val activity = Robolectric.buildActivity(
-        AppCompatActivity::class.java).setup()
     private val editTextNFormView =  EditTextNFormView(activity.get())
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
     private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)

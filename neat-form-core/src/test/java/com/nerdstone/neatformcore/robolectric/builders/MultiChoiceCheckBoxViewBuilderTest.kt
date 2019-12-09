@@ -3,10 +3,10 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
@@ -17,20 +17,18 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
+class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxOption1 = spyk(NFormSubViewProperty())
     private val checkBoxOption2 = spyk(NFormSubViewProperty())
     private val checkBoxOption3 = spyk(NFormSubViewProperty())
     private val checkBoxOption4 = spyk(NFormSubViewProperty())
-    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val multiChoiceCheckBox = MultiChoiceCheckBox(activity.get())
     private val multiChoiceCheckBoxViewBuilder =
         spyk(MultiChoiceCheckBoxViewBuilder(multiChoiceCheckBox))
@@ -131,14 +129,19 @@ class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
 
         Assert.assertTrue(multiChoiceCheckBox.viewDetails.value != null && (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).size == 2)
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["kotlin"]!! == checkBox1.text)
+        val nFormViewData1 =
+            (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["kotlin"]!! as NFormViewData
+        Assert.assertTrue(nFormViewData1.value == checkBox1.text)
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("java"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["java"]!! == checkBox2.text)
+        val nFormViewData2 =
+            (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["java"]!! as NFormViewData
+        Assert.assertTrue(nFormViewData2.value == checkBox2.text)
 
         //When  first checkbox is deselected then the value should be set to null
         checkBox1.isChecked = false
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<String, String?>)["kotlin"] == null)
+        val valueMap = multiChoiceCheckBox.viewDetails.value as HashMap<String, NFormViewData?>
+        Assert.assertTrue(valueMap["kotlin"]?.value == null)
     }
 
     @Test
@@ -161,15 +164,15 @@ class `Test building MultiChoiceCheckBox view`: BaseJsonViewBuilderTest() {
         //Since checkbox 3 is exclusive and can only be selected independently the other value must be reset to null
         Assert.assertTrue(multiChoiceCheckBox.viewDetails.value != null && (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).size == 3)
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, String?>)["kotlin"] == null)
-        Assert.assertTrue(!checkBox1.isChecked)
+        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["kotlin"] == null)
+        Assert.assertFalse(checkBox1.isChecked)
 
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("none"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, String?>)["none"] == null)
-        Assert.assertTrue(!checkBox4.isChecked)
+        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["none"] == null)
+        Assert.assertFalse(checkBox4.isChecked)
 
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("dont_know"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, String?>)["dont_know"] == "Don't know")
+        Assert.assertTrue(((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["dont_know"] as NFormViewData).value == "Don't know")
 
     }
 
