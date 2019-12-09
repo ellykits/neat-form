@@ -62,11 +62,11 @@ class FormActivity : AppCompatActivity(), StepperActions {
 
             completeButton.setOnClickListener {
                 if (it.id == R.id.completeButton) {
-                    if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+                    if (formBuilder?.getFormData()!!.isNotEmpty()) {
                         Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
                         Timber.d(
                             "Saved Data = %s",
-                            Utils.getJsonFromModel(formBuilder?.getFormDetails()!!)
+                            Utils.getJsonFromModel(formBuilder?.getFormData()!!)
                         )
                         finish()
                     }
@@ -118,9 +118,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onStepComplete(step: Step) {
-        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+        if (formBuilder?.getFormData()!!.isNotEmpty()) {
             Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormData()!!))
             finish()
         }
     }
@@ -137,9 +137,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     }
 
     override fun onCompleteStepper() {
-        if (formBuilder?.getFormDetails()!!.isNotEmpty()) {
+        if (formBuilder?.getFormData()!!.isNotEmpty()) {
             Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormDetails()!!))
+            Timber.d("Saved Data = %s", Utils.getJsonFromModel(formBuilder?.getFormData()!!))
             finish()
         }
     }

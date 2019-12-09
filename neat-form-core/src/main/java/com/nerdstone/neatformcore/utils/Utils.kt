@@ -67,4 +67,10 @@ object Utils {
     fun getJsonFromModel(model: Any): String = GsonBuilder()
         .excludeFieldsWithoutExposeAnnotation()
         .create().toJson(model)
+
+    fun getOptionMetadata(nFormView: NFormView, optionName: String): Map<String, Any>? {
+       return nFormView.viewProperties.options?.first { option ->
+            option.name == optionName
+        }?.viewMetadata
+    }
 }

@@ -6,6 +6,7 @@ import android.widget.RadioButton
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -59,7 +60,17 @@ class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             setOnCheckedChangeListener { radioButton, isChecked ->
                 if (isChecked) {
                     radioGroupView.viewDetails.value =
-                        mutableMapOf(radioButton.getTag(R.id.field_name) to radioButton.text.toString())
+                        mutableMapOf(
+                            radioButton.getTag(R.id.field_name) to
+                                    NFormViewData(
+                                        type = null,
+                                        value = radioButton.text.toString(),
+                                        metadata = Utils.getOptionMetadata(
+                                            radioGroupView,
+                                            radioButton.getTag(R.id.field_name) as String
+                                        )
+                                    )
+                        )
                     handleExclusiveChecks(this, radioButton.getTag(R.id.field_name) as String)
                     radioGroupView.dataActionListener?.onPassData(radioGroupView.viewDetails)
                 }

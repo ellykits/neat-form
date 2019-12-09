@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class NFormViewData(
     @Expose
-    var type: String,
+    var type: String? = null,
     @Expose
     var value: Any? = null,
     @Expose

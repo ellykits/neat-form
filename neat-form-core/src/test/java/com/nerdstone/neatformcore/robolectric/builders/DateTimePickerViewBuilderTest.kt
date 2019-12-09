@@ -1,7 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import androidx.test.core.app.ApplicationProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
@@ -21,8 +20,7 @@ import org.robolectric.annotation.Config
 class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val dateTimePickerNFormView =
-        DateTimePickerNFormView(ApplicationProvider.getApplicationContext())
+    private val dateTimePickerNFormView = DateTimePickerNFormView(activity.get())
     private val dateTimePickerViewBuilder = spyk(
         objToCopy = DateTimePickerViewBuilder(dateTimePickerNFormView),
         recordPrivateCalls = true
