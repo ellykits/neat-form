@@ -34,9 +34,12 @@ import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 object JsonFormConstants {
     const val FORM_VERSION = "form_version"
@@ -48,8 +51,7 @@ object JsonFormConstants {
 /***
  * @author Elly Nerdstone
  */
-class JsonFormBuilder() : FormBuilder {
-
+class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -94,28 +96,39 @@ class JsonFormBuilder() : FormBuilder {
     override fun buildForm(
         jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
-        GlobalScope.launch(defaultContextProvider.main()) {
-            if (form == null) {
-                val async = async(defaultContextProvider.default()) {
-                    singleRunner.afterPrevious {
-                        parseJsonForm()
+        launch(defaultContextProvider.main()) {
+            coroutineScope {
+                try {
+                    if (form == null) {
+                        form = withContext(defaultContextProvider.default()) {
+                            singleRunner.afterPrevious {
+                                parseJsonForm()
+                            }
+                        }
                     }
-                }
-                form = async.await()
-            }
-            launch(defaultContextProvider.main()) {
-                val rulesAsync = async {
-                    singleRunner.afterPrevious {
-                        registerFormRulesFromFile(context, RulesFileType.YAML)
+                    launch {
+                        val rulesAsync = withContext(defaultContextProvider.io()) {
+                            singleRunner.afterPrevious {
+                                registerFormRulesFromFile(context, RulesFileType.YAML)
+                            }
+                        }
+                        if (rulesAsync) {
+                            launch {
+                                withContext(defaultContextProvider.main()) {
+                                    if (viewList == null)
+                                        createFormViews(
+                                            context,
+                                            arrayListOf(),
+                                            jsonFormStepBuilderModel
+                                        )
+                                    else
+                                        createFormViews(context, viewList, jsonFormStepBuilderModel)
+                                }
+                            }
+                        }
                     }
-                }
-                if (rulesAsync.await()) {
-                    launch(defaultContextProvider.main()) {
-                        if (viewList == null)
-                            createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
-                        else
-                            createFormViews(context, viewList, jsonFormStepBuilderModel)
-                    }
+                } catch (throwable: Throwable) {
+                    Timber.e(throwable)
                 }
             }
         }

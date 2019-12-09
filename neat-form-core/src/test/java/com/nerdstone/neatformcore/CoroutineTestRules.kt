@@ -4,6 +4,7 @@ import com.nerdstone.neatformcore.utils.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -30,5 +31,6 @@ class CoroutineTestRule(val testDispatcher: TestCoroutineDispatcher = TestCorout
         super.finished(description)
         Dispatchers.resetMain()
         testDispatcher.cleanupTestCoroutines()
+        testDispatcher.cancelChildren()
     }
 }
