@@ -6,14 +6,14 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.google.android.material.textfield.TextInputLayout
-import com.nerdstone.neatformcore.TestCoroutineContextProvider
+import com.nerdstone.neatformcore.CoroutineTestRule
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormConstants
-import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
@@ -22,16 +22,14 @@ import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -186,49 +184,43 @@ const val VALIDATION_FORM = """
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test form validation ` : BaseJsonViewBuilderTest() {
+@ExperimentalCoroutinesApi
+class `Test form validation ` {
 
-    private val testDispatcher = TestCoroutineDispatcher()
-
-    private lateinit var editTextNFormView: TextInputEditTextNFormView
-    private lateinit var checkBoxNFormView: CheckBoxNFormView
-    private lateinit var spinnerNFormView: SpinnerNFormView
-    private lateinit var multiChoiceCheckBox: MultiChoiceCheckBox
-    private lateinit var radioGroupView: RadioGroupView
-    private lateinit var numberSelectorNFormView: NumberSelectorNFormView
-    @Before
-    fun `Before everything else`() {
-        Dispatchers.setMain(testDispatcher)
-    }
+    @get:Rule
+    var coroutinesTestRule = CoroutineTestRule()
+    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+    private val mainLayout: LinearLayout = LinearLayout(activity.get())
+    private lateinit var formBuilder: JsonFormBuilder
 
     @Test
-    fun `Should display error message and return empty map when required fields are missing`() {
-        runBlockingTest {
+    fun `Should display error message and return empty map when required fields are missing`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
-            formBuilder.coroutineContextProvider = TestCoroutineContextProvider()
-            formBuilder.buildForm()
+            formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
+            launch { formBuilder.buildForm() }.join()
+
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
             Assert.assertTrue(formBuilder.getFormDataAsJson() == "")
             Assert.assertTrue(formBuilder.formValidator.requiredFields.size == 6)
         }
-    }
 
     @Test
-    fun `Should display error message when there is invalid input`() {
-        runBlockingTest {
+    fun `Should display error message when there is invalid input`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
-            formBuilder.coroutineContextProvider = TestCoroutineContextProvider()
-            formBuilder.buildForm()
+            formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
+            launch { formBuilder.buildForm() }.join()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
+            val editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
 
             (editTextNFormView.viewDetails.view as TextInputLayout).editText?.setText("90091239009123")
             editTextNFormView.viewDetails.view.visibility =
@@ -239,12 +231,10 @@ class `Test form validation ` : BaseJsonViewBuilderTest() {
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
         }
 
-    }
-
     @Test
-    fun `Should return valid form data when validation succeeds`() {
-        updateViewValues()
-        runBlockingTest {
+    fun `Should return valid form data when validation succeeds`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            updateViewValues()
             Assert.assertTrue(formBuilder.getFormData().isNotEmpty())
             Assert.assertTrue(formBuilder.getFormData().size == 6)
             Assert.assertTrue(formBuilder.getFormData().containsKey("adult"))
@@ -254,12 +244,11 @@ class `Test form validation ` : BaseJsonViewBuilderTest() {
             Assert.assertTrue(formBuilder.getFormData().containsKey("wiki_contribution"))
             Assert.assertTrue(formBuilder.getFormData().containsKey("no_prev_pregnancies"))
         }
-    }
 
     @Test
-    fun `Should return field values with their metadata`() {
-        updateViewValues()
-        runBlockingTest {
+    fun `Should return field values with their metadata`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            updateViewValues()
             val formData = formBuilder.getFormData()
             Assert.assertTrue(formData["adult"]?.metadata != null && formData["adult"]?.value == "1234567890")
             Assert.assertTrue(
@@ -276,38 +265,36 @@ class `Test form validation ` : BaseJsonViewBuilderTest() {
             )
             Assert.assertTrue(formData["no_prev_pregnancies"]?.value == 2)
         }
-    }
 
     @Test
-    fun `Should return json string of form values`() {
-        updateViewValues()
-        runBlockingTest {
+    fun `Should return json string of form values`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            updateViewValues()
             Assert.assertNotNull(formBuilder.getFormDataAsJson())
             Assert.assertTrue(formBuilder.getFormDataAsJson().contains(JsonFormConstants.FORM_NAME))
             Assert.assertTrue(formBuilder.getFormDataAsJson().contains(JsonFormConstants.FORM_DATA))
         }
-    }
 
     /**
      * Update values of the views and trigger the trackRequireFields method by changing their visibility
      */
     private fun updateViewValues() {
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
-            formBuilder.coroutineContextProvider = TestCoroutineContextProvider()
-            formBuilder.buildForm()
+            formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
+            launch { formBuilder.buildForm() }.join()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
-            checkBoxNFormView = verticalRootView.getChildAt(1) as CheckBoxNFormView
-            spinnerNFormView = verticalRootView.getChildAt(2) as SpinnerNFormView
-            multiChoiceCheckBox = verticalRootView.getChildAt(3) as MultiChoiceCheckBox
-            radioGroupView = verticalRootView.getChildAt(4) as RadioGroupView
-            numberSelectorNFormView = verticalRootView.getChildAt(5) as NumberSelectorNFormView
+            val editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
+            val checkBoxNFormView = verticalRootView.getChildAt(1) as CheckBoxNFormView
+            val spinnerNFormView = verticalRootView.getChildAt(2) as SpinnerNFormView
+            val multiChoiceCheckBox = verticalRootView.getChildAt(3) as MultiChoiceCheckBox
+            val radioGroupView = verticalRootView.getChildAt(4) as RadioGroupView
+            val numberSelectorNFormView = verticalRootView.getChildAt(5) as NumberSelectorNFormView
 
             (editTextNFormView.viewDetails.view as TextInputLayout).editText?.setText("1234567890")
             editTextNFormView.viewDetails.view.visibility = View.VISIBLE
@@ -333,12 +320,6 @@ class `Test form validation ` : BaseJsonViewBuilderTest() {
             textView3.performClick()
             numberSelectorNFormView.viewDetails.view.visibility = View.VISIBLE
         }
-    }
-
-    @After
-    fun `Tearing everything down`() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
 
 }

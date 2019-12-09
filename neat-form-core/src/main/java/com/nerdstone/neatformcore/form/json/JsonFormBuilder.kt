@@ -27,7 +27,8 @@ import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
-import com.nerdstone.neatformcore.utils.CoroutineContextProvider
+import com.nerdstone.neatformcore.utils.DefaultDispatcherProvider
+import com.nerdstone.neatformcore.utils.DispatcherProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
@@ -54,7 +55,7 @@ class JsonFormBuilder() : FormBuilder {
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
     private val singleRunner = SingleRunner()
-    var coroutineContextProvider: CoroutineContextProvider
+    var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
     override var jsonString: String? = null
@@ -87,29 +88,29 @@ class JsonFormBuilder() : FormBuilder {
     init {
         rulesHandler.formBuilder = this
         formValidator.formBuilder = this
-        coroutineContextProvider = CoroutineContextProvider.Default()
+        defaultContextProvider = DefaultDispatcherProvider()
     }
 
     override fun buildForm(
         jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
-        GlobalScope.launch(coroutineContextProvider.main) {
+        GlobalScope.launch(defaultContextProvider.main()) {
             if (form == null) {
-                val async = async(coroutineContextProvider.default) {
+                val async = async(defaultContextProvider.default()) {
                     singleRunner.afterPrevious {
                         parseJsonForm()
                     }
                 }
                 form = async.await()
             }
-            launch(coroutineContextProvider.main) {
+            launch(defaultContextProvider.main()) {
                 val rulesAsync = async {
                     singleRunner.afterPrevious {
                         registerFormRulesFromFile(context, RulesFileType.YAML)
                     }
                 }
                 if (rulesAsync.await()) {
-                    launch(coroutineContextProvider.main) {
+                    launch(defaultContextProvider.main()) {
                         if (viewList == null)
                             createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
                         else

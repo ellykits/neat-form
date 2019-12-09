@@ -12,9 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
+import com.nerdstone.neatformcore.CoroutineTestRule
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
-import com.nerdstone.neatformcore.TestCoroutineContextProvider
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.FRAGMENT_VIEW
@@ -30,15 +30,10 @@ import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Ignore
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -47,26 +42,22 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
+@ExperimentalCoroutinesApi
 class `Test building form with JSON` {
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private lateinit var jsonFormBuilder: JsonFormBuilder
-
-    private val testDispatcher = TestCoroutineDispatcher()
-
-    @Before
-    fun `Before everything else`() {
-        Dispatchers.setMain(testDispatcher)
-    }
+    @get:Rule
+    var coroutinesTestRule = CoroutineTestRule()
 
     @Test
     fun `Should parse json from file source, create views and register form rules`() =
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
-            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             jsonFormBuilder.buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
@@ -95,13 +86,14 @@ class `Test building form with JSON` {
             Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
             Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
         }
+
     @Test
     fun `Should parse json from json string, create views and register form rules`() =
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(TestConstants.SAMPLE_JSON.trimIndent(), activity.get(), mainLayout)
             )
-            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             jsonFormBuilder.buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
@@ -132,11 +124,11 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json from file source, update views from provided layout view with form rules`() =
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
-            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             val inflater =
                 activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -158,13 +150,13 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build default form (in vertical layout) with using stepper library`() =
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
             jsonFormBuilder = spyk(
                 objToCopy =
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_TWO_FORM_FILE, mainLayout),
                 recordPrivateCalls = true
             )
-            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             val stepperModel = StepperModel.Builder()
                 .toolbarColorResource(R.color.colorBlack)
                 .build()
@@ -211,14 +203,14 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build customized form (using provided layout) using stepper library`() {
-        runBlockingTest {
+        coroutinesTestRule.testDispatcher.runBlockingTest {
 
             jsonFormBuilder = spyk(
                 objToCopy =
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, null),
                 recordPrivateCalls = true
             )
-            jsonFormBuilder.coroutineContextProvider = TestCoroutineContextProvider()
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             val inflater =
                 activity.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
@@ -267,9 +259,4 @@ class `Test building form with JSON` {
         }
     }
 
-    @After
-    fun `Tearing everything down`() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
-    }
 }

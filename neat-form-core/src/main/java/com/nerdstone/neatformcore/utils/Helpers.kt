@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.utils
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -58,16 +59,11 @@ class SingleRunner {
     }
 }
 
-interface CoroutineContextProvider {
-
-    val main: CoroutineContext
-        get() = Dispatchers.Main
-
-    val io: CoroutineContext
-        get() = Dispatchers.IO
-
-    val default: CoroutineContext
-        get() = Dispatchers.Default
-
-    class Default : CoroutineContextProvider
+interface DispatcherProvider {
+    fun main(): CoroutineDispatcher = Dispatchers.Main
+    fun default(): CoroutineDispatcher = Dispatchers.Default
+    fun io(): CoroutineDispatcher = Dispatchers.IO
+    fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
 }
+
+class DefaultDispatcherProvider : DispatcherProvider
