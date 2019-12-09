@@ -252,14 +252,14 @@ class `Test form validation ` {
             val formData = formBuilder.getFormData()
             Assert.assertTrue(formData["adult"]?.metadata != null && formData["adult"]?.value == "1234567890")
             Assert.assertTrue(
-                formData["email_subscription"]?.metadata != null && ((formData["email_subscription"]?.value) as HashMap<*, *>).containsKey(
+                formData["email_subscription"]?.metadata != null && (formData["email_subscription"]?.value as HashMap<*, *>).containsKey(
                     "email_subscription"
                 )
             )
             Assert.assertTrue((formData["gender"]?.value as NFormViewData).metadata != null)
             Assert.assertTrue((formData["choose_language"]?.value as HashMap<*, *>).size == 1)
             Assert.assertTrue(
-                ((formData["wiki_contribution"]?.value) as HashMap<*, *>).containsKey(
+                (formData["wiki_contribution"]?.value as HashMap<*, *>).containsKey(
                     "yes"
                 )
             )
