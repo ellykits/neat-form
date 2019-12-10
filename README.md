@@ -37,7 +37,6 @@ gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
 **Step 3** : Update `build.gradle` for the application module  
   
 ```groovy  
-//For publishing dependency to GitHub package  
 def githubProperties = new Properties()  
 //Read the github properties content  
 githubProperties.load(new FileInputStream(rootProject.file("local.properties")))  
@@ -67,7 +66,7 @@ Add the library in the dependency section of your application's `build.gradle` f
 ```groovy  
 dependencies {  
    //consume library - use the latest version available on github packages  
-   implementation "com.nerdstone:neat-form-core:1.0.7"  
+   implementation "com.nerdstone:neat-form-core:1.0.8"  
    //....  
   
 }  

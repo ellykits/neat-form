@@ -38,7 +38,7 @@ actions:
 name: "choose_language_visibility"
 description: "Ask the user the languages they are proficient in"
 priority: 1
-condition: "gender == 'Female'"
+condition: "gender.value == 'Female'"
 actions:
   - "choose_language_visibility =  true"
 ---

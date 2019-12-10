@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.views.handlers
 
+import android.app.Activity
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
