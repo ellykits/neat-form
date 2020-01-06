@@ -66,7 +66,7 @@ Add the library in the dependency section of your application's `build.gradle` f
 ```groovy  
 dependencies {  
    //consume library - use the latest version available on github packages  
-   implementation "com.nerdstone:neat-form-core:1.0.8"  
+   implementation "com.nerdstone:neat-form-core:1.0.9"  
    //....  
   
 }  
