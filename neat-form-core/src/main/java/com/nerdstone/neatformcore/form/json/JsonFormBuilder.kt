@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.nerdstone.neatandroidstepper.core.model.StepModel
@@ -97,7 +96,6 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
         launch(defaultContextProvider.main()) {
-            coroutineScope {
                 try {
                     if (form == null) {
                         form = withContext(defaultContextProvider.default()) {
@@ -130,7 +128,6 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                 } catch (throwable: Throwable) {
                     Timber.e(throwable)
                 }
-            }
         }
         return this
     }
@@ -177,7 +174,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                     }
                     neatStepperLayout.setUpViewWithAdapter(
                         StepperPagerAdapter(
-                            (context as AppCompatActivity).supportFragmentManager,
+                            (context as FragmentActivity).supportFragmentManager,
                             fragmentsList
                         )
                     )
