@@ -296,7 +296,7 @@ First you will need to add the form file with its corresponding rules file to th
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
+            "display_format": "dd/MM/yyyy"
           },
           "required_status": "true:Please specify your dob"
         },

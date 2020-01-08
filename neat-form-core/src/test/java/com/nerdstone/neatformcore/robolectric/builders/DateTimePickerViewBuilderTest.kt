@@ -38,7 +38,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
     @Test
     fun `Should set hint on the datetime picker`() {
         val hint = "Am a hint"
-        viewProperty.viewAttributes = hashMapOf("hint" to hint, "display_format" to "dd/MM/YYYY")
+        viewProperty.viewAttributes = hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy")
         dateTimePickerViewBuilder.buildView()
         Assert.assertTrue(
             dateTimePickerViewBuilder.textInputEditText.hint.isNotEmpty() &&
@@ -71,7 +71,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         val hint = "Am a hint"
         val type = "date_picker"
         viewProperty.viewAttributes =
-            hashMapOf("hint" to hint, "display_format" to "dd/MM/YYYY", "type" to type)
+            hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy", "type" to type)
         dateTimePickerViewBuilder.buildView()
         Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.compoundDrawablePadding == 8)
         val compoundDrawables = dateTimePickerViewBuilder.textInputEditText.compoundDrawables
@@ -84,7 +84,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         val hint = "Am a hint"
         val type = "time_picker"
         viewProperty.viewAttributes =
-            hashMapOf("hint" to hint, "display_format" to "dd/MM/YYYY", "type" to type)
+            hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy", "type" to type)
         dateTimePickerViewBuilder.buildView()
         Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.compoundDrawablePadding == 8)
         val compoundDrawables = dateTimePickerViewBuilder.textInputEditText.compoundDrawables
@@ -96,7 +96,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         val hint = "Am a hint"
         val type = "date_picker"
         viewProperty.viewAttributes =
-            hashMapOf("hint" to hint, "display_format" to "dd/MM/YYYY", "type" to type)
+            hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy", "type" to type)
         dateTimePickerViewBuilder.buildView()
         dateTimePickerViewBuilder.textInputEditText.performClick()
         dateTimePickerViewBuilder.onDateSet(spyk(), 2019, 0,1)
