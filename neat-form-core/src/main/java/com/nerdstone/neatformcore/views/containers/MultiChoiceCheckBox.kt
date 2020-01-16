@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.views.containers
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -11,12 +12,14 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
+import timber.log.Timber
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
-
+    var attributeSet: AttributeSet? = null
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
@@ -32,13 +35,16 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     constructor(context: Context) : super(context)
 
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        attributeSet = attrs
+    }
 
     override fun initView(
         viewProperty: NFormViewProperty,
         viewDispatcher: ViewDispatcher
     ): NFormView {
         ViewUtils.setupView(this, viewProperty, viewDispatcher)
+        setupViewAttributes(attributeSet)
         return this
     }
 
@@ -52,7 +58,36 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
         formValidator.validateLabeledField(this)
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
+    }
+
+    /**
+     * Obtain custom xml attributes passed for the stepper view
+     */
+    private fun setupViewAttributes(attrs: AttributeSet?) {
+        if (attrs != null) {
+            val typedArray = context.obtainStyledAttributes(
+                attrs, R.styleable.MultiChoiceCheckBox, 0, 0
+            )
+            try {
+                viewBuilder.also {
+                    val fontSize: Int =
+                        typedArray.getDimensionPixelSize(
+                            R.styleable.MultiChoiceCheckBox_checkbox_options_text_size,
+                            12
+                        )
+
+                    Timber.e("setting font size size = %s ", fontSize)
+                    viewProperties.viewAttributes?.put(
+                        CheckBoxViewBuilder.CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
+                        fontSize
+                    )
+                    it.buildView()
+                }
+            } finally {
+                typedArray.recycle()
+            }
+        }
     }
 }

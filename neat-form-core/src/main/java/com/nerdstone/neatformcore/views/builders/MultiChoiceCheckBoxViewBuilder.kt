@@ -16,10 +16,11 @@ import java.util.*
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
+    private var checkBoxTextSize: Float? = null
     private var valuesMap: HashMap<String, NFormViewData?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
-        TEXT
+        TEXT, CHECK_BOX_TEXT_SIZE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
@@ -40,6 +41,10 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                 multiChoiceCheckBox.addView(
                     ViewUtils.addViewLabel(attribute.toPair(), multiChoiceCheckBox)
                 )
+            }
+
+            MultiChoiceCheckBoxProperties.CHECK_BOX_TEXT_SIZE.name -> {
+                checkBoxTextSize = (attribute.value as Int).toFloat()
             }
         }
     }
@@ -84,6 +89,10 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
 
             if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
                 setTag(R.id.is_exclusive_checkbox, true)
+            }
+
+            if (checkBoxTextSize != null) {
+                textSize = checkBoxTextSize as Float
             }
         }
         multiChoiceCheckBox.addView(checkBox)

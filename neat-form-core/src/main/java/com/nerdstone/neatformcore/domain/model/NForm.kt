@@ -42,7 +42,7 @@ class NFormViewProperty : Serializable {
     lateinit var type: String
 
     @SerializedName("properties")
-    var viewAttributes: Map<String, Any>? = null
+    var viewAttributes: MutableMap<String, Any>? = null
 
     @SerializedName("meta_data")
     var viewMetadata: Map<String, Any>? = null

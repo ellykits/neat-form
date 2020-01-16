@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.views.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.CheckBox
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -17,7 +18,7 @@ import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class CheckBoxNFormView : CheckBox, NFormView {
-
+    var attributeSet: AttributeSet? = null
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
@@ -28,12 +29,15 @@ class CheckBoxNFormView : CheckBox, NFormView {
 
     constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        attributeSet = attrs
+    }
 
     override fun initView(
         viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
         ViewUtils.setupView(this, viewProperty, viewDispatcher)
+        setupViewAttributes(attributeSet)
         return this
     }
 
@@ -68,5 +72,32 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override fun setVisibility(visibility: Int) {
         super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
+    }
+
+    /**
+     * Obtain custom xml attributes passed for the stepper view
+     */
+    private fun setupViewAttributes(attrs: AttributeSet?) {
+        if (attrs != null) {
+            val typedArray = context.theme.obtainStyledAttributes(
+                attrs, R.styleable.CheckBoxNFormView, 0, 0
+            )
+            try {
+                viewBuilder.also {
+                    val fontSize: Int =
+                        typedArray.getDimensionPixelSize(
+                            R.styleable.CheckBoxNFormView_checkbox_text_size,
+                            12
+                        )
+                    viewProperties.viewAttributes?.put(
+                        CheckBoxViewBuilder.CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
+                        fontSize
+                    )
+                    it.buildView()
+                }
+            } finally {
+                typedArray.recycle()
+            }
+        }
     }
 }
