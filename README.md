@@ -66,7 +66,7 @@ Add the library in the dependency section of your application's `build.gradle` f
 ```groovy  
 dependencies {  
    //consume library - use the latest version available on github packages  
-   implementation "com.nerdstone:neat-form-core:1.0.8"  
+   implementation "com.nerdstone:neat-form-core:1.0.9"  
    //....  
   
 }  
@@ -296,7 +296,7 @@ First you will need to add the form file with its corresponding rules file to th
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "dd/MM/YYYY"
+            "display_format": "dd/MM/yyyy"
           },
           "required_status": "true:Please specify your dob"
         },
