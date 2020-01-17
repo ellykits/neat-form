@@ -11,13 +11,12 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
-import timber.log.Timber
-import java.lang.Exception
 
 class CheckBoxNFormView : CheckBox, NFormView {
 
@@ -30,7 +29,7 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
     //Attribute value passed from the view's AttributeSet
-    private var fontSize: Int = 0
+    private var fontSize: Float = 0f
 
     constructor(context: Context) : super(context)
 
@@ -89,11 +88,13 @@ class CheckBoxNFormView : CheckBox, NFormView {
                 attrs, R.styleable.CheckBoxNFormView, 0, 0
             )
             try {
-                fontSize =
-                    typedArray.getDimensionPixelSize(
+                fontSize = Utils.pixelsToSp(
+                    context,
+                    typedArray.getDimension(
                         R.styleable.CheckBoxNFormView_checkbox_text_size,
-                        0
+                        0f
                     )
+                )
             } finally {
                 typedArray.recycle()
             }
@@ -104,7 +105,7 @@ class CheckBoxNFormView : CheckBox, NFormView {
      * adding passed xml attributes to MultiChoice Checkbox viewAttributes
      */
     private fun setPassedAttributes(viewProperty: NFormViewProperty) {
-        if (fontSize != 0) {
+        if (fontSize != 0f) {
             viewProperty.viewAttributes?.put(
                 CheckBoxViewBuilder.CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
                 fontSize

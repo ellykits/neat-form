@@ -28,6 +28,11 @@ object Utils {
         ).toInt()
     }
 
+    fun pixelsToSp(context: Context, px: Float): Float {
+        val scaledDensity = context.resources.displayMetrics.scaledDensity
+        return px / scaledDensity
+    }
+
     fun extractKeyValue(key: String): Pair<String, String> {
         val keyDataType = ViewUtils.splitText(key, ":")
         return Pair(keyDataType.first().trim(), keyDataType.last().trim())
