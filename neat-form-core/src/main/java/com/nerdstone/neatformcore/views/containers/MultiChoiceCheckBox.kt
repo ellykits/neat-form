@@ -12,14 +12,13 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 import timber.log.Timber
+import java.lang.Exception
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
-    var attributeSet: AttributeSet? = null
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
@@ -27,6 +26,10 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+
+    //Attribute value passed from the view's AttributeSet
+    private var checkBoxOptionsTextSize: Int = 0
+    private var labelTextSize: Int = 0
 
     init {
         orientation = VERTICAL
@@ -36,15 +39,15 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        attributeSet = attrs
+        setupViewAttributes(attrs)
     }
 
     override fun initView(
         viewProperty: NFormViewProperty,
         viewDispatcher: ViewDispatcher
     ): NFormView {
+        setPassedAttributes(viewProperty)
         ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        setupViewAttributes(attributeSet)
         return this
     }
 
@@ -71,23 +74,41 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
                 attrs, R.styleable.MultiChoiceCheckBox, 0, 0
             )
             try {
-                viewBuilder.also {
-                    val fontSize: Int =
-                        typedArray.getDimensionPixelSize(
-                            R.styleable.MultiChoiceCheckBox_checkbox_options_text_size,
-                            12
-                        )
-
-                    Timber.e("setting font size size = %s ", fontSize)
-                    viewProperties.viewAttributes?.put(
-                        CheckBoxViewBuilder.CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
-                        fontSize
+                checkBoxOptionsTextSize =
+                    typedArray.getDimensionPixelSize(
+                        R.styleable.MultiChoiceCheckBox_checkbox_options_text_size,
+                        0
                     )
-                    it.buildView()
-                }
+
+                labelTextSize =
+                    typedArray.getDimensionPixelSize(
+                        R.styleable.MultiChoiceCheckBox_label_text_size,
+                        0
+                    )
+
+                Timber.i("obtained checkbox options font size size = %s ", checkBoxOptionsTextSize)
             } finally {
                 typedArray.recycle()
             }
+        }
+    }
+
+    /**
+     * adding passed xml attributes to MultiChoice Checkbox viewAttributes
+     */
+    private fun setPassedAttributes( viewProperty: NFormViewProperty) {
+        if (checkBoxOptionsTextSize != 0) {
+            viewProperty.viewAttributes?.put(
+                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
+                checkBoxOptionsTextSize
+            )
+        }
+
+        if (labelTextSize != 0) {
+            viewProperty.viewAttributes?.put(
+                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name,
+                labelTextSize
+            )
         }
     }
 }

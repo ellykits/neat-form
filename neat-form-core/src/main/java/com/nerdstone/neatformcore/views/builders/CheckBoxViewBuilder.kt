@@ -42,7 +42,7 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                 }
 
                 CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name -> {
-                    textSize = (attribute.value as Int).toFloat()
+                    textSize = (attribute.value.toString()).toFloat()
                 }
             }
         }
