@@ -103,7 +103,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     private fun setPassedAttributes(viewProperty: NFormViewProperty) {
         if (checkBoxOptionsTextSize != 0f) {
             viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
+                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.CHECK_BOX_OPTIONS_TEXT_SIZE.name,
                 checkBoxOptionsTextSize
             )
         }

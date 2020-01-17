@@ -3,11 +3,13 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import com.google.gson.Gson
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import io.mockk.spyk
@@ -60,12 +62,14 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
     @Test
     fun `Should set label for multi choice checkbox`() {
         val text = "Pick the programming languages"
-        viewProperty.viewAttributes = hashMapOf("text" to text)
+        val labelTextSize = 20
+        viewProperty.viewAttributes = mutableMapOf("text" to text,"label_text_size" to labelTextSize)
         multiChoiceCheckBoxViewBuilder.buildView()
         val view = multiChoiceCheckBox.getChildAt(0)
 
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView.text.toString() == text)
+        Assert.assertTrue(textView.textSize == Utils.pixelsToSp(textView.context,labelTextSize.toFloat()))
         Assert.assertTrue(multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
@@ -85,7 +89,8 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
     @Test
     fun `Should create multiple checkboxes when options are defined`() {
         val text = "Pick your programming languages"
-        viewProperty.viewAttributes = hashMapOf("text" to text)
+        val checkBoxOptionsTextSize = 22
+        viewProperty.viewAttributes = mutableMapOf("text" to text,"check_box_options_text_size" to checkBoxOptionsTextSize)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
         multiChoiceCheckBoxViewBuilder.buildView()
@@ -101,12 +106,14 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(1) as CheckBox).getTag(R.id.field_name) == "kotlin")
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(1) as CheckBox).getTag(R.id.is_exclusive_checkbox) == null)
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(1) as CheckBox).getTag(R.id.is_checkbox_option) == true)
+        Assert.assertTrue((multiChoiceCheckBox.getChildAt(1) as CheckBox).textSize == checkBoxOptionsTextSize.toFloat())
 
         //Check single exclusive checkbox properties
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(4) as CheckBox).text == "None")
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(4) as CheckBox).getTag(R.id.field_name) == "none")
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(4) as CheckBox).getTag(R.id.is_exclusive_checkbox) == true)
         Assert.assertTrue((multiChoiceCheckBox.getChildAt(4) as CheckBox).getTag(R.id.is_checkbox_option) == true)
+        Assert.assertTrue((multiChoiceCheckBox.getChildAt(4) as CheckBox).textSize == checkBoxOptionsTextSize.toFloat())
 
         //All views counted including label
         Assert.assertTrue(multiChoiceCheckBox.childCount == 5)

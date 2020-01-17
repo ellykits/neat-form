@@ -12,6 +12,7 @@ import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import timber.log.Timber
 import java.util.*
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
@@ -21,7 +22,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     private var valuesMap: HashMap<String, NFormViewData?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
-        TEXT, CHECK_BOX_TEXT_SIZE,LABEL_TEXT_SIZE
+        TEXT, CHECK_BOX_OPTIONS_TEXT_SIZE,LABEL_TEXT_SIZE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
@@ -30,6 +31,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     override fun buildView() {
         ViewUtils.applyViewAttributes(
             nFormView = multiChoiceCheckBox,
+
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
@@ -45,12 +47,16 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             }
 
             MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name -> {
-                multiChoiceCheckBox.findViewById<TextView>(R.id.labelTextView).apply {
-                    textSize = attribute.value.toString().toFloat()
+                try {
+                    multiChoiceCheckBox.findViewById<TextView>(R.id.labelTextView).apply {
+                        textSize = attribute.value.toString().toFloat()
+                    }
+                }catch (e:NullPointerException){
+                    Timber.e(e)
                 }
             }
 
-            MultiChoiceCheckBoxProperties.CHECK_BOX_TEXT_SIZE.name -> {
+            MultiChoiceCheckBoxProperties.CHECK_BOX_OPTIONS_TEXT_SIZE.name -> {
                 checkBoxTextSize = attribute.value.toString().toFloat()
             }
         }
