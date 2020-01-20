@@ -693,7 +693,7 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 | ✔️  |️  Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*|
 | ✔️  |️ Data management - saving data from the input fields |
 | ❌  |️ Multi language support |
-| ❌  |️ Form Fields Validation |
+| ✔️  |️ Form Fields Validation |
 | ❌  |️ Ability to obtain and render `JSON`form from server |
 | ✔️  |️ Support Multi-Step Forms |
 | ✔️  |️ Rules Engine integration - handle form skip logic and calculations |
