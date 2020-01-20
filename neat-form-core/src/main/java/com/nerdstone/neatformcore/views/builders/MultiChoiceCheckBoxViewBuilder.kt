@@ -2,6 +2,7 @@ package com.nerdstone.neatformcore.views.builders
 
 import android.view.View
 import android.widget.CheckBox
+import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -11,15 +12,17 @@ import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import timber.log.Timber
 import java.util.*
 
 class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
+    private var checkBoxTextSize: Float? = null
     private var valuesMap: HashMap<String, NFormViewData?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
-        TEXT
+        TEXT, OPTIONS_TEXT_SIZE,LABEL_TEXT_SIZE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
@@ -28,6 +31,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     override fun buildView() {
         ViewUtils.applyViewAttributes(
             nFormView = multiChoiceCheckBox,
+
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
@@ -40,6 +44,16 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                 multiChoiceCheckBox.addView(
                     ViewUtils.addViewLabel(attribute.toPair(), multiChoiceCheckBox)
                 )
+            }
+
+            MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name -> {
+                multiChoiceCheckBox.findViewById<TextView>(R.id.labelTextView)?.apply {
+                    textSize = attribute.value.toString().toFloat()
+                }
+            }
+
+            MultiChoiceCheckBoxProperties.OPTIONS_TEXT_SIZE.name -> {
+                checkBoxTextSize = attribute.value.toString().toFloat()
             }
         }
     }
@@ -85,6 +99,8 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             if (nFormSubViewProperty.isExclusive != null && nFormSubViewProperty.isExclusive == true) {
                 setTag(R.id.is_exclusive_checkbox, true)
             }
+
+            checkBoxTextSize?.also { textSize = it }
         }
         multiChoiceCheckBox.addView(checkBox)
     }

@@ -14,7 +14,7 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
     override val acceptedAttributes = Utils.convertEnumToSet(CheckBoxProperties::class.java)
 
     enum class CheckBoxProperties {
-        TEXT
+        TEXT, TEXT_SIZE
     }
 
     override fun buildView() {
@@ -39,6 +39,10 @@ class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 CheckBoxProperties.TEXT.name -> {
                     text = attribute.value.toString()
+                }
+
+                CheckBoxProperties.TEXT_SIZE.name -> {
+                    textSize = (attribute.value.toString()).toFloat()
                 }
             }
         }

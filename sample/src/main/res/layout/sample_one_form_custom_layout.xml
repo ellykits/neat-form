@@ -66,7 +66,7 @@
 
     <com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
         android:id="@+id/gender"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/email_subscription"
@@ -84,6 +84,7 @@
         android:id="@+id/choose_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:options_text_size="14sp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/gender"
         app:layout_constraintTop_toBottomOf="@+id/country" />

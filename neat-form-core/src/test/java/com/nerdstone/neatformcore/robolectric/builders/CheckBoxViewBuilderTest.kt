@@ -33,12 +33,13 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
     }
 
     @Test
-    fun `Should set text on checkbox`() {
+    fun `Should set text and textSize on checkbox`() {
         val text = "Am a checkbox"
-        viewProperty.viewAttributes = hashMapOf("text" to text)
+        val checkBoxTextSize = 14
+        viewProperty.viewAttributes = mutableMapOf("text" to text,"text_size" to checkBoxTextSize)
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(checkBoxNFormView.text.isNotEmpty() && checkBoxNFormView.text.toString() == text)
-        Assert.assertTrue(checkBoxNFormView.textSize.toInt() == 18)
+        Assert.assertTrue(checkBoxNFormView.textSize.toInt() == checkBoxTextSize)
     }
 
     @Test
