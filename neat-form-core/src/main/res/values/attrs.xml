@@ -2,11 +2,11 @@
 <resources>
     <!--Custom XML style for neat stepper layout -->
     <declare-styleable name="MultiChoiceCheckBox">
-        <attr name="checkbox_options_text_size" format="dimension" />
+        <attr name="options_text_size" format="dimension" />
         <attr name="label_text_size" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="CheckBoxNFormView">
-        <attr name="checkbox_text_size" format="dimension" />
+        <attr name="text_size" format="dimension" />
     </declare-styleable>
 </resources>

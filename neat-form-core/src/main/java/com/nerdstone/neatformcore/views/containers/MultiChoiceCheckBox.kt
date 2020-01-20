@@ -16,7 +16,6 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
-import timber.log.Timber
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
     override lateinit var viewProperties: NFormViewProperty
@@ -27,7 +26,6 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
-    //Attribute value passed from the view's AttributeSet
     private var checkBoxOptionsTextSize: Float = 0f
     private var labelTextSize: Float = 0f
 
@@ -76,21 +74,14 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
             try {
                 checkBoxOptionsTextSize = Utils.pixelsToSp(
                     context, typedArray.getDimension(
-                        R.styleable.MultiChoiceCheckBox_checkbox_options_text_size,
-                        0f
+                        R.styleable.MultiChoiceCheckBox_options_text_size, 0f
                     )
                 )
-
-
                 labelTextSize = Utils.pixelsToSp(
                     context, typedArray.getDimension(
-                        R.styleable.MultiChoiceCheckBox_label_text_size,
-                        0f
+                        R.styleable.MultiChoiceCheckBox_label_text_size, 0f
                     )
                 )
-
-
-                Timber.i("obtained checkbox options font size size = %s ", checkBoxOptionsTextSize)
             } finally {
                 typedArray.recycle()
             }
@@ -103,7 +94,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     private fun setPassedAttributes(viewProperty: NFormViewProperty) {
         if (checkBoxOptionsTextSize != 0f) {
             viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.CHECK_BOX_OPTIONS_TEXT_SIZE.name,
+                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.OPTIONS_TEXT_SIZE.name,
                 checkBoxOptionsTextSize
             )
         }

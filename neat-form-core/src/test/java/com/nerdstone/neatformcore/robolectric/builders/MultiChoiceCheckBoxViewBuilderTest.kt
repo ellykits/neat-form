@@ -90,7 +90,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
     fun `Should create multiple checkboxes when options are defined`() {
         val text = "Pick your programming languages"
         val checkBoxOptionsTextSize = 22
-        viewProperty.viewAttributes = mutableMapOf("text" to text,"check_box_options_text_size" to checkBoxOptionsTextSize)
+        viewProperty.viewAttributes = mutableMapOf("text" to text,"options_text_size" to checkBoxOptionsTextSize)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
         multiChoiceCheckBoxViewBuilder.buildView()

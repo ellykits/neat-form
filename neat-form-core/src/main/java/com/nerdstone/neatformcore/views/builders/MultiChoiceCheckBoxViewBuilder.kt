@@ -22,7 +22,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
     private var valuesMap: HashMap<String, NFormViewData?>? = null
 
     enum class MultiChoiceCheckBoxProperties {
-        TEXT, CHECK_BOX_OPTIONS_TEXT_SIZE,LABEL_TEXT_SIZE
+        TEXT, OPTIONS_TEXT_SIZE,LABEL_TEXT_SIZE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
@@ -47,16 +47,12 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
             }
 
             MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name -> {
-                try {
-                    multiChoiceCheckBox.findViewById<TextView>(R.id.labelTextView).apply {
-                        textSize = attribute.value.toString().toFloat()
-                    }
-                }catch (e:NullPointerException){
-                    Timber.e(e)
+                multiChoiceCheckBox.findViewById<TextView>(R.id.labelTextView)?.apply {
+                    textSize = attribute.value.toString().toFloat()
                 }
             }
 
-            MultiChoiceCheckBoxProperties.CHECK_BOX_OPTIONS_TEXT_SIZE.name -> {
+            MultiChoiceCheckBoxProperties.OPTIONS_TEXT_SIZE.name -> {
                 checkBoxTextSize = attribute.value.toString().toFloat()
             }
         }
@@ -104,9 +100,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                 setTag(R.id.is_exclusive_checkbox, true)
             }
 
-            if (checkBoxTextSize != null) {
-                textSize = checkBoxTextSize!!
-            }
+            checkBoxTextSize?.also { textSize = it }
         }
         multiChoiceCheckBox.addView(checkBox)
     }

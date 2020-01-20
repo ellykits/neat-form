@@ -28,7 +28,6 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
-    //Attribute value passed from the view's AttributeSet
     private var fontSize: Float = 0f
 
     constructor(context: Context) : super(context)
@@ -87,17 +86,13 @@ class CheckBoxNFormView : CheckBox, NFormView {
             val typedArray = context.obtainStyledAttributes(
                 attrs, R.styleable.CheckBoxNFormView, 0, 0
             )
-            try {
-                fontSize = Utils.pixelsToSp(
-                    context,
-                    typedArray.getDimension(
-                        R.styleable.CheckBoxNFormView_checkbox_text_size,
-                        0f
-                    )
+            fontSize = Utils.pixelsToSp(
+                context,
+                typedArray.getDimension(
+                    R.styleable.CheckBoxNFormView_text_size, 0f
                 )
-            } finally {
-                typedArray.recycle()
-            }
+            )
+            typedArray.recycle()
         }
     }
 
@@ -107,7 +102,7 @@ class CheckBoxNFormView : CheckBox, NFormView {
     private fun setPassedAttributes(viewProperty: NFormViewProperty) {
         if (fontSize != 0f) {
             viewProperty.viewAttributes?.put(
-                CheckBoxViewBuilder.CheckBoxProperties.CHECK_BOX_TEXT_SIZE.name,
+                CheckBoxViewBuilder.CheckBoxProperties.TEXT_SIZE.name,
                 fontSize
             )
         }
