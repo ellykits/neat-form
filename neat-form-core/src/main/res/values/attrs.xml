@@ -5,8 +5,4 @@
         <attr name="options_text_size" format="dimension" />
         <attr name="label_text_size" format="dimension" />
     </declare-styleable>
-
-    <declare-styleable name="CheckBoxNFormView">
-        <attr name="text_size" format="dimension" />
-    </declare-styleable>
 </resources>

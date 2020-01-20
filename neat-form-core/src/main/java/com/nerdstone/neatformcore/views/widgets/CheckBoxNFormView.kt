@@ -3,7 +3,6 @@ package com.nerdstone.neatformcore.views.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.CheckBox
-import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -11,7 +10,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
-import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
@@ -28,18 +26,13 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
 
-    private var fontSize: Float = 0f
-
     constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        setupViewAttributes(attrs)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun initView(
         viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
-        setPassedAttributes(viewProperty)
         ViewUtils.setupView(this, viewProperty, viewDispatcher)
         return this
     }
@@ -75,36 +68,5 @@ class CheckBoxNFormView : CheckBox, NFormView {
     override fun setVisibility(visibility: Int) {
         super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
-    }
-
-
-    /**
-     * Obtain custom xml attributes passed for the stepper view
-     */
-    private fun setupViewAttributes(attrs: AttributeSet?) {
-        if (attrs != null) {
-            val typedArray = context.obtainStyledAttributes(
-                attrs, R.styleable.CheckBoxNFormView, 0, 0
-            )
-            fontSize = Utils.pixelsToSp(
-                context,
-                typedArray.getDimension(
-                    R.styleable.CheckBoxNFormView_text_size, 0f
-                )
-            )
-            typedArray.recycle()
-        }
-    }
-
-    /**
-     * adding passed xml attributes to MultiChoice Checkbox viewAttributes
-     */
-    private fun setPassedAttributes(viewProperty: NFormViewProperty) {
-        if (fontSize != 0f) {
-            viewProperty.viewAttributes?.put(
-                CheckBoxViewBuilder.CheckBoxProperties.TEXT_SIZE.name,
-                fontSize
-            )
-        }
     }
 }
