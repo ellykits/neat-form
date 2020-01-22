@@ -16,12 +16,25 @@ NeatForm lets you create basic android views using JSON standard. This is especi
 * [Built with](#built-with)
 * [Roadmap](#roadmap)
 * [License](#license)
-  
+
+
 ## Getting Started  
+
+### Download (From JCenter)
+
+Add the library as a dependency to your app's `build.gradle` file
+```groovy
+dependencies {
+    //....
+	 implementation "com.nerdstone:neat-form-core:1.0.10"  
+	//....
+
+}
+``` 
 
  ### Download (From GitHub Packages)  
  
-This library is available as a git package [Neat Form Packages](https://github.com/ellykits/neat-form/packages).   
+This library is also available as a git package [Neat Form Packages](https://github.com/ellykits/neat-form/packages).
 
 At the moment GitHub requires you to be authenticated in order to download Android Libraries hosted in GitHub packages. To do so you will need your **personal access token** and your GitHub **userid/username**. Follow these steps to add the library as a dependency to your app.  
   
@@ -692,11 +705,11 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 | ----------------------|:--------------------------------------------------------------------------------- |  
 | ✔️  |️  Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*|
 | ✔️  |️ Data management - saving data from the input fields |
-| ❌  |️ Multi language support |
 | ✔️  |️ Form Fields Validation |
-| ❌  |️ Ability to obtain and render `JSON`form from server |
 | ✔️  |️ Support Multi-Step Forms |
 | ✔️  |️ Rules Engine integration - handle form skip logic and calculations |
+| ❌  |️ Multi language support |
+| ❌  |️ Ability to obtain and render `JSON`form from server |
   
 >Neat form is currently in the infancy stage; a lot will change with addition of many cool features. Be sure to check in once in a while for updates.😄  
   
