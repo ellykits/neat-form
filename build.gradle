@@ -17,35 +17,20 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.5.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.15.0"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-//For publishing dependency to GitHub package
-def githubProperties = new Properties()
-//Read the github properties content
-githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
 allprojects {
     repositories {
-        mavenLocal()
         google()
         jcenter()
+        mavenCentral()
+        mavenLocal()
         maven { url "https://jitpack.io" }
-        maven {
-            name = "GitHubPackages"
-            /**
-             * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */
-            url = uri("https://maven.pkg.github.com/ellykits/neat-android-stepper")
-            credentials {
-                /** get credentials from local.properties in root project folder file with
-                 ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
-        }
     }
 
     tasks.withType(Javadoc) {

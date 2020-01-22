@@ -2,14 +2,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 jacoco {
     toolVersion = "0.8.3"
 }
-//For publishing dependency to GitHub package
-def githubProperties = new Properties()
-//Read the github properties content
-githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+def properties = new Properties()
+properties.load(new FileInputStream(rootProject.file("local.properties")))
+
+version = "1.0.10"
 
 android {
     compileSdkVersion 28
@@ -18,7 +20,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName this.version
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -99,22 +101,6 @@ dependencies {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "GitHubPackages"
-        /**
-         * Configure path of the package repository on Github using the GITHUB_USER_ID and * Git Repository */
-        url = uri("https://maven.pkg.github.com/ellykits/neat-android-stepper")
-        credentials {
-            /** get credentials from local.properties in root project folder file with
-             ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise ** Set env variable GPR_USER & GPR_API_KEY**/
-            username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-            password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-        }
-    }
-}
-
-def getVersionName = { ->
-    return "1.0.10"
 }
 
 def getArtifactId = { ->
@@ -149,10 +135,10 @@ task androidSourcesJar(type: Jar) {
 
 publishing {
     publications {
-        bar(MavenPublication) {
+        NeatForm(MavenPublication) {
             groupId 'com.nerdstone'
             artifactId getArtifactId()
-            version getVersionName()
+            version this.version
             artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
             artifact androidJavadocsJar
             artifact androidSourcesJar
@@ -222,9 +208,33 @@ publishing {
                  ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN otherwise
                  ** Set env variable GPR_USER & GPR_API_KEY**/
 
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+                username = properties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = properties['gpr.key'] ?: System.getenv("GPR_API_KEY")
             }
         }
     }
+}
+
+bintray {
+    user = properties['jcenter.usr'] ?: System.getenv('BINTRAY_USER')
+    key = properties['jcenter.key'] ?: System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'nerdstone'
+        name = 'neat-form-core'
+        licenses = ['Apache-2.0']
+        desc = 'Build basic android UI using JSON standard. Generate repetitive views with different configurations in easy steps.'
+        publish = true
+        vcsUrl = "https://github.com/ellykits/neat-form"
+        issueTrackerUrl = 'https://github.com/ellykits/neat-form/issues'
+        labels = ['rules-engine', 'kotlin-android', 'gson', 'form', 'json-forms']
+        publicDownloadNumbers = true
+        version {
+            name = this.version
+            desc = "Neat Form ${this.version}"
+            released = new Date()
+            vcsTag = this.version
+        }
+    }
+    publications = ['NeatForm']
 }
