@@ -27,6 +27,7 @@ import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
+import timber.log.Timber
 import java.lang.NullPointerException
 import java.util.*
 import kotlin.reflect.KClass
@@ -102,6 +103,7 @@ object ViewUtils {
             try {
                 getView(view as NFormView, viewProperty, viewDispatcher)
             }catch (e:Exception){
+                Timber.e(e)
                 Toast.makeText(rootView.context,"ERROR: The view with name "+viewProperty.name+" defined in json form is missing in custom layout",LENGTH_LONG).show()
             }
         } else {
