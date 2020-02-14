@@ -45,7 +45,7 @@ class NeatFormValidator private constructor() : FormValidator {
      */
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
         if (nFormView.viewDetails.view.visibility == View.VISIBLE) {
-            if ((nFormView.viewDetails.value == null || nFormView.viewDetails.value is HashMap<*,*> && (nFormView.viewDetails.value as HashMap<*,*>).isEmpty()) && Utils.isFieldRequired(nFormView)) {
+            if ((nFormView.viewDetails.value == null || (nFormView.viewDetails.value is HashMap<*,*> && (nFormView.viewDetails.value as HashMap<*,*>).isEmpty())) && Utils.isFieldRequired(nFormView)) {
                 invalidFields.add(nFormView.viewDetails.name)
                 val errorMessage =
                     nFormView.viewProperties.requiredStatus?.let {
