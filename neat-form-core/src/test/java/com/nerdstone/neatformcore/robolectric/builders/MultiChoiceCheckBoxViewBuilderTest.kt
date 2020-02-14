@@ -146,9 +146,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
 
         //When  first checkbox is deselected then the value should be set to null
         checkBox1.isChecked = false
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        val valueMap = multiChoiceCheckBox.viewDetails.value as HashMap<String, NFormViewData?>
-        Assert.assertTrue(valueMap["kotlin"]?.value == null)
+        Assert.assertFalse((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
     }
 
     @Test
@@ -168,14 +166,11 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         checkBox4.isChecked = true
         checkBox3.isChecked = true
 
-        //Since checkbox 3 is exclusive and can only be selected independently the other value must be reset to null
-        Assert.assertTrue(multiChoiceCheckBox.viewDetails.value != null && (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).size == 3)
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["kotlin"] == null)
+        //Since checkbox 3 is exclusive and can only be selected independently the other value must be reset
+        Assert.assertTrue(multiChoiceCheckBox.viewDetails.value != null && (multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).size == 1)
+        Assert.assertFalse((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("kotlin"))
         Assert.assertFalse(checkBox1.isChecked)
-
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("none"))
-        Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>)["none"] == null)
+        Assert.assertFalse((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("none"))
         Assert.assertFalse(checkBox4.isChecked)
 
         Assert.assertTrue((multiChoiceCheckBox.viewDetails.value as HashMap<*, *>).containsKey("dont_know"))
