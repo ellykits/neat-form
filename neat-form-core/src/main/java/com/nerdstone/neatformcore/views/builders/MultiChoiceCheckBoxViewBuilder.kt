@@ -90,7 +90,7 @@ class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBu
                     )
                     handleExclusiveChecks(this)
                 } else {
-                    valuesMap?.put(compoundButton.getTag(R.id.field_name) as String, null)
+                    valuesMap?.remove(compoundButton.getTag(R.id.field_name) as String)
                 }
                 multiChoiceCheckBox.viewDetails.value = valuesMap
                 multiChoiceCheckBox.dataActionListener?.onPassData(multiChoiceCheckBox.viewDetails)

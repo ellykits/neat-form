@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
@@ -20,7 +21,9 @@ import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRule
+import timber.log.Timber
 import java.util.*
+import kotlin.collections.HashMap
 
 /***
  * @author Elly Nerdstone
@@ -42,7 +45,7 @@ class NeatFormValidator private constructor() : FormValidator {
      */
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
         if (nFormView.viewDetails.view.visibility == View.VISIBLE) {
-            if (nFormView.viewDetails.value == null && Utils.isFieldRequired(nFormView)) {
+            if ((nFormView.viewDetails.value == null || (nFormView.viewDetails.value is HashMap<*,*> && (nFormView.viewDetails.value as HashMap<*,*>).isEmpty())) && Utils.isFieldRequired(nFormView)) {
                 invalidFields.add(nFormView.viewDetails.name)
                 val errorMessage =
                     nFormView.viewProperties.requiredStatus?.let {
