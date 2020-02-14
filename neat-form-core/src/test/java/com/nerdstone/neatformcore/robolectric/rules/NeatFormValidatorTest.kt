@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.CoroutineTestRule
+import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
@@ -22,6 +23,7 @@ import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
+import kotlinx.android.synthetic.main.sample_custom_form_layout.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
@@ -223,6 +225,8 @@ class `Test form validation ` {
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
             val editTextNFormView = verticalRootView.getChildAt(0) as TextInputEditTextNFormView
+            val multiChoiceCheckBox = verticalRootView.getChildAt(3) as MultiChoiceCheckBox
+
 
             (editTextNFormView.viewDetails.view as TextInputLayout).editText?.setText("90091239009123")
             editTextNFormView.viewDetails.view.visibility =
@@ -231,6 +235,17 @@ class `Test form validation ` {
             Assert.assertTrue(formBuilder.formValidator.invalidFields.size == 1)
             Assert.assertTrue(formBuilder.formValidator.requiredFields.size == 5)
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
+
+            val multiChoiceCheckBoxErrorMessage = multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView)
+            val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
+            checkBox1.isChecked = true
+            multiChoiceCheckBox.viewDetails.view.visibility = View.VISIBLE
+            Assert.assertTrue(multiChoiceCheckBoxErrorMessage.text == "")
+
+            checkBox1.isChecked = false
+            multiChoiceCheckBox.viewDetails.view.visibility = View.VISIBLE
+            Assert.assertTrue(multiChoiceCheckBoxErrorMessage.text == "Please specify your languages")
+
         }
 
     @Test

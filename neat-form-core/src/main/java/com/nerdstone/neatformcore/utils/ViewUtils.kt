@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -25,6 +27,8 @@ import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
+import timber.log.Timber
+import java.lang.NullPointerException
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -96,7 +100,12 @@ object ViewUtils {
             val view = androidView.findViewById<View>(
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
-            getView(view as NFormView, viewProperty, viewDispatcher)
+            try {
+                getView(view as NFormView, viewProperty, viewDispatcher)
+            }catch (e:Exception){
+                Timber.e(e)
+                Toast.makeText(rootView.context,"ERROR: The view with name "+viewProperty.name+" defined in json form is missing in custom layout",LENGTH_LONG).show()
+            }
         } else {
             val objectConstructor = kClass.constructors.minBy { it.parameters.size }
             rootView.addChild(
