@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
@@ -35,7 +35,6 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -71,8 +70,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         this.fileSource = fileSource
         this.mainLayout = mainLayout
         this.neatStepperLayout = NeatStepperLayout(context)
-        this.viewModel =
-            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
+        this.viewModel = ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
     }
 
     constructor(jsonString: String, context: Context, mainLayout: ViewGroup?)
@@ -81,9 +79,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         this.context = context
         this.mainLayout = mainLayout
         this.neatStepperLayout = NeatStepperLayout(context)
-        this.viewModel =
-            ViewModelProviders.of(context as FragmentActivity)[DataViewModel::class.java]
-
+        this.viewModel = ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
     }
 
     init {
