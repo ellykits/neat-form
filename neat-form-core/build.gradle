@@ -11,7 +11,7 @@ jacoco {
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
 
-version = "1.0.11"
+version = "1.0.12"
 
 android {
     compileSdkVersion 28
@@ -60,7 +60,7 @@ android {
         }
     }
     configurations.all {
-        resolutionStrategy.force 'com.google.android.material:material:1.0.0'
+        resolutionStrategy.force 'com.google.android.material:material:1.2.0-alpha05'
     }
 }
 
