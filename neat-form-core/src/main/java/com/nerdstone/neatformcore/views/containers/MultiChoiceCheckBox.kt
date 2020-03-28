@@ -14,7 +14,6 @@ import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
@@ -38,15 +37,6 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setupViewAttributes(attrs)
-    }
-
-    override fun initView(
-        viewProperty: NFormViewProperty,
-        viewDispatcher: ViewDispatcher
-    ): NFormView {
-        setPassedAttributes(viewProperty)
-        ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        return this
     }
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)

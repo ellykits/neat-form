@@ -10,8 +10,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import java.util.*
 
-
-class EditTextViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val editTextNFormView = nFormView as EditTextNFormView
 

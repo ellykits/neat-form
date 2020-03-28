@@ -41,7 +41,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy")
         dateTimePickerViewBuilder.buildView()
         Assert.assertTrue(
-            dateTimePickerViewBuilder.textInputEditText.hint.isNotEmpty() &&
+            dateTimePickerViewBuilder.textInputEditText.hint!!.isNotEmpty() &&
                     dateTimePickerViewBuilder.textInputEditText.hint.toString() == hint
         )
     }
@@ -53,7 +53,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         viewProperty.requiredStatus = "yes:Am required"
         dateTimePickerViewBuilder.buildView()
         Assert.assertTrue(
-            dateTimePickerViewBuilder.textInputEditText.hint.isNotEmpty() && dateTimePickerViewBuilder.textInputEditText.hint.endsWith(
+            dateTimePickerViewBuilder.textInputEditText.hint!!.isNotEmpty() && dateTimePickerViewBuilder.textInputEditText.hint!!.endsWith(
                 "*"
             )
         )

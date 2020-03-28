@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.NumberSelectorViewBuilder
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import io.mockk.spyk
@@ -90,8 +91,7 @@ class `Test building NumberSelector view` : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should set pass value as integer when number is selected`() {
-        numberSelector.initView(viewProperty, spyk())
-
+        ViewUtils.setupView(numberSelector, viewProperty, spyk())
         //Value is null first but will always contain a value when selection is done
         Assert.assertNull(numberSelector.viewDetails.value)
 
@@ -106,7 +106,7 @@ class `Test building NumberSelector view` : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should deselect number when the number selector view is gone`() {
-        numberSelector.initView(viewProperty, spyk())
+        ViewUtils.setupView(numberSelector, viewProperty, spyk())
         val linearLayout = numberSelector.getChildAt(1) as LinearLayout
         val textView = linearLayout.getChildAt(3) as TextView
         textView.performClick()

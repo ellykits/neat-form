@@ -4,6 +4,7 @@ import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
@@ -19,10 +20,10 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building EditText view`: BaseJsonViewBuilderTest() {
+class `Test building EditText view` : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val editTextNFormView =  EditTextNFormView(activity.get())
+    private val editTextNFormView = EditTextNFormView(activity.get())
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
     private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
 
@@ -33,7 +34,7 @@ class `Test building EditText view`: BaseJsonViewBuilderTest() {
         //Set EditText properties and assign EditText view builder
         editTextNFormView.formValidator = this.formValidator
         editTextNFormView.viewProperties = viewProperty
-        editTextNFormView.initView(viewProperty, dataActionListener)
+        ViewUtils.setupView(editTextNFormView, viewProperty, dataActionListener)
     }
 
     @Test
@@ -93,7 +94,7 @@ class `Test building EditText view`: BaseJsonViewBuilderTest() {
 
         editTextNFormView.setText("johndoegmail.com")
         Assert.assertFalse(editTextNFormView.validateValue())
-        Assert.assertTrue(editTextNFormView.error=="Please enter a valid email address")
+        Assert.assertTrue(editTextNFormView.error == "Please enter a valid email address")
 
     }
 

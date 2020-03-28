@@ -13,7 +13,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import java.util.*
 
-class SpinnerViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val spinnerNFormView = nFormView as SpinnerNFormView
     private val spinnerOptions = mutableListOf<String>()

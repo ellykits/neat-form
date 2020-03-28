@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
+import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
@@ -21,9 +20,7 @@ import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRule
-import timber.log.Timber
 import java.util.*
-import kotlin.collections.HashMap
 
 /***
  * @author Elly Nerdstone
@@ -46,14 +43,14 @@ class NeatFormValidator private constructor() : FormValidator {
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
         if (nFormView.viewDetails.view.visibility == View.VISIBLE) {
             if ((nFormView.viewDetails.value == null || nFormView.viewDetails.value is HashMap<*, *>
-                        && (nFormView.viewDetails.value as HashMap<*, *>).isEmpty())
-                && Utils.isFieldRequired(nFormView)
+                            && (nFormView.viewDetails.value as HashMap<*, *>).isEmpty())
+                    && Utils.isFieldRequired(nFormView)
             ) {
                 invalidFields.add(nFormView.viewDetails.name)
                 val errorMessage =
-                    nFormView.viewProperties.requiredStatus?.let {
-                        Utils.extractKeyValue(it).second
-                    }
+                        nFormView.viewProperties.requiredStatus?.let {
+                            Utils.extractKeyValue(it).second
+                        }
                 return Pair(false, errorMessage)
             }
             if (nFormView.viewProperties.validations != null) {
@@ -79,7 +76,7 @@ class NeatFormValidator private constructor() : FormValidator {
         val validationPair = validateField(nFormView)
         val anchorView = nFormView.viewDetails.view as ViewGroup
         val labelTextView =
-            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
+                (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
         if (!validationPair.first) {
             labelTextView.apply {
                 error = validationPair.second
@@ -88,8 +85,7 @@ class NeatFormValidator private constructor() : FormValidator {
         } else {
             labelTextView.error = null
             (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.errorMessageTextView)
-                .visibility =
-                View.GONE
+                    .visibility = View.GONE
         }
         return validationPair.first
     }
@@ -112,20 +108,19 @@ class NeatFormValidator private constructor() : FormValidator {
         facts.put(VALUE, value)
 
         val customRule: Rule = MVELRule()
-            .name(UUID.randomUUID().toString())
-            .description(validation.condition)
-            .`when`(validation.condition)
-            .then("$VALIDATION_RESULT = true")
+                .name(UUID.randomUUID().toString())
+                .description(validation.condition)
+                .`when`(validation.condition)
+                .then("$VALIDATION_RESULT = true")
 
         val rules = Rules(customRule)
         rulesEngine.fire(rules, facts)
 
-        return facts.get<Boolean>(VALIDATION_RESULT)
+        return facts.get(VALIDATION_RESULT)
     }
 
     private fun getFormData(): MutableMap<String, Any?> {
-        val viewModel =
-            ViewModelProviders.of(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
+        val viewModel = ViewModelProvider(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
         return viewModel.details.mapValuesTo(mutableMapOf(), { entry ->
             entry.value
         })

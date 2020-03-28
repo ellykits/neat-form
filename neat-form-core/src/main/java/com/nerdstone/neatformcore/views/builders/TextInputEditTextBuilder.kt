@@ -13,8 +13,7 @@ import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import java.util.*
 
-
-class TextInputEditTextBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class TextInputEditTextBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val textInputEditTextNFormView = nFormView as TextInputEditTextNFormView
 

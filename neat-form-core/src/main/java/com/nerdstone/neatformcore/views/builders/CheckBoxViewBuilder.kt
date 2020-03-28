@@ -7,7 +7,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import java.util.*
 
-class CheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class CheckBoxViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val checkBoxNFormView = nFormView as CheckBoxNFormView
 

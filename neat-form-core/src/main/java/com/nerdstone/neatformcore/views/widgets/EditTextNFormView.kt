@@ -13,9 +13,7 @@ import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
-
 
 class EditTextNFormView : AppCompatEditText, NFormView {
 
@@ -30,12 +28,6 @@ class EditTextNFormView : AppCompatEditText, NFormView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    override fun initView(viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher)
-            : NFormView {
-        ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        return this
-    }
 
     override fun onTextChanged(
         text: CharSequence, start: Int, lengthBefore: Int,

@@ -5,6 +5,7 @@ import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import io.mockk.spyk
@@ -96,7 +97,7 @@ class `Test building Spinner view` : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        spinnerNFormView.initView(viewProperty, spyk())
+        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
         spinnerNFormView.visibility = View.GONE
         Assert.assertNull(spinnerNFormView.viewDetails.value)
     }
@@ -107,7 +108,7 @@ class `Test building Spinner view` : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        spinnerNFormView.initView(viewProperty, spyk())
+        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
         val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
         materialSpinner.setSelection(1)
         materialSpinner.isSelected = true
