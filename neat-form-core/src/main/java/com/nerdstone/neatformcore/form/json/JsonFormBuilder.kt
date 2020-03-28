@@ -26,18 +26,23 @@ import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.Constants.ViewType
 import com.nerdstone.neatformcore.utils.DefaultDispatcherProvider
 import com.nerdstone.neatformcore.utils.DispatcherProvider
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
+import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
+import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
+import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 object JsonFormConstants {
     const val FORM_VERSION = "form_version"
@@ -63,6 +68,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     override lateinit var context: Context
     override lateinit var viewModel: DataViewModel
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var registeredViews = hashMapOf<String, KClass<*>>()
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {
@@ -89,41 +95,42 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     }
 
     override fun buildForm(
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
+            jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
+        registerViews()
         launch(defaultContextProvider.main()) {
-                try {
-                    if (form == null) {
-                        form = withContext(defaultContextProvider.default()) {
-                            singleRunner.afterPrevious {
-                                parseJsonForm()
-                            }
+            try {
+                if (form == null) {
+                    form = withContext(defaultContextProvider.default()) {
+                        singleRunner.afterPrevious {
+                            parseJsonForm()
                         }
                     }
-                    launch {
-                        val rulesAsync = withContext(defaultContextProvider.io()) {
-                            singleRunner.afterPrevious {
-                                registerFormRulesFromFile(context, RulesFileType.YAML)
-                            }
+                }
+                launch {
+                    val rulesAsync = withContext(defaultContextProvider.io()) {
+                        singleRunner.afterPrevious {
+                            registerFormRulesFromFile(context, RulesFileType.YAML)
                         }
-                        if (rulesAsync) {
-                            launch {
-                                withContext(defaultContextProvider.main()) {
-                                    if (viewList == null)
-                                        createFormViews(
+                    }
+                    if (rulesAsync) {
+                        launch {
+                            withContext(defaultContextProvider.main()) {
+                                if (viewList == null)
+                                    createFormViews(
                                             context,
                                             arrayListOf(),
                                             jsonFormStepBuilderModel
-                                        )
-                                    else
-                                        createFormViews(context, viewList, jsonFormStepBuilderModel)
-                                }
+                                    )
+                                else
+                                    createFormViews(context, viewList, jsonFormStepBuilderModel)
                             }
                         }
                     }
-                } catch (throwable: Throwable) {
-                    Timber.e(throwable)
                 }
+            } catch (throwable: Throwable) {
+                Timber.e(throwable)
+            }
         }
         return this
     }
@@ -132,7 +139,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         return when {
             jsonString != null -> JsonFormParser.parseJson(jsonString)
             fileSource != null -> JsonFormParser.parseJson(
-                AssetFile.readAssetFileAsString(context, fileSource!!)
+                    AssetFile.readAssetFileAsString(context, fileSource!!)
             )
             else -> null
         }
@@ -142,7 +149,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
      * @param context android context
      */
     override fun createFormViews(
-        context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
+            context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
     ) {
         if (form != null) {
             when {
@@ -159,20 +166,20 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                         rootView.formBuilder = this
                         addViewsToVerticalRootView(views, index, formContent, rootView)
                         val stepFragment = StepFragment.newInstance(
-                            index,
-                            StepModel.Builder()
-                                .title(form!!.formName)
-                                .subTitle(formContent.stepName as CharSequence)
-                                .build(),
-                            rootView
+                                index,
+                                StepModel.Builder()
+                                        .title(form!!.formName)
+                                        .subTitle(formContent.stepName as CharSequence)
+                                        .build(),
+                                rootView
                         )
                         fragmentsList.add(stepFragment)
                     }
                     neatStepperLayout.setUpViewWithAdapter(
-                        StepperPagerAdapter(
-                            (context as FragmentActivity).supportFragmentManager,
-                            fragmentsList
-                        )
+                            StepperPagerAdapter(
+                                    (context as FragmentActivity).supportFragmentManager,
+                                    fragmentsList
+                            )
                     )
                     neatStepperLayout.showLoadingIndicators(false)
                 }
@@ -186,15 +193,15 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                     mainLayout?.addView(formViews)
                 }
                 else -> Toast.makeText(
-                    context, R.string.form_builder_error, Toast.LENGTH_LONG
+                        context, R.string.form_builder_error, Toast.LENGTH_LONG
                 ).show()
             }
         }
     }
 
     private fun addViewsToVerticalRootView(
-        customViews: List<View>?, stepIndex: Int,
-        formContent: NFormContent, verticalRootView: VerticalRootView
+            customViews: List<View>?, stepIndex: Int,
+            formContent: NFormContent, verticalRootView: VerticalRootView
     ) {
 
         val view = customViews?.getOrNull(stepIndex)
@@ -228,8 +235,8 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     }
 
     override fun registerFormRulesFromFile(
-        context: Context,
-        rulesFileType: RulesFileType
+            context: Context,
+            rulesFileType: RulesFileType
     ): Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
@@ -245,6 +252,16 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         return hashMapOf()
     }
 
+    override fun registerViews() {
+        registeredViews[ViewType.EDIT_TEXT] = EditTextNFormView::class
+        registeredViews[ViewType.TEXT_INPUT_EDIT_TEXT] = TextInputEditTextNFormView::class
+        registeredViews[ViewType.NUMBER_SELECTOR] = NumberSelectorNFormView::class
+        registeredViews[ViewType.SPINNER] = SpinnerNFormView::class
+        registeredViews[ViewType.DATETIME_PICKER] = DateTimePickerNFormView::class
+        registeredViews[ViewType.CHECKBOX] = CheckBoxNFormView::class
+        registeredViews[ViewType.MULTI_CHOICE_CHECKBOX] = MultiChoiceCheckBox::class
+        registeredViews[ViewType.RADIO_GROUP] = RadioGroupView::class
+    }
 }
 
 
@@ -261,7 +278,7 @@ class StepFragment : Step {
 
     companion object {
         fun newInstance(
-            index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
+                index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
         ): StepFragment {
 
             val args = Bundle().apply {
@@ -284,7 +301,7 @@ class StepFragment : Step {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         if (formView != null && formView?.parent != null) {
             return formView?.parent as View

@@ -8,6 +8,7 @@ import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import io.mockk.spyk
@@ -112,8 +113,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        radioGroupView.initView(viewProperty, spyk())
-
+        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
         //Value is null first but will always contain a value when selection is done
         Assert.assertNull(radioGroupView.viewDetails.value)
 
@@ -131,7 +131,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        radioGroupView.initView(viewProperty, spyk())
+        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
         val radioButton1 = radioGroupView.getChildAt(1) as RadioButton
         radioButton1.isChecked = true
         radioGroupView.visibility = View.GONE

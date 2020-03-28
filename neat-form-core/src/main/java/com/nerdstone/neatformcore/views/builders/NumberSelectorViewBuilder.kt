@@ -15,8 +15,7 @@ import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import java.util.*
 
-
-class NumberSelectorViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private var visibleNumbers = 1
     private var firstNumber = 1

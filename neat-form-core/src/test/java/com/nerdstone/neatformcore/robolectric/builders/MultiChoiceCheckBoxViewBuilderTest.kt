@@ -3,13 +3,13 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
-import com.google.gson.Gson
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import io.mockk.spyk
@@ -57,6 +57,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         checkBoxOption4.viewAttributes = hashMapOf()
         multiChoiceCheckBox.formValidator = this.formValidator
         multiChoiceCheckBox.viewProperties = viewProperty
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
     }
 
     @Test
@@ -125,8 +126,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        multiChoiceCheckBox.initView(viewProperty, spyk())
-
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
         //Select 2 checkboxes and ensure value map contains the 2 checkboxes
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
@@ -155,8 +155,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        multiChoiceCheckBox.initView(viewProperty, spyk())
-
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
         //An exclusive option can only be selected independently
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox //kotlin
         val checkBox3 = multiChoiceCheckBox.getChildAt(3) as CheckBox //don't know
@@ -184,7 +183,7 @@ class `Test building MultiChoiceCheckBox view` : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        multiChoiceCheckBox.initView(viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
         checkBox1.isChecked = true

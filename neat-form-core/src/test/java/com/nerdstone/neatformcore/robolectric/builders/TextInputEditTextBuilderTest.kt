@@ -4,6 +4,7 @@ import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
@@ -40,7 +41,7 @@ class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
         viewProperty.name = "first_name"
         viewProperty.type = "text_input_layout"
         textInputEditTextNFormView.viewProperties = viewProperty
-        textInputEditTextNFormView.initView(viewProperty, dataActionListener)
+        ViewUtils.setupView(textInputEditTextNFormView, viewProperty, dataActionListener)
     }
 
     @Test

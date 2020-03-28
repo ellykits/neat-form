@@ -8,6 +8,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
+import kotlin.reflect.KClass
 
 interface FormBuilder {
 
@@ -21,19 +22,19 @@ interface FormBuilder {
 
     var formValidator: FormValidator
 
+    var registeredViews: HashMap<String, KClass<*>>
+
     fun buildForm(
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null,
-        viewList: List<View>? = null
+            jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null, viewList: List<View>? = null
     ): FormBuilder
 
     fun createFormViews(
-        context: Context,
-        views: List<View>? = null,
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
+            context: Context, views: List<View>? = null,
+            jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
     )
 
     fun registerFormRulesFromFile(
-        context: Context, rulesFileType: RulesFactory.RulesFileType
+            context: Context, rulesFileType: RulesFactory.RulesFileType
     ): Boolean
 
     fun getFormData(): HashMap<String, NFormViewData>
@@ -41,5 +42,7 @@ interface FormBuilder {
     fun getFormMetaData(): Map<String, Any>
 
     fun getFormDataAsJson(): String
+
+    fun registerViews()
 
 }

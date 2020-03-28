@@ -12,7 +12,6 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class RadioGroupView : LinearLayout, NFormView {
@@ -32,14 +31,6 @@ class RadioGroupView : LinearLayout, NFormView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-
-    override fun initView(
-        viewProperty: NFormViewProperty,
-        viewDispatcher: ViewDispatcher
-    ): NFormView {
-        ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        return this
-    }
 
     override fun resetValueWhenHidden() {
         viewBuilder.resetRadioButtonsValue()

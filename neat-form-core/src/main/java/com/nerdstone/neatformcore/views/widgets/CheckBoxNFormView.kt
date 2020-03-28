@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.views.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.CheckBox
+import androidx.appcompat.widget.AppCompatCheckBox
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -13,10 +14,9 @@ import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
-class CheckBoxNFormView : CheckBox, NFormView {
+class CheckBoxNFormView : AppCompatCheckBox, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
@@ -29,14 +29,6 @@ class CheckBoxNFormView : CheckBox, NFormView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    override fun initView(
-        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
-    ): NFormView {
-        ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        return this
-    }
-
 
     override fun setChecked(checked: Boolean) {
         super.setChecked(checked)

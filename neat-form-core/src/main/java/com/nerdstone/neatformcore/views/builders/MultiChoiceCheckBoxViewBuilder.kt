@@ -14,7 +14,7 @@ import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import java.util.*
 
-class MultiChoiceCheckBoxViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val multiChoiceCheckBox = nFormView as MultiChoiceCheckBox
     private var checkBoxTextSize: Float? = null

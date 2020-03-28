@@ -13,7 +13,7 @@ import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateTimePickerViewBuilder(override val nFormView: NFormView) :
+open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
     private var dateDisplayFormat = "yyyy-MM-dd"

@@ -12,7 +12,6 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.NumberSelectorViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class NumberSelectorNFormView : LinearLayout, NFormView {
@@ -31,13 +30,6 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
 
     init {
         orientation = VERTICAL
-    }
-
-    override fun initView(
-        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
-    ): NFormView {
-        ViewUtils.setupView(this, viewProperty, viewDispatcher)
-        return this
     }
 
     override fun resetValueWhenHidden() {

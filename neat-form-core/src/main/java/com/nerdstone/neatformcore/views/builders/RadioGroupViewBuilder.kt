@@ -14,7 +14,7 @@ import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import java.util.*
 
-class RadioGroupViewBuilder(override val nFormView: NFormView) : ViewBuilder {
+open class RadioGroupViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private val radioGroupView = nFormView as RadioGroupView
 

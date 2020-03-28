@@ -4,20 +4,16 @@ import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.spyk
-import io.mockk.unmockkAll
-import io.mockk.verifyOrder
+import io.mockk.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
@@ -36,11 +32,11 @@ class `Test View Dispacher action` : BaseJsonViewBuilderTest(){
         editTextNFormView.viewProperties = viewProperty
         editTextNFormView.formValidator = this.formValidator
         every { viewDispatcher.rulesFactory } returns rulesFactory
-        editTextNFormView.initView(viewProperty, viewDispatcher)
     }
 
     @Test
     fun `Verify that field value is passed to the dispatcher`() {
+        ViewUtils.setupView(editTextNFormView, viewProperty, viewDispatcher)
         editTextNFormView.setText("Sample text")
         verifyOrder {
             viewDispatcher.onPassData(editTextNFormView.viewDetails)

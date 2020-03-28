@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import io.mockk.spyk
@@ -30,6 +31,7 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
         //Set EditText properties and assign EditText view builder
         checkBoxNFormView.formValidator = this.formValidator
         checkBoxNFormView.viewProperties = viewProperty
+        ViewUtils.setupView(checkBoxNFormView, viewProperty, spyk())
     }
 
     @Test
@@ -57,7 +59,6 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
 
     @Test
     fun `Should uncheck the checkbox when visibility is gone`() {
-        checkBoxNFormView.initView(viewProperty, spyk())
         checkBoxViewBuilder.buildView()
         checkBoxNFormView.isChecked = true
         checkBoxNFormView.visibility = View.GONE
@@ -66,7 +67,6 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
 
     @Test
     fun `Should set ViewDetails value to a map of name and label of the checkbox when state changes`() {
-        checkBoxNFormView.initView(viewProperty, spyk())
         val text = "Am a checkbox"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         checkBoxViewBuilder.buildView()
@@ -78,7 +78,6 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
 
     @Test
     fun `Should set ViewDetails value to null when unchecked`() {
-        checkBoxNFormView.initView(viewProperty, spyk())
         val text = "Am a checkbox"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         checkBoxViewBuilder.buildView()
