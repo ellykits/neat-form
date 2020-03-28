@@ -681,11 +681,8 @@ The *condition* is evaluated and validation result returns `true` when the field
 ### App demo
 Please check out the sample app for this demo.
 
-App rendered using the default view (`LinearLayout`).
- <p><img src ="./pics/neat-form-demo.gif" width="360" /></p>
-
-App rendered using custom layout.
- <p><img src ="./pics/neat-form-demo2.gif" width="680" /></p>
+App rendered using the default RootView (`LinearLayout`) and custom layout respectively.
+ <p><img src ="./pics/neat-form-demo.gif" width="420" />  <img src ="./pics/neat-form-demo2.gif" width="420" /></p>
 
 Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 
