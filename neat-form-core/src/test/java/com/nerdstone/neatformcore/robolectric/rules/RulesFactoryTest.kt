@@ -28,7 +28,6 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test Rules Engine functionality` {
@@ -102,7 +101,7 @@ class `Test Rules Engine functionality` {
             .name("decade_calculation")
             .description("Always multiply by 10")
             .priority(1)
-            .`when`(Condition.TRUE)
+            .`when`{ true }
             .then { facts ->
                 val decade = facts.asMap()["age"] as Int * 10
                 facts.put("decade_calculation", decade)

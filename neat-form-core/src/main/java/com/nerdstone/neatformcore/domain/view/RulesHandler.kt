@@ -24,4 +24,6 @@ interface RulesHandler {
 
     fun changeVisibility(value: Boolean?, view: View)
 
+    fun handleCalculations(facts: Facts?)
+
 }

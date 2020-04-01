@@ -68,20 +68,15 @@ class RulesFactory private constructor() : RuleListener {
         }
     }
 
-    private fun updateCurrentViewAndFacts(viewDetails: NFormViewDetails) {
-        currentViewDetails = viewDetails
-        facts.put(currentViewDetails.name, currentViewDetails.value)
-    }
-
-    private fun fireRules() {
-        rulesEngine.fire(Rules(executableRulesList), facts)
-        rulesHandler.handleSkipLogic(facts)
-    }
-
     fun updateFactsAndExecuteRules(viewDetails: NFormViewDetails) {
         updateCurrentViewAndFacts(viewDetails)
         updateExecutableRules()
         fireRules()
+    }
+
+    private fun updateCurrentViewAndFacts(viewDetails: NFormViewDetails) {
+        currentViewDetails = viewDetails
+        facts.put(currentViewDetails.name, currentViewDetails.value)
     }
 
     private fun updateExecutableRules() {
@@ -98,6 +93,12 @@ class RulesFactory private constructor() : RuleListener {
         rulesHandler.executableRulesList = executableRulesList
     }
 
+    private fun fireRules() {
+        rulesEngine.fire(Rules(executableRulesList), facts)
+        rulesHandler.handleCalculations(facts)
+        rulesHandler.handleSkipLogic(facts)
+    }
+
     fun registerSubjects(subjects: List<String>, viewProperty: NFormViewProperty) {
         subjects.forEach { subject ->
 
@@ -107,12 +108,7 @@ class RulesFactory private constructor() : RuleListener {
             if (!subjectsRegistry.containsKey(key)) {
                 subjectsRegistry[key] = hashSetOf()
             }
-            subjectsRegistry[key]?.add(
-                NFormRule(
-                    viewProperty.name,
-                    hashSetOf()
-                )
-            )
+            subjectsRegistry[key]?.add(NFormRule(viewProperty.name, hashSetOf()))
         }
     }
 

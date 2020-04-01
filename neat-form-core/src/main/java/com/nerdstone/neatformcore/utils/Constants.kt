@@ -15,5 +15,6 @@ object Constants {
 
     object RuleActions {
         const val VISIBILITY = "_visibility"
+        const val CALCULATION = "_calculation"
     }
 }

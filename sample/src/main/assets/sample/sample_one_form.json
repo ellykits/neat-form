@@ -354,7 +354,7 @@
               "message": "Advice woman to register for Family Planning"
             }
           ],
-          "subjects": "email_subscription:map",
+          "binding_fields": "email_subscription:map",
           "required_status": "yes:Please number of previous pregnancy"
         },
         {
