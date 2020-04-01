@@ -5,6 +5,7 @@ import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.Utils
@@ -21,6 +22,7 @@ import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.HashSet
 
 class RulesFactory private constructor() : RuleListener {
 
@@ -41,18 +43,18 @@ class RulesFactory private constructor() : RuleListener {
     override fun onSuccess(rule: Rule?, facts: Facts?) = Timber.d("%s executed successfully", rule)
 
     override fun onFailure(rule: Rule?, facts: Facts?, exception: Exception?) =
-        when (exception) {
-            is CompileException -> Timber.e(exception.cause)
-            else -> Timber.e(exception)
-        }
+            when (exception) {
+                is CompileException -> Timber.e(exception.cause)
+                else -> Timber.e(exception)
+            }
 
     override fun beforeExecute(rule: Rule?, facts: Facts?) = Unit
 
     override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) =
-        rulesHandler.updateSkipLogicFactAfterEvaluate(evaluationResult, rule, facts)
+            rulesHandler.updateSkipLogicFactAfterEvaluate(evaluationResult, rule, facts)
 
     fun readRulesFromFile(
-        context: Context, filePath: String, rulesFileType: RulesFileType
+            context: Context, filePath: String, rulesFileType: RulesFileType
     ) {
         if (allRules == null) {
             val mvelRuleFactory: MVELRuleFactory = when (rulesFileType) {
@@ -61,9 +63,9 @@ class RulesFactory private constructor() : RuleListener {
             }
 
             allRules = mvelRuleFactory.createRules(
-                BufferedReader(
-                    InputStreamReader(AssetFile.openFileAsset(context, filePath))
-                )
+                    BufferedReader(
+                            InputStreamReader(AssetFile.openFileAsset(context, filePath))
+                    )
             )
         }
     }
@@ -90,8 +92,40 @@ class RulesFactory private constructor() : RuleListener {
             }
             executableRulesList.addAll(nFormRule.matchingRules.asIterable())
         }
+        executableRulesList.addAll(getDependentCalculationRules())
         rulesHandler.executableRulesList = executableRulesList
     }
+
+    /**
+     * This method gets all calculation rules. A calculation can also have other fields watching on
+     * it as declared in the subject registry. So we need to fetch them too and execute them whenever
+     * a calculation is updated.
+     */
+    private fun getDependentCalculationRules(): Set<Rule> {
+        val mappedCalculations = (currentViewDetails.view as NFormView).viewProperties.calculations
+                ?.map { "$it${Constants.RuleActions.CALCULATION}"}
+                ?: listOf()
+
+        if (allRules == null && mappedCalculations.isEmpty()) {
+            return hashSetOf()
+        }
+
+        val calculationRules = allRules?.filter { mappedCalculations.contains(it.name) }!!.toHashSet()
+        mappedCalculations.forEach { fieldKey ->
+            if (subjectsRegistry.containsKey(fieldKey)) {
+                subjectsRegistry[fieldKey]?.forEach { nFormRule ->
+                    nFormRule.matchingRules.also {
+                        if (it.isEmpty()) {
+                            nFormRule.matchingRules = getMatchingRules(nFormRule.key)
+                        }
+                    }
+                    calculationRules.addAll(nFormRule.matchingRules)
+                }
+            }
+        }
+        return calculationRules
+    }
+
 
     private fun fireRules() {
         rulesEngine.fire(Rules(executableRulesList), facts)
@@ -114,8 +148,8 @@ class RulesFactory private constructor() : RuleListener {
 
     fun viewHasVisibilityRule(viewProperty: NFormViewProperty): Boolean {
         val hasVisibilityRule =
-            allRules?.map { it.name }
-                ?.contains("${viewProperty.name}${Constants.RuleActions.VISIBILITY}")
+                allRules?.map { it.name }
+                        ?.contains("${viewProperty.name}${Constants.RuleActions.VISIBILITY}")
         return hasVisibilityRule != null && hasVisibilityRule
     }
 

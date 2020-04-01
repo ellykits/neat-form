@@ -59,6 +59,9 @@ class NFormViewProperty : Serializable {
     @SerializedName(value = "subjects", alternate = ["binding_fields"])
     var subjects: String? = null
 
+    @SerializedName(value = "dependent_calculations", alternate = ["calculation_fields", "calculations"])
+    var calculations: List<String>? = null
+
     constructor()
 
     constructor(name: String) {
