@@ -18,7 +18,7 @@ class NForm : Serializable {
     @SerializedName("steps")
     lateinit var steps: List<NFormContent>
 
-    @SerializedName("meta_data")
+    @SerializedName(value = "meta_data", alternate = ["metadata"])
     val formMetadata: Map<String, Any>? = null
 
 }
@@ -44,7 +44,7 @@ class NFormViewProperty : Serializable {
     @SerializedName("properties")
     var viewAttributes: MutableMap<String, Any>? = null
 
-    @SerializedName("meta_data")
+    @SerializedName(value = "meta_data", alternate = ["metadata"])
     var viewMetadata: Map<String, Any>? = null
 
     @SerializedName("options")
@@ -56,8 +56,11 @@ class NFormViewProperty : Serializable {
     @SerializedName("validation")
     var validations: List<NFormFieldValidation>? = null
 
-    @SerializedName("subjects")
+    @SerializedName(value = "subjects", alternate = ["binding_fields"])
     var subjects: String? = null
+
+    @SerializedName(value = "dependent_calculations", alternate = ["calculation_fields", "calculations"])
+    var calculations: List<String>? = null
 
     constructor()
 
@@ -82,7 +85,7 @@ class NFormSubViewProperty : Serializable {
     @SerializedName("is_exclusive")
     var isExclusive: Boolean? = null
 
-    @SerializedName("meta_data")
+    @SerializedName(value = "meta_data", alternate = ["metadata"])
     var viewMetadata: Map<String, Any>? = null
 
     @SerializedName("properties")

@@ -36,7 +36,9 @@ class ViewDispatcher private constructor() : DataActionListener {
             val nFormView = viewDetails.view as NFormView
             nFormView.validateValue()
 
-            if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim())) {
+            //Fire rules for calculations and other fields watching on this current field
+            val calculations = (viewDetails.view as NFormView).viewProperties.calculations
+            if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim()) || calculations != null) {
                 rulesFactory.updateFactsAndExecuteRules(viewDetails)
             }
 

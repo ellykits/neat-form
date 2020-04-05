@@ -46,6 +46,7 @@
               "message": "Not a valid age"
             }
           ],
+          "dependent_calculations": ["test", "decade"],
           "required_status": "yes:Please add age"
         },
         {
@@ -70,7 +71,7 @@
           "properties": {
             "text": "Subscribe to email notifications"
           },
-          "required_status": "yes:Please specify if you want subscription",
+          "required_status": "no:Please specify if you want subscription",
           "subjects": "age:number"
         },
         {
@@ -354,7 +355,7 @@
               "message": "Advice woman to register for Family Planning"
             }
           ],
-          "subjects": "email_subscription:map",
+          "binding_fields": "decade_calculation:number",
           "required_status": "yes:Please number of previous pregnancy"
         },
         {

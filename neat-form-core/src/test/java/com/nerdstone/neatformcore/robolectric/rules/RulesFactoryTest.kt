@@ -8,14 +8,16 @@ import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
+import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.rules.NFormRulesHandler
 import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import org.jeasy.rules.api.Condition
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.RuleBuilder
@@ -28,12 +30,11 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 class `Test Rules Engine functionality` {
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
-    private val view: View = View(activity.get())
+    private val view = EditTextNFormView(activity.get())
     private val mainLayout: ViewGroup = LinearLayout(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
@@ -49,19 +50,24 @@ class `Test Rules Engine functionality` {
         activity.get().setContentView(mainLayout)
 
         //Setup view details
+        val viewProperties = NFormViewProperty("adult", "edit_text")
+        viewProperties.apply {
+            viewMetadata = hashMapOf()
+            calculations = listOf("decade")
+        }
+        ViewUtils.setupView(view, viewProperties, spyk())
         view.id = 1
         view.visibility = View.GONE
-        view.tag = "adult"
 
         //When age changes then adult field is affected
         rulesFactory.subjectsRegistry["age"] =
-            hashSetOf(NFormRule("age", hashSetOf(rule1, rule2)))
+                hashSetOf(NFormRule("adult", hashSetOf(rule1, rule2)))
         mainLayout.addView(view)
 
         //Setup rules handler with form builder and views map
         rulesHandler.formBuilder = JsonFormBuilder(
-            activity.get(),
-            TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout
+                activity.get(),
+                TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout
         )
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
@@ -78,15 +84,15 @@ class `Test Rules Engine functionality` {
         - "adult_visibility =  true"
          */
         rule1 = RuleBuilder()
-            .name("adult_visibility")
-            .description("Show if age greater than 18")
-            .priority(1)
-            .`when` { facts ->
-                val age: Int = facts.get<String>("age").toInt()
-                age > 18
-            }
-            .then { facts -> facts.put("adult_visibility", true) }
-            .build()
+                .name("adult_visibility")
+                .description("Show if age greater than 18")
+                .priority(1)
+                .`when` { facts ->
+                    val age: Int = facts.get<String>("age").toInt()
+                    age > 18
+                }
+                .then { facts -> facts.put("adult_visibility", true) }
+                .build()
 
         /**
          *  Here is the corresponding MVEL representation for {{rule2}}
@@ -99,15 +105,15 @@ class `Test Rules Engine functionality` {
         - "decade_calculation =  age * 10"
          */
         rule2 = RuleBuilder()
-            .name("decade_calculation")
-            .description("Always multiply by 10")
-            .priority(1)
-            .`when`(Condition.TRUE)
-            .then { facts ->
-                val decade = facts.asMap()["age"] as Int * 10
-                facts.put("decade_calculation", decade)
-            }
-            .build()
+                .name("decade_calculation")
+                .description("Always multiply by 10")
+                .priority(1)
+                .`when` { true }
+                .then { facts ->
+                    val decade = facts.asMap()["age"] as Int * 10
+                    facts.put("decade_calculation", decade)
+                }
+                .build()
 
         rulesFactory.allRules = Rules(rule1, rule2)
     }

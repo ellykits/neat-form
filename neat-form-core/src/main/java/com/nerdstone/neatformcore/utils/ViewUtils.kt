@@ -110,7 +110,6 @@ object ViewUtils {
             viewProperties = viewProperty
             viewDetails.name = viewProperty.name
             viewDetails.metadata = viewProperty.viewMetadata
-            viewDetails.subjects = splitText(viewProperty.subjects, ",")
 
             //Add listener and build view
             viewDetails.view.id = View.generateViewId()

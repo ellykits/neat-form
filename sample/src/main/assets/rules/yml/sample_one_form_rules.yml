@@ -6,13 +6,13 @@ condition: "age <= 18"
 actions:
   - "child_visibility = true"
 ---
-name: "adult_calculation"
+name: "decade_calculation"
 description: "decade calculation"
 priority: 1
 condition: "true"
 actions:
   - "import java.math.BigInteger;"
-  - "adult_calculation =  age * 10"
+  - "decade_calculation =  age * 10"
 ---
 name: "adult_visibility"
 description: "adults can buy alcohol"
@@ -59,7 +59,7 @@ actions:
 name: "no_prev_pregnancies_visibility"
 description: "Ask last pregnancies"
 priority: 1
-condition: "email_subscription != null"
+condition: "decade_calculation >= 500 &&  decade_calculation < 1000"
 actions:
   - "no_prev_pregnancies_visibility =  true"
 ---
@@ -83,3 +83,10 @@ priority: 1
 condition: "no_prev_pregnancies > 0"
 actions:
   - "delivery_methods_visibility =  true"
+---
+name: "test_calculation"
+description: "Delivery method"
+priority: 1
+condition: "true"
+actions:
+  - "test_calculation =  'I am a calculation field'"
