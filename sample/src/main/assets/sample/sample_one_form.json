@@ -6,6 +6,50 @@
       "title": "Demographics",
       "fields": [
         {
+          "name": "gender",
+          "type": "spinner",
+          "properties": {
+            "text": "Choose your gender"
+          },
+          "options": [
+            {
+              "name": "female",
+              "text": "Female",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "A123390123123",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "male",
+              "text": "Male",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "S8918313",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify your gender"
+        },
+        {
+          "name": "male_avatar",
+          "type": "custom_image",
+          "properties": {
+            "src": "avatar"
+          },
+          "subjects": "gender:text"
+        },
+        {
+          "name": "female_avatar",
+          "type": "custom_image",
+          "properties": {
+            "src": "avatar2"
+          },
+          "subjects": "gender:text"
+        },
+        {
           "name": "adult",
           "type": "text_input_edit_text",
           "properties": {
@@ -32,8 +76,7 @@
           "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter your age",
-            "type": "name",
-            "padding": "8"
+            "type": "name"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -46,7 +89,10 @@
               "message": "Not a valid age"
             }
           ],
-          "dependent_calculations": ["test", "decade"],
+          "dependent_calculations": [
+            "test",
+            "decade"
+          ],
           "required_status": "yes:Please add age"
         },
         {
@@ -73,35 +119,6 @@
           },
           "required_status": "no:Please specify if you want subscription",
           "subjects": "age:number"
-        },
-        {
-          "name": "gender",
-          "type": "spinner",
-          "properties": {
-            "text": "Choose your gender"
-          },
-          "options": [
-            {
-              "name": "female",
-              "text": "Female",
-              "meta_data": {
-                "openmrs_entity": "",
-                "openmrs_entity_id": "A123390123123",
-                "openmrs_entity_parent": ""
-              }
-            },
-            {
-              "name": "male",
-              "text": "Male",
-              "meta_data": {
-                "openmrs_entity": "",
-                "openmrs_entity_id": "S8918313",
-                "openmrs_entity_parent": ""
-              }
-            }
-          ],
-          "subjects": "email_subscription:map",
-          "required_status": "yes:Please specify your gender"
         },
         {
           "name": "country",
