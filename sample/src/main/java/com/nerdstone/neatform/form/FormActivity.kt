@@ -14,6 +14,7 @@ import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
+import com.nerdstone.neatform.custom.views.CustomImageView
 import com.nerdstone.neatform.utils.DialogUtil
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
@@ -75,16 +76,26 @@ class FormActivity : AppCompatActivity(), StepperActions {
             when (formData.formCategory) {
                 FormType.embeddableDefault -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
-                        .buildForm()
+                    formBuilder?.also {
+                        it.registeredViews["custom_image"] = CustomImageView::class
+                        it.buildForm()
+                    }
                 }
                 FormType.embeddableCustomized -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
-                        .buildForm(viewList = views)
+                    formBuilder?.also {
+                        it.registeredViews["custom_image"] = CustomImageView::class
+                        it.buildForm(viewList = views)
+                    }
                 }
                 FormType.stepperDefault -> {
                     sampleToolBar.visibility = View.GONE
                     formBuilder = JsonFormBuilder(this, formData.filePath, null)
-                        .buildForm(JsonFormStepBuilderModel.Builder(this, stepperModel).build())
+                            formBuilder?.also {
+                                it.registeredViews["custom_image"] = CustomImageView::class
+                                it.buildForm(JsonFormStepBuilderModel.Builder(this,
+                                        stepperModel).build())
+                            }
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 FormType.stepperCustomized -> {

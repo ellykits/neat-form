@@ -42,13 +42,6 @@ condition: "gender.value == 'Female'"
 actions:
   - "choose_language_visibility =  true"
 ---
-name: "gender_visibility"
-description: "Ask gender"
-priority: 1
-condition: "email_subscription != null"
-actions:
-  - "gender_visibility =  true"
----
 name: "country_visibility"
 description: "Ask country"
 priority: 1
@@ -90,3 +83,17 @@ priority: 1
 condition: "true"
 actions:
   - "test_calculation =  'I am a calculation field'"
+---
+name: "male_avatar_visibility"
+description: "Show this avatar if gender is male"
+priority: 1
+condition: "gender.value == 'Male'"
+actions:
+  - "male_avatar_visibility =  true"
+---
+name: "female_avatar_visibility"
+description: "Show this avatar if gender is female"
+priority: 1
+condition: "gender.value == 'Female'"
+actions:
+  - "female_avatar_visibility =  true"
