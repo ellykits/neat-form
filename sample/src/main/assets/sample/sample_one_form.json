@@ -110,6 +110,18 @@
           }
         },
         {
+          "name": "custom_toast2_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "info",
+            "dismissible": "no",
+            "title": "{test_calculation}",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "background_color": "#082455",
+            "text_color": "#EBEE2F"
+          }
+        },
+        {
           "name": "adult",
           "type": "text_input_edit_text",
           "properties": {

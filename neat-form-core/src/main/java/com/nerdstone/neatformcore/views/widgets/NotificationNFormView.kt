@@ -29,7 +29,7 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
     private val rulesHandler = NFormRulesHandler.INSTANCE
 
     init {
-        rulesHandler.calculationChangeListener = this
+        rulesHandler.calculationListeners.add(this)
     }
 
     constructor(context: Context) : super(context)

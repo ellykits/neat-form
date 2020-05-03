@@ -17,7 +17,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
 
     override lateinit var formBuilder: FormBuilder
     override lateinit var executableRulesList: HashSet<Rule>
-    var calculationChangeListener: CalculationChangeListener? = null
+    var calculationListeners: MutableList<CalculationChangeListener> = mutableListOf()
 
     companion object {
 
@@ -81,9 +81,12 @@ class NFormRulesHandler private constructor() : RulesHandler {
                     NFormViewData(
                         type = "Calculation", value = value, metadata = null
                     )
-                calculationChangeListener?.onCalculationChanged(Pair(key, value))
+                updateCalculationListeners(Pair(key, value))
             }
     }
+
+    private fun updateCalculationListeners(calculation: Pair<String, Any?>) =
+        calculationListeners.forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
         if (findViewWithKey(key) != null) {
