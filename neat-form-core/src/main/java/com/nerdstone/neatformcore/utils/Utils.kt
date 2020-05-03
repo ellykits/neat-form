@@ -81,10 +81,10 @@ object Utils {
 }
 
 object DialogUtil {
-    fun createAlertDialog(context: Context, title: String, message: String): AlertDialog.Builder {
+    fun createAlertDialog(context: Context, title: String?, message: String): AlertDialog.Builder {
         return AlertDialog.Builder(context)
             .apply {
-                setTitle(title)
+                if (title != null) setTitle(title)
                 setMessage(message)
                 create()
             }
