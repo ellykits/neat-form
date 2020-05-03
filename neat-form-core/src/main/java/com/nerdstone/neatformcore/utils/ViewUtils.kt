@@ -131,11 +131,9 @@ object ViewUtils {
             nFormView: NFormView, acceptedAttributes: HashSet<String>,
             task: (attribute: Map.Entry<String, Any>) -> Unit
     ) {
-        if (nFormView.viewProperties.viewAttributes != null) {
-            nFormView.viewProperties.viewAttributes?.forEach { attribute ->
-                if (acceptedAttributes.contains(attribute.key.toUpperCase(Locale.getDefault()))) {
-                    task(attribute)
-                }
+        nFormView.viewProperties.viewAttributes?.forEach { attribute ->
+            if (acceptedAttributes.contains(attribute.key.toUpperCase(Locale.getDefault()))) {
+                task(attribute)
             }
         }
     }

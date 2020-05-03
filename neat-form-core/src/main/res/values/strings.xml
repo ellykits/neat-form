@@ -2,4 +2,8 @@
     <string name="app_name">neatformcore</string>
     <string name="form_builder_error">Provide root view or stepper for form builder </string>
     <string name="nothing_selected">Nothing Selected</string>
+    <string name="notification_cancel">notification cancel</string>
+    <string name="notification_info">notification info</string>
+    <string name="notification_type">notification_type</string>
+    <string name="ok">OK</string>
 </resources>

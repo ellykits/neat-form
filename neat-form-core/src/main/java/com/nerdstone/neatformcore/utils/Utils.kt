@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.utils
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.util.TypedValue
@@ -8,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import com.google.gson.GsonBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import java.util.*
-
 
 object ThemeColor {
     const val COLOR_ACCENT = "colorAccent"
@@ -77,5 +77,16 @@ object Utils {
        return nFormView.viewProperties.options?.first { option ->
             option.name == optionName
         }?.viewMetadata
+    }
+}
+
+object DialogUtil {
+    fun createAlertDialog(context: Context, title: String, message: String): AlertDialog.Builder {
+        return AlertDialog.Builder(context)
+            .apply {
+                setTitle(title)
+                setMessage(message)
+                create()
+            }
     }
 }

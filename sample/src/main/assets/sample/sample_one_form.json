@@ -50,6 +50,66 @@
           "subjects": "gender:text"
         },
         {
+          "name": "info_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "info",
+            "dismissible": "yes",
+            "title": "Info toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "notification_dialog_title": "Wubba Lubba Dub Dub",
+            "notification_dialog_text": "I am in great pain, please help me!!"
+          }
+        },
+        {
+          "name": "success_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "success",
+            "dismissible": "yes",
+            "title": "Success toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "notification_dialog_title": "Wubba Lubba Dub Dub",
+            "notification_dialog_text": "I am in great pain, please help me!!"
+          }
+        },
+        {
+          "name": "warning_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "warning",
+            "dismissible": "yes",
+            "title": "Warning toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "notification_dialog_title": "Wubba Lubba Dub Dub",
+            "notification_dialog_text": "I am in great pain, please help me!!"
+          }
+        },
+        {
+          "name": "error_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "error",
+            "dismissible": "yes",
+            "title": "Error toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "notification_dialog_title": "Wubba Lubba Dub Dub",
+            "notification_dialog_text": "I am in great pain, please help me!!"
+          }
+        },
+        {
+          "name": "info_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "info",
+            "dismissible": "no",
+            "title": "Custom toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "background_color": "#91468C",
+            "text_color": "#EBEE2F"
+          }
+        },
+        {
           "name": "adult",
           "type": "text_input_edit_text",
           "properties": {

@@ -15,12 +15,11 @@ import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
 import com.nerdstone.neatform.custom.views.CustomImageView
-import com.nerdstone.neatform.utils.DialogUtil
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.DialogUtil
 import timber.log.Timber
 
 class FormActivity : AppCompatActivity(), StepperActions {
@@ -45,7 +44,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
         completeButton = findViewById(R.id.completeButton)
 
         val stepperModel = StepperModel.Builder()
-            .exitButtonDrawableResource(R.drawable.ic_clear_white)
+            .exitButtonDrawableResource(R.drawable.ic_clear)
             .indicatorType(StepperModel.IndicatorType.DOT_INDICATOR)
             .toolbarColorResource(R.color.colorPrimaryDark)
             .build()
