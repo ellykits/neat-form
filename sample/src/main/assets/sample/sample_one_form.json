@@ -105,7 +105,7 @@
             "dismissible": "no",
             "title": "Custom toast: {test_calculation}",
             "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick! \n\nDecade from age: {decade_calculation}",
-            "background_color": "#91468C",
+            "background_color": "#082455",
             "text_color": "#EBEE2F"
           }
         },

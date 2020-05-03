@@ -28,9 +28,7 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun resetValueWhenHidden() {
-        viewBuilder.resetDatetimePickerValue()
-    }
+    override fun resetValueWhenHidden() = viewBuilder.resetDatetimePickerValue()
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 

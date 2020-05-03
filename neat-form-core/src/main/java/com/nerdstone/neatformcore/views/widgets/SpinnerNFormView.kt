@@ -34,11 +34,9 @@ class SpinnerNFormView : LinearLayout, NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
-    override fun resetValueWhenHidden() {
-        viewBuilder.resetSpinnerValue()
-    }
+    override fun resetValueWhenHidden() = viewBuilder.resetSpinnerValue()
 
-    override fun validateValue(): Boolean = formValidator.validateField(this).first
+    override fun validateValue() = formValidator.validateField(this).first
 
     override fun setVisibility(visibility: Int) {
         super.setVisibility( visibility)
