@@ -106,8 +106,7 @@
             "title": "Custom toast: {test_calculation}",
             "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick! \n\nDecade from age: {decade_calculation}",
             "background_color": "#91468C",
-            "text_color": "#EBEE2F",
-            "highlighted_text_color": "#F6D42D"
+            "text_color": "#EBEE2F"
           }
         },
         {

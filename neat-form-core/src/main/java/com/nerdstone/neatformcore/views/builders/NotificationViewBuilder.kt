@@ -1,6 +1,11 @@
 package com.nerdstone.neatformcore.views.builders
 
 import android.graphics.Color
+import android.graphics.Typeface
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -151,17 +156,38 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
     }
 
     fun updateNotificationText(calculationField: Pair<String, Any?>) {
-        if (currentText.contains(calculationField.first)) {
-            notificationText.text =
-                currentText.replace(
-                    "{${calculationField.first}}", calculationField.second.toString(), true
-                )
+        with(currentText) {
+            if (contains(calculationField.first)) {
+                notificationText.text = getFormattedText(calculationField, this)
+            }
         }
-        if (currentTitle!!.contains(calculationField.first)) {
-            notificationTitle.text =
-                currentTitle?.replace(
-                    "{${calculationField.first}}", calculationField.second.toString(), true
-                )
+        currentTitle?.run {
+            if (contains(calculationField.first)) {
+                notificationTitle.text = getFormattedText(calculationField, this)
+            }
+        }
+    }
+
+    /**
+     * Format the replaceable text by making it bold and highlighting its color
+     */
+    private fun getFormattedText(
+        calculationField: Pair<String, Any?>, currentText: String
+    ): SpannableStringBuilder {
+        val replaceableText = calculationField.second.toString()
+        return SpannableStringBuilder(
+            currentText.replace("{${calculationField.first}}", replaceableText, true)
+        ).apply {
+            val startPosition = indexOf(replaceableText)
+            val endPosition = startPosition + replaceableText.length
+            setSpan(
+                StyleSpan(Typeface.BOLD), startPosition, endPosition,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                ForegroundColorSpan(highlightedTextColor), startPosition, endPosition,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
         }
     }
 }
