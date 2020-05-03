@@ -279,6 +279,18 @@
             }
           ],
           "subjects": "no_prev_pregnancies:number"
+        },
+        {
+          "name": "warning_toast_notification",
+          "type": "toast_notification",
+          "properties": {
+            "notification_type": "warning",
+            "dismissible": "yes",
+            "title": "Warning toast",
+            "text": "Hey Morty! Morty I turned myself into a pickle. Am a pickle Rick!",
+            "notification_dialog_title": "Wubba Lubba Dub Dub",
+            "notification_dialog_text": "I am in great pain, please help me!!"
+          }
         }
       ]
     }

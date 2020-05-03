@@ -64,7 +64,7 @@ class `Test building form with JSON` {
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             //VerticalRootView has 3 EditTextNFormView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            Assert.assertTrue(verticalRootView.childCount == 13)
+            Assert.assertTrue(verticalRootView.childCount == 14)
             Assert.assertTrue(verticalRootView.getChildAt(0) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
@@ -80,6 +80,7 @@ class `Test building form with JSON` {
                 (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
             Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
             Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(13) is NotificationNFormView)
         }
 
     @Test

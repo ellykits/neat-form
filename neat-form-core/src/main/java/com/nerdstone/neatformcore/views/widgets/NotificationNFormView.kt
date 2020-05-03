@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import com.nerdstone.neatformcore.domain.listeners.CalculationChangeListener
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
@@ -16,7 +16,7 @@ import com.nerdstone.neatformcore.views.builders.NotificationViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 import timber.log.Timber
 
-class NotificationNFormView : ConstraintLayout, NFormView, CalculationChangeListener {
+class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener {
 
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null

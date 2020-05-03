@@ -27,9 +27,9 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
     private lateinit var notificationCancelIcon: ImageView
     private lateinit var notificationTypeIcon: ImageView
     private lateinit var notificationInfoIcon: ImageView
+    private lateinit var currentText: String
     private val notificationView = nFormView as NotificationNFormView
     private var currentViewProps: MutableMap<String, Any>? = null
-    private lateinit var currentText: String
     private var currentTitle: String? = null
     private var highlightedTextColor = Color.parseColor("#ffffff")
 
