@@ -32,14 +32,11 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
         orientation = VERTICAL
     }
 
-    override fun resetValueWhenHidden() {
-        viewBuilder.resetNumberSelectorValue()
-    }
+    override fun resetValueWhenHidden() = viewBuilder.resetNumberSelectorValue()
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
-    override fun validateValue(): Boolean =
-        formValidator.validateLabeledField(this)
+    override fun validateValue() = formValidator.validateLabeledField(this)
 
     override fun setVisibility(visibility: Int) {
         super.setVisibility( visibility)

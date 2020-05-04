@@ -46,9 +46,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         }
     }
 
-    override fun resetValueWhenHidden() {
-        setText("")
-    }
+    override fun resetValueWhenHidden() = setText("")
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 

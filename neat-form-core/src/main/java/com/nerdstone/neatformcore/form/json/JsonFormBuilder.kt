@@ -261,6 +261,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         registeredViews[ViewType.CHECKBOX] = CheckBoxNFormView::class
         registeredViews[ViewType.MULTI_CHOICE_CHECKBOX] = MultiChoiceCheckBox::class
         registeredViews[ViewType.RADIO_GROUP] = RadioGroupView::class
+        registeredViews[ViewType.TOAST_NOTIFICATION] = NotificationNFormView::class
     }
 }
 
