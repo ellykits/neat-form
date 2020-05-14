@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.CheckBox
 import androidx.appcompat.widget.AppCompatCheckBox
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener

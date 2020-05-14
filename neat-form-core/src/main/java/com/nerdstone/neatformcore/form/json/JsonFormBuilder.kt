@@ -95,7 +95,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     }
 
     override fun buildForm(
-            jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
     ): FormBuilder {
         registerViews()
         launch(defaultContextProvider.main()) {
@@ -107,27 +107,21 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                         }
                     }
                 }
-                launch {
-                    val rulesAsync = withContext(defaultContextProvider.io()) {
-                        singleRunner.afterPrevious {
-                            registerFormRulesFromFile(context, RulesFileType.YAML)
-                        }
-                    }
-                    if (rulesAsync) {
-                        launch {
-                            withContext(defaultContextProvider.main()) {
-                                if (viewList == null)
-                                    createFormViews(
-                                            context,
-                                            arrayListOf(),
-                                            jsonFormStepBuilderModel
-                                    )
-                                else
-                                    createFormViews(context, viewList, jsonFormStepBuilderModel)
-                            }
-                        }
+
+                val rulesAsync = withContext(defaultContextProvider.io()) {
+                    singleRunner.afterPrevious {
+                        registerFormRulesFromFile(context, RulesFileType.YAML)
                     }
                 }
+                if (rulesAsync) {
+                    withContext(defaultContextProvider.main()) {
+                        if (viewList == null)
+                            createFormViews(context, arrayListOf(), jsonFormStepBuilderModel)
+                        else
+                            createFormViews(context, viewList, jsonFormStepBuilderModel)
+                    }
+                }
+
             } catch (throwable: Throwable) {
                 Timber.e(throwable)
             }
@@ -139,7 +133,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         return when {
             jsonString != null -> JsonFormParser.parseJson(jsonString)
             fileSource != null -> JsonFormParser.parseJson(
-                    AssetFile.readAssetFileAsString(context, fileSource!!)
+                AssetFile.readAssetFileAsString(context, fileSource!!)
             )
             else -> null
         }
@@ -149,7 +143,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
      * @param context android context
      */
     override fun createFormViews(
-            context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
+        context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
     ) {
         if (form != null) {
             when {
@@ -166,20 +160,20 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                         rootView.formBuilder = this
                         addViewsToVerticalRootView(views, index, formContent, rootView)
                         val stepFragment = StepFragment.newInstance(
-                                index,
-                                StepModel.Builder()
-                                        .title(form!!.formName)
-                                        .subTitle(formContent.stepName as CharSequence)
-                                        .build(),
-                                rootView
+                            index,
+                            StepModel.Builder()
+                                .title(form!!.formName)
+                                .subTitle(formContent.stepName as CharSequence)
+                                .build(),
+                            rootView
                         )
                         fragmentsList.add(stepFragment)
                     }
                     neatStepperLayout.setUpViewWithAdapter(
-                            StepperPagerAdapter(
-                                    (context as FragmentActivity).supportFragmentManager,
-                                    fragmentsList
-                            )
+                        StepperPagerAdapter(
+                            (context as FragmentActivity).supportFragmentManager,
+                            fragmentsList
+                        )
                     )
                     neatStepperLayout.showLoadingIndicators(false)
                 }
@@ -193,15 +187,15 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                     mainLayout?.addView(formViews)
                 }
                 else -> Toast.makeText(
-                        context, R.string.form_builder_error, Toast.LENGTH_LONG
+                    context, R.string.form_builder_error, Toast.LENGTH_LONG
                 ).show()
             }
         }
     }
 
     private fun addViewsToVerticalRootView(
-            customViews: List<View>?, stepIndex: Int,
-            formContent: NFormContent, verticalRootView: VerticalRootView
+        customViews: List<View>?, stepIndex: Int,
+        formContent: NFormContent, verticalRootView: VerticalRootView
     ) {
 
         val view = customViews?.getOrNull(stepIndex)
@@ -235,8 +229,8 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     }
 
     override fun registerFormRulesFromFile(
-            context: Context,
-            rulesFileType: RulesFileType
+        context: Context,
+        rulesFileType: RulesFileType
     ): Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
@@ -279,7 +273,7 @@ class StepFragment : Step {
 
     companion object {
         fun newInstance(
-                index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
+            index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
         ): StepFragment {
 
             val args = Bundle().apply {
@@ -302,7 +296,7 @@ class StepFragment : Step {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         if (formView != null && formView?.parent != null) {
             return formView?.parent as View
