@@ -219,7 +219,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                 it[JsonFormConstants.FORM_NAME] = form?.formName
                 it[JsonFormConstants.FORM_METADATA] = form?.formMetadata
                 it[JsonFormConstants.FORM_VERSION] = form?.formVersion
-                it[JsonFormConstants.FORM_DATA] = viewModel.details
+                it[JsonFormConstants.FORM_DATA] = viewModel.details.value
             }
 
             return Utils.getJsonFromModel(formDetails)
@@ -240,7 +240,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     override fun getFormData(): HashMap<String, NFormViewData> {
         if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
-            return viewModel.details
+            return viewModel.details.value!!
         }
         FormErrorDialog(context).show()
         return hashMapOf()
@@ -314,12 +314,8 @@ class StepFragment : Step {
         return StepVerificationState(true, null)
     }
 
-    override fun onSelected() {
-        //Overridden not useful at the moment
-    }
+    override fun onSelected() = Unit
 
-    override fun onError(stepVerificationState: StepVerificationState) {
-        //Overridden not useful at the moment
-    }
+    override fun onError(stepVerificationState: StepVerificationState) = Unit
 
 }

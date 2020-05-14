@@ -34,6 +34,10 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         editText?.setText("")
     }
 
+    override fun setValue(value: Any, disabled: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun validateValue(): Boolean {
         val validationPair = formValidator.validateField(this)
         if (!validationPair.first) {

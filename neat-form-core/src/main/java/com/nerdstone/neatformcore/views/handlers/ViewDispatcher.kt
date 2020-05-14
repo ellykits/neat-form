@@ -12,6 +12,16 @@ import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
+/**
+ * @author Elly Nerdstone
+ *
+ * This Singleton class provides a listener method that is called when a field's value
+ * has been changed. Say for instance when the text of an EditText has been updated the listener
+ * will be triggered. At this point the fields value can be validated and then the rules are fired
+ * for the fields watching on the field that has passed its value.
+ *
+ * The rules are handled by the [RulesFactory] class and the validation
+ */
 class ViewDispatcher private constructor() : DataActionListener {
 
     val rulesFactory: RulesFactory = RulesFactory.INSTANCE
@@ -24,28 +34,33 @@ class ViewDispatcher private constructor() : DataActionListener {
     override fun onPassData(viewDetails: NFormViewDetails) {
         val context = viewDetails.view.context
         var activityContext = context
-        if (context is ContextThemeWrapper) {
-            activityContext = context.baseContext
-        }
-        val viewModel = ViewModelProvider(activityContext as FragmentActivity)[DataViewModel::class.java]
+        if (context is ContextThemeWrapper) activityContext = context.baseContext
+        val viewModel =
+            ViewModelProvider(activityContext as FragmentActivity)[DataViewModel::class.java]
 
-        if (viewModel.details[viewDetails.name] != viewDetails.value) {
-            viewModel.details[viewDetails.name] =
-                    NFormViewData(viewDetails.view.javaClass.simpleName, viewDetails.value, viewDetails.metadata)
+        viewModel.details.value?.also {
 
-            val nFormView = viewDetails.view as NFormView
-            nFormView.validateValue()
+            if (it[viewDetails.name] != viewDetails.value) {
+                it[viewDetails.name] =
+                    NFormViewData(
+                        viewDetails.view.javaClass.simpleName,
+                        viewDetails.value, viewDetails.metadata
+                    )
 
-            //Fire rules for calculations and other fields watching on this current field
-            val calculations = (viewDetails.view as NFormView).viewProperties.calculations
-            if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim()) || calculations != null) {
-                rulesFactory.updateFactsAndExecuteRules(viewDetails)
-            }
+                val nFormView = viewDetails.view as NFormView
+                nFormView.validateValue()
 
-            if (viewDetails.value == null && Utils.isFieldRequired(nFormView)
+                //Fire rules for calculations and other fields watching on this current field
+                val calculations = (viewDetails.view as NFormView).viewProperties.calculations
+                if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim()) || calculations != null) {
+                    rulesFactory.updateFactsAndExecuteRules(viewDetails)
+                }
+
+                if (viewDetails.value == null && Utils.isFieldRequired(nFormView)
                     && viewDetails.view.visibility == View.VISIBLE
-            ) {
-                nFormView.formValidator.requiredFields.add(viewDetails.name)
+                ) {
+                    nFormView.formValidator.requiredFields.add(viewDetails.name)
+                }
             }
         }
     }

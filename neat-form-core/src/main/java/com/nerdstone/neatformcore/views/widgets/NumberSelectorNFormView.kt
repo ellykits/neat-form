@@ -36,6 +36,10 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
+    override fun setValue(value: Any, disabled: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun validateValue() = formValidator.validateLabeledField(this)
 
     override fun setVisibility(visibility: Int) {

@@ -48,6 +48,10 @@ class CheckBoxNFormView : AppCompatCheckBox, NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
+    override fun setValue(value: Any, disabled: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun validateValue(): Boolean {
         val validationPair = formValidator.validateField(this)
         if (!validationPair.first) {

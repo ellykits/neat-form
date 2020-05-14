@@ -32,14 +32,6 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
     }
 
-    override fun handleReadOnlyState() {
-        TODO("implement toggle enable/disable state on views")
-    }
-
-    override fun handleFilter(filterItems: List<String>) {
-        TODO("implement functionality for filtering")
-    }
-
     override fun updateSkipLogicFactAfterEvaluate(
         evaluationResult: Boolean, rule: Rule?, facts: Facts?
     ) {
@@ -77,10 +69,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         filterCurrentRules(Constants.RuleActions.CALCULATION)
             .forEach { key ->
                 val value = facts?.asMap()?.get(key)
-                formBuilder.viewModel.details[key] =
-                    NFormViewData(
-                        type = "Calculation", value = value, metadata = null
-                    )
+                formBuilder.viewModel.saveValue(key, NFormViewData("Calculation", value, null))
                 updateCalculationListeners(Pair(key, value))
             }
     }

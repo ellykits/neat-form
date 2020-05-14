@@ -12,10 +12,6 @@ interface RulesHandler {
 
     var formBuilder: FormBuilder
 
-    fun handleReadOnlyState()
-
-    fun handleFilter(filterItems: List<String>)
-
     fun updateSkipLogicFactAfterEvaluate(evaluationResult: Boolean, rule: Rule?, facts: Facts?)
 
     fun handleSkipLogic(facts: Facts?)

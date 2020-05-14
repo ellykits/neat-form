@@ -46,4 +46,8 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
        Timber.i("Updated calculation ${calculationField.first} -> ${calculationField.second}")
         viewBuilder.updateNotificationText(calculationField)
     }
+
+    override fun setValue(value: Any, disabled: Boolean) {
+        TODO("Not yet implemented")
+    }
 }

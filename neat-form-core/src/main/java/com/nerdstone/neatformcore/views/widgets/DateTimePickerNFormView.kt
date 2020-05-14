@@ -40,6 +40,10 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
         return validationPair.first
     }
 
+    override fun setValue(value: Any, disabled: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun setVisibility(visibility: Int) {
         super.setVisibility( visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
