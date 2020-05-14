@@ -20,7 +20,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building Spinner view` : BaseJsonViewBuilderTest(){
+class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val spinnerOption1 = spyk(NFormSubViewProperty())

@@ -17,7 +17,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test View Dispacher action` : BaseJsonViewBuilderTest(){
+class ViewDispatcherTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = NFormViewProperty()
     private val viewDispatcher = spyk<ViewDispatcher>()

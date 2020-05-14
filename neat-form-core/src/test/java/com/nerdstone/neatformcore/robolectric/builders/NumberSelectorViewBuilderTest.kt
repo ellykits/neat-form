@@ -21,7 +21,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building NumberSelector view` : BaseJsonViewBuilderTest() {
+class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
     private val numberSelector = NumberSelectorNFormView(activity.get())
     private val numberSelectorViewBuilder = spyk(NumberSelectorViewBuilder(numberSelector))
     private val viewProperty = spyk(NFormViewProperty())

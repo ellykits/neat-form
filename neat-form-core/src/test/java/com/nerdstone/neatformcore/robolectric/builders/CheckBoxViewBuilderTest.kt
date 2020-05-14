@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
+class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxNFormView = CheckBoxNFormView(activity.get())

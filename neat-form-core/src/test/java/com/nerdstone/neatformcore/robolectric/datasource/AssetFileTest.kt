@@ -14,7 +14,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test working with Assets` {
+class AssetFileTest {
 
     private lateinit var context: Context
 

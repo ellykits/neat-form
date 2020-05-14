@@ -26,10 +26,9 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -38,7 +37,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 @ExperimentalCoroutinesApi
-class `Test building form with JSON` {
+class JsonFormBuilderTest {
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
@@ -48,7 +47,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json from file source, create views and register form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
@@ -85,7 +84,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json from json string, create views and register form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(TestConstants.SAMPLE_JSON.trimIndent(), activity.get(), mainLayout)
             )
@@ -120,7 +119,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json from file source, update views from provided layout view with form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
@@ -146,7 +145,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build default form (in vertical layout) with using stepper library`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 objToCopy =
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_TWO_FORM_FILE, mainLayout),
@@ -199,7 +198,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build customized form (using provided layout) using stepper library`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
 
             jsonFormBuilder = spyk(
                 objToCopy =

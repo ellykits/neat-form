@@ -24,7 +24,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
+class TextInputEditTextBuilderTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val textInputEditTextNFormView = TextInputEditTextNFormView(activity.get())

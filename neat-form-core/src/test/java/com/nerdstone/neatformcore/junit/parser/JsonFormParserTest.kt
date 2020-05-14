@@ -5,7 +5,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class `Test passing JSON files` {
+class JsonFormParserTest {
 
     private var json: String? = null
 

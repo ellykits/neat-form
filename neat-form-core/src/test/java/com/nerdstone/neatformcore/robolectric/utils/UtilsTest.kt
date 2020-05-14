@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test Utils with Robolectric` {
+class UtilsTest {
     @Before
     fun `Before everything else`() {
         mockkObject(Utils)
