@@ -44,8 +44,8 @@ interface NFormView {
 
     /**
      * This method sets [value] of the field. And it also accepts an optional parameter called
-     * [disabled] that is used to indicate whether you want the field to be disabled or not. Use the
+     * [enabled] that is used to indicate whether you want the field to be disabled or not. Use the
      * option if you want to make the field readonly.
      */
-    fun setValue(value: Any, disabled: Boolean = false)
+    fun setValue(value: Any, enabled: Boolean = true)
 }

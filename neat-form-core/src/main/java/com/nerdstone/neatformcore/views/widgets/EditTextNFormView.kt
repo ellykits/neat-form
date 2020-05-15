@@ -58,12 +58,13 @@ class EditTextNFormView : AppCompatEditText, NFormView {
         return validationPair.first
     }
 
-    override fun setValue(value: Any, disabled: Boolean) {
-        TODO("Not yet implemented")
+    override fun setValue(value: Any, enabled: Boolean) {
+        setText(value as String)
+        isEnabled = enabled
     }
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

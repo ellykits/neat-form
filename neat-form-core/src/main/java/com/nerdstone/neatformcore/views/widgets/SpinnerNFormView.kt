@@ -36,7 +36,7 @@ class SpinnerNFormView : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() = viewBuilder.resetSpinnerValue()
 
-    override fun setValue(value: Any, disabled: Boolean) {
+    override fun setValue(value: Any, enabled: Boolean) {
         TODO("Not yet implemented")
     }
 

@@ -11,9 +11,14 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
  */
 
 class DataViewModel : ViewModel() {
+
     var details: MutableLiveData<HashMap<String, NFormViewData>> = MutableLiveData(HashMap())
 
-    fun saveValue(fieldName: String, fieldValue:NFormViewData){
+    fun saveFieldValue(fieldName: String, fieldValue: NFormViewData) {
         details.value?.set(fieldName, fieldValue)
+    }
+
+    fun updateDetails(newDetails: HashMap<String, NFormViewData>) {
+        details.value?.putAll(newDetails)
     }
 }

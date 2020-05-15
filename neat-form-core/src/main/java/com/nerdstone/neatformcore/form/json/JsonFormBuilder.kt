@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
@@ -22,15 +24,14 @@ import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
+import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.form.common.FormErrorDialog
+import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.utils.Constants.ViewType
-import com.nerdstone.neatformcore.utils.DefaultDispatcherProvider
-import com.nerdstone.neatformcore.utils.DispatcherProvider
-import com.nerdstone.neatformcore.utils.SingleRunner
-import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
@@ -53,6 +54,19 @@ object JsonFormConstants {
 
 /***
  * @author Elly Nerdstone
+ *
+ * This class implements the [FormBuilder] and is used to build the form using JSON specification.
+ * This form builder works in 3 sequential steps. First it parses the JSON into a model, secondly it
+ * reads the rules file and finally creates the actual views. All these three tasks run one after the
+ * other but within a [CoroutineScope].
+ *
+ * To ensure that the the form builder will not attempt to create the views without first parsing
+ * the JSON a mutex [SingleRunner] is used to guarantee that the tasks run sequentially. This
+ * does not mean however that the tasks are running on the main thread.
+ *
+ * To parse the JSON for example is handled by [DispatcherProvider.default] method since it is a CPU intensive task.
+ * Reading of rules file however is run by [DispatcherProvider.io] whereas creation of views is done on the
+ * main thread using [DispatcherProvider.main] scope.
  */
 class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     private var mainLayout: ViewGroup? = null
@@ -63,12 +77,13 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
-    override var jsonString: String? = null
+    override var formString: String? = null
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
     override lateinit var viewModel: DataViewModel
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var registeredViews = hashMapOf<String, KClass<*>>()
+    private var readOnlyFields = mutableSetOf<String>()
 
     constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
             : this() {
@@ -81,7 +96,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     constructor(jsonString: String, context: Context, mainLayout: ViewGroup?)
             : this() {
-        this.jsonString = jsonString
+        this.formString = jsonString
         this.context = context
         this.mainLayout = mainLayout
         this.neatStepperLayout = NeatStepperLayout(context)
@@ -131,8 +146,8 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     private fun parseJsonForm(): NForm? {
         return when {
-            jsonString != null -> JsonFormParser.parseJson(jsonString)
-            fileSource != null -> JsonFormParser.parseJson(
+            formString != null -> parseJson<NForm>(formString)
+            fileSource != null -> parseJson<NForm>(
                 AssetFile.readAssetFileAsString(context, fileSource!!)
             )
             else -> null
@@ -191,6 +206,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
                 ).show()
             }
         }
+        observeViewModel()
     }
 
     private fun addViewsToVerticalRootView(
@@ -228,9 +244,15 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         return ""
     }
 
+    override fun updateFormData(formDataJson: String, readOnlyFields: MutableSet<String>) {
+        if (this::viewModel.isInitialized) {
+            viewModel.updateDetails(Gson().parseJson(formDataJson))
+            this.readOnlyFields.addAll(readOnlyFields)
+        }
+    }
+
     override fun registerFormRulesFromFile(
-        context: Context,
-        rulesFileType: RulesFileType
+        context: Context, rulesFileType: RulesFileType
     ): Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
@@ -257,15 +279,32 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         registeredViews[ViewType.RADIO_GROUP] = RadioGroupView::class
         registeredViews[ViewType.TOAST_NOTIFICATION] = NotificationNFormView::class
     }
-}
 
+    /**
+     * This method watches for changes in the view model by observing the mutable live data.
+     */
+    private fun observeViewModel() {
+        this.viewModel = ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+        viewModel.details.observe(context as FragmentActivity, Observer {
+            it.filterNot { entry -> entry.key.endsWith(Constants.RuleActions.CALCULATION) }
+                .forEach { entry ->
+                    val nFormView: NFormView? =
+                        ViewUtils.findViewWithKey(entry.key, context) as NFormView
+                    entry.value.value?.let { realValue ->
+                        nFormView?.setValue(realValue, !readOnlyFields.contains(entry.key))
+                    }
+                    Timber.d("Updated field %s : %s", entry.key, entry.value.value)
+                }
+        })
+    }
+}
 
 const val FRAGMENT_VIEW = "fragment_view"
 const val FRAGMENT_INDEX = "index"
 
 class StepFragment : Step {
-    var index: Int? = null
-    var formView: View? = null
+    private var index: Int? = null
+    private var formView: View? = null
 
     constructor()
 
@@ -291,7 +330,6 @@ class StepFragment : Step {
             index = it.getInt(FRAGMENT_INDEX)
             formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
         }
-        retainInstance = true
     }
 
 
@@ -318,4 +356,8 @@ class StepFragment : Step {
 
     override fun onError(stepVerificationState: StepVerificationState) = Unit
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        formView = null
+    }
 }

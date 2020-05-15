@@ -45,7 +45,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
         viewBuilder.resetCheckBoxValues()
     }
 
-    override fun setValue(value: Any, disabled: Boolean) {
+    override fun setValue(value: Any, enabled: Boolean) {
         TODO("Not yet implemented")
     }
 

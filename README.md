@@ -30,7 +30,7 @@ Add the library as a dependency to your app's `build.gradle` file
 ```groovy  
 dependencies {  
     //....  
-    implementation "com.nerdstone:neat-form-core:1.0.12"  
+    implementation "com.nerdstone:neat-form-core:1.0.13"  
    //....  
   
 }  
@@ -82,7 +82,7 @@ Add the library in the dependency section of your application's `build.gradle` f
 ```groovy  
 dependencies {  
    //consume library - use the latest version available on github packages  
-   implementation "com.nerdstone:neat-form-core:1.0.12"  
+   implementation "com.nerdstone:neat-form-core:1.0.13"  
    //....  
   
 }  

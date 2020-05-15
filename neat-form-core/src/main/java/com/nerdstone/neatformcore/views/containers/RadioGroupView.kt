@@ -41,7 +41,7 @@ class RadioGroupView : LinearLayout, NFormView {
     override fun validateValue(): Boolean =
         formValidator.validateLabeledField(this)
 
-    override fun setValue(value: Any, disabled: Boolean) {
+    override fun setValue(value: Any, enabled: Boolean) {
         TODO("Not yet implemented")
     }
 

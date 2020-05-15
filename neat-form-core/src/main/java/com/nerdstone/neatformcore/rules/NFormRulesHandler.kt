@@ -1,6 +1,5 @@
 package com.nerdstone.neatformcore.rules
 
-import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.listeners.CalculationChangeListener
@@ -69,7 +68,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         filterCurrentRules(Constants.RuleActions.CALCULATION)
             .forEach { key ->
                 val value = facts?.asMap()?.get(key)
-                formBuilder.viewModel.saveValue(key, NFormViewData("Calculation", value, null))
+                formBuilder.viewModel.saveFieldValue(key, NFormViewData("Calculation", value, null))
                 updateCalculationListeners(Pair(key, value))
             }
     }
@@ -78,15 +77,10 @@ class NFormRulesHandler private constructor() : RulesHandler {
         calculationListeners.forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        if (findViewWithKey(key) != null) {
-            changeVisibility(isVisible, findViewWithKey(key)!!)
+        val view = ViewUtils.findViewWithKey(key, formBuilder.context)
+        if (view != null) {
+            changeVisibility(isVisible, view)
         }
-    }
-
-    private fun findViewWithKey(key: String): View? {
-        val activity = formBuilder.context as Activity
-        val activityRootView = activity.findViewById<View>(android.R.id.content).rootView
-        return activityRootView.findViewWithTag(key)
     }
 
     override fun refreshViews(allRules: Rules?) {
@@ -97,7 +91,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
                         .endsWith(Constants.RuleActions.VISIBILITY)
                 }.forEach { item ->
                     val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                    val view = findViewWithKey(key)
+                    val view = ViewUtils.findViewWithKey(key, formBuilder.context)
                     if (view != null) changeVisibility(false, view)
                 }
         }

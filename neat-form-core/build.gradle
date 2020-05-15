@@ -11,7 +11,7 @@ jacoco {
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
 
-version = "1.0.12"
+version = "1.0.13"
 
 android {
     compileSdkVersion 28
@@ -98,6 +98,9 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // debugImplementation because LeakCanary should only run in debug builds.
+   // debugImplementation "com.squareup.leakcanary:leakcanary-android:2.3"
 }
 
 repositories {

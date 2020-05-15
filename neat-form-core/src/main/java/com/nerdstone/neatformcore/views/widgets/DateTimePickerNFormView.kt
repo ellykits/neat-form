@@ -40,7 +40,7 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
         return validationPair.first
     }
 
-    override fun setValue(value: Any, disabled: Boolean) {
+    override fun setValue(value: Any, enabled: Boolean) {
         TODO("Not yet implemented")
     }
 

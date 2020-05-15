@@ -34,8 +34,9 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         editText?.setText("")
     }
 
-    override fun setValue(value: Any, disabled: Boolean) {
-        TODO("Not yet implemented")
+    override fun setValue(value: Any, enabled: Boolean) {
+        this.editText?.setText(value as String)
+        isEnabled = enabled
     }
 
     override fun validateValue(): Boolean {

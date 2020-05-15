@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
 /**
@@ -32,13 +33,8 @@ class ViewDispatcher private constructor() : DataActionListener {
      * @param viewDetails the details of the view that has just dispatched a value
      */
     override fun onPassData(viewDetails: NFormViewDetails) {
-        val context = viewDetails.view.context
-        var activityContext = context
-        if (context is ContextThemeWrapper) activityContext = context.baseContext
-        val viewModel =
-            ViewModelProvider(activityContext as FragmentActivity)[DataViewModel::class.java]
-
-        viewModel.details.value?.also {
+        
+        ViewUtils.getDataViewModel(viewDetails).details.value?.also {
 
             if (it[viewDetails.name] != viewDetails.value) {
                 it[viewDetails.name] =

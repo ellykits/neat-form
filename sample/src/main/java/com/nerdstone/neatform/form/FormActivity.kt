@@ -32,6 +32,29 @@ class FormActivity : AppCompatActivity(), StepperActions {
     private lateinit var completeButton: ImageView
     private var formBuilder: FormBuilder? = null
 
+    private val previousFormData = """
+        {
+            "age": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "4"
+            },
+            "child": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "adult"
+            }
+        }
+    """.trimIndent()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.form_activity)
@@ -78,7 +101,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
                         it.buildForm()
+                        updateForm()
                     }
+
                 }
                 FormType.embeddableCustomized -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
@@ -90,11 +115,15 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 FormType.stepperDefault -> {
                     sampleToolBar.visibility = View.GONE
                     formBuilder = JsonFormBuilder(this, formData.filePath, null)
-                            formBuilder?.also {
-                                it.registeredViews["custom_image"] = CustomImageView::class
-                                it.buildForm(JsonFormStepBuilderModel.Builder(this,
-                                        stepperModel).build())
-                            }
+                    formBuilder?.also {
+                        it.registeredViews["custom_image"] = CustomImageView::class
+                        it.buildForm(
+                            JsonFormStepBuilderModel.Builder(
+                                this,
+                                stepperModel
+                            ).build()
+                        )
+                    }
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 FormType.stepperCustomized -> {
@@ -104,6 +133,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                             JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
                             views
                         )
+                    updateForm()
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 else -> Toast.makeText(
@@ -114,14 +144,19 @@ class FormActivity : AppCompatActivity(), StepperActions {
         }
     }
 
-    override fun onStepError(stepVerificationState: StepVerificationState) {
+    private fun updateForm() {
+        formBuilder?.apply {
+            if (viewModel.details.value?.isEmpty()!!) {
+                updateFormData(previousFormData, mutableSetOf("age"))
+            }
+        }
     }
 
-    override fun onButtonNextClick(step: Step) {
-    }
+    override fun onStepError(stepVerificationState: StepVerificationState) = Unit
 
-    override fun onButtonPreviousClick(step: Step) {
-    }
+    override fun onButtonNextClick(step: Step) = Unit
+
+    override fun onButtonPreviousClick(step: Step) = Unit
 
     override fun onStepComplete(step: Step) {
         if (formBuilder?.getFormDataAsJson() != "") {

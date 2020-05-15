@@ -47,7 +47,7 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
         viewBuilder.updateNotificationText(calculationField)
     }
 
-    override fun setValue(value: Any, disabled: Boolean) {
+    override fun setValue(value: Any, enabled: Boolean) {
         TODO("Not yet implemented")
     }
 }
