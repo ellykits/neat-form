@@ -23,6 +23,7 @@ class RadioGroupView : LinearLayout, NFormView {
     override val viewBuilder = RadioGroupViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     init {
         orientation = VERTICAL

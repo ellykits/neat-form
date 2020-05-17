@@ -41,7 +41,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 "openmrs_entity_parent": ""
               },
               "type": "TextInputEditTextNFormView",
-              "value": "4"
+              "value": "54"
             },
             "child": {
               "meta_data": {
@@ -50,7 +50,48 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 "openmrs_entity_parent": ""
               },
               "type": "TextInputEditTextNFormView",
-              "value": "adult"
+              "value": "child"
+            },
+            "dob": {
+              "type": "DateTimePickerNFormView",
+              "value": 1589555422331
+            },
+            "time": {
+              "type": "DateTimePickerNFormView",
+              "value": 1589555422335
+            },
+            "adult": {
+              "type": "TextInputEditTextNFormView",
+              "value": "0723721920"
+            },
+            "email_subscription": {
+              "type": "CheckBoxNFormView",
+              "value": {
+                "email_subscription": "Subscribe to email notifications"
+              },
+              "visible": true
+            },
+            "no_prev_pregnancies": {
+              "type": "NumberSelectorNFormView",
+              "value": 1,
+              "visible": true
+            },
+            "gender": {
+              "type": "SpinnerNFormView",
+              "value": {
+                "value": "Male"
+              }
+            },
+            "country": {
+              "type": "SpinnerNFormView",
+              "value": {
+                "meta_data": {
+                  "country_code": "+61"
+                },
+                "value": "Australia",
+                "visible": true
+              },
+              "visible": true
             }
         }
     """.trimIndent()
@@ -124,6 +165,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
                             ).build()
                         )
                     }
+                    updateForm()
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 FormType.stepperCustomized -> {
@@ -147,7 +189,9 @@ class FormActivity : AppCompatActivity(), StepperActions {
     private fun updateForm() {
         formBuilder?.apply {
             if (viewModel.details.value?.isEmpty()!!) {
-                updateFormData(previousFormData, mutableSetOf("age"))
+                updateFormData(
+                    previousFormData, mutableSetOf("dob", "time", "email_subscription", "gender", "country", "no_prev_pregnancies")
+                )
             }
         }
     }

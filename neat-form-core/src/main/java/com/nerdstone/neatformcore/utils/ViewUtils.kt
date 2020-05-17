@@ -12,7 +12,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -64,7 +64,7 @@ object ViewUtils {
                 if (BuildConfig.DEBUG)
                     Toast.makeText(
                         context, "ERROR: The view with name ${viewProperty.name} " +
-                                "defined in json form is missing in custom layout", LENGTH_LONG
+                                "defined in json form is missing in custom layout", LENGTH_SHORT
                     ).show()
             }
         } else {
@@ -81,12 +81,10 @@ object ViewUtils {
         if (viewProperty.subjects != null) {
             viewDispatcher.rulesFactory
                 .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
-            val hasVisibilityRule =
-                viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
+            val hasVisibilityRule = viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
             if (hasVisibilityRule) {
                 viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
-                    false,
-                    nFormView.viewDetails.view
+                    false, nFormView.viewDetails.view
                 )
             }
         }
@@ -237,8 +235,14 @@ object ViewUtils {
         return activityContext
     }
 
+    @Throws(Throwable::class)
     fun findViewWithKey(key: String, context: Context): View? {
         val activityRootView = (context as Activity).findViewById<View>(android.R.id.content).rootView
         return activityRootView.findViewWithTag(key)
+    }
+
+    fun View.setReadOnlyState(enabled: Boolean) {
+        isEnabled = enabled
+        isFocusable = enabled
     }
 }

@@ -246,8 +246,11 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     override fun updateFormData(formDataJson: String, readOnlyFields: MutableSet<String>) {
         if (this::viewModel.isInitialized) {
-            viewModel.updateDetails(Gson().parseJson(formDataJson))
             this.readOnlyFields.addAll(readOnlyFields)
+            val viewData = Gson()
+                .parseJson<HashMap<String, NFormViewData>>(formDataJson)
+                .filter { it.value.value != null }
+            viewModel.updateDetails(viewData as HashMap<String, NFormViewData>)
         }
     }
 
@@ -288,10 +291,11 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         viewModel.details.observe(context as FragmentActivity, Observer {
             it.filterNot { entry -> entry.key.endsWith(Constants.RuleActions.CALCULATION) }
                 .forEach { entry ->
-                    val nFormView: NFormView? =
-                        ViewUtils.findViewWithKey(entry.key, context) as NFormView
+                    val view: View? = ViewUtils.findViewWithKey(entry.key, context)
                     entry.value.value?.let { realValue ->
-                        nFormView?.setValue(realValue, !readOnlyFields.contains(entry.key))
+                        if (view != null) (view as NFormView).setValue(
+                            realValue, !readOnlyFields.contains(entry.key)
+                        )
                     }
                     Timber.d("Updated field %s : %s", entry.key, entry.value.value)
                 }
@@ -356,8 +360,4 @@ class StepFragment : Step {
 
     override fun onError(stepVerificationState: StepVerificationState) = Unit
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        formView = null
-    }
 }

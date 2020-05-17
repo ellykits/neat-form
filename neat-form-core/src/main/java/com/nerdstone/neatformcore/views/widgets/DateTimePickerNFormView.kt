@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -23,6 +24,7 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
     override val viewBuilder = DateTimePickerViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -41,11 +43,16 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
     }
 
     override fun setValue(value: Any, enabled: Boolean) {
-        TODO("Not yet implemented")
+        when (value) {
+            is Double -> viewBuilder.selectedDate.timeInMillis = value.toLong()
+            is Long -> viewBuilder.selectedDate.timeInMillis = value
+        }
+        viewBuilder.updateViewData()
+        setReadOnlyState(enabled)
     }
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

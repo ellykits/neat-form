@@ -1,9 +1,6 @@
 package com.nerdstone.neatformcore.views.handlers
 
 import android.view.View
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
@@ -11,7 +8,6 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.viewmodel.DataViewModel
 
 /**
  * @author Elly Nerdstone
@@ -33,29 +29,33 @@ class ViewDispatcher private constructor() : DataActionListener {
      * @param viewDetails the details of the view that has just dispatched a value
      */
     override fun onPassData(viewDetails: NFormViewDetails) {
-        
+
         ViewUtils.getDataViewModel(viewDetails).details.value?.also {
 
-            if (it[viewDetails.name] != viewDetails.value) {
-                it[viewDetails.name] =
-                    NFormViewData(
-                        viewDetails.view.javaClass.simpleName,
-                        viewDetails.value, viewDetails.metadata
-                    )
+            with(viewDetails) {
+                if (it[this.name] != this.value) {
+                    it[this.name] =
+                        NFormViewData(
+                            type = view.javaClass.simpleName,
+                            value = value,
+                            metadata = metadata,
+                            visible = view.visibility == View.VISIBLE
+                        )
 
-                val nFormView = viewDetails.view as NFormView
-                nFormView.validateValue()
+                    val nFormView = view as NFormView
+                    nFormView.validateValue()
 
-                //Fire rules for calculations and other fields watching on this current field
-                val calculations = (viewDetails.view as NFormView).viewProperties.calculations
-                if (rulesFactory.subjectsRegistry.containsKey(viewDetails.name.trim()) || calculations != null) {
-                    rulesFactory.updateFactsAndExecuteRules(viewDetails)
-                }
+                    //Fire rules for calculations and other fields watching on this current field
+                    val calculations = (view as NFormView).viewProperties.calculations
+                    if (rulesFactory.subjectsRegistry.containsKey(name.trim()) || calculations != null) {
+                        rulesFactory.updateFactsAndExecuteRules(this)
+                    }
 
-                if (viewDetails.value == null && Utils.isFieldRequired(nFormView)
-                    && viewDetails.view.visibility == View.VISIBLE
-                ) {
-                    nFormView.formValidator.requiredFields.add(viewDetails.name)
+                    if (value == null && Utils.isFieldRequired(nFormView)
+                        && view.visibility == View.VISIBLE
+                    ) {
+                        nFormView.formValidator.requiredFields.add(name)
+                    }
                 }
             }
         }

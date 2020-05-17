@@ -22,6 +22,7 @@ class CustomImageView(context: Context) : CircleImageView(context), NFormView {
     override val viewBuilder = CustomImageViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     override fun resetValueWhenHidden() = Unit
 

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -33,7 +34,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -47,7 +48,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

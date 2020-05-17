@@ -24,6 +24,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     private var checkBoxOptionsTextSize: Float = 0f
     private var labelTextSize: Float = 0f

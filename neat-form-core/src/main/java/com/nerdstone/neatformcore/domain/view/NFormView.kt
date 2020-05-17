@@ -27,6 +27,8 @@ interface NFormView {
 
     var formValidator: FormValidator
 
+    var initialValue: Any?
+
     /**
      * This function is called to reset the value of the field when it is hidden
      */

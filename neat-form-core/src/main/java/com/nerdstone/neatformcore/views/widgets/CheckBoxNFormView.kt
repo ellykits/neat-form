@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
@@ -24,6 +25,7 @@ class CheckBoxNFormView : AppCompatCheckBox, NFormView {
     override val viewBuilder = CheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -49,7 +51,9 @@ class CheckBoxNFormView : AppCompatCheckBox, NFormView {
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
     override fun setValue(value: Any, enabled: Boolean) {
-        TODO("Not yet implemented")
+        initialValue = value
+        if (value is Map<*, *>) isChecked = value.size == 1 && value.containsKey(viewDetails.name)
+        setReadOnlyState(enabled)
     }
 
     override fun validateValue(): Boolean {

@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.utils.removeAsterisk
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
@@ -24,6 +25,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
     override val viewBuilder = EditTextViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -60,7 +62,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
     override fun setValue(value: Any, enabled: Boolean) {
         setText(value as String)
-        isEnabled = enabled
+        setReadOnlyState(enabled)
     }
 
     override fun setVisibility(visibility: Int) {
