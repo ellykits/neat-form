@@ -8,6 +8,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
+import com.nerdstone.neatformcore.viewmodel.ReadOnlyFieldsViewModel
 import kotlin.reflect.KClass
 
 /**
@@ -39,11 +40,13 @@ interface FormBuilder {
 
     var neatStepperLayout: NeatStepperLayout
 
-    var viewModel: DataViewModel
+    var dataViewModel: DataViewModel
 
     var formValidator: FormValidator
 
     var registeredViews: HashMap<String, KClass<*>>
+
+    var readOnlyFieldsViewModel: ReadOnlyFieldsViewModel
 
     /**
      * THis is the method that hooks up everything on the form builder. It parses the file say JSON file that it has
@@ -51,7 +54,7 @@ interface FormBuilder {
      * for generating views is delegated to [createFormViews]
      */
     fun buildForm(
-            jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null, viewList: List<View>? = null
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null, viewList: List<View>? = null
     ): FormBuilder
 
     /**
@@ -64,8 +67,8 @@ interface FormBuilder {
      *
      */
     fun createFormViews(
-            context: Context, views: List<View>? = null,
-            jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
+        context: Context, views: List<View>? = null,
+        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
     )
 
     /**
@@ -74,7 +77,7 @@ interface FormBuilder {
      * uses Rules engine that allows you to write rules either in JSON or YML format.
      */
     fun registerFormRulesFromFile(
-            context: Context, rulesFileType: RulesFactory.RulesFileType
+        context: Context, rulesFileType: RulesFactory.RulesFileType
     ): Boolean
 
     /**
@@ -100,14 +103,16 @@ interface FormBuilder {
     fun registerViews()
 
     /**
-     * Use this method to update the view model which will in turn update its observers (views)
-     * This method expect [formDataJson] to comply with the json string that was returned by the form builder.
-     * The string will be parsed into a map of [NFormViewData] with the key being the name of the field
-     * then use the new map as the data for the view model.
-     *
-     * Any field that exists in the list of [readOnlyFields] will be disabled.
+     * Call this method before building the form to supply the fields with data obtained from [formDataJson]. You
+     * can optionally pass [readOnlyFields] which will be disabled.
      */
+    fun withFormData(
+        formDataJson: String, readOnlyFields: MutableSet<String> = mutableSetOf()
+    ): FormBuilder
 
-    fun updateFormData(formDataJson: String, readOnlyFields: MutableSet<String> = mutableSetOf())
-
+    /**
+     * This method is called right after the views have been created. The data provided will be delegated to
+     * the view model which will call the method for setting values on its observers (fields)
+     */
+    fun preFillForm()
 }

@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nerdstone.neatformcore.domain.model.NFormViewData
@@ -12,7 +13,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 
 class DataViewModel : ViewModel() {
 
-    var details: MutableLiveData<HashMap<String, NFormViewData>> = MutableLiveData(HashMap())
+    var details: LiveData<HashMap<String, NFormViewData>> = MutableLiveData(HashMap())
 
     fun saveFieldValue(fieldName: String, fieldValue: NFormViewData) {
         details.value?.set(fieldName, fieldValue)

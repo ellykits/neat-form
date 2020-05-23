@@ -79,7 +79,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
             "gender": {
               "type": "SpinnerNFormView",
               "value": {
-                "value": "Male"
+                "value": "Female"
               }
             },
             "country": {
@@ -90,6 +90,40 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 },
                 "value": "Australia",
                 "visible": true
+              },
+              "visible": true
+            },
+            "choose_language": {
+              "type": "MultiChoiceCheckBox",
+              "value": {
+                "kisw": {
+                  "meta_data": {
+                    "openmrs_entity": "",
+                    "openmrs_entity_id": "A123123123123",
+                    "openmrs_entity_parent": ""
+                  },
+                  "value": "Kiswahili",
+                  "visible": true
+                },
+                "french": {
+                  "meta_data": {
+                    "openmrs_entity": "",
+                    "openmrs_entity_id": "A123123123123",
+                    "openmrs_entity_parent": ""
+                  },
+                  "value": "French",
+                  "visible": true
+                }
+              },
+              "visible": true
+            },
+            "wiki_contribution": {
+              "type": "RadioGroupView",
+              "value": {
+                "yes": {
+                  "value": "Yes",
+                  "visible": true
+                }
               },
               "visible": true
             }
@@ -141,10 +175,13 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
-                        it.buildForm()
-                        updateForm()
+                        it.withFormData(
+                            previousFormData, mutableSetOf(
+                                "dob", "time", "email_subscription", "country",
+                                "no_prev_pregnancies", "choose_language", "wiki_contribution"
+                            )
+                        ).buildForm()
                     }
-
                 }
                 FormType.embeddableCustomized -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
@@ -158,14 +195,10 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     formBuilder = JsonFormBuilder(this, formData.filePath, null)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
-                        it.buildForm(
-                            JsonFormStepBuilderModel.Builder(
-                                this,
-                                stepperModel
-                            ).build()
+                        it.withFormData(previousFormData, mutableSetOf()).buildForm(
+                            JsonFormStepBuilderModel.Builder(this, stepperModel).build()
                         )
                     }
-                    updateForm()
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 FormType.stepperCustomized -> {
@@ -175,23 +208,12 @@ class FormActivity : AppCompatActivity(), StepperActions {
                             JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
                             views
                         )
-                    updateForm()
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 else -> Toast.makeText(
                     this, "Please provide the right form type",
                     Toast.LENGTH_LONG
                 ).show()
-            }
-        }
-    }
-
-    private fun updateForm() {
-        formBuilder?.apply {
-            if (viewModel.details.value?.isEmpty()!!) {
-                updateFormData(
-                    previousFormData, mutableSetOf("dob", "time", "email_subscription", "gender", "country", "no_prev_pregnancies")
-                )
             }
         }
     }

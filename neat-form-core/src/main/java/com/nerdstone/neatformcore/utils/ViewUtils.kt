@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.BuildConfig
 import com.nerdstone.neatformcore.R
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -60,12 +61,10 @@ object ViewUtils {
             try {
                 getView(view as NFormView, viewProperty, viewDispatcher)
             } catch (e: Exception) {
-                Timber.e(e)
-                if (BuildConfig.DEBUG)
-                    Toast.makeText(
-                        context, "ERROR: The view with name ${viewProperty.name} " +
-                                "defined in json form is missing in custom layout", LENGTH_SHORT
-                    ).show()
+                val message =
+                    "ERROR: The view with name ${viewProperty.name} defined in json form is missing in custom layout"
+                Timber.e(e, message)
+                if (BuildConfig.DEBUG) Toast.makeText(context, message, LENGTH_SHORT).show()
             }
         } else {
             val constructor = kClass.constructors.minBy { it.parameters.size }
@@ -237,12 +236,33 @@ object ViewUtils {
 
     @Throws(Throwable::class)
     fun findViewWithKey(key: String, context: Context): View? {
-        val activityRootView = (context as Activity).findViewById<View>(android.R.id.content).rootView
+        val activityRootView =
+            (context as Activity).findViewById<View>(android.R.id.content).rootView
         return activityRootView.findViewWithTag(key)
     }
 
     fun View.setReadOnlyState(enabled: Boolean) {
         isEnabled = enabled
         isFocusable = enabled
+    }
+
+    /**
+     * This method updates the values of the fields with the provided [fieldValues]. Fields that should be disabled
+     * are listed in the [readOnlyFields]
+     */
+    fun updateFieldValues(
+        fieldValues: HashMap<String, NFormViewData>, context: Context,
+        readOnlyFields: MutableSet<String>
+    ) {
+        fieldValues.filterNot { entry -> entry.key.endsWith(Constants.RuleActions.CALCULATION) }
+            .forEach { entry ->
+                val view: View? = findViewWithKey(entry.key, context)
+                entry.value.value?.let { realValue ->
+                    if (view != null) (view as NFormView).setValue(
+                        realValue, !readOnlyFields.contains(entry.key)
+                    )
+                }
+                Timber.d("Updated field %s : %s", entry.key, entry.value.value)
+            }
     }
 }

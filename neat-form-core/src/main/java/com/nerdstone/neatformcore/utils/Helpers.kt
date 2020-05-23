@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  * A helper class to execute tasks sequentially in coroutines.
@@ -66,3 +68,52 @@ interface DispatcherProvider {
 }
 
 class DefaultDispatcherProvider : DispatcherProvider
+
+/**
+ * This is a weak collection list that internally uses [LinkedList]. We use this to hold weak references
+ * of items in order to avoid memory leaks as in the case oh caching listeners in a singleton class
+ */
+class DisposableList<T> {
+
+    private val linkedList: LinkedList<WeakReference<T>> = LinkedList()
+
+    fun add(item: T): Boolean {
+        val currentList = get()
+        for (oldItem in currentList) {
+            if (item === oldItem) {
+                return false
+            }
+        }
+        return linkedList.add(WeakReference<T>(item))
+    }
+
+    fun get(): MutableList<T> {
+        val finalList = arrayListOf<T>()
+        val itemsToRemove = LinkedList<WeakReference<T>>()
+        linkedList.forEach { weakReference ->
+            when (val item: T? = weakReference.get()) {
+                null -> itemsToRemove.add(weakReference)
+                else -> finalList.add(item)
+            }
+        }
+        itemsToRemove.forEach { weakReference ->
+            linkedList.remove(weakReference)
+        }
+        return finalList
+    }
+
+    fun remove(item: T): Boolean {
+        var weakReferenceToRemove: WeakReference<T>? = null
+        for (weakReference in linkedList) {
+            val currentItem: T? = weakReference.get()
+            if (currentItem === currentItem) {
+                weakReferenceToRemove = weakReference
+                break
+            }
+        }
+        return if (weakReferenceToRemove != null) {
+            linkedList.remove(weakReferenceToRemove)
+            true
+        } else false
+    }
+}

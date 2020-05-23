@@ -851,7 +851,7 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 * [Easy Rules](https://github.com/j-easy/easy-rules) - Rules Engine library  
 * [Mockk](https://mockk.io/) - Testing Framework Kotlin  
 * [GSON](https://github.com/google/gson) - Parsing JSON files  
-* [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library  
+* [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library
   
 ## RoadMap  
   
@@ -862,6 +862,7 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 | ✔️ |️ Form Fields Validation |  
 | ✔️ |️ Support Multi-Step Forms |  
 | ✔️ |️ Rules Engine integration - handle form skip logic and calculations |  
+| ❌ |️ Support image and location picker and barcode reader |  
 | ❌ |️ Multi language support |  
 | ❌ |️ Ability to obtain and render `JSON`form from server |  
   
@@ -869,7 +870,6 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
   
 ## Awesome Contributors  
 
-* [ellykits](https://github.com/ellykits)
 * [cozej4](https://github.com/cozej4)
 
 ## License  

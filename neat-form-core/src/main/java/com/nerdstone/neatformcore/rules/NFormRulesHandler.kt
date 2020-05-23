@@ -6,6 +6,7 @@ import com.nerdstone.neatformcore.domain.listeners.CalculationChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
+import com.nerdstone.neatformcore.utils.DisposableList
 import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -16,7 +17,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
 
     override lateinit var formBuilder: FormBuilder
     override lateinit var executableRulesList: HashSet<Rule>
-    var calculationListeners: MutableList<CalculationChangeListener> = mutableListOf()
+    var calculationListeners: DisposableList<CalculationChangeListener> = DisposableList()
 
     companion object {
 
@@ -37,9 +38,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         if (rule != null && facts != null && !evaluationResult) {
             if (facts.asMap().containsKey(rule.name) && rule.name.toLowerCase(Locale.getDefault())
                     .endsWith(Constants.RuleActions.VISIBILITY)
-            ) {
-                facts.put(rule.name, false)
-            }
+            ) facts.put(rule.name, false)
         }
     }
 
@@ -68,13 +67,13 @@ class NFormRulesHandler private constructor() : RulesHandler {
         filterCurrentRules(Constants.RuleActions.CALCULATION)
             .forEach { key ->
                 val value = facts?.asMap()?.get(key)
-                formBuilder.viewModel.saveFieldValue(key, NFormViewData("Calculation", value, null))
+                formBuilder.dataViewModel.saveFieldValue(key, NFormViewData("Calculation", value, null))
                 updateCalculationListeners(Pair(key, value))
             }
     }
 
     private fun updateCalculationListeners(calculation: Pair<String, Any?>) =
-        calculationListeners.forEach { it.onCalculationChanged(calculation) }
+        calculationListeners.get().forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
         val view = ViewUtils.findViewWithKey(key, formBuilder.context)

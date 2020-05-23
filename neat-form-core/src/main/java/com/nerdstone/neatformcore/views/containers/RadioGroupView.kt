@@ -43,11 +43,16 @@ class RadioGroupView : LinearLayout, NFormView {
         formValidator.validateLabeledField(this)
 
     override fun setValue(value: Any, enabled: Boolean) {
-        TODO("Not yet implemented")
+        initialValue = value
+        when (value) {
+            is Map<*, *> -> {
+                viewBuilder.setValue(value.keys.first() as String, enabled)
+            }
+        }
     }
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
@@ -17,6 +18,7 @@ import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
+
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
@@ -47,7 +49,14 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     }
 
     override fun setValue(value: Any, enabled: Boolean) {
-        TODO("Not yet implemented")
+        initialValue = value
+        when (value) {
+            is Map<*, *> -> {
+                viewBuilder.setValue(value.keys, enabled)
+            }
+            is NFormViewData -> {
+            }
+        }
     }
 
     override fun validateValue(): Boolean =
@@ -80,25 +89,6 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
             } finally {
                 typedArray.recycle()
             }
-        }
-    }
-
-    /**
-     * adding passed xml attributes to MultiChoice Checkbox viewAttributes
-     */
-    private fun setPassedAttributes(viewProperty: NFormViewProperty) {
-        if (checkBoxOptionsTextSize != 0f) {
-            viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.OPTIONS_TEXT_SIZE.name,
-                checkBoxOptionsTextSize
-            )
-        }
-
-        if (labelTextSize != 0f) {
-            viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name,
-                labelTextSize
-            )
         }
     }
 }
