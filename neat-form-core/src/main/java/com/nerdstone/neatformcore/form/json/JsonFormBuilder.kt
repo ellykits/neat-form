@@ -20,8 +20,6 @@ import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.listeners.FormDataListener
-import com.nerdstone.neatformcore.domain.listeners.FormFieldsData
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
@@ -299,7 +297,7 @@ const val FRAGMENT_VIEW = "fragment_view"
 const val FRAGMENT_INDEX = "index"
 const val FORM_DATA_JSON = "form_fields_data"
 
-class StepFragment : Step, FormDataListener {
+class StepFragment : Step {
 
     private lateinit var dataViewModel: DataViewModel
     private var index: Int? = null
@@ -373,9 +371,4 @@ class StepFragment : Step, FormDataListener {
     override fun onSelected() = Unit
 
     override fun onError(stepVerificationState: StepVerificationState) = Unit
-
-    override fun onReceiveDataEvent(formFieldsData: FormFieldsData) {
-        dataViewModel.updateDetails(formFieldsData.data)
-    }
-
 }
