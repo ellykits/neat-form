@@ -43,6 +43,7 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
     }
 
     override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
         when (value) {
             is Double -> viewBuilder.selectedDate.timeInMillis = value.toLong()
             is Long -> viewBuilder.selectedDate.timeInMillis = value

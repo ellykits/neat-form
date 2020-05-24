@@ -2,6 +2,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
@@ -18,7 +19,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest(){
+class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxNFormView = CheckBoxNFormView(activity.get())
@@ -38,7 +39,7 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest(){
     fun `Should set text and textSize on checkbox`() {
         val text = "Am a checkbox"
         val checkBoxTextSize = 14
-        viewProperty.viewAttributes = mutableMapOf("text" to text,"text_size" to checkBoxTextSize)
+        viewProperty.viewAttributes = mutableMapOf("text" to text, "text_size" to checkBoxTextSize)
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(checkBoxNFormView.text.isNotEmpty() && checkBoxNFormView.text.toString() == text)
         Assert.assertTrue(checkBoxNFormView.textSize.toInt() == checkBoxTextSize)
@@ -51,9 +52,10 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.requiredStatus = "yes:Am required"
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(
-            checkBoxNFormView.text.toString().isNotEmpty() && checkBoxNFormView.text.toString().endsWith(
-                "*"
-            )
+            checkBoxNFormView.text.toString().isNotEmpty() && checkBoxNFormView.text.toString()
+                .endsWith(
+                    "*"
+                )
         )
     }
 
@@ -83,6 +85,15 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest(){
         checkBoxViewBuilder.buildView()
         checkBoxNFormView.isChecked = false
         Assert.assertNull(checkBoxNFormView.viewDetails.value)
+    }
+
+    @Test
+    fun `Should set value when provided`() {
+        checkBoxViewBuilder.buildView()
+        val valueHashMap = mapOf("name" to NFormViewData().apply { value = "Am a checkbox" })
+        checkBoxNFormView.setValue(valueHashMap)
+        Assert.assertEquals(checkBoxNFormView.initialValue, valueHashMap)
+        Assert.assertTrue(checkBoxNFormView.isChecked)
     }
 
     @After

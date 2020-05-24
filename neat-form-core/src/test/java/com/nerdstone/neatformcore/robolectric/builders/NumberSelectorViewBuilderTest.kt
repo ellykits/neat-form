@@ -1,6 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
@@ -112,6 +113,16 @@ class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
         textView.performClick()
         numberSelector.visibility = View.GONE
         Assert.assertNull(numberSelector.viewDetails.value)
+    }
+
+    @Test
+    fun `Should set value to the number selector when provided`() {
+        ViewUtils.setupView(numberSelector, viewProperty, spyk())
+        val textValue = 3
+        numberSelector.setValue(textValue, false)
+        Assert.assertEquals(numberSelector.initialValue, textValue)
+        Assert.assertEquals(numberSelector.viewDetails.value, 3)
+        Assert.assertFalse((numberSelector.getChildAt(1) as ViewGroup).getChildAt(0).isEnabled)
     }
 
     @After

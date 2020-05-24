@@ -6,7 +6,6 @@ import android.widget.LinearLayout
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
-import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
@@ -50,12 +49,8 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     override fun setValue(value: Any, enabled: Boolean) {
         initialValue = value
-        when (value) {
-            is Map<*, *> -> {
-                viewBuilder.setValue(value.keys, enabled)
-            }
-            is NFormViewData -> {
-            }
+        if (value is Map<*, *>) {
+            viewBuilder.setValue(value.keys, enabled)
         }
     }
 

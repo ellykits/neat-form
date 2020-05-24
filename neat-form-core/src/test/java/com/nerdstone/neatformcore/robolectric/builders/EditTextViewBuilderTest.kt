@@ -98,6 +98,15 @@ class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
 
     }
 
+    @Test
+    fun `Should set value to the edittext when provided`() {
+        editTextViewBuilder.buildView()
+        val textValue = "0723721920"
+        editTextNFormView.setValue(textValue)
+        Assert.assertEquals(editTextNFormView.initialValue, textValue)
+        Assert.assertEquals(editTextNFormView.text.toString(), "0723721920")
+    }
+
     @After
     fun `After everything else`() {
         unmockkAll()

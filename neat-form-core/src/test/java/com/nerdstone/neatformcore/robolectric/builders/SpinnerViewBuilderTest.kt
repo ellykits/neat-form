@@ -4,6 +4,7 @@ import android.view.View
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
@@ -113,6 +114,20 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         materialSpinner.setSelection(1)
         materialSpinner.isSelected = true
         Assert.assertTrue(materialSpinner.item[materialSpinner.selectedItemPosition]  == "Female")
+    }
+
+    @Test
+    fun `Should set value on spinner when provided`() {
+        viewProperty.viewAttributes = hashMapOf("text" to "Pick your gender")
+        viewProperty.options =
+            listOf(spinnerOption1, spinnerOption2, spinnerOption3)
+        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
+        val valueHashMap = mapOf("value" to "Female")
+        spinnerNFormView.setValue(valueHashMap)
+        Assert.assertEquals(spinnerNFormView.initialValue, valueHashMap)
+        Assert.assertTrue(spinnerNFormView.viewDetails.value is NFormViewData)
+        val viewData = spinnerNFormView.viewDetails.value as NFormViewData
+        Assert.assertEquals(viewData.value ,"Female")
     }
 
     @After

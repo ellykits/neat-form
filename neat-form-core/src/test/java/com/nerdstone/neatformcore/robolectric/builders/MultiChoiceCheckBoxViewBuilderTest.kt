@@ -64,13 +64,19 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
     fun `Should set label for multi choice checkbox`() {
         val text = "Pick the programming languages"
         val labelTextSize = 20
-        viewProperty.viewAttributes = mutableMapOf("text" to text,"label_text_size" to labelTextSize)
+        viewProperty.viewAttributes =
+            mutableMapOf("text" to text, "label_text_size" to labelTextSize)
         multiChoiceCheckBoxViewBuilder.buildView()
         val view = multiChoiceCheckBox.getChildAt(0)
 
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView.text.toString() == text)
-        Assert.assertTrue(textView.textSize == Utils.pixelsToSp(textView.context,labelTextSize.toFloat()))
+        Assert.assertTrue(
+            textView.textSize == Utils.pixelsToSp(
+                textView.context,
+                labelTextSize.toFloat()
+            )
+        )
         Assert.assertTrue(multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
@@ -91,7 +97,8 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
     fun `Should create multiple checkboxes when options are defined`() {
         val text = "Pick your programming languages"
         val checkBoxOptionsTextSize = 22
-        viewProperty.viewAttributes = mutableMapOf("text" to text,"options_text_size" to checkBoxOptionsTextSize)
+        viewProperty.viewAttributes =
+            mutableMapOf("text" to text, "options_text_size" to checkBoxOptionsTextSize)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
         multiChoiceCheckBoxViewBuilder.buildView()
@@ -193,7 +200,24 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         (1 until multiChoiceCheckBox.childCount).forEach { i ->
             Assert.assertTrue(!(multiChoiceCheckBox.getChildAt(i) as CheckBox).isChecked)
         }
+    }
 
+    @Test
+    fun `Should set value on multi choice checkbox when provided`() {
+        viewProperty.viewAttributes = hashMapOf("text" to "Pick your languages")
+        viewProperty.options =
+            listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        val valueHashMap = mapOf(
+            "kotlin" to NFormViewData(value = "Kotlin"),
+            "java" to NFormViewData(value = "Java")
+        )
+        multiChoiceCheckBox.setValue(valueHashMap, false)
+        Assert.assertEquals(multiChoiceCheckBox.initialValue, valueHashMap)
+        Assert.assertTrue(multiChoiceCheckBox.viewDetails.value is HashMap<*, *>)
+        val hashMap = multiChoiceCheckBox.viewDetails.value as HashMap<*, *>
+        Assert.assertTrue(hashMap.containsKey("kotlin"))
+        Assert.assertTrue(hashMap.containsKey("java"))
     }
 
     @After

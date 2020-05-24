@@ -141,6 +141,20 @@ class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
         }
     }
 
+    @Test
+    fun `Should set value on radio group when provided`() {
+        viewProperty.viewAttributes = hashMapOf("text" to "Pick your preferred language")
+        viewProperty.options =
+            listOf(radioOption1, radioOption2, radioOption3)
+        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
+        val valueHashMap = mapOf("kotlin" to NFormViewData(value = "Kotlin"))
+        radioGroupView.setValue(valueHashMap)
+        Assert.assertEquals(radioGroupView.initialValue, valueHashMap)
+        Assert.assertTrue(radioGroupView.viewDetails.value is HashMap<*, *>)
+        val hashMap = radioGroupView.viewDetails.value as HashMap<*, *>
+        Assert.assertTrue(hashMap.containsKey("kotlin"))
+    }
+
     @After
     fun `After everything else`() {
         unmockkAll()

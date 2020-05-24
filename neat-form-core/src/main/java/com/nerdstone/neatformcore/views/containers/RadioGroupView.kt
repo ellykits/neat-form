@@ -44,10 +44,8 @@ class RadioGroupView : LinearLayout, NFormView {
 
     override fun setValue(value: Any, enabled: Boolean) {
         initialValue = value
-        when (value) {
-            is Map<*, *> -> {
-                viewBuilder.setValue(value.keys.first() as String, enabled)
-            }
+        if (value is Map<*, *>) {
+            viewBuilder.setValue(value.keys.first() as String, enabled)
         }
     }
 

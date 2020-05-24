@@ -70,6 +70,8 @@ interface DispatcherProvider {
 class DefaultDispatcherProvider : DispatcherProvider
 
 /**
+ * @author Elly Nerdstone
+ *
  * This is a weak collection list that internally uses [LinkedList]. We use this to hold weak references
  * of items in order to avoid memory leaks as in the case oh caching listeners in a singleton class
  */
@@ -77,6 +79,10 @@ class DisposableList<T> {
 
     private val linkedList: LinkedList<WeakReference<T>> = LinkedList()
 
+    /**
+     * Add a new [item] to the linked list. We first check if the item already exists in the list
+     * if not we add it otherwise we return false.
+     */
     fun add(item: T): Boolean {
         val currentList = get()
         for (oldItem in currentList) {
@@ -87,6 +93,13 @@ class DisposableList<T> {
         return linkedList.add(WeakReference<T>(item))
     }
 
+    /**
+     * This method is used to retrieve a list of elements of type [T]. It also check if list has null
+     * values on the [WeakReference]. If so the items will be removed from the list. This is useful when
+     * trying to avoid memory leaks by the list maintaining references to items that had been garbage
+     * collected
+     * f
+     */
     fun get(): MutableList<T> {
         val finalList = arrayListOf<T>()
         val itemsToRemove = LinkedList<WeakReference<T>>()
@@ -102,11 +115,14 @@ class DisposableList<T> {
         return finalList
     }
 
+    /**
+     * This method is used to remove the provided [item] from the [linkedList]
+     */
     fun remove(item: T): Boolean {
         var weakReferenceToRemove: WeakReference<T>? = null
         for (weakReference in linkedList) {
             val currentItem: T? = weakReference.get()
-            if (currentItem === currentItem) {
+            if (currentItem === item) {
                 weakReferenceToRemove = weakReference
                 break
             }

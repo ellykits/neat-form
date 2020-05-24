@@ -9,6 +9,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
@@ -17,6 +18,7 @@ import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.FRAGMENT_VIEW
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.StepFragment
@@ -24,11 +26,15 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.*
+import org.junit.Assert
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -42,6 +48,29 @@ class JsonFormBuilderTest {
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private lateinit var jsonFormBuilder: JsonFormBuilder
+    var observer: Observer<HashMap<String, NFormViewData>> = spyk()
+    private val previousFormData = """
+        {
+            "age": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "54"
+            },
+            "child": {
+              "type": "TextInputEditTextNFormView",
+              "value": "yes"
+            },
+            "adult": {
+              "type": "TextInputEditTextNFormView",
+              "value": "0723721920"
+            }
+        }
+    """.trimIndent()
+
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
@@ -254,4 +283,24 @@ class JsonFormBuilderTest {
         }
     }
 
+    @Test
+    fun `Should build a pre-filled form`() {
+        coroutinesTestRule.runBlockingTest {
+            jsonFormBuilder = spyk(
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+            )
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
+            jsonFormBuilder
+                .withFormData(previousFormData, mutableSetOf("age", "child", "adult"))
+                .buildForm(null, null)
+            Assert.assertNotNull(jsonFormBuilder.form)
+            Assert.assertNotNull(jsonFormBuilder.formDataJson)
+            val details = jsonFormBuilder.dataViewModel.details
+            details.observeForever(observer)
+            verify { observer.onChanged(any()) }
+            Assert.assertEquals((details.value?.get("age") as NFormViewData).value, "54")
+            Assert.assertEquals((details.value?.get("child") as NFormViewData).value, "yes")
+            Assert.assertEquals((details.value?.get("adult") as NFormViewData).value, "0723721920")
+        }
+    }
 }

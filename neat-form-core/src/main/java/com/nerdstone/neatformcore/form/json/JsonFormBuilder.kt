@@ -70,7 +70,6 @@ object JsonFormConstants {
  * main thread using [DispatcherProvider.main] scope.
  */
 class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
-    private var formDataJson: String? = null
     private lateinit var readOnlyFields: MutableSet<String>
     private var mainLayout: ViewGroup? = null
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
@@ -80,6 +79,7 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
+    var formDataJson: String? = null
     override var formString: String? = null
     override lateinit var neatStepperLayout: NeatStepperLayout
     override lateinit var context: Context
