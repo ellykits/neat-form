@@ -28,8 +28,8 @@ class CoroutineTestRule(val testDispatcher: TestCoroutineDispatcher = TestCorout
             override fun evaluate() {
                 Dispatchers.setMain(testDispatcher)
                 base?.evaluate()
-                cleanupTestCoroutines()
                 Dispatchers.resetMain()
+                testDispatcher.cleanupTestCoroutines()
             }
         }
 }

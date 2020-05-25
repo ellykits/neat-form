@@ -63,6 +63,7 @@ class JsonFormStepper(
                 Timber.e(throwable)
             }
         }
+        jsonFormBuilder.preFillForm()
         return this
     }
 
@@ -94,7 +95,6 @@ class JsonFormStepper(
         }
     }
 }
-
 
 const val FRAGMENT_VIEW = "fragment_view"
 const val FRAGMENT_INDEX = "index"
@@ -129,7 +129,6 @@ class StepFragment : Step {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        dataViewModel = ViewModelProvider(this)[DataViewModel::class.java]
         arguments?.also {
             index = it.getInt(FRAGMENT_INDEX)
             formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?

@@ -15,7 +15,6 @@ import com.nerdstone.neatformcore.form.common.FormActions
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormStepper
 import com.nerdstone.neatformcore.utils.DialogUtil
-import com.nerdstone.neatformcore.utils.FormUtils
 import kotlinx.android.synthetic.main.activity_stepper.*
 import timber.log.Timber
 
@@ -40,16 +39,13 @@ class StepperActivity : AppCompatActivity(), FormActions {
                 .build()
         }
 
-        formBuilder = JsonFormBuilder(this, filePath)
+        formBuilder =
+            JsonFormBuilder(this, filePath)
         formBuilder.also {
             it.registeredViews["custom_image"] = CustomImageView::class
             if (preFilled!!) it.withFormData(Constants.PREVIOUS_DATA, mutableSetOf())
         }
         JsonFormStepper(formBuilder as JsonFormBuilder, neatStepperLayout).buildForm()
-        formBuilder.dataViewModel.also {
-            if (it.details.value.isNullOrEmpty())
-                it.updateDetails(FormUtils.parseFormDataJson(Constants.PREVIOUS_DATA))
-        }
     }
 
     override fun onStepError(stepVerificationState: StepVerificationState) = Unit

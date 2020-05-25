@@ -1,4 +1,4 @@
-package com.nerdstone.neatformcore.robolectric.builders
+package com.nerdstone.neatformcore.robolectric.json
 
 import android.content.Context
 import android.view.LayoutInflater
