@@ -127,7 +127,8 @@
           "properties": {
             "hint": "Enter adult's phone number",
             "type": "name",
-            "padding": "8"
+            "padding": "8",
+            "input_type": "phone"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -148,7 +149,8 @@
           "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter your age",
-            "type": "name"
+            "type": "name",
+            "input_type": "number"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -173,7 +175,7 @@
           "properties": {
             "hint": "I am a child",
             "type": "name",
-            "padding": "8"
+            "input_type": "text"
           },
           "meta_data": {
             "openmrs_entity": "",
