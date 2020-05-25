@@ -41,29 +41,32 @@ class NeatFormValidator private constructor() : FormValidator {
      * @return [Pair] of true if validation succeeds and a string of the error message
      */
     override fun validateField(nFormView: NFormView): Pair<Boolean, String?> {
-        if (nFormView.viewDetails.view.visibility == View.VISIBLE) {
-            if ((nFormView.viewDetails.value == null || nFormView.viewDetails.value is HashMap<*, *>
-                            && (nFormView.viewDetails.value as HashMap<*, *>).isEmpty())
-                    && Utils.isFieldRequired(nFormView)
+
+        val viewDetails = nFormView.viewDetails
+
+        if (viewDetails.view.visibility == View.VISIBLE) {
+            if ((viewDetails.value == null || viewDetails.value is HashMap<*, *>
+                        && (viewDetails.value as HashMap<*, *>).isEmpty())
+                && Utils.isFieldRequired(nFormView)
             ) {
-                invalidFields.add(nFormView.viewDetails.name)
+                invalidFields.add(viewDetails.name)
                 val errorMessage =
-                        nFormView.viewProperties.requiredStatus?.let {
-                            Utils.extractKeyValue(it).second
-                        }
+                    nFormView.viewProperties.requiredStatus?.let {
+                        Utils.extractKeyValue(it).second
+                    }
                 return Pair(false, errorMessage)
             }
             if (nFormView.viewProperties.validations != null) {
                 nFormView.viewProperties.validations?.forEach { validation ->
-                    if (!performValidation(validation, nFormView.viewDetails.value)) {
-                        invalidFields.add(nFormView.viewDetails.name)
+                    if (!performValidation(validation, viewDetails.value)) {
+                        invalidFields.add(viewDetails.name)
                         return Pair(false, validation.message)
                     }
                 }
             }
         }
-        invalidFields.remove(nFormView.viewDetails.name)
-        requiredFields.remove(nFormView.viewDetails.name)
+        invalidFields.remove(viewDetails.name)
+        requiredFields.remove(viewDetails.name)
         return Pair(true, null)
     }
 
@@ -76,16 +79,14 @@ class NeatFormValidator private constructor() : FormValidator {
         val validationPair = validateField(nFormView)
         val anchorView = nFormView.viewDetails.view as ViewGroup
         val labelTextView =
-                (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
+            (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.labelTextView)
         if (!validationPair.first) {
-            labelTextView.apply {
-                error = validationPair.second
-            }
+            labelTextView.apply { error = validationPair.second }
             showErrorMessage(anchorView, validationPair.second)
         } else {
             labelTextView.error = null
             (anchorView.getChildAt(0) as LinearLayout).findViewById<TextView>(R.id.errorMessageTextView)
-                    .visibility = View.GONE
+                .visibility = View.GONE
         }
         return validationPair.first
     }
@@ -108,10 +109,10 @@ class NeatFormValidator private constructor() : FormValidator {
         facts.put(VALUE, value)
 
         val customRule: Rule = MVELRule()
-                .name(UUID.randomUUID().toString())
-                .description(validation.condition)
-                .`when`(validation.condition)
-                .then("$VALIDATION_RESULT = true")
+            .name(UUID.randomUUID().toString())
+            .description(validation.condition)
+            .`when`(validation.condition)
+            .then("$VALIDATION_RESULT = true")
 
         val rules = Rules(customRule)
         rulesEngine.fire(rules, facts)
@@ -120,10 +121,8 @@ class NeatFormValidator private constructor() : FormValidator {
     }
 
     private fun getFormData(): MutableMap<String, Any?> {
-        val viewModel = ViewModelProvider(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
-        return viewModel.details.mapValuesTo(mutableMapOf(), { entry ->
-            entry.value
-        })
+        return ViewModelProvider(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
+            .details.value?.mapValuesTo(mutableMapOf(), { entry -> entry.value })!!
     }
 
     companion object {

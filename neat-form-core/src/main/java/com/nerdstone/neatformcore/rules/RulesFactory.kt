@@ -22,7 +22,6 @@ import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.HashSet
 
 class RulesFactory private constructor() : RuleListener {
 

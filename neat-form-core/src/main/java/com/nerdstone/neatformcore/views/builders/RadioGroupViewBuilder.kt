@@ -10,6 +10,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import java.util.*
@@ -23,7 +24,6 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(RadioGroupViewProperties::class.java)
-
 
     override fun buildView() {
         ViewUtils.applyViewAttributes(
@@ -63,9 +63,8 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
                         mutableMapOf(
                             radioButton.getTag(R.id.field_name) to
                                     NFormViewData(
-                                        type = null,
-                                        value = radioButton.text.toString(),
-                                        metadata = Utils.getOptionMetadata(
+                                        null, radioButton.text.toString(),
+                                        Utils.getOptionMetadata(
                                             radioGroupView,
                                             radioButton.getTag(R.id.field_name) as String
                                         )
@@ -75,9 +74,8 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
                     radioGroupView.dataActionListener?.onPassData(radioGroupView.viewDetails)
                 }
             }
+            radioGroupView.addView(this)
         }
-
-        radioGroupView.addView(radioButton)
     }
 
     /**
@@ -87,12 +85,10 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         (radioButton.parent as View).getViewsByTagValue(R.id.is_radio_group_option, true)
             .map { it as RadioButton }
             .forEach { view ->
-                if (view.getTag(R.id.field_name) as String != selectedOption && view.getTag(R.id.is_radio_group_option) != null && view.getTag(
-                        R.id.is_radio_group_option
-                    ) == true
-                ) {
-                    view.isChecked = false
-                }
+                val optionTag = view.getTag(R.id.is_radio_group_option)
+                if (view.getTag(R.id.field_name) as String != selectedOption
+                    && optionTag != null && optionTag == true
+                ) view.isChecked = false
             }
     }
 
@@ -100,12 +96,21 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         (radioGroupView as View).getViewsByTagValue(R.id.is_radio_group_option, true)
             .map { it as RadioButton }
             .forEach { view ->
-                if (view.isChecked) {
-                    view.isChecked = false
-                }
+                if (view.isChecked) view.isChecked = false
             }
         radioGroupView.viewDetails.value = null
         radioGroupView.dataActionListener?.onPassData(radioGroupView.viewDetails)
+    }
+
+    fun setValue(selectedOption: String, enabled: Boolean) {
+        for (view in radioGroupView.getViewsByTagValue(R.id.is_radio_group_option, true)
+            .map { it as RadioButton }) {
+            val optionTag = view.getTag(R.id.is_radio_group_option)
+            if (view.getTag(R.id.field_name) as String == selectedOption
+                && optionTag != null && optionTag == true
+            ) view.isChecked = true
+            view.setReadOnlyState(enabled)
+        }
     }
 }
 

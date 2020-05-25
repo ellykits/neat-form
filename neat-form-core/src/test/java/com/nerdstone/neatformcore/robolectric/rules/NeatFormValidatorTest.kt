@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormConstants
+import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
@@ -20,7 +21,6 @@ import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Ignore
@@ -184,23 +184,20 @@ const val VALIDATION_FORM = """
 @Config(application = TestNeatFormApp::class)
 @ExperimentalCoroutinesApi
 @Ignore("I still don't understand how this test passes individually but fails when run with others")
-class `Test form validation ` {
+class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
 
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
-    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
-    private val mainLayout: LinearLayout = LinearLayout(activity.get())
-    private lateinit var formBuilder: JsonFormBuilder
 
     @Test
     fun `Should display error message and return empty map when required fields are missing`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            launch { formBuilder.buildForm() }.join()
+            formBuilder.buildForm()
 
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
             Assert.assertTrue(formBuilder.getFormDataAsJson() == "")
@@ -209,13 +206,13 @@ class `Test form validation ` {
 
     @Test
     fun `Should display error message when there is invalid input`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            launch { formBuilder.buildForm() }.join()
+            formBuilder.buildForm()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
@@ -231,7 +228,8 @@ class `Test form validation ` {
             Assert.assertTrue(formBuilder.formValidator.requiredFields.size == 5)
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
 
-            val multiChoiceCheckBoxErrorMessage = multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView)
+            val multiChoiceCheckBoxErrorMessage =
+                multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView)
             val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
             checkBox1.isChecked = true
             multiChoiceCheckBox.viewDetails.view.visibility = View.VISIBLE
@@ -245,7 +243,7 @@ class `Test form validation ` {
 
     @Test
     fun `Should return valid form data when validation succeeds`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             updateViewValues()
             Assert.assertTrue(formBuilder.getFormData().isNotEmpty())
             Assert.assertTrue(formBuilder.getFormData().size == 6)
@@ -259,7 +257,7 @@ class `Test form validation ` {
 
     @Test
     fun `Should return field values with their metadata`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             updateViewValues()
             val formData = formBuilder.getFormData()
             Assert.assertTrue(formData["adult"]?.metadata != null && formData["adult"]?.value == "1234567890")
@@ -280,7 +278,7 @@ class `Test form validation ` {
 
     @Test
     fun `Should return json string of form values`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             updateViewValues()
             Assert.assertNotNull(formBuilder.getFormDataAsJson())
             Assert.assertTrue(formBuilder.getFormDataAsJson().contains(JsonFormConstants.FORM_NAME))
@@ -291,13 +289,13 @@ class `Test form validation ` {
      * Update values of the views and trigger the trackRequireFields method by changing their visibility
      */
     private fun updateViewValues() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
                 JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            launch { formBuilder.buildForm() }.join()
+            formBuilder.buildForm()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView

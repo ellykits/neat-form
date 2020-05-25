@@ -1,11 +1,12 @@
 package com.nerdstone.neatformcore.rules
 
-import android.app.Activity
 import android.view.View
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
+import com.nerdstone.neatformcore.domain.listeners.CalculationChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
+import com.nerdstone.neatformcore.utils.DisposableList
 import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -16,6 +17,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
 
     override lateinit var formBuilder: FormBuilder
     override lateinit var executableRulesList: HashSet<Rule>
+    var calculationListeners: DisposableList<CalculationChangeListener> = DisposableList()
 
     companion object {
 
@@ -30,85 +32,75 @@ class NFormRulesHandler private constructor() : RulesHandler {
             }
     }
 
-    override fun handleReadOnlyState() {
-        TODO("implement toggle enable/disable state on views")
-    }
-
-    override fun handleFilter(filterItems: List<String>) {
-        TODO("implement functionality for filtering")
-    }
-
     override fun updateSkipLogicFactAfterEvaluate(
-            evaluationResult: Boolean, rule: Rule?, facts: Facts?
+        evaluationResult: Boolean, rule: Rule?, facts: Facts?
     ) {
         if (rule != null && facts != null && !evaluationResult) {
             if (facts.asMap().containsKey(rule.name) && rule.name.toLowerCase(Locale.getDefault())
-                            .endsWith(Constants.RuleActions.VISIBILITY)
-            ) {
-                facts.put(rule.name, false)
-            }
+                    .endsWith(Constants.RuleActions.VISIBILITY)
+            ) facts.put(rule.name, false)
         }
     }
 
     override fun handleSkipLogic(facts: Facts?) {
         val suffix = Constants.RuleActions.VISIBILITY
         filterCurrentRules(suffix)
-                .map { name ->
-                    ViewUtils.getKey(name, suffix)
+            .map { name ->
+                ViewUtils.getKey(name, suffix)
+            }
+            .forEach { key ->
+                facts?.also {
+                    hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
                 }
-                .forEach { key ->
-                    facts?.also {
-                        hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
-                    }
-                }
+            }
     }
 
     private fun filterCurrentRules(suffix: String): List<String> {
         return executableRulesList
-                .map { rule -> rule.name }
-                .filter {
-                    it.toLowerCase(Locale.getDefault()).endsWith(suffix)
-                }
+            .map { rule -> rule.name }
+            .filter {
+                it.toLowerCase(Locale.getDefault()).endsWith(suffix)
+            }
     }
 
     override fun handleCalculations(facts: Facts?) {
         filterCurrentRules(Constants.RuleActions.CALCULATION)
-                .forEach { key ->
-                    formBuilder.viewModel.details[key] =
-                            NFormViewData(type = "Calculation", value = facts?.asMap()?.get(key), metadata = null)
-                }
+            .forEach { key ->
+                val value = facts?.asMap()?.get(key)
+                formBuilder.dataViewModel.saveFieldValue(key, NFormViewData("Calculation", value, null))
+                updateCalculationListeners(Pair(key, value))
+            }
     }
+
+    private fun updateCalculationListeners(calculation: Pair<String, Any?>) =
+        calculationListeners.get().forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        if (findViewWithKey(key) != null) {
-            changeVisibility(isVisible, findViewWithKey(key)!!)
+        val view = ViewUtils.findViewWithKey(key, formBuilder.context)
+        if (view != null) {
+            changeVisibility(isVisible, view)
         }
-    }
-
-    private fun findViewWithKey(key: String): View? {
-        val activity = formBuilder.context as Activity
-        val activityRootView = activity.findViewById<View>(android.R.id.content).rootView
-        return activityRootView.findViewWithTag(key)
     }
 
     override fun refreshViews(allRules: Rules?) {
         allRules?.also {
             it.toMutableList()
-                    .filter { rule ->
-                        rule.name.toLowerCase(Locale.getDefault())
-                                .endsWith(Constants.RuleActions.VISIBILITY)
-                    }.forEach { item ->
-                        val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                        val view = findViewWithKey(key)
-                        if (view != null) changeVisibility(false, view)
-                    }
+                .filter { rule ->
+                    rule.name.toLowerCase(Locale.getDefault())
+                        .endsWith(Constants.RuleActions.VISIBILITY)
+                }.forEach { item ->
+                    val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
+                    val view = ViewUtils.findViewWithKey(key, formBuilder.context)
+                    if (view != null) changeVisibility(false, view)
+                }
         }
     }
 
-    override fun changeVisibility(value: Boolean?, view: View) = if (value != null) when {
-        value -> view.visibility = View.VISIBLE
-        else -> view.visibility = View.GONE
-    } else {
+    override fun changeVisibility(value: Boolean?, view: View) = if (value != null)
+        when {
+            value -> view.visibility = View.VISIBLE
+            else -> view.visibility = View.GONE
+        } else {
         view.visibility = View.GONE
     }
 }

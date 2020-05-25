@@ -9,6 +9,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
@@ -17,6 +18,7 @@ import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.FRAGMENT_VIEW
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.StepFragment
@@ -24,7 +26,10 @@ import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
@@ -38,17 +43,40 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 @ExperimentalCoroutinesApi
-class `Test building form with JSON` {
+class JsonFormBuilderTest {
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
     private lateinit var jsonFormBuilder: JsonFormBuilder
+    var observer: Observer<HashMap<String, NFormViewData>> = spyk()
+    private val previousFormData = """
+        {
+            "age": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "54"
+            },
+            "child": {
+              "type": "TextInputEditTextNFormView",
+              "value": "yes"
+            },
+            "adult": {
+              "type": "TextInputEditTextNFormView",
+              "value": "0723721920"
+            }
+        }
+    """.trimIndent()
+
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
     @Test
     fun `Should parse json from file source, create views and register form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
@@ -64,7 +92,7 @@ class `Test building form with JSON` {
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             //VerticalRootView has 3 EditTextNFormView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
-            Assert.assertTrue(verticalRootView.childCount == 13)
+            Assert.assertTrue(verticalRootView.childCount == 14)
             Assert.assertTrue(verticalRootView.getChildAt(0) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(1) is TextInputEditTextNFormView)
             Assert.assertTrue(verticalRootView.getChildAt(3) is CheckBoxNFormView)
@@ -80,11 +108,12 @@ class `Test building form with JSON` {
                 (verticalRootView.getChildAt(10) as DateTimePickerNFormView).viewProperties.viewAttributes as Map<*, *>
             Assert.assertTrue(timePickerAttributes.containsKey("type") && timePickerAttributes["type"] == "time_picker")
             Assert.assertTrue(verticalRootView.getChildAt(11) is NumberSelectorNFormView)
+            Assert.assertTrue(verticalRootView.getChildAt(13) is NotificationNFormView)
         }
 
     @Test
     fun `Should parse json from json string, create views and register form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(TestConstants.SAMPLE_JSON.trimIndent(), activity.get(), mainLayout)
             )
@@ -119,7 +148,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should parse json from file source, update views from provided layout view with form rules`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
             )
@@ -145,7 +174,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build default form (in vertical layout) with using stepper library`() =
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 objToCopy =
                 JsonFormBuilder(activity.get(), TestConstants.SAMPLE_TWO_FORM_FILE, mainLayout),
@@ -198,7 +227,7 @@ class `Test building form with JSON` {
 
     @Test
     fun `Should build customized form (using provided layout) using stepper library`() {
-        coroutinesTestRule.testDispatcher.runBlockingTest {
+        coroutinesTestRule.runBlockingTest {
 
             jsonFormBuilder = spyk(
                 objToCopy =
@@ -254,4 +283,24 @@ class `Test building form with JSON` {
         }
     }
 
+    @Test
+    fun `Should build a pre-filled form`() {
+        coroutinesTestRule.runBlockingTest {
+            jsonFormBuilder = spyk(
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+            )
+            jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
+            jsonFormBuilder
+                .withFormData(previousFormData, mutableSetOf("age", "child", "adult"))
+                .buildForm(null, null)
+            Assert.assertNotNull(jsonFormBuilder.form)
+            Assert.assertNotNull(jsonFormBuilder.formDataJson)
+            val details = jsonFormBuilder.dataViewModel.details
+            details.observeForever(observer)
+            verify { observer.onChanged(any()) }
+            Assert.assertEquals((details.value?.get("age") as NFormViewData).value, "54")
+            Assert.assertEquals((details.value?.get("child") as NFormViewData).value, "yes")
+            Assert.assertEquals((details.value?.get("adult") as NFormViewData).value, "0723721920")
+        }
+    }
 }

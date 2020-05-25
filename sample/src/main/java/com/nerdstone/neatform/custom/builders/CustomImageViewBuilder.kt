@@ -1,6 +1,5 @@
 package com.nerdstone.neatform.custom.builders
 
-import android.widget.ImageView
 import com.nerdstone.neatform.custom.views.CustomImageView
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView

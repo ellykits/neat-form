@@ -15,12 +15,11 @@ import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
 import com.nerdstone.neatform.custom.views.CustomImageView
-import com.nerdstone.neatform.utils.DialogUtil
 import com.nerdstone.neatform.utils.replaceView
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.DialogUtil
 import timber.log.Timber
 
 class FormActivity : AppCompatActivity(), StepperActions {
@@ -32,6 +31,104 @@ class FormActivity : AppCompatActivity(), StepperActions {
     private lateinit var exitFormImageView: ImageView
     private lateinit var completeButton: ImageView
     private var formBuilder: FormBuilder? = null
+
+    private val previousFormData = """
+        {
+            "age": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "54"
+            },
+            "child": {
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              },
+              "type": "TextInputEditTextNFormView",
+              "value": "child"
+            },
+            "dob": {
+              "type": "DateTimePickerNFormView",
+              "value": 1589555422331
+            },
+            "time": {
+              "type": "DateTimePickerNFormView",
+              "value": 1589555422335
+            },
+            "adult": {
+              "type": "TextInputEditTextNFormView",
+              "value": "0723721920"
+            },
+            "email_subscription": {
+              "type": "CheckBoxNFormView",
+              "value": {
+                "email_subscription": "Subscribe to email notifications"
+              },
+              "visible": true
+            },
+            "no_prev_pregnancies": {
+              "type": "NumberSelectorNFormView",
+              "value": 1,
+              "visible": true
+            },
+            "gender": {
+              "type": "SpinnerNFormView",
+              "value": {
+                "value": "Female"
+              }
+            },
+            "country": {
+              "type": "SpinnerNFormView",
+              "value": {
+                "meta_data": {
+                  "country_code": "+61"
+                },
+                "value": "Australia",
+                "visible": true
+              },
+              "visible": true
+            },
+            "choose_language": {
+              "type": "MultiChoiceCheckBox",
+              "value": {
+                "kisw": {
+                  "meta_data": {
+                    "openmrs_entity": "",
+                    "openmrs_entity_id": "A123123123123",
+                    "openmrs_entity_parent": ""
+                  },
+                  "value": "Kiswahili",
+                  "visible": true
+                },
+                "french": {
+                  "meta_data": {
+                    "openmrs_entity": "",
+                    "openmrs_entity_id": "A123123123123",
+                    "openmrs_entity_parent": ""
+                  },
+                  "value": "French",
+                  "visible": true
+                }
+              },
+              "visible": true
+            },
+            "wiki_contribution": {
+              "type": "RadioGroupView",
+              "value": {
+                "yes": {
+                  "value": "Yes",
+                  "visible": true
+                }
+              },
+              "visible": true
+            }
+        }
+    """.trimIndent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +142,7 @@ class FormActivity : AppCompatActivity(), StepperActions {
         completeButton = findViewById(R.id.completeButton)
 
         val stepperModel = StepperModel.Builder()
-            .exitButtonDrawableResource(R.drawable.ic_clear_white)
+            .exitButtonDrawableResource(R.drawable.ic_clear)
             .indicatorType(StepperModel.IndicatorType.DOT_INDICATOR)
             .toolbarColorResource(R.color.colorPrimaryDark)
             .build()
@@ -78,7 +175,12 @@ class FormActivity : AppCompatActivity(), StepperActions {
                     formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
-                        it.buildForm()
+                        it.withFormData(
+                            previousFormData, mutableSetOf(
+                                "dob", "time", "email_subscription", "country",
+                                "no_prev_pregnancies", "choose_language", "wiki_contribution"
+                            )
+                        ).buildForm()
                     }
                 }
                 FormType.embeddableCustomized -> {
@@ -91,11 +193,12 @@ class FormActivity : AppCompatActivity(), StepperActions {
                 FormType.stepperDefault -> {
                     sampleToolBar.visibility = View.GONE
                     formBuilder = JsonFormBuilder(this, formData.filePath, null)
-                            formBuilder?.also {
-                                it.registeredViews["custom_image"] = CustomImageView::class
-                                it.buildForm(JsonFormStepBuilderModel.Builder(this,
-                                        stepperModel).build())
-                            }
+                    formBuilder?.also {
+                        it.registeredViews["custom_image"] = CustomImageView::class
+                        it.withFormData(previousFormData, mutableSetOf()).buildForm(
+                            JsonFormStepBuilderModel.Builder(this, stepperModel).build()
+                        )
+                    }
                     replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
                 }
                 FormType.stepperCustomized -> {
@@ -115,14 +218,11 @@ class FormActivity : AppCompatActivity(), StepperActions {
         }
     }
 
-    override fun onStepError(stepVerificationState: StepVerificationState) {
-    }
+    override fun onStepError(stepVerificationState: StepVerificationState) = Unit
 
-    override fun onButtonNextClick(step: Step) {
-    }
+    override fun onButtonNextClick(step: Step) = Unit
 
-    override fun onButtonPreviousClick(step: Step) {
-    }
+    override fun onButtonPreviousClick(step: Step) = Unit
 
     override fun onStepComplete(step: Step) {
         if (formBuilder?.getFormDataAsJson() != "") {

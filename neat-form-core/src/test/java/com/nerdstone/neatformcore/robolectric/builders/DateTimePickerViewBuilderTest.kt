@@ -7,6 +7,7 @@ import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -17,7 +18,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
+class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val dateTimePickerNFormView = DateTimePickerNFormView(activity.get())
@@ -99,7 +100,7 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
             hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy", "type" to type)
         dateTimePickerViewBuilder.buildView()
         dateTimePickerViewBuilder.textInputEditText.performClick()
-        dateTimePickerViewBuilder.onDateSet(spyk(), 2019, 0,1)
+        dateTimePickerViewBuilder.onDateSet(spyk(), 2019, 0, 1)
         Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.text.toString() == "01/01/2019")
     }
 
@@ -113,6 +114,20 @@ class `Test building DateTimePicker view` : BaseJsonViewBuilderTest(){
         dateTimePickerViewBuilder.textInputEditText.performClick()
         dateTimePickerViewBuilder.onTimeSet(spyk(), 11, 30)
         Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.text.toString() == "11:30 AM")
+    }
+
+    @Test
+    fun `Should set value to the date picker when provided`() {
+        dateTimePickerViewBuilder.buildView()
+        val timestamp = 1589555422331
+        dateTimePickerNFormView.setValue(timestamp)
+        Assert.assertEquals(dateTimePickerNFormView.initialValue, timestamp)
+        Assert.assertEquals(
+            dateTimePickerNFormView.viewBuilder.selectedDate.timeInMillis, 1589555422331
+        )
+        Assert.assertEquals(
+            dateTimePickerNFormView.viewBuilder.textInputEditText.text.toString(), "2020-05-15"
+        )
     }
 
     @After

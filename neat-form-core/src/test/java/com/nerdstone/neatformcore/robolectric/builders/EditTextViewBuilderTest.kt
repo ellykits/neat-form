@@ -20,7 +20,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building EditText view` : BaseJsonViewBuilderTest() {
+class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val editTextNFormView = EditTextNFormView(activity.get())
@@ -96,6 +96,15 @@ class `Test building EditText view` : BaseJsonViewBuilderTest() {
         Assert.assertFalse(editTextNFormView.validateValue())
         Assert.assertTrue(editTextNFormView.error == "Please enter a valid email address")
 
+    }
+
+    @Test
+    fun `Should set value to the edittext when provided`() {
+        editTextViewBuilder.buildView()
+        val textValue = "0723721920"
+        editTextNFormView.setValue(textValue)
+        Assert.assertEquals(editTextNFormView.initialValue, textValue)
+        Assert.assertEquals(editTextNFormView.text.toString(), "0723721920")
     }
 
     @After

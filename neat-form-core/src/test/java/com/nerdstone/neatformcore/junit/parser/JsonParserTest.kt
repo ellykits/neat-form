@@ -1,11 +1,12 @@
 package com.nerdstone.neatformcore.junit.parser
 
-import com.nerdstone.neatformcore.form.json.JsonFormParser
+import com.nerdstone.neatformcore.domain.model.NForm
+import com.nerdstone.neatformcore.form.json.JsonParser
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class `Test passing JSON files` {
+class JsonParserTest {
 
     private var json: String? = null
 
@@ -218,7 +219,7 @@ class `Test passing JSON files` {
 
     @Test
     fun `Should parse a valid JSON into NForm model`() {
-        val nForm = JsonFormParser.parseJson(json)
+        val nForm = JsonParser.parseJson<NForm>(json)
         assertEquals(nForm!!.formName, "Profile")
         assertEquals(nForm.steps.size.toLong(), 5)
         assertNotNull(nForm)
@@ -226,7 +227,7 @@ class `Test passing JSON files` {
 
     @Test
     fun `Should correctly parse form content`() {
-        val nForm = JsonFormParser.parseJson(json)
+        val nForm = JsonParser.parseJson<NForm>(json)
         val nFormContent = nForm!!.steps[0]
         assertEquals(nFormContent.stepName, "Behaviour and counselling")
         assertEquals(nFormContent.fields.size.toLong(), 2)
@@ -234,7 +235,7 @@ class `Test passing JSON files` {
 
     @Test
     fun `Should properly parse view properties`() {
-        val nForm = JsonFormParser.parseJson(json)
+        val nForm = JsonParser.parseJson<NForm>(json)
         val property = nForm!!.steps[0].fields[0]
         assertEquals(property.name, "username")
         assertEquals(2, property.validations?.size)
@@ -245,7 +246,7 @@ class `Test passing JSON files` {
 
     @Test
     fun `Should properly parse sub view properties`() {
-        val nForm = JsonFormParser.parseJson(json)
+        val nForm = JsonParser.parseJson<NForm>(json)
         val property = nForm!!.steps[4].fields[1]
         assertEquals(property.options!!.size.toLong(), 2)
         assertEquals(property.options!![0].name, "female")
@@ -258,7 +259,7 @@ class `Test passing JSON files` {
 
     @Test
     fun `Should not parse empty JSON or null`() {
-        assertNull(JsonFormParser.parseJson(null))
-        assertNull(JsonFormParser.parseJson(""))
+        assertNull(JsonParser.parseJson<NForm>(null))
+        assertNull(JsonParser.parseJson<NForm>(""))
     }
 }

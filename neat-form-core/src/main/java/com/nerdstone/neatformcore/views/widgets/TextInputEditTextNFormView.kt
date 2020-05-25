@@ -11,6 +11,7 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -23,6 +24,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
     override val viewBuilder = TextInputEditTextBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -34,6 +36,12 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
         editText?.setText("")
     }
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        this.editText?.setText(value as String)
+        setReadOnlyState(enabled)
+    }
+
     override fun validateValue(): Boolean {
         val validationPair = formValidator.validateField(this)
         if (!validationPair.first) {
@@ -43,7 +51,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
     }
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }
