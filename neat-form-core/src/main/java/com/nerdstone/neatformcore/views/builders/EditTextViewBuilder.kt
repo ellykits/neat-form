@@ -17,7 +17,7 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
     override val acceptedAttributes = Utils.convertEnumToSet(EditTextProperties::class.java)
 
     enum class EditTextProperties {
-        HINT, PADDING, TEXT_SIZE, TEXT
+        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE
     }
 
     override fun buildView() {
@@ -68,6 +68,10 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
 
                 EditTextProperties.TEXT.name -> {
                     setText(attribute.value.toString())
+                }
+                EditTextProperties.INPUT_TYPE.name -> {
+                    ViewUtils.getSupportedEditTextTypes()[attribute.value.toString()]
+                        ?.also { inputType = it}
                 }
             }
         }

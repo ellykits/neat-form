@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
+import android.text.InputType
 import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
@@ -87,5 +88,13 @@ class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
         textInputEditTextNFormView.editText?.setText("johndoegmail.com")
         Assert.assertFalse(textInputEditTextNFormView.validateValue())
         Assert.assertTrue(textInputEditTextNFormView.error == "Please enter a valid email address")
+    }
+
+    @Test
+    fun `Should apply the provided input type`(){
+        val hint = "Am a hint"
+        viewProperty.viewAttributes = hashMapOf("hint" to hint, "input_type" to "number")
+        testInputLayoutBuilder.buildView()
+        Assert.assertEquals(textInputEditTextNFormView.editText?.inputType , InputType.TYPE_CLASS_NUMBER )
     }
 }

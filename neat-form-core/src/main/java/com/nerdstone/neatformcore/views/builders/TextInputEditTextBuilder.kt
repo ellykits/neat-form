@@ -18,7 +18,7 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
     private val textInputEditTextNFormView = nFormView as TextInputEditTextNFormView
 
     enum class TextInputEditTextViewProperties {
-        HINT, PADDING, TEXT_SIZE, TEXT
+        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE
     }
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputEditTextViewProperties::class.java)
@@ -59,6 +59,10 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
 
                 TextInputEditTextViewProperties.TEXT.name -> {
                     setText(attribute.value.toString())
+                }
+                TextInputEditTextViewProperties.INPUT_TYPE.name -> {
+                    ViewUtils.getSupportedEditTextTypes()[attribute.value.toString()]
+                        ?.also { inputType = it }
                 }
             }
         }

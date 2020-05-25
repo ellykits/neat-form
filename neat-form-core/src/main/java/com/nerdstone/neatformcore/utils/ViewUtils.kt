@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.utils
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -29,52 +30,59 @@ const val VALIDATION_RESULT = "validationResults"
 object ViewUtils {
 
     fun createViews(
-            rootView: RootView, viewProperties: List<NFormViewProperty>,
-            viewDispatcher: ViewDispatcher, buildFromLayout: Boolean = false
+        rootView: RootView, viewProperties: List<NFormViewProperty>,
+        viewDispatcher: ViewDispatcher, buildFromLayout: Boolean = false
     ) {
         val registeredViews = rootView.formBuilder.registeredViews
         for (viewProperty in viewProperties) {
-            buildView(buildFromLayout, rootView, viewProperty, viewDispatcher,
-                    registeredViews[viewProperty.type] as KClass<*>)
+            buildView(
+                buildFromLayout, rootView, viewProperty, viewDispatcher,
+                registeredViews[viewProperty.type] as KClass<*>
+            )
         }
     }
 
     private fun buildView(
-            buildFromLayout: Boolean, rootView: RootView,
-            viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher, kClass: KClass<*>
+        buildFromLayout: Boolean, rootView: RootView,
+        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher, kClass: KClass<*>
     ) {
         val androidView = rootView as View
         val context = rootView.context
         if (buildFromLayout) {
             val view = androidView.findViewById<View>(
-                    context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
+                context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
             try {
                 getView(view as NFormView, viewProperty, viewDispatcher)
             } catch (e: Exception) {
                 Timber.e(e)
                 if (BuildConfig.DEBUG)
-                    Toast.makeText(rootView.context, "ERROR: The view with name ${viewProperty.name} " +
-                            "defined in json form is missing in custom layout", LENGTH_LONG).show()
+                    Toast.makeText(
+                        rootView.context, "ERROR: The view with name ${viewProperty.name} " +
+                                "defined in json form is missing in custom layout", LENGTH_LONG
+                    ).show()
             }
         } else {
             val constructor = kClass.constructors.minBy { it.parameters.size }
             rootView.addChild(
-                    getView(constructor!!.call(context) as NFormView, viewProperty, viewDispatcher)
+                getView(constructor!!.call(context) as NFormView, viewProperty, viewDispatcher)
             )
         }
     }
 
     private fun getView(
-            nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
         if (viewProperty.subjects != null) {
             viewDispatcher.rulesFactory
-                    .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
             val hasVisibilityRule =
-                    viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
+                viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
             if (hasVisibilityRule) {
-                viewDispatcher.rulesFactory.rulesHandler.changeVisibility(false, nFormView.viewDetails.view)
+                viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
+                    false,
+                    nFormView.viewDetails.view
+                )
             }
         }
         return setupView(nFormView, viewProperty, viewDispatcher)
@@ -83,15 +91,16 @@ object ViewUtils {
     fun splitText(text: String?, delimiter: String): List<String> {
         return if (text == null || text.isEmpty()) {
             ArrayList()
-        } else listOf(*text.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+        } else listOf(*text.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray())
     }
 
     fun addRedAsteriskSuffix(text: String): SpannableString {
         if (text.isNotEmpty()) {
             val textWithSuffix = SpannableString("$text *")
             textWithSuffix.setSpan(
-                    ForegroundColorSpan(Color.RED), textWithSuffix.length - 1, textWithSuffix.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                ForegroundColorSpan(Color.RED), textWithSuffix.length - 1, textWithSuffix.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             return textWithSuffix
         }
@@ -103,7 +112,7 @@ object ViewUtils {
     }
 
     fun setupView(
-            nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
         with(nFormView) {
             //Set view properties
@@ -128,8 +137,8 @@ object ViewUtils {
     }
 
     fun applyViewAttributes(
-            nFormView: NFormView, acceptedAttributes: HashSet<String>,
-            task: (attribute: Map.Entry<String, Any>) -> Unit
+        nFormView: NFormView, acceptedAttributes: HashSet<String>,
+        task: (attribute: Map.Entry<String, Any>) -> Unit
     ) {
         nFormView.viewProperties.viewAttributes?.forEach { attribute ->
             if (acceptedAttributes.contains(attribute.key.toUpperCase(Locale.getDefault()))) {
@@ -158,7 +167,8 @@ object ViewUtils {
             }
             error = null
         }
-        (nFormView as View).findViewById<TextView>(R.id.errorMessageTextView)?.visibility = View.GONE
+        (nFormView as View).findViewById<TextView>(R.id.errorMessageTextView)?.visibility =
+            View.GONE
         return layout
     }
 
@@ -166,8 +176,8 @@ object ViewUtils {
         (nFormView as View).tag?.also {
             val formValidator = nFormView.formValidator
             if (Utils.isFieldRequired(nFormView) &&
-                    nFormView.viewDetails.value == null &&
-                    nFormView.viewDetails.view.visibility == View.VISIBLE
+                nFormView.viewDetails.value == null &&
+                nFormView.viewDetails.view.visibility == View.VISIBLE
             ) {
                 formValidator.requiredFields.add(nFormView.viewDetails.name)
             } else {
@@ -182,4 +192,45 @@ object ViewUtils {
             View.GONE -> view.animate().alpha(0.0f).duration = 800
         }
     }
+
+
+    /**
+     * Crediting @see <a href='https://stackoverflow.com/questions/2586301/set-inputtype-for-an-edittext-programmatically?rq=1'>
+     *     StackOverflow Implement InputType on EditText</a>
+     */
+    internal fun getSupportedEditTextTypes() =
+        mapOf(
+            "date" to (InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE),
+            "datetime" to (InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_NORMAL),
+            "none" to InputType.TYPE_NULL,
+            "number" to (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL),
+            "numberDecimal" to (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL),
+            "numberPassword" to (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD),
+            "numberSigned" to (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED),
+            "phone" to InputType.TYPE_CLASS_PHONE,
+            "text" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL),
+            "textAutoComplete" to InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE,
+            "textAutoCorrect" to InputType.TYPE_TEXT_FLAG_AUTO_CORRECT,
+            "textCapCharacters" to InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS,
+            "textCapSentences" to InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+            "textCapWords" to InputType.TYPE_TEXT_FLAG_CAP_WORDS,
+            "textEmailAddress" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS),
+            "textEmailSubject" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT),
+            "textFilter" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_FILTER),
+            "textLongMessage" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE),
+            "textMultiLine" to InputType.TYPE_TEXT_FLAG_MULTI_LINE,
+            "textNoSuggestions" to InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS,
+            "textPassword" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD),
+            "textPersonName" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME),
+            "textPhonetic" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PHONETIC),
+            "textPostalAddress" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS),
+            "textShortMessage" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE),
+            "textUri" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI),
+            "textVisiblePassword" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD),
+            "textWebEditText" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT),
+            "textWebEmailAddress" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS),
+            "textWebPassword" to (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD),
+            "time" to (InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_TIME)
+        )
+
 }
