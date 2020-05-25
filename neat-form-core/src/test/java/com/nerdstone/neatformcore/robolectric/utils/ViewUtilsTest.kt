@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.robolectric.utils
 
 import androidx.appcompat.widget.AppCompatEditText
 import com.nerdstone.neatformcore.TestNeatFormApp
-import com.nerdstone.neatformcore.utils.InputTypeItem
 import com.nerdstone.neatformcore.utils.ViewUtils
 import io.mockk.mockkObject
 import io.mockk.spyk
@@ -41,7 +40,7 @@ class `Test View Utils with Robolectric` {
     @Test
     fun `Should return a map of supported input types`(){
         Assert.assertEquals(ViewUtils.getSupportedEditTextTypes().size, 31)
-        Assert.assertTrue(ViewUtils.getSupportedEditTextTypes()["phone"] is InputTypeItem)
+        Assert.assertTrue(ViewUtils.getSupportedEditTextTypes()["phone"] is Int)
         Assert.assertTrue(ViewUtils.getSupportedEditTextTypes().containsKey("number"))
     }
 

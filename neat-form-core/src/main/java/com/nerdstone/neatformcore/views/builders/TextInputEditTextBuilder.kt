@@ -62,7 +62,7 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
                 }
                 TextInputEditTextViewProperties.INPUT_TYPE.name -> {
                     ViewUtils.getSupportedEditTextTypes()[attribute.value.toString()]
-                        ?.also { inputType = it.inputType }
+                        ?.also { inputType = it }
                 }
             }
         }
