@@ -13,7 +13,7 @@ open class BaseJsonViewBuilderTest {
     protected val activity: ActivityController<AppCompatActivity> =
         Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     val mainLayout: ViewGroup = LinearLayout(activity.get())
-    var formBuilder = JsonFormBuilder(TestConstants.SAMPLE_JSON, activity.get(), mainLayout)
+    var formBuilder = JsonFormBuilder(TestConstants.SAMPLE_JSON, activity.get())
     val formValidator = NeatFormValidator.INSTANCE
 
     init {

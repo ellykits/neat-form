@@ -1,14 +1,11 @@
 package com.nerdstone.neatformcore.domain.builders
 
 import android.content.Context
-import android.view.View
-import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
-import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
-import com.nerdstone.neatformcore.viewmodel.ReadOnlyFieldsViewModel
+import com.nerdstone.neatformcore.viewmodel.FormViewModel
 import kotlin.reflect.KClass
 
 /**
@@ -16,10 +13,6 @@ import kotlin.reflect.KClass
  *
  * [formString] is the string representation of the form depending on the schema which can be JSON
  * YAML or even XML
- *
- * The form builder requires a FragmentActivity [context] which it will use to create its views. If the form is
- * generated with a stepper. That is when the generated form is not embedded into an existing view. The
- * [neatStepperLayout] is the view holding the form steps.
  *
  * The form builder also uses the [formValidator] to validate fields.
  *
@@ -38,38 +31,13 @@ interface FormBuilder {
 
     val context: Context
 
-    var neatStepperLayout: NeatStepperLayout
-
     var dataViewModel: DataViewModel
 
     var formValidator: FormValidator
 
     var registeredViews: HashMap<String, KClass<*>>
 
-    var readOnlyFieldsViewModel: ReadOnlyFieldsViewModel
-
-    /**
-     * THis is the method that hooks up everything on the form builder. It parses the file say JSON file that it has
-     * been provided with, reads the rules from Assets directory and generate the actual views. The functionality
-     * for generating views is delegated to [createFormViews]
-     */
-    fun buildForm(
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null, viewList: List<View>? = null
-    ): FormBuilder
-
-    /**
-     * This method creates within [context]. It also has an optional [jsonFormStepBuilderModel] parameter
-     * that can be used to customize the stepper that will be shown on the [neatStepperLayout]
-     *
-     * When using custom layout to build the form you need to provide the layouts to the [views] list.
-     * The form builder will generate the views for steps in the order that the layouts are added to the list
-     * i.e. for step one views will be on the layout in position 0 of the [views]
-     *
-     */
-    fun createFormViews(
-        context: Context, views: List<View>? = null,
-        jsonFormStepBuilderModel: JsonFormStepBuilderModel? = null
-    )
+    var formViewModel: FormViewModel
 
     /**
      * This method reads the rules file available withing the given [context] and returns true when done

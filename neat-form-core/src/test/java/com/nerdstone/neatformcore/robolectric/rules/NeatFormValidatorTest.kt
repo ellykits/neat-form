@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.robolectric.rules
 
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.google.android.material.textfield.TextInputLayout
 import com.nerdstone.neatformcore.CoroutineTestRule
@@ -11,6 +10,7 @@ import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormConstants
+import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
@@ -27,7 +27,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -189,15 +188,17 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
+    private lateinit var jsonFormEmbedded: JsonFormEmbedded
+
     @Test
     fun `Should display error message and return empty map when required fields are missing`() =
         coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
-                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
+                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get())
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            formBuilder.buildForm()
+            jsonFormEmbedded = JsonFormEmbedded(formBuilder, mainLayout).buildForm()
 
             Assert.assertTrue(formBuilder.getFormData().isEmpty())
             Assert.assertTrue(formBuilder.getFormDataAsJson() == "")
@@ -208,11 +209,11 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
     fun `Should display error message when there is invalid input`() =
         coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
-                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
+                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get())
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            formBuilder.buildForm()
+            jsonFormEmbedded = JsonFormEmbedded(formBuilder, mainLayout).buildForm()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
@@ -291,11 +292,11 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
     private fun updateViewValues() {
         coroutinesTestRule.runBlockingTest {
             formBuilder = spyk(
-                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get(), mainLayout)
+                JsonFormBuilder(VALIDATION_FORM.trimIndent(), activity.get())
             )
 
             formBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            formBuilder.buildForm()
+            jsonFormEmbedded = JsonFormEmbedded(formBuilder, mainLayout).buildForm()
 
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView

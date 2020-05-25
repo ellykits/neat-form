@@ -13,21 +13,17 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.nerdstone.neatandroidstepper.core.model.StepperModel
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
+import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.CoroutineTestRule
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.TestNeatFormApp
-import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NFormViewData
-import com.nerdstone.neatformcore.form.json.FRAGMENT_VIEW
-import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.form.json.StepFragment
+import com.nerdstone.neatformcore.form.json.*
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.widgets.*
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,7 +43,10 @@ class JsonFormBuilderTest {
 
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val mainLayout: LinearLayout = LinearLayout(activity.get())
+    private val neatStepperLayout = NeatStepperLayout(activity.get())
     private lateinit var jsonFormBuilder: JsonFormBuilder
+    private lateinit var jsonFormStepper: JsonFormStepper
+    private lateinit var jsonFormEmbedded: JsonFormEmbedded
     var observer: Observer<HashMap<String, NFormViewData>> = spyk()
     private val previousFormData = """
         {
@@ -78,10 +77,10 @@ class JsonFormBuilderTest {
     fun `Should parse json from file source, create views and register form rules`() =
         coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
-                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE)
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            jsonFormBuilder.buildForm()
+            jsonFormEmbedded = JsonFormEmbedded(jsonFormBuilder, mainLayout).buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Test and counselling")
@@ -115,10 +114,10 @@ class JsonFormBuilderTest {
     fun `Should parse json from json string, create views and register form rules`() =
         coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
-                JsonFormBuilder(TestConstants.SAMPLE_JSON.trimIndent(), activity.get(), mainLayout)
+                JsonFormBuilder(TestConstants.SAMPLE_JSON.trimIndent(), activity.get())
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
-            jsonFormBuilder.buildForm()
+            jsonFormEmbedded = JsonFormEmbedded(jsonFormBuilder, mainLayout).buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.size == 1)
             Assert.assertTrue(jsonFormBuilder.form?.steps?.get(0)?.stepName == "Demographics")
@@ -150,7 +149,7 @@ class JsonFormBuilderTest {
     fun `Should parse json from file source, update views from provided layout view with form rules`() =
         coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
-                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE)
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             val inflater =
@@ -158,8 +157,7 @@ class JsonFormBuilderTest {
 
             val view = inflater.inflate(R.layout.sample_custom_form_layout, null)
             val viewsList = listOf<View>(view)
-
-            jsonFormBuilder.buildForm(null, viewsList)
+            jsonFormEmbedded = JsonFormEmbedded(jsonFormBuilder, mainLayout).buildForm(viewsList)
             Assert.assertTrue(mainLayout.getChildAt(0) is ScrollView)
             val scrollView = mainLayout.getChildAt(0) as ScrollView
             val verticalRootView = scrollView.getChildAt(0) as VerticalRootView
@@ -173,24 +171,21 @@ class JsonFormBuilderTest {
         }
 
     @Test
-    fun `Should build default form (in vertical layout) with using stepper library`() =
+    fun `Should build default form (in vertical layout) using stepper library`() =
         coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
                 objToCopy =
-                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_TWO_FORM_FILE, mainLayout),
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_TWO_FORM_FILE),
                 recordPrivateCalls = true
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             val stepperModel = StepperModel.Builder()
                 .toolbarColorResource(R.color.colorBlack)
                 .build()
-            jsonFormBuilder.buildForm(
-                JsonFormStepBuilderModel.Builder(stepperModel = stepperModel)
-                    .build()
-            )
+            neatStepperLayout.stepperModel = stepperModel
+            jsonFormStepper = JsonFormStepper(jsonFormBuilder, neatStepperLayout).buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
-            Assert.assertNotNull(jsonFormBuilder.neatStepperLayout.stepperModel.toolbarColorResId == R.color.colorBlack)
-            val neatStepperLayout = jsonFormBuilder.neatStepperLayout
+            Assert.assertNotNull(neatStepperLayout.stepperModel.toolbarColorResId == R.color.colorBlack)
             Assert.assertTrue(neatStepperLayout.findViewById<TextView>(R.id.titleTextView).text.toString() == "Profile")
             val innerStepperLayout = neatStepperLayout.getChildAt(0) as LinearLayout
             //Stepper has toolbar, frameLayout (fragment content) and bottom navigation
@@ -231,7 +226,7 @@ class JsonFormBuilderTest {
 
             jsonFormBuilder = spyk(
                 objToCopy =
-                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, null),
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE),
                 recordPrivateCalls = true
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
@@ -242,14 +237,11 @@ class JsonFormBuilderTest {
             val stepperModel = StepperModel.Builder()
                 .toolbarColorResource(R.color.colorBlack)
                 .build()
-            jsonFormBuilder.buildForm(
-                JsonFormStepBuilderModel.Builder(stepperModel = stepperModel)
-                    .build(), viewsList
-            )
+            neatStepperLayout.stepperModel = stepperModel
+            jsonFormStepper = JsonFormStepper(jsonFormBuilder, neatStepperLayout).buildForm(viewsList)
 
             Assert.assertNotNull(jsonFormBuilder.form)
-            Assert.assertNotNull(jsonFormBuilder.neatStepperLayout.stepperModel.toolbarColorResId == R.color.colorBlack)
-            val neatStepperLayout = jsonFormBuilder.neatStepperLayout
+            Assert.assertNotNull(neatStepperLayout.stepperModel.toolbarColorResId == R.color.colorBlack)
             Assert.assertTrue(neatStepperLayout.findViewById<TextView>(R.id.titleTextView).text.toString() == "Profile")
             val innerStepperLayout = neatStepperLayout.getChildAt(0) as LinearLayout
             //Stepper has toolbar, frameLayout (fragment content) and bottom navigation
@@ -287,12 +279,12 @@ class JsonFormBuilderTest {
     fun `Should build a pre-filled form`() {
         coroutinesTestRule.runBlockingTest {
             jsonFormBuilder = spyk(
-                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout)
+                JsonFormBuilder(activity.get(), TestConstants.SAMPLE_ONE_FORM_FILE)
             )
             jsonFormBuilder.defaultContextProvider = coroutinesTestRule.testDispatcherProvider
             jsonFormBuilder
                 .withFormData(previousFormData, mutableSetOf("age", "child", "adult"))
-                .buildForm(null, null)
+            jsonFormEmbedded = JsonFormEmbedded(jsonFormBuilder, mainLayout).buildForm()
             Assert.assertNotNull(jsonFormBuilder.form)
             Assert.assertNotNull(jsonFormBuilder.formDataJson)
             val details = jsonFormBuilder.dataViewModel.details

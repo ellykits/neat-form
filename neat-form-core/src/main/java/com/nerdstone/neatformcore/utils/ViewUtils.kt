@@ -194,11 +194,15 @@ object ViewUtils {
      * data will not be valid and an empty map will be returned if you try to access the form data.
      */
     fun handleRequiredStatus(nFormView: NFormView) {
+        val viewContext = getViewContext(nFormView.viewDetails)
+        val dataViewModel =
+            ViewModelProvider(viewContext as FragmentActivity)[DataViewModel::class.java]
         (nFormView as View).tag?.also {
             val formValidator = nFormView.formValidator
             if (Utils.isFieldRequired(nFormView) &&
                 nFormView.viewDetails.value == null &&
-                nFormView.viewDetails.view.visibility == View.VISIBLE
+                nFormView.viewDetails.view.visibility == View.VISIBLE &&
+                !dataViewModel.details.value?.containsKey(nFormView.viewDetails.name)!!
             ) {
                 formValidator.requiredFields.add(nFormView.viewDetails.name)
             } else {

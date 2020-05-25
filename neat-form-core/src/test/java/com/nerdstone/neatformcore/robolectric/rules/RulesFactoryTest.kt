@@ -66,8 +66,8 @@ class RulesFactoryTest {
 
         //Setup rules handler with form builder and views map
         rulesHandler.formBuilder = JsonFormBuilder(
-                activity.get(),
-                TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout
+            activity.get(),
+            TestConstants.SAMPLE_ONE_FORM_FILE
         )
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
