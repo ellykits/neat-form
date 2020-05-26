@@ -19,13 +19,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.BuildConfig
 import com.nerdstone.neatformcore.R
+import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import timber.log.Timber
 import java.util.*
 import kotlin.reflect.KClass
@@ -38,20 +38,20 @@ object ViewUtils {
 
     fun createViews(
         rootView: RootView, viewProperties: List<NFormViewProperty>,
-        viewDispatcher: ViewDispatcher, buildFromLayout: Boolean = false
+        formBuilder: FormBuilder, buildFromLayout: Boolean = false
     ) {
-        val registeredViews = rootView.formBuilder.registeredViews
+        val registeredViews = formBuilder.registeredViews
         for (viewProperty in viewProperties) {
-            buildView(
-                buildFromLayout, rootView, viewProperty, viewDispatcher,
-                registeredViews[viewProperty.type] as KClass<*>
-            )
+            val kClass = registeredViews[viewProperty.type] as KClass<*>
+            if (kClass.isNotNull()) {
+                buildView(buildFromLayout, rootView, viewProperty, formBuilder, kClass)
+            }
         }
     }
 
     private fun buildView(
         buildFromLayout: Boolean, rootView: RootView,
-        viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher, kClass: KClass<*>
+        viewProperty: NFormViewProperty, formBuilder: FormBuilder, kClass: KClass<*>
     ) {
         val androidView = rootView as View
         val context = rootView.context
@@ -60,7 +60,7 @@ object ViewUtils {
                 context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
             )
             try {
-                getView(view as NFormView, viewProperty, viewDispatcher)
+                getView(view as NFormView, viewProperty, formBuilder)
             } catch (e: Exception) {
                 val message =
                     "ERROR: The view with name ${viewProperty.name} defined in json form is missing in custom layout"
@@ -70,25 +70,27 @@ object ViewUtils {
         } else {
             val constructor = kClass.constructors.minBy { it.parameters.size }
             rootView.addChild(
-                getView(constructor!!.call(context) as NFormView, viewProperty, viewDispatcher)
+                getView(constructor!!.call(context) as NFormView, viewProperty, formBuilder)
             )
         }
     }
 
     private fun getView(
-        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+        nFormView: NFormView, viewProperty: NFormViewProperty, formBuilder: FormBuilder
     ): NFormView {
         if (viewProperty.subjects != null) {
-            viewDispatcher.rulesFactory
-                .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
-            val hasVisibilityRule = viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
-            if (hasVisibilityRule) {
-                viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
-                    false, nFormView.viewDetails.view
-                )
+            val viewDispatcher = formBuilder.viewDispatcher
+            viewDispatcher.run {
+                rulesFactory.registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
+                val hasVisibilityRule = rulesFactory.viewHasVisibilityRule(viewProperty)
+                if (hasVisibilityRule) {
+                    rulesFactory.rulesHandler.changeVisibility(
+                        false, nFormView.viewDetails.view
+                    )
+                }
             }
         }
-        return setupView(nFormView, viewProperty, viewDispatcher)
+        return setupView(nFormView, viewProperty, formBuilder)
     }
 
     fun splitText(text: String?, delimiter: String): List<String> {
@@ -118,13 +120,14 @@ object ViewUtils {
     }
 
     fun setupView(
-        nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
+        nFormView: NFormView, viewProperty: NFormViewProperty, formBuilder: FormBuilder
     ): NFormView {
         with(nFormView) {
 
-            //Set view properties and view dispatcher
+            //Set late init properties
             viewProperties = viewProperty
-            dataActionListener = viewDispatcher
+            dataActionListener = formBuilder.viewDispatcher
+            formValidator = formBuilder.formValidator
 
             with(viewDetails) {
                 name = viewProperty.name

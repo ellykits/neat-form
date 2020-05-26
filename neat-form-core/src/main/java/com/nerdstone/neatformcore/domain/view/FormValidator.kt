@@ -1,10 +1,6 @@
 package com.nerdstone.neatformcore.domain.view
 
-import com.nerdstone.neatformcore.domain.builders.FormBuilder
-
 interface FormValidator {
-
-    var formBuilder: FormBuilder
 
     val invalidFields: HashSet<String>
 

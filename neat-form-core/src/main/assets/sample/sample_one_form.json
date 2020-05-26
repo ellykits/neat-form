@@ -30,7 +30,7 @@
               "error_message": "Not a valid phone number"
             }
           ],
-          "subjects": "age:number, child:text, dob:number",
+          "subjects": "age:number, child:text",
           "required_status": "True:please add phone number"
         },
         {

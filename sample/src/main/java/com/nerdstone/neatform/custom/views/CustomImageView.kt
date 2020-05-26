@@ -16,12 +16,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 class CustomImageView(context: Context) : CircleImageView(context), NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
+    override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
             ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = CustomImageViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var initialValue: Any? = null
 
     override fun resetValueWhenHidden() = Unit

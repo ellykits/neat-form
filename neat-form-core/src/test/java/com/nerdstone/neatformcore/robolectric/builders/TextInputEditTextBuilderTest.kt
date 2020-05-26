@@ -33,8 +33,6 @@ class TextInputEditTextBuilderTest : BaseJsonViewBuilderTest(){
         objToCopy = TextInputEditTextBuilder(textInputEditTextNFormView),
         recordPrivateCalls = true
     )
-    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
-
 
     @Before
     fun `Before doing anything else`() {
@@ -42,7 +40,7 @@ class TextInputEditTextBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.name = "first_name"
         viewProperty.type = "text_input_layout"
         textInputEditTextNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(textInputEditTextNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(textInputEditTextNFormView, viewProperty, formBuilder)
     }
 
     @Test

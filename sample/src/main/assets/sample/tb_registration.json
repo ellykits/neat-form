@@ -61,9 +61,7 @@
           "name": "community_client_tb_registration_number",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Community Based Health Services Registration Number (CBHS Number)",
-            "type": "name",
-            "padding": "8"
+            "hint": "Community Based Health Services Registration Number (CBHS Number)"
           },
           "meta_data": {
             "openmrs_entity": "concept",

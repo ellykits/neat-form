@@ -30,7 +30,6 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val notificationNFormView = NotificationNFormView(activity.get())
     private val viewProperty = spyk(NFormViewProperty())
-    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
 
     @Before
     fun `Before doing anything else`() {
@@ -46,7 +45,7 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should have title and text`() {
-        ViewUtils.setupView(notificationNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(notificationNFormView, viewProperty, formBuilder)
         val constraintLayout = notificationNFormView.getChildAt(0) as ViewGroup
         val titleTextView = constraintLayout.findViewById<TextView>(R.id.notificationTitleTextView)
         val notificationTextTextView =
@@ -65,7 +64,7 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
     fun `Should change text and background color of toast notification`() {
         notificationNFormView.viewProperties.viewAttributes?.set("text_color", "#cccccc")
         notificationNFormView.viewProperties.viewAttributes?.set("background_color", "#fc3c5c")
-        ViewUtils.setupView(notificationNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(notificationNFormView, viewProperty, formBuilder)
         val constraintLayout = notificationNFormView.getChildAt(0) as ViewGroup
         val titleTextView = constraintLayout.findViewById<TextView>(R.id.notificationTitleTextView)
         Assert.assertNotEquals(titleTextView.currentTextColor ,  -1)
@@ -75,7 +74,7 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
     @Test
     fun `Should dismiss the notification when cancel is clicked`() {
         notificationNFormView.viewProperties.viewAttributes?.set("dismissible", true)
-        ViewUtils.setupView(notificationNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(notificationNFormView, viewProperty, formBuilder)
         val constraintLayout = notificationNFormView.getChildAt(0) as ViewGroup
         val cancelIcon = constraintLayout.findViewById<ImageView>(R.id.notificationCancelIcon)
         Assert.assertEquals(cancelIcon.visibility, View.VISIBLE)
@@ -93,7 +92,7 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
             "notification_dialog_text",
             "I am dialog text"
         )
-        ViewUtils.setupView(notificationNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(notificationNFormView, viewProperty, formBuilder)
         val constraintLayout = notificationNFormView.getChildAt(0) as ViewGroup
         val infoIcon = constraintLayout.findViewById<ImageView>(R.id.notificationInfoIcon)
         Assert.assertEquals(infoIcon.visibility, View.VISIBLE)
@@ -109,7 +108,7 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
             "title", "Title: {title_calculation}"
         )
         notificationNFormView.viewProperties.viewAttributes?.set("text", "Text: {text_calculation}")
-        ViewUtils.setupView(notificationNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(notificationNFormView, viewProperty, formBuilder)
         val constraintLayout = notificationNFormView.getChildAt(0) as ViewGroup
 
         //Title should be updated when calculation changes

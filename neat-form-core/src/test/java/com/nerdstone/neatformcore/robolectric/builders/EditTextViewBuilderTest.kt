@@ -5,6 +5,7 @@ import android.view.View
 import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
+import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
@@ -26,7 +27,6 @@ class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
     private val viewProperty = spyk(NFormViewProperty())
     private val editTextNFormView = EditTextNFormView(activity.get())
     private val editTextViewBuilder = spyk(EditTextViewBuilder(editTextNFormView))
-    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
 
     @Before
     fun `Before doing anything else`() {
@@ -35,7 +35,7 @@ class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
         //Set EditText properties and assign EditText view builder
         editTextNFormView.formValidator = this.formValidator
         editTextNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(editTextNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(editTextNFormView, viewProperty, formBuilder)
     }
 
     @Test

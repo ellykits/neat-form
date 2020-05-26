@@ -2,7 +2,7 @@
 name: "community_gathering_visibility"
 description: "Display community gathering types if community gathering is chosen"
 priority: 1
-condition: "place_of_domicile.value=='Community Gathering'"
+condition: "place_of_domicile.value == 'Community Gathering'"
 actions:
   - "community_gathering_visibility =  true"
 ---

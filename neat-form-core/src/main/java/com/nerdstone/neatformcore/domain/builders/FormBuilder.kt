@@ -6,6 +6,7 @@ import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.viewmodel.FormViewModel
+import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import kotlin.reflect.KClass
 
 /**
@@ -33,11 +34,14 @@ interface FormBuilder {
 
     var dataViewModel: DataViewModel
 
-    var formValidator: FormValidator
+    val formValidator: FormValidator
 
     var registeredViews: HashMap<String, KClass<*>>
 
     var formViewModel: FormViewModel
+
+    val rulesFactory: RulesFactory
+    val viewDispatcher: ViewDispatcher
 
     /**
      * This method reads the rules file available withing the given [context] and returns true when done

@@ -20,8 +20,7 @@ import org.robolectric.annotation.Config
 class ViewDispatcherTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = NFormViewProperty()
-    private val viewDispatcher = spyk<ViewDispatcher>()
-    private val rulesFactory = RulesFactory.INSTANCE
+    private val rulesFactory = RulesFactory()
     private val editTextNFormView = EditTextNFormView(activity.get())
 
     @Before
@@ -31,17 +30,17 @@ class ViewDispatcherTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("hint" to "Am a sample hint on field")
         editTextNFormView.viewProperties = viewProperty
         editTextNFormView.formValidator = this.formValidator
-        every { viewDispatcher.rulesFactory } returns rulesFactory
+        every { formBuilder.viewDispatcher.rulesFactory } returns rulesFactory
     }
 
     @Test
     fun `Verify that field value is passed to the dispatcher`() {
-        ViewUtils.setupView(editTextNFormView, viewProperty, viewDispatcher)
+        ViewUtils.setupView(editTextNFormView, viewProperty, formBuilder)
         editTextNFormView.setText("Sample text")
         verifyOrder {
-            viewDispatcher.onPassData(editTextNFormView.viewDetails)
+           formBuilder. viewDispatcher.onPassData(editTextNFormView.viewDetails)
         }
-        confirmVerified(viewDispatcher)
+        confirmVerified(formBuilder)
     }
 
     @After

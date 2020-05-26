@@ -53,19 +53,19 @@ object JsonFormConstants {
  */
 class JsonFormBuilder() : FormBuilder {
     internal val readOnlyFields = mutableSetOf<String>()
-    private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
-    private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
+    override lateinit var context: Context
+    override lateinit var dataViewModel: DataViewModel
+    override lateinit var formViewModel: FormViewModel
+    override val rulesFactory: RulesFactory = RulesFactory()
+    override val viewDispatcher: ViewDispatcher = ViewDispatcher(rulesFactory)
+    override val formValidator: FormValidator = NeatFormValidator()
+    override var registeredViews = hashMapOf<String, KClass<*>>()
     private val rulesHandler = rulesFactory.rulesHandler
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
     var formDataJson: String? = null
     override var formString: String? = null
-    override lateinit var context: Context
-    override lateinit var dataViewModel: DataViewModel
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
-    override var registeredViews = hashMapOf<String, KClass<*>>()
-    override lateinit var formViewModel: FormViewModel
 
     constructor(context: Context, fileSource: String) : this() {
         this.context = context
@@ -73,6 +73,7 @@ class JsonFormBuilder() : FormBuilder {
         this.dataViewModel =
             ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
         this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
+
     }
 
     constructor(jsonString: String, context: Context) : this() {
@@ -85,7 +86,6 @@ class JsonFormBuilder() : FormBuilder {
 
     init {
         rulesHandler.formBuilder = this
-        formValidator.formBuilder = this
         defaultContextProvider = DefaultDispatcherProvider()
     }
 
@@ -108,9 +108,9 @@ class JsonFormBuilder() : FormBuilder {
         when {
             view.isNotNull() -> {
                 verticalRootView.addView(view)
-                verticalRootView.addChildren(formContent.fields, viewDispatcher, true)
+                verticalRootView.addChildren(formContent.fields, this, true)
             }
-            else -> verticalRootView.addChildren(formContent.fields, viewDispatcher)
+            else -> verticalRootView.addChildren(formContent.fields, this)
         }
     }
 

@@ -9,7 +9,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.utils.removeAsterisk
@@ -19,12 +18,12 @@ import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 class CheckBoxNFormView : AppCompatCheckBox, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
+    override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = CheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)

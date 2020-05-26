@@ -66,7 +66,7 @@ class FormActivity : AppCompatActivity() {
                 layoutInflater.inflate(R.layout.sample_one_form_custom_layout, null)
             )
             when (formData.formCategory) {
-                FormType.embeddableDefault -> {
+                FormType.jsonFromEmbeddedDefault -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
@@ -79,17 +79,17 @@ class FormActivity : AppCompatActivity() {
                         JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm()
                     }
                 }
-                FormType.embeddableCustomized -> {
+                FormType.jsonFormEmbeddedCustomized -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
                     }
                     JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm(views)
                 }
-                FormType.stepperDefault -> {
+                FormType.jsonFormStepperDefault -> {
                     startStepperActivity(formData.filePath, true)
                 }
-                FormType.stepperCustomized -> {
+                FormType.jsonFormStepperCustomized -> {
                     startStepperActivity(formData.filePath)
                 }
                 else -> Toast.makeText(

@@ -19,9 +19,7 @@ import com.nerdstone.neatformcore.utils.isNotNull
  *
  * The rules are handled by the [RulesFactory] class and the validation
  */
-class ViewDispatcher private constructor() : DataActionListener {
-
-    val rulesFactory: RulesFactory = RulesFactory.INSTANCE
+class ViewDispatcher(val rulesFactory: RulesFactory ) : DataActionListener {
 
     /**
      * Dispatches an action when view value changes. If value is the same as what had already been
@@ -51,17 +49,5 @@ class ViewDispatcher private constructor() : DataActionListener {
                 }
             }
         }
-    }
-
-    companion object {
-        @Volatile
-        private var instance: ViewDispatcher? = null
-
-        val INSTANCE: ViewDispatcher
-            get() = instance ?: synchronized(this) {
-                ViewDispatcher().also {
-                    instance = it
-                }
-            }
     }
 }

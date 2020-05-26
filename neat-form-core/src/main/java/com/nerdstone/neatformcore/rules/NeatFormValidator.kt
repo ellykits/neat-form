@@ -4,16 +4,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.VALIDATION_RESULT
 import com.nerdstone.neatformcore.utils.VALUE
+import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -25,11 +24,9 @@ import java.util.*
 /***
  * @author Elly Nerdstone
  * This class is used to handle form validations
- * @property formBuilder Form builder that validation is performed on
  */
-class NeatFormValidator private constructor() : FormValidator {
+class NeatFormValidator : FormValidator {
 
-    override lateinit var formBuilder: FormBuilder
     private val rulesEngine = DefaultRulesEngine()
     private val facts = Facts()
     override val invalidFields = hashSetOf<String>()
@@ -58,7 +55,7 @@ class NeatFormValidator private constructor() : FormValidator {
             }
             if (nFormView.viewProperties.validations != null) {
                 nFormView.viewProperties.validations?.forEach { validation ->
-                    if (!performValidation(validation, viewDetails.value)) {
+                    if (!performValidation(validation, viewDetails)) {
                         invalidFields.add(viewDetails.name)
                         return Pair(false, validation.message)
                     }
@@ -100,13 +97,14 @@ class NeatFormValidator private constructor() : FormValidator {
 
     /**
      * @param validation Validation to run
-     * @param value value used to run the validation against
+     * @param viewDetails details about the current view
      * @return true if validation passes false otherwise
      */
-    private fun performValidation(validation: NFormFieldValidation, value: Any?): Boolean {
+    private fun performValidation(validation: NFormFieldValidation, viewDetails: NFormViewDetails): Boolean {
         facts.put(VALIDATION_RESULT, false)
-        facts.asMap().putAll(getFormData())
-        facts.put(VALUE, value)
+        val dataViewModel:DataViewModel = ViewUtils.getDataViewModel(viewDetails)
+        facts.asMap().putAll(getFormData(dataViewModel))
+        facts.put(VALUE, viewDetails.value)
 
         val customRule: Rule = MVELRule()
             .name(UUID.randomUUID().toString())
@@ -120,21 +118,8 @@ class NeatFormValidator private constructor() : FormValidator {
         return facts.get(VALIDATION_RESULT)
     }
 
-    private fun getFormData(): MutableMap<String, Any?> {
-        return ViewModelProvider(formBuilder.context as FragmentActivity)[DataViewModel::class.java]
-            .details.value?.mapValuesTo(mutableMapOf(), { entry -> entry.value })!!
-    }
-
-    companion object {
-        @Volatile
-        private var instance: NeatFormValidator? = null
-
-        val INSTANCE: NeatFormValidator
-            get() = instance ?: synchronized(this) {
-                NeatFormValidator().also {
-                    instance = it
-                }
-            }
+    private fun getFormData(dataViewModel: DataViewModel): MutableMap<String, Any?> {
+        return dataViewModel.details.value?.mapValuesTo(mutableMapOf(), { entry -> entry.value })!!
     }
 
 }
