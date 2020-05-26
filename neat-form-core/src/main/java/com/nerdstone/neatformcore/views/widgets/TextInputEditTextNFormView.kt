@@ -38,7 +38,7 @@ class TextInputEditTextNFormView : TextInputLayout, NFormView {
 
     override fun setValue(value: Any, enabled: Boolean) {
         initialValue = value
-        this.editText?.setText(value as String)
+        this.editText?.setText(value.toString())
         setReadOnlyState(enabled)
     }
 

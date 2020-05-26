@@ -37,6 +37,13 @@ class ViewUtilsTest {
         Assert.assertTrue(mockEditText.hint.toString().endsWith("*"))
     }
 
+    @Test
+    fun `Should return a map of supported input types`(){
+        Assert.assertEquals(ViewUtils.getSupportedEditTextTypes().size, 31)
+        Assert.assertTrue(ViewUtils.getSupportedEditTextTypes()["phone"] is Int)
+        Assert.assertTrue(ViewUtils.getSupportedEditTextTypes().containsKey("number"))
+    }
+
     @After
     fun `After everything else`() {
         unmockkAll()

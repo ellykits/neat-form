@@ -62,7 +62,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
     override fun setValue(value: Any, enabled: Boolean) {
         initialValue = value
-        setText(value as String)
+        setText(value.toString())
         setReadOnlyState(enabled)
     }
 
