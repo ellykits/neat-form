@@ -22,6 +22,7 @@ class CustomImageView(context: Context) : CircleImageView(context), NFormView {
     override val viewBuilder = CustomImageViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     override fun resetValueWhenHidden() = Unit
 
@@ -29,4 +30,7 @@ class CustomImageView(context: Context) : CircleImageView(context), NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        TODO("Not yet implemented")
+    }
 }

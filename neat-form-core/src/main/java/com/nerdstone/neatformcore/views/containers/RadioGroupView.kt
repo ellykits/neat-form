@@ -23,6 +23,7 @@ class RadioGroupView : LinearLayout, NFormView {
     override val viewBuilder = RadioGroupViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     init {
         orientation = VERTICAL
@@ -41,8 +42,15 @@ class RadioGroupView : LinearLayout, NFormView {
     override fun validateValue(): Boolean =
         formValidator.validateLabeledField(this)
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        if (value is Map<*, *>) {
+            viewBuilder.setValue(value.keys.first() as String, enabled)
+        }
+    }
+
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

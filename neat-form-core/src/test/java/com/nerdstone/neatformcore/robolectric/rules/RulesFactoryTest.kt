@@ -32,7 +32,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test Rules Engine functionality` {
+class RulesFactoryTest {
     private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
     private val view = EditTextNFormView(activity.get())
     private val mainLayout: ViewGroup = LinearLayout(activity.get())
@@ -66,8 +66,8 @@ class `Test Rules Engine functionality` {
 
         //Setup rules handler with form builder and views map
         rulesHandler.formBuilder = JsonFormBuilder(
-                activity.get(),
-                TestConstants.SAMPLE_ONE_FORM_FILE, mainLayout
+            activity.get(),
+            TestConstants.SAMPLE_ONE_FORM_FILE
         )
         every { rulesFactory.rulesHandler } returns rulesHandler
     }

@@ -5,12 +5,15 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import com.nerdstone.neatformcore.domain.listeners.DataActionListener
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NeatFormValidator
+import com.nerdstone.neatformcore.utils.VALUE
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -23,6 +26,7 @@ class SpinnerNFormView : LinearLayout, NFormView {
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
+    override var initialValue: Any? = null
 
     init {
         orientation = VERTICAL
@@ -36,10 +40,25 @@ class SpinnerNFormView : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() = viewBuilder.resetSpinnerValue()
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        viewBuilder.materialSpinner.apply {
+            when (value) {
+                is Map<*, *> -> {
+                    setSelection(item.indexOf(value[VALUE]))
+                }
+                is NFormViewData -> {
+                    setSelection(item.indexOf(value.value as String))
+                }
+            }
+            setReadOnlyState(enabled)
+        }
+    }
+
     override fun validateValue() = formValidator.validateField(this).first
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

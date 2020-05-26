@@ -12,6 +12,7 @@ import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Calendar.*
 
 open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
@@ -19,8 +20,8 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     private var dateDisplayFormat = "yyyy-MM-dd"
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
-    private val selectedDate = Calendar.getInstance()
-    private val calendar = Calendar.getInstance()
+    private val calendar = getInstance()
+    val selectedDate: Calendar = getInstance()
     val textInputEditText =
         com.google.android.material.textfield.TextInputEditText(
             dateTimePickerNFormView.context
@@ -37,9 +38,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
 
     override fun buildView() {
         ViewUtils.applyViewAttributes(
-            nFormView = dateTimePickerNFormView,
-            acceptedAttributes = acceptedAttributes,
-            task = this::setViewProperties
+            dateTimePickerNFormView, acceptedAttributes, this::setViewProperties
         )
 
         dateTimePickerNFormView.addView(textInputEditText)
@@ -91,9 +90,9 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     }
 
     private fun launchDatePickerDialog() {
-        val year = selectedDate.get(Calendar.YEAR)
-        val month = selectedDate.get(Calendar.MONTH)
-        val dayOfMonth = selectedDate.get(Calendar.DAY_OF_MONTH)
+        val year = selectedDate.get(YEAR)
+        val month = selectedDate.get(MONTH)
+        val dayOfMonth = selectedDate.get(DAY_OF_MONTH)
 
         val datePickerDialog =
             DatePickerDialog(dateTimePickerNFormView.context, this, year, month, dayOfMonth)
@@ -102,8 +101,8 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     }
 
     private fun launchTimePickerDialog() {
-        val hour = selectedDate.get(Calendar.HOUR_OF_DAY)
-        val minute = selectedDate.get(Calendar.MINUTE)
+        val hour = selectedDate.get(HOUR_OF_DAY)
+        val minute = selectedDate.get(MINUTE)
         val isTwentyFourHour = false
         val timePickerDialog =
             TimePickerDialog(dateTimePickerNFormView.context, this, hour, minute, isTwentyFourHour)
@@ -112,28 +111,24 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         selectedDate.set(year, month, dayOfMonth)
-        textInputEditText.setText(getFormattedDate())
-        dateTimePickerNFormView.viewDetails.value = selectedDate.timeInMillis
-        dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
+        updateViewData()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         selectedDate.set(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH),
-            hourOfDay,
-            minute
+            calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH), hourOfDay, minute
         )
+        updateViewData()
+    }
+
+    fun updateViewData() {
         textInputEditText.setText(getFormattedDate())
         dateTimePickerNFormView.viewDetails.value = selectedDate.timeInMillis
         dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
     }
 
-    private fun getFormattedDate(): String =
-        SimpleDateFormat(
-            dateDisplayFormat, Locale.getDefault()
-        ).format(Date(selectedDate.timeInMillis))
+    private fun getFormattedDate(): String = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
+        .format(Date(selectedDate.timeInMillis))
 
     fun resetDatetimePickerValue() {
         textInputEditText.setText("")

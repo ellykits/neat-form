@@ -26,7 +26,7 @@ import org.robolectric.shadows.ShadowTextView
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class, shadows = [ShadowTextView::class])
-class `Test building toast notification` : BaseJsonViewBuilderTest() {
+class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val notificationNFormView = NotificationNFormView(activity.get())
     private val viewProperty = spyk(NFormViewProperty())

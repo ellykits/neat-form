@@ -3,7 +3,6 @@ package com.nerdstone.neatformcore.utils
 import android.view.View
 import android.view.ViewGroup
 
-
 /***
  * Ported from this Gist on Github https://gist.github.com/orip/5566666
  */
@@ -23,4 +22,11 @@ fun View.getViewsByTagValue(tag: Int, value: Any): List<View> {
 
 fun String.removeAsterisk(): String {
     return this.trim().removeSuffix("*").trim()
+}
+
+fun Any?.isNotNull(): Boolean {
+    return this != null
+}
+fun Any?.isNull(): Boolean {
+    return this == null
 }

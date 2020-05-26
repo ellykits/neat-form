@@ -1,5 +1,6 @@
 package com.nerdstone.neatform.form
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -8,21 +9,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.nerdstone.neatandroidstepper.core.domain.StepperActions
-import com.nerdstone.neatandroidstepper.core.model.StepperModel
-import com.nerdstone.neatandroidstepper.core.stepper.Step
-import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
+import com.nerdstone.neatform.StepperActivity
 import com.nerdstone.neatform.custom.views.CustomImageView
-import com.nerdstone.neatform.utils.replaceView
+import com.nerdstone.neatform.utils.Constants
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
-import com.nerdstone.neatformcore.utils.DialogUtil
+import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
 import timber.log.Timber
 
-class FormActivity : AppCompatActivity(), StepperActions {
+const val FILE_PATH = "FILE_PATH"
+const val PRE_FILLED = "PRE_FILLED"
+
+class FormActivity : AppCompatActivity() {
 
     private lateinit var formLayout: LinearLayout
     private lateinit var mainLayout: LinearLayout
@@ -42,13 +42,6 @@ class FormActivity : AppCompatActivity(), StepperActions {
         pageTitleTextView = findViewById(R.id.pageTitleTextView)
         exitFormImageView = findViewById(R.id.exitFormImageView)
         completeButton = findViewById(R.id.completeButton)
-
-        val stepperModel = StepperModel.Builder()
-            .exitButtonDrawableResource(R.drawable.ic_clear)
-            .indicatorType(StepperModel.IndicatorType.DOT_INDICATOR)
-            .toolbarColorResource(R.color.colorPrimaryDark)
-            .build()
-
 
         if (intent.extras != null) {
             val formData = intent?.extras?.getSerializable("formData") as FormData
@@ -74,37 +67,30 @@ class FormActivity : AppCompatActivity(), StepperActions {
             )
             when (formData.formCategory) {
                 FormType.embeddableDefault -> {
-                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
+                    formBuilder = JsonFormBuilder(this, formData.filePath)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
-                        it.buildForm()
+                        it.withFormData(
+                            Constants.PREVIOUS_DATA, mutableSetOf(
+                                "dob", "time", "email_subscription", "country",
+                                "no_prev_pregnancies", "choose_language", "wiki_contribution"
+                            )
+                        )
+                        JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm()
                     }
                 }
                 FormType.embeddableCustomized -> {
-                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
+                    formBuilder = JsonFormBuilder(this, formData.filePath)
                     formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
-                        it.buildForm(viewList = views)
                     }
+                    JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm(views)
                 }
                 FormType.stepperDefault -> {
-                    sampleToolBar.visibility = View.GONE
-                    formBuilder = JsonFormBuilder(this, formData.filePath, null)
-                            formBuilder?.also {
-                                it.registeredViews["custom_image"] = CustomImageView::class
-                                it.buildForm(JsonFormStepBuilderModel.Builder(this,
-                                        stepperModel).build())
-                            }
-                    replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
+                    startStepperActivity(formData.filePath, true)
                 }
                 FormType.stepperCustomized -> {
-                    sampleToolBar.visibility = View.GONE
-                    formBuilder = JsonFormBuilder(this, formData.filePath, formLayout)
-                        .buildForm(
-                            JsonFormStepBuilderModel.Builder(this, stepperModel).build(),
-                            views
-                        )
-                    replaceView(mainLayout, (formBuilder as JsonFormBuilder).neatStepperLayout)
+                    startStepperActivity(formData.filePath)
                 }
                 else -> Toast.makeText(
                     this, "Please provide the right form type",
@@ -114,39 +100,11 @@ class FormActivity : AppCompatActivity(), StepperActions {
         }
     }
 
-    override fun onStepError(stepVerificationState: StepVerificationState) {
-    }
-
-    override fun onButtonNextClick(step: Step) {
-    }
-
-    override fun onButtonPreviousClick(step: Step) {
-    }
-
-    override fun onStepComplete(step: Step) {
-        if (formBuilder?.getFormDataAsJson() != "") {
-            Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
-            finish()
-        }
-    }
-
-    override fun onExitStepper() {
-        DialogUtil.createAlertDialog(
-            context = this, title = "Confirm close",
-            message = "All the unsaved data will get lost if you quit"
-        ).apply {
-            setPositiveButton("Exit") { _, _ -> finish() }
-            setNegativeButton("Cancel") { _, _ -> return@setNegativeButton }
-            create()
-        }.show()
-    }
-
-    override fun onCompleteStepper() {
-        if (formBuilder?.getFormDataAsJson() != "") {
-            Toast.makeText(this, "Completed entire step", Toast.LENGTH_LONG).show()
-            Timber.d("Saved Data = %s", formBuilder?.getFormDataAsJson())
-            finish()
-        }
+    private fun startStepperActivity(filePath: String, preFilled: Boolean = false) {
+        finish()
+        startActivity(Intent(this, StepperActivity::class.java).apply {
+            putExtra(FILE_PATH, filePath)
+            putExtra(PRE_FILLED, preFilled)
+        })
     }
 }

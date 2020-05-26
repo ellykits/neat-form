@@ -126,8 +126,6 @@
           "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter adult's phone number",
-            "type": "name",
-            "padding": "8",
             "input_type": "phone"
           },
           "meta_data": {
@@ -149,7 +147,6 @@
           "type": "text_input_edit_text",
           "properties": {
             "hint": "Enter your age",
-            "type": "name",
             "input_type": "number"
           },
           "meta_data": {
@@ -174,7 +171,6 @@
           "type": "text_input_edit_text",
           "properties": {
             "hint": "I am a child",
-            "type": "name",
             "input_type": "text"
           },
           "meta_data": {
@@ -355,8 +351,7 @@
           "name": "language_none",
           "type": "edit_text",
           "properties": {
-            "hint": "Specify your language",
-            "type": "name"
+            "hint": "Specify your language"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -399,8 +394,7 @@
           "name": "wiki_contribution_yes",
           "type": "edit_text",
           "properties": {
-            "hint": "What was your contribution?",
-            "type": "name"
+            "hint": "What was your contribution?"
           },
           "validation": [
             {

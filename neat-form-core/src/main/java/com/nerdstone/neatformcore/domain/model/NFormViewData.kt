@@ -10,6 +10,9 @@ data class NFormViewData(
     @Expose
     var value: Any? = null,
     @Expose
-    @SerializedName("meta_data")
-    var metadata: Map<String, Any>? = null
+    @SerializedName("meta_data", alternate = ["metadata"])
+    var metadata: Map<String, Any>? = null,
+    @Expose
+    var visible: Boolean = true
+
 ) : Serializable

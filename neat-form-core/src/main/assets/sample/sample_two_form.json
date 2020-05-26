@@ -11,7 +11,6 @@
           "properties": {
             "hint": "This is an adult",
             "type": "name",
-            "text": "",
             "padding": "8"
           },
           "meta_data": {

@@ -25,6 +25,7 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
     override val viewBuilder = NotificationViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     private val rulesHandler = NFormRulesHandler.INSTANCE
 
@@ -46,4 +47,6 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
        Timber.i("Updated calculation ${calculationField.first} -> ${calculationField.second}")
         viewBuilder.updateNotificationText(calculationField)
     }
+
+    override fun setValue(value: Any, enabled: Boolean) = Unit
 }

@@ -10,7 +10,9 @@ class ViewVisibilityChangeHandler private constructor() : VisibilityChangeListen
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         ViewUtils.animateView(changedView)
         if (changedView is NFormView) {
-            if (visibility == View.GONE) {
+            if (visibility == View.GONE && changedView.viewDetails.value != null
+                && changedView.initialValue == null
+            ) {
                 changedView.resetValueWhenHidden()
             }
             changedView.trackRequiredField()

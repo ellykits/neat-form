@@ -1,46 +1,30 @@
 package com.nerdstone.neatformcore.form.json
 
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ScrollView
-import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.nerdstone.neatandroidstepper.core.model.StepModel
-import com.nerdstone.neatandroidstepper.core.stepper.Step
-import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
-import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
-import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
-import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
-import com.nerdstone.neatformcore.domain.model.JsonFormStepBuilderModel
 import com.nerdstone.neatformcore.domain.model.NForm
 import com.nerdstone.neatformcore.domain.model.NFormContent
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.form.common.FormErrorDialog
+import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.utils.Constants.ViewType
-import com.nerdstone.neatformcore.utils.DefaultDispatcherProvider
-import com.nerdstone.neatformcore.utils.DispatcherProvider
-import com.nerdstone.neatformcore.utils.SingleRunner
-import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
+import com.nerdstone.neatformcore.viewmodel.FormViewModel
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -53,39 +37,50 @@ object JsonFormConstants {
 
 /***
  * @author Elly Nerdstone
+ *
+ * This class implements the [FormBuilder] and is used to build the form using JSON specification.
+ * This form builder works in 3 sequential steps. First it parses the JSON into a model, secondly it
+ * reads the rules file and finally creates the actual views. All these three tasks run one after the
+ * other but within a [CoroutineScope].
+ *
+ * To ensure that the the form builder will not attempt to create the views without first parsing
+ * the JSON a mutex [SingleRunner] is used to guarantee that the tasks run sequentially. This
+ * does not mean however that the tasks are running on the main thread.
+ *
+ * To parse the JSON for example is handled by [DispatcherProvider.default] method since it is a CPU intensive task.
+ * Reading of rules file however is run by [DispatcherProvider.io] whereas creation of views is done on the
+ * main thread using [DispatcherProvider.main] scope.
  */
-class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
-    private var mainLayout: ViewGroup? = null
+class JsonFormBuilder() : FormBuilder {
+    internal val readOnlyFields = mutableSetOf<String>()
     private val viewDispatcher: ViewDispatcher = ViewDispatcher.INSTANCE
     private val rulesFactory: RulesFactory = RulesFactory.INSTANCE
     private val rulesHandler = rulesFactory.rulesHandler
-    private val singleRunner = SingleRunner()
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
     var fileSource: String? = null
-    override var jsonString: String? = null
-    override lateinit var neatStepperLayout: NeatStepperLayout
+    var formDataJson: String? = null
+    override var formString: String? = null
     override lateinit var context: Context
-    override lateinit var viewModel: DataViewModel
+    override lateinit var dataViewModel: DataViewModel
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var registeredViews = hashMapOf<String, KClass<*>>()
+    override lateinit var formViewModel: FormViewModel
 
-    constructor(context: Context, fileSource: String, mainLayout: ViewGroup?)
-            : this() {
+    constructor(context: Context, fileSource: String) : this() {
         this.context = context
         this.fileSource = fileSource
-        this.mainLayout = mainLayout
-        this.neatStepperLayout = NeatStepperLayout(context)
-        this.viewModel = ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+        this.dataViewModel =
+            ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+        this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
     }
 
-    constructor(jsonString: String, context: Context, mainLayout: ViewGroup?)
-            : this() {
-        this.jsonString = jsonString
+    constructor(jsonString: String, context: Context) : this() {
+        this.formString = jsonString
         this.context = context
-        this.mainLayout = mainLayout
-        this.neatStepperLayout = NeatStepperLayout(context)
-        this.viewModel = ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+        this.dataViewModel =
+            ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+        this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
     }
 
     init {
@@ -94,119 +89,24 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         defaultContextProvider = DefaultDispatcherProvider()
     }
 
-    override fun buildForm(
-            jsonFormStepBuilderModel: JsonFormStepBuilderModel?, viewList: List<View>?
-    ): FormBuilder {
-        registerViews()
-        launch(defaultContextProvider.main()) {
-            try {
-                if (form == null) {
-                    form = withContext(defaultContextProvider.default()) {
-                        singleRunner.afterPrevious {
-                            parseJsonForm()
-                        }
-                    }
-                }
-                launch {
-                    val rulesAsync = withContext(defaultContextProvider.io()) {
-                        singleRunner.afterPrevious {
-                            registerFormRulesFromFile(context, RulesFileType.YAML)
-                        }
-                    }
-                    if (rulesAsync) {
-                        launch {
-                            withContext(defaultContextProvider.main()) {
-                                if (viewList == null)
-                                    createFormViews(
-                                            context,
-                                            arrayListOf(),
-                                            jsonFormStepBuilderModel
-                                    )
-                                else
-                                    createFormViews(context, viewList, jsonFormStepBuilderModel)
-                            }
-                        }
-                    }
-                }
-            } catch (throwable: Throwable) {
-                Timber.e(throwable)
-            }
-        }
-        return this
-    }
 
-    private fun parseJsonForm(): NForm? {
+    internal fun parseJsonForm(): NForm? {
         return when {
-            jsonString != null -> JsonFormParser.parseJson(jsonString)
-            fileSource != null -> JsonFormParser.parseJson(
-                    AssetFile.readAssetFileAsString(context, fileSource!!)
+            formString.isNotNull() -> parseJson<NForm>(formString)
+            fileSource.isNotNull() -> parseJson<NForm>(
+                AssetFile.readAssetFileAsString(context, fileSource!!)
             )
             else -> null
         }
     }
 
-    /***
-     * @param context android context
-     */
-    override fun createFormViews(
-            context: Context, views: List<View>?, jsonFormStepBuilderModel: JsonFormStepBuilderModel?
+    internal fun addViewsToVerticalRootView(
+        customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
+        verticalRootView: VerticalRootView
     ) {
-        if (form != null) {
-            when {
-                jsonFormStepBuilderModel != null && (mainLayout == null || mainLayout != null) -> {
-                    neatStepperLayout.stepperModel = jsonFormStepBuilderModel.stepperModel
-
-                    if (jsonFormStepBuilderModel.stepperActions != null)
-                        neatStepperLayout.stepperActions = jsonFormStepBuilderModel.stepperActions
-
-                    val fragmentsList: MutableList<StepFragment> = mutableListOf()
-
-                    form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = VerticalRootView(context)
-                        rootView.formBuilder = this
-                        addViewsToVerticalRootView(views, index, formContent, rootView)
-                        val stepFragment = StepFragment.newInstance(
-                                index,
-                                StepModel.Builder()
-                                        .title(form!!.formName)
-                                        .subTitle(formContent.stepName as CharSequence)
-                                        .build(),
-                                rootView
-                        )
-                        fragmentsList.add(stepFragment)
-                    }
-                    neatStepperLayout.setUpViewWithAdapter(
-                            StepperPagerAdapter(
-                                    (context as FragmentActivity).supportFragmentManager,
-                                    fragmentsList
-                            )
-                    )
-                    neatStepperLayout.showLoadingIndicators(false)
-                }
-                mainLayout != null && jsonFormStepBuilderModel == null -> {
-                    val formViews = ScrollView(context)
-                    form!!.steps.withIndex().forEach { (index, formContent) ->
-                        val rootView = VerticalRootView(context)
-                        formViews.addView(rootView.initRootView(this) as View)
-                        addViewsToVerticalRootView(views, index, formContent, rootView)
-                    }
-                    mainLayout?.addView(formViews)
-                }
-                else -> Toast.makeText(
-                        context, R.string.form_builder_error, Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-
-    private fun addViewsToVerticalRootView(
-            customViews: List<View>?, stepIndex: Int,
-            formContent: NFormContent, verticalRootView: VerticalRootView
-    ) {
-
         val view = customViews?.getOrNull(stepIndex)
         when {
-            view != null -> {
+            view.isNotNull() -> {
                 verticalRootView.addView(view)
                 verticalRootView.addChildren(formContent.fields, viewDispatcher, true)
             }
@@ -220,24 +120,38 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     override fun getFormDataAsJson(): String {
         if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
-
             val formDetails = hashMapOf<String, Any?>().also {
                 it[JsonFormConstants.FORM_NAME] = form?.formName
                 it[JsonFormConstants.FORM_METADATA] = form?.formMetadata
                 it[JsonFormConstants.FORM_VERSION] = form?.formVersion
-                it[JsonFormConstants.FORM_DATA] = viewModel.details
+                it[JsonFormConstants.FORM_DATA] = dataViewModel.details.value
             }
-
             return Utils.getJsonFromModel(formDetails)
         }
         FormErrorDialog(context).show()
+        logInvalidFields()
         return ""
     }
 
-    override fun registerFormRulesFromFile(
-            context: Context,
-            rulesFileType: RulesFileType
-    ): Boolean {
+    override fun withFormData(formDataJson: String, readOnlyFields: MutableSet<String>):
+            FormBuilder {
+        this.formDataJson = formDataJson
+        this.readOnlyFields.addAll(readOnlyFields)
+        return this
+    }
+
+    override fun preFillForm() {
+        if (
+            this::dataViewModel.isInitialized && dataViewModel.details.value.isNullOrEmpty()
+            && formDataJson.isNotNull()
+        ) {
+            this.formViewModel.readOnlyFields.value?.addAll(readOnlyFields)
+            dataViewModel.updateDetails(FormUtils.parseFormDataJson(formDataJson!!))
+        }
+    }
+
+    override fun registerFormRulesFromFile(context: Context, rulesFileType: RulesFileType)
+            : Boolean {
         form?.rulesFile?.also {
             rulesFactory.readRulesFromFile(context, it, rulesFileType)
         }
@@ -246,10 +160,16 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
 
     override fun getFormData(): HashMap<String, NFormViewData> {
         if (formValidator.invalidFields.isEmpty() && formValidator.requiredFields.isEmpty()) {
-            return viewModel.details
+            return dataViewModel.details.value!!
         }
         FormErrorDialog(context).show()
+        logInvalidFields()
         return hashMapOf()
+    }
+
+    private fun logInvalidFields() {
+        Timber.d("Invalid fields (${formValidator.invalidFields.size}) -> ${formValidator.invalidFields}")
+        Timber.d("Required fields (${formValidator.requiredFields.size}) -> ${formValidator.requiredFields}")
     }
 
     override fun registerViews() {
@@ -263,69 +183,4 @@ class JsonFormBuilder() : FormBuilder, CoroutineScope by MainScope() {
         registeredViews[ViewType.RADIO_GROUP] = RadioGroupView::class
         registeredViews[ViewType.TOAST_NOTIFICATION] = NotificationNFormView::class
     }
-}
-
-
-const val FRAGMENT_VIEW = "fragment_view"
-const val FRAGMENT_INDEX = "index"
-
-class StepFragment : Step {
-    var index: Int? = null
-    var formView: View? = null
-
-    constructor()
-
-    constructor(stepModel: StepModel) : super(stepModel)
-
-    companion object {
-        fun newInstance(
-                index: Int, stepModel: StepModel, verticalRootView: VerticalRootView
-        ): StepFragment {
-
-            val args = Bundle().apply {
-                putInt(FRAGMENT_INDEX, index)
-                putSerializable(FRAGMENT_VIEW, verticalRootView)
-            }
-            return StepFragment(stepModel).apply { arguments = args }
-        }
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.also {
-            index = it.getInt(FRAGMENT_INDEX)
-            formView = it.getSerializable(FRAGMENT_VIEW) as VerticalRootView?
-        }
-        retainInstance = true
-    }
-
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        if (formView != null && formView?.parent != null) {
-            return formView?.parent as View
-        }
-        val scroller = ScrollView(activity)
-        scroller.addView(formView)
-        return scroller
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        //No call for super(). Bug on API Level > 11.
-    }
-
-    override fun verifyStep(): StepVerificationState {
-        return StepVerificationState(true, null)
-    }
-
-    override fun onSelected() {
-        //Overridden not useful at the moment
-    }
-
-    override fun onError(stepVerificationState: StepVerificationState) {
-        //Overridden not useful at the moment
-    }
-
 }

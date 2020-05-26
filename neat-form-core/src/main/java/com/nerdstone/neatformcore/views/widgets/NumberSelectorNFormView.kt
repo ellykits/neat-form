@@ -23,6 +23,7 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -36,10 +37,15 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        viewBuilder.setValue(value, enabled)
+    }
+
     override fun validateValue() = formValidator.validateLabeledField(this)
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

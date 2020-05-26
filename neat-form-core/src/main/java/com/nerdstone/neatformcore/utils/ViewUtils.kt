@@ -1,5 +1,6 @@
 package com.nerdstone.neatformcore.utils
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
@@ -12,12 +13,18 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.nerdstone.neatformcore.BuildConfig
 import com.nerdstone.neatformcore.R
+import com.nerdstone.neatformcore.domain.model.NFormViewData
+import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
+import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import timber.log.Timber
 import java.util.*
@@ -55,12 +62,10 @@ object ViewUtils {
             try {
                 getView(view as NFormView, viewProperty, viewDispatcher)
             } catch (e: Exception) {
-                Timber.e(e)
-                if (BuildConfig.DEBUG)
-                    Toast.makeText(
-                        rootView.context, "ERROR: The view with name ${viewProperty.name} " +
-                                "defined in json form is missing in custom layout", LENGTH_LONG
-                    ).show()
+                val message =
+                    "ERROR: The view with name ${viewProperty.name} defined in json form is missing in custom layout"
+                Timber.e(e, message)
+                if (BuildConfig.DEBUG) Toast.makeText(context, message, LENGTH_SHORT).show()
             }
         } else {
             val constructor = kClass.constructors.minBy { it.parameters.size }
@@ -76,12 +81,10 @@ object ViewUtils {
         if (viewProperty.subjects != null) {
             viewDispatcher.rulesFactory
                 .registerSubjects(splitText(viewProperty.subjects, ","), viewProperty)
-            val hasVisibilityRule =
-                viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
+            val hasVisibilityRule = viewDispatcher.rulesFactory.viewHasVisibilityRule(viewProperty)
             if (hasVisibilityRule) {
                 viewDispatcher.rulesFactory.rulesHandler.changeVisibility(
-                    false,
-                    nFormView.viewDetails.view
+                    false, nFormView.viewDetails.view
                 )
             }
         }
@@ -95,6 +98,9 @@ object ViewUtils {
             .toTypedArray())
     }
 
+    /**
+     * This method appends a suffix '*' to the provided [text]
+     */
     fun addRedAsteriskSuffix(text: String): SpannableString {
         if (text.isNotEmpty()) {
             val textWithSuffix = SpannableString("$text *")
@@ -115,15 +121,18 @@ object ViewUtils {
         nFormView: NFormView, viewProperty: NFormViewProperty, viewDispatcher: ViewDispatcher
     ): NFormView {
         with(nFormView) {
-            //Set view properties
-            viewProperties = viewProperty
-            viewDetails.name = viewProperty.name
-            viewDetails.metadata = viewProperty.viewMetadata
 
-            //Add listener and build view
-            viewDetails.view.id = View.generateViewId()
-            viewDetails.view.tag = viewProperty.name
+            //Set view properties and view dispatcher
+            viewProperties = viewProperty
             dataActionListener = viewDispatcher
+
+            with(viewDetails) {
+                name = viewProperty.name
+                metadata = viewProperty.viewMetadata
+                view.id = View.generateViewId()
+                view.tag = viewProperty.name
+            }
+
             addRequiredFields(nFormView)
             trackRequiredField()
             viewBuilder.buildView()
@@ -136,6 +145,11 @@ object ViewUtils {
             nFormView.formValidator.requiredFields.add(nFormView.viewDetails.name)
     }
 
+    /**
+     * This method is the one responsible for mapping the JSON string [acceptedAttributes] to actual
+     * view attributes to [nFormView]. [task] is a the method that is responsible for applying these
+     * properties
+     */
     fun applyViewAttributes(
         nFormView: NFormView, acceptedAttributes: HashSet<String>,
         task: (attribute: Map.Entry<String, Any>) -> Unit
@@ -154,6 +168,10 @@ object ViewUtils {
         }
     }
 
+    /**
+     * This method extracts the value from the provided [attribute] and uses it as the text that will
+     * be displayed on the top label of [nFormView]
+     */
     fun addViewLabel(attribute: Pair<String, Any>, nFormView: NFormView): LinearLayout {
         val layout = View.inflate((nFormView as View).context, R.layout.custom_label_layout, null)
                 as LinearLayout
@@ -172,12 +190,20 @@ object ViewUtils {
         return layout
     }
 
+    /**
+     * When a field represented by this [nFormView] is required it must be filled otherwise
+     * data will not be valid and an empty map will be returned if you try to access the form data.
+     */
     fun handleRequiredStatus(nFormView: NFormView) {
+        val viewContext = getViewContext(nFormView.viewDetails)
+        val dataViewModel =
+            ViewModelProvider(viewContext as FragmentActivity)[DataViewModel::class.java]
         (nFormView as View).tag?.also {
             val formValidator = nFormView.formValidator
             if (Utils.isFieldRequired(nFormView) &&
                 nFormView.viewDetails.value == null &&
-                nFormView.viewDetails.view.visibility == View.VISIBLE
+                nFormView.viewDetails.view.visibility == View.VISIBLE &&
+                !dataViewModel.details.value?.containsKey(nFormView.viewDetails.name)!!
             ) {
                 formValidator.requiredFields.add(nFormView.viewDetails.name)
             } else {
@@ -186,6 +212,9 @@ object ViewUtils {
         }
     }
 
+    /**
+     * This method is used to animate the [view]
+     */
     fun animateView(view: View) {
         when (view.visibility) {
             View.VISIBLE -> view.animate().alpha(1.0f).duration = 800
@@ -193,6 +222,54 @@ object ViewUtils {
         }
     }
 
+    /**
+     * This method returns [DataViewModel] from the provided context of the [viewDetails]
+     */
+    fun getDataViewModel(viewDetails: NFormViewDetails) =
+        ViewModelProvider(getViewContext(viewDetails) as FragmentActivity)[DataViewModel::class.java]
+
+    /**
+     * This method is used to get the base context for [viewDetails]. Sometimes the context is
+     * wrapped inside a [ContextThemeWrapper] but we need its base context which is an [FragmentActivity]
+     */
+    private fun getViewContext(viewDetails: NFormViewDetails): Context {
+        val context = viewDetails.view.context
+        var activityContext = context
+        if (context is ContextThemeWrapper) activityContext = context.baseContext
+        return activityContext
+    }
+
+    @Throws(Throwable::class)
+    fun findViewWithKey(key: String, context: Context): View? {
+        val activityRootView =
+            (context as Activity).findViewById<View>(android.R.id.content).rootView
+        return activityRootView.findViewWithTag(key)
+    }
+
+    fun View.setReadOnlyState(enabled: Boolean) {
+        isEnabled = enabled
+        isFocusable = enabled
+    }
+
+    /**
+     * This method updates the values of the fields with the provided [fieldValues]. Fields that should be disabled
+     * are listed in the [readOnlyFields]
+     */
+    fun updateFieldValues(
+        fieldValues: HashMap<String, NFormViewData>, context: Context,
+        readOnlyFields: MutableSet<String>
+    ) {
+        fieldValues.filterNot { entry -> entry.key.endsWith(Constants.RuleActions.CALCULATION) }
+            .forEach { entry ->
+                val view: View? = findViewWithKey(entry.key, context)
+                entry.value.value?.let { realValue ->
+                    if (view != null) (view as NFormView).setValue(
+                        realValue, !readOnlyFields.contains(entry.key)
+                    )
+                }
+                Timber.d("Updated field %s : %s", entry.key, entry.value.value)
+            }
+    }
 
     /**
      * Crediting @see <a href='https://stackoverflow.com/questions/2586301/set-inputtype-for-an-edittext-programmatically?rq=1'>

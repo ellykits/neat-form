@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
+class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val radioOption1 = spyk(NFormSubViewProperty())
@@ -139,6 +139,20 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         (1 until radioGroupView.childCount).forEach { i ->
             Assert.assertTrue(!(radioGroupView.getChildAt(i) as RadioButton).isChecked)
         }
+    }
+
+    @Test
+    fun `Should set value on radio group when provided`() {
+        viewProperty.viewAttributes = hashMapOf("text" to "Pick your preferred language")
+        viewProperty.options =
+            listOf(radioOption1, radioOption2, radioOption3)
+        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
+        val valueHashMap = mapOf("kotlin" to NFormViewData(value = "Kotlin"))
+        radioGroupView.setValue(valueHashMap)
+        Assert.assertEquals(radioGroupView.initialValue, valueHashMap)
+        Assert.assertTrue(radioGroupView.viewDetails.value is HashMap<*, *>)
+        val hashMap = radioGroupView.viewDetails.value as HashMap<*, *>
+        Assert.assertTrue(hashMap.containsKey("kotlin"))
     }
 
     @After

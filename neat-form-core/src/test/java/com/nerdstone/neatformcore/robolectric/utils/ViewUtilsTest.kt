@@ -17,7 +17,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
-class `Test View Utils with Robolectric` {
+class ViewUtilsTest {
 
     @Before
     fun `Before doing anything else`() {

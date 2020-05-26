@@ -17,6 +17,7 @@ import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
 class MultiChoiceCheckBox : LinearLayout, NFormView {
+
     override lateinit var viewProperties: NFormViewProperty
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
@@ -24,6 +25,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
     override val viewBuilder = MultiChoiceCheckBoxViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     private var checkBoxOptionsTextSize: Float = 0f
     private var labelTextSize: Float = 0f
@@ -43,6 +45,13 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
 
     override fun resetValueWhenHidden() {
         viewBuilder.resetCheckBoxValues()
+    }
+
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        if (value is Map<*, *>) {
+            viewBuilder.setValue(value.keys, enabled)
+        }
     }
 
     override fun validateValue(): Boolean =
@@ -75,25 +84,6 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
             } finally {
                 typedArray.recycle()
             }
-        }
-    }
-
-    /**
-     * adding passed xml attributes to MultiChoice Checkbox viewAttributes
-     */
-    private fun setPassedAttributes(viewProperty: NFormViewProperty) {
-        if (checkBoxOptionsTextSize != 0f) {
-            viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.OPTIONS_TEXT_SIZE.name,
-                checkBoxOptionsTextSize
-            )
-        }
-
-        if (labelTextSize != 0f) {
-            viewProperty.viewAttributes?.put(
-                MultiChoiceCheckBoxViewBuilder.MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name,
-                labelTextSize
-            )
         }
     }
 }
