@@ -4,7 +4,7 @@
   "encounter_type": "TB Followup",
   "entity_id": "",
   "relational_id": "",
-  "rules_file": "rule/tb_followup_form_rules.yml",
+  "rules_file": "rules/yml/tb_followup_form_rules.yml",
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",
@@ -449,16 +449,6 @@
           ],
           "required_status": "yes:Please specify the state of TB therapy",
           "subjects": "registration_or_followup_status:text"
-        },
-        {
-          "name": "tb_followup_visit_date",
-          "type": "hidden",
-          "meta_data": {
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "tb_followup_visit_date",
-            "openmrs_entity_parent": ""
-          },
-          "required_status": "false"
         }
       ]
     }

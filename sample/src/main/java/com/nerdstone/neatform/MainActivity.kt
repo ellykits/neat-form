@@ -45,14 +45,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
-                    formTitle = "Profile - Sample",
+                    formTitle = "TB Registration",
                     formCategory = FormType.embeddableDefault,
-                    filePath = "sample/sample_one_form.json"
+                    filePath = "sample/tb_registration.json"
                 ),
                 FormData(
-                    formTitle = "Profile - Customized Sample",
-                    formCategory = FormType.embeddableCustomized,
-                    filePath = "sample/sample_one_form.json"
+                    formTitle = "TB Followup",
+                    formCategory = FormType.embeddableDefault,
+                    filePath = "sample/tb_followup_visit.json"
                 ),
                 FormData(
                     formTitle = "Profile - Sample 2",

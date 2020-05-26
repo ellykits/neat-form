@@ -4,7 +4,7 @@
   "encounter_type": "TB Registration",
   "entity_id": "",
   "relational_id": "",
-  "rules_file": "rule/tb_registration_form_rules.yml",
+  "rules_file": "rules/yml/tb_registration_form_rules.yml",
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",
@@ -317,16 +317,6 @@
             }
           ],
           "required_status": "yes:Please specify your gender"
-        },
-        {
-          "name": "tb_registration_date",
-          "type": "hidden",
-          "meta_data": {
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "tb_registration_date",
-            "openmrs_entity_parent": ""
-          },
-          "required_status": "false"
         }
       ]
     }
