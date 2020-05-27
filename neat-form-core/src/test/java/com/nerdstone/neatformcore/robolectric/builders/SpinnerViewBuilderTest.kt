@@ -2,7 +2,6 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -15,12 +14,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -33,7 +27,6 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
 
     @Before
     fun `Before doing anything else`() {
-        spinnerNFormView.formValidator = this.formValidator
         viewProperty.name = "gender"
         viewProperty.type = "spinner"
         spinnerNFormView.viewProperties = viewProperty
@@ -98,7 +91,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
+        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
         spinnerNFormView.visibility = View.GONE
         Assert.assertNull(spinnerNFormView.viewDetails.value)
     }
@@ -109,7 +102,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
+        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
         val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
         materialSpinner.setSelection(1)
         materialSpinner.isSelected = true
@@ -121,7 +114,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your gender")
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, spyk())
+        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
         val valueHashMap = mapOf("value" to "Female")
         spinnerNFormView.setValue(valueHashMap)
         Assert.assertEquals(spinnerNFormView.initialValue, valueHashMap)

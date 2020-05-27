@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -18,12 +17,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -55,9 +49,8 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         checkBoxOption4.isExclusive = true
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
-        multiChoiceCheckBox.formValidator = this.formValidator
         multiChoiceCheckBox.viewProperties = viewProperty
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
     }
 
     @Test
@@ -133,7 +126,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty,  formBuilder)
         //Select 2 checkboxes and ensure value map contains the 2 checkboxes
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
@@ -162,7 +155,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
         //An exclusive option can only be selected independently
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox //kotlin
         val checkBox3 = multiChoiceCheckBox.getChildAt(3) as CheckBox //don't know
@@ -190,7 +183,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
         checkBox1.isChecked = true
@@ -207,7 +200,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your languages")
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, spyk())
+        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
         val valueHashMap = mapOf(
             "kotlin" to NFormViewData(value = "Kotlin"),
             "java" to NFormViewData(value = "Java")

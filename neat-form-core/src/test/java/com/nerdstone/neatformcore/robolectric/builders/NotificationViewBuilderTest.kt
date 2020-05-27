@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.NotificationNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -18,14 +16,8 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowAlertDialog
-import org.robolectric.shadows.ShadowTextView
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class, shadows = [ShadowTextView::class])
 class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val notificationNFormView = NotificationNFormView(activity.get())
@@ -33,7 +25,6 @@ class NotificationViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Before
     fun `Before doing anything else`() {
-        notificationNFormView.formValidator = this.formValidator
         viewProperty.name = "notification_view"
         viewProperty.type = "toast_notification"
         notificationNFormView.viewProperties = viewProperty

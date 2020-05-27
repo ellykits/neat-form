@@ -2,13 +2,10 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.text.InputType
 import android.view.View
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -16,12 +13,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -33,7 +25,6 @@ class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.name = "name"
         viewProperty.type = "edit_text"
         //Set EditText properties and assign EditText view builder
-        editTextNFormView.formValidator = this.formValidator
         editTextNFormView.viewProperties = viewProperty
         ViewUtils.setupView(editTextNFormView, viewProperty, formBuilder)
     }

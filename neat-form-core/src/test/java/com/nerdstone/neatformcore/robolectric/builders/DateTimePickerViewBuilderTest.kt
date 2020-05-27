@@ -1,23 +1,16 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
-import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -32,7 +25,6 @@ class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.name = "dob"
         viewProperty.type = "datetime_picker"
         //Set EditText properties and assign EditText view builder
-        dateTimePickerNFormView.formValidator = this.formValidator
         dateTimePickerNFormView.viewProperties = viewProperty
     }
 

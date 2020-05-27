@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.NumberSelectorViewBuilder
@@ -16,12 +15,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
     private val numberSelector = NumberSelectorNFormView(activity.get())
     private val numberSelectorViewBuilder = spyk(NumberSelectorViewBuilder(numberSelector))
@@ -29,7 +23,6 @@ class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Before
     fun `Before doing anything else`() {
-        numberSelector.formValidator = this.formValidator
         viewProperty.name = "number_selector_test"
         viewProperty.type = "number_selector"
         numberSelector.viewProperties = viewProperty
@@ -92,7 +85,7 @@ class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should set pass value as integer when number is selected`() {
-        ViewUtils.setupView(numberSelector, viewProperty, spyk())
+        ViewUtils.setupView(numberSelector, viewProperty, formBuilder)
         //Value is null first but will always contain a value when selection is done
         Assert.assertNull(numberSelector.viewDetails.value)
 
@@ -107,7 +100,7 @@ class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should deselect number when the number selector view is gone`() {
-        ViewUtils.setupView(numberSelector, viewProperty, spyk())
+        ViewUtils.setupView(numberSelector, viewProperty, formBuilder)
         val linearLayout = numberSelector.getChildAt(1) as LinearLayout
         val textView = linearLayout.getChildAt(3) as TextView
         textView.performClick()
@@ -117,7 +110,7 @@ class NumberSelectorViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should set value to the number selector when provided`() {
-        ViewUtils.setupView(numberSelector, viewProperty, spyk())
+        ViewUtils.setupView(numberSelector, viewProperty, formBuilder)
         val textValue = 3
         numberSelector.setValue(textValue, false)
         Assert.assertEquals(numberSelector.initialValue, textValue)

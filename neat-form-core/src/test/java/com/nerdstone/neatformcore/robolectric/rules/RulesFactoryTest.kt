@@ -1,15 +1,12 @@
 package com.nerdstone.neatformcore.robolectric.rules
 
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.nerdstone.neatformcore.TestConstants
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
+import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.rules.NFormRulesHandler
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -25,17 +22,9 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
-class RulesFactoryTest {
-    private val activity = Robolectric.buildActivity(AppCompatActivity::class.java).setup()
+class RulesFactoryTest: BaseJsonViewBuilderTest() {
     private val view = EditTextNFormView(activity.get())
-    private val mainLayout: ViewGroup = LinearLayout(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
     private val rulesHandler = NFormRulesHandler.INSTANCE
@@ -55,7 +44,8 @@ class RulesFactoryTest {
             viewMetadata = hashMapOf()
             calculations = listOf("decade")
         }
-        ViewUtils.setupView(view, viewProperties, spyk())
+        val formBuilder = spyk<JsonFormBuilder>()
+        ViewUtils.setupView(view, viewProperties, formBuilder)
         view.id = 1
         view.visibility = View.GONE
 

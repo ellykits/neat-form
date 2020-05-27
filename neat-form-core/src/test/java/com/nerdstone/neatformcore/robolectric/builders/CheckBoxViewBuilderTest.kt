@@ -1,7 +1,6 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
@@ -13,12 +12,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
 class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
@@ -30,9 +24,8 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.name = "name"
         viewProperty.type = "checkbox"
         //Set EditText properties and assign EditText view builder
-        checkBoxNFormView.formValidator = this.formValidator
         checkBoxNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(checkBoxNFormView, viewProperty, spyk())
+        ViewUtils.setupView(checkBoxNFormView, viewProperty, formBuilder)
     }
 
     @Test

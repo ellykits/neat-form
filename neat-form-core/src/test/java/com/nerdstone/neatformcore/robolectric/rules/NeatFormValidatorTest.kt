@@ -23,7 +23,6 @@ import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -182,7 +181,7 @@ const val VALIDATION_FORM = """
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 @ExperimentalCoroutinesApi
-@Ignore("I still don't understand how this test passes individually but fails when run with others")
+//@Ignore("I still don't understand how this test passes individually but fails when run with others")
 class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
 
     @get:Rule
