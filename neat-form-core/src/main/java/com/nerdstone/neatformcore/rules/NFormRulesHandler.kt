@@ -6,6 +6,7 @@ import com.nerdstone.neatformcore.domain.listeners.CalculationChangeListener
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
+import com.nerdstone.neatformcore.utils.Constants.RuleActions.CALCULATION
 import com.nerdstone.neatformcore.utils.DisposableList
 import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
@@ -64,10 +65,12 @@ class NFormRulesHandler private constructor() : RulesHandler {
     }
 
     override fun handleCalculations(facts: Facts?) {
-        filterCurrentRules(Constants.RuleActions.CALCULATION)
+        filterCurrentRules(CALCULATION)
             .forEach { key ->
                 val value = facts?.asMap()?.get(key)
-                formBuilder.dataViewModel.saveFieldValue(key, NFormViewData("Calculation", value, null))
+                formBuilder.dataViewModel.saveFieldValue(
+                    key.replace(CALCULATION, ""), NFormViewData("Calculation", value, null)
+                )
                 updateCalculationListeners(Pair(key, value))
             }
     }
