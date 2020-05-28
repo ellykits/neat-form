@@ -11,7 +11,6 @@ import com.nerdstone.neatformcore.utils.DisposableList
 import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
-import org.jeasy.rules.api.Rules
 import java.util.*
 
 class NFormRulesHandler private constructor() : RulesHandler {
@@ -82,20 +81,6 @@ class NFormRulesHandler private constructor() : RulesHandler {
         val view = ViewUtils.findViewWithKey(key, formBuilder.context)
         if (view != null) {
             changeVisibility(isVisible, view)
-        }
-    }
-
-    override fun refreshViews(allRules: Rules?) {
-        allRules?.also {
-            it.toMutableList()
-                .filter { rule ->
-                    rule.name.toLowerCase(Locale.getDefault())
-                        .endsWith(Constants.RuleActions.VISIBILITY)
-                }.forEach { item ->
-                    val key = ViewUtils.getKey(item.name, Constants.RuleActions.VISIBILITY)
-                    val view = ViewUtils.findViewWithKey(key, formBuilder.context)
-                    if (view != null) changeVisibility(false, view)
-                }
         }
     }
 

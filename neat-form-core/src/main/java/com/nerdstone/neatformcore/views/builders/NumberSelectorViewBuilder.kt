@@ -22,9 +22,9 @@ import java.util.*
 open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
     private var firstNumber = 1
-    var visibleNumbers = 1
-    var lastNumber = visibleNumbers
-    var maxValue = visibleNumbers
+    private var visibleNumbers = 1
+    private var lastNumber = visibleNumbers
+    private var maxValue = visibleNumbers
     private val numberSelectorNFormView = nFormView as NumberSelectorNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(NumberSelectorProperties::class.java)
 

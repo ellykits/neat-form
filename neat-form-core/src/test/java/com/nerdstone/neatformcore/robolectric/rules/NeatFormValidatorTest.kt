@@ -281,6 +281,7 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
         coroutinesTestRule.runBlockingTest {
             updateViewValues()
             Assert.assertNotNull(formBuilder.getFormDataAsJson())
+            Assert.assertTrue(formBuilder.getFormMetaData().isEmpty())
             Assert.assertTrue(formBuilder.getFormDataAsJson().contains(JsonFormConstants.FORM_NAME))
             Assert.assertTrue(formBuilder.getFormDataAsJson().contains(JsonFormConstants.FORM_DATA))
         }

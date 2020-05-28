@@ -94,6 +94,8 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
         spinnerNFormView.visibility = View.GONE
         Assert.assertNull(spinnerNFormView.viewDetails.value)
+        spinnerNFormView.resetValueWhenHidden()
+        Assert.assertNull(spinnerNFormView.viewDetails.value)
     }
 
     @Test
@@ -121,6 +123,8 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         Assert.assertTrue(spinnerNFormView.viewDetails.value is NFormViewData)
         val viewData = spinnerNFormView.viewDetails.value as NFormViewData
         Assert.assertEquals(viewData.value ,"Female")
+        spinnerNFormView.setValue(NFormViewData(value = "Male"))
+        Assert.assertEquals(((spinnerNFormView.viewDetails.value) as NFormViewData).value ,"Male")
     }
 
     @After
