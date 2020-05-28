@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
-import com.nerdstone.neatformcore.TestNeatFormApp
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
@@ -12,13 +12,8 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
-class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
+class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val checkBoxNFormView = CheckBoxNFormView(activity.get())
@@ -29,16 +24,15 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
         viewProperty.name = "name"
         viewProperty.type = "checkbox"
         //Set EditText properties and assign EditText view builder
-        checkBoxNFormView.formValidator = this.formValidator
         checkBoxNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(checkBoxNFormView, viewProperty, spyk())
+        ViewUtils.setupView(checkBoxNFormView, viewProperty, formBuilder)
     }
 
     @Test
     fun `Should set text and textSize on checkbox`() {
         val text = "Am a checkbox"
         val checkBoxTextSize = 14
-        viewProperty.viewAttributes = mutableMapOf("text" to text,"text_size" to checkBoxTextSize)
+        viewProperty.viewAttributes = mutableMapOf("text" to text, "text_size" to checkBoxTextSize)
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(checkBoxNFormView.text.isNotEmpty() && checkBoxNFormView.text.toString() == text)
         Assert.assertTrue(checkBoxNFormView.textSize.toInt() == checkBoxTextSize)
@@ -51,9 +45,10 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
         viewProperty.requiredStatus = "yes:Am required"
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(
-            checkBoxNFormView.text.toString().isNotEmpty() && checkBoxNFormView.text.toString().endsWith(
-                "*"
-            )
+            checkBoxNFormView.text.toString().isNotEmpty() && checkBoxNFormView.text.toString()
+                .endsWith(
+                    "*"
+                )
         )
     }
 
@@ -83,6 +78,15 @@ class `Test building CheckBox view` : BaseJsonViewBuilderTest(){
         checkBoxViewBuilder.buildView()
         checkBoxNFormView.isChecked = false
         Assert.assertNull(checkBoxNFormView.viewDetails.value)
+    }
+
+    @Test
+    fun `Should set value when provided`() {
+        checkBoxViewBuilder.buildView()
+        val valueHashMap = mapOf("name" to NFormViewData().apply { value = "Am a checkbox" })
+        checkBoxNFormView.setValue(valueHashMap)
+        Assert.assertEquals(checkBoxNFormView.initialValue, valueHashMap)
+        Assert.assertTrue(checkBoxNFormView.isChecked)
     }
 
     @After

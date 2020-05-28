@@ -15,10 +15,10 @@ import com.nerdstone.neatform.form.FormRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 object FormType {
-    const val embeddableDefault = "embeddable - default"
-    const val embeddableCustomized = "embeddable - customised"
-    const val stepperDefault = "stepper - default"
-    const val stepperCustomized = "stepper - customised"
+    const val jsonFromEmbeddedDefault = "JsonFormEmbedded - default"
+    const val jsonFormEmbeddedCustomized = "JsonFormEmbedded - customised"
+    const val jsonFormStepperDefault = "JsonFormStepper - default"
+    const val jsonFormStepperCustomized = "JsonFormStepper - customised"
 }
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -45,28 +45,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         formRecyclerAdapter.formList =
             mutableListOf(
                 FormData(
-                    formTitle = "Profile - Sample",
-                    formCategory = FormType.embeddableDefault,
+                    formTitle = "TB Registration",
+                    formCategory = FormType.jsonFromEmbeddedDefault,
+                    filePath = "sample/tb_registration.json"
+                ),
+                FormData(
+                    formTitle = "TB Followup",
+                    formCategory = FormType.jsonFromEmbeddedDefault,
+                    filePath = "sample/tb_followup_visit.json"
+                ),
+                FormData(
+                    formTitle = "Customized Embedded Form",
+                    formCategory = FormType.jsonFormEmbeddedCustomized,
                     filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
-                    formTitle = "Profile - Customized Sample",
-                    formCategory = FormType.embeddableCustomized,
-                    filePath = "sample/sample_one_form.json"
-                ),
-                FormData(
-                    formTitle = "Profile - Sample 2",
-                    formCategory = FormType.stepperDefault,
+                    formTitle = "Default Stepper Form",
+                    formCategory = FormType.jsonFormStepperDefault,
                     filePath = "sample/sample_two_form.json"
                 ),
                 FormData(
-                    formTitle = "Profile - Customized Sample 2",
-                    formCategory = FormType.stepperCustomized,
+                    formTitle = "Customized Stepper Form",
+                    formCategory = FormType.jsonFormStepperCustomized,
                     filePath = "sample/sample_two_form.json"
                 ),
                 FormData(
-                    formTitle = "Profile - Single Step",
-                    formCategory = FormType.stepperDefault,
+                    formTitle = "Single Stepper Form",
+                    formCategory = FormType.jsonFormStepperDefault,
                     filePath = "sample/sample_one_form.json"
                 )
             )

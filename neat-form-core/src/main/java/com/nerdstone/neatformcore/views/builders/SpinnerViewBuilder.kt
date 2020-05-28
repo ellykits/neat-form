@@ -17,8 +17,8 @@ open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBui
 
     private val spinnerNFormView = nFormView as SpinnerNFormView
     private val spinnerOptions = mutableListOf<String>()
-    private val materialSpinner = SmartMaterialSpinner<String>(spinnerNFormView.context)
     private val optionsNamesMap = hashMapOf<Int, String>()
+    val materialSpinner = SmartMaterialSpinner<String>(spinnerNFormView.context)
 
     enum class SpinnerProperties {
         TEXT, SEARCHABLE

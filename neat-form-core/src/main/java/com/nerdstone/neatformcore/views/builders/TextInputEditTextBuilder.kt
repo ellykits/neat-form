@@ -23,7 +23,6 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputEditTextViewProperties::class.java)
 
-
     override fun buildView() {
         createEditText()
         ViewUtils.applyViewAttributes(
@@ -89,17 +88,12 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
         }
 
         textInputEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                //Implement
-            }
+            override fun afterTextChanged(p0: Editable?) = Unit
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //Implement
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
             override fun onTextChanged(
-                text: CharSequence, start: Int, lengthBefore: Int,
-                lengthAfter: Int
+                text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int
             ) {
                 textInputEditTextNFormView.dataActionListener?.also {
                     if (text.isNotEmpty()) {

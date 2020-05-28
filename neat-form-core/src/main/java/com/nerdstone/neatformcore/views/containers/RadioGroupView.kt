@@ -9,7 +9,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
@@ -17,12 +16,13 @@ import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 class RadioGroupView : LinearLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
+    override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = RadioGroupViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     init {
         orientation = VERTICAL
@@ -41,8 +41,15 @@ class RadioGroupView : LinearLayout, NFormView {
     override fun validateValue(): Boolean =
         formValidator.validateLabeledField(this)
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        if (value is Map<*, *>) {
+            viewBuilder.setValue(value.keys.first() as String, enabled)
+        }
+    }
+
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

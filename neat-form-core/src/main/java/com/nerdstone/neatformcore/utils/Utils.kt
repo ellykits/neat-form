@@ -6,8 +6,11 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
+import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
 import java.util.*
 
 object ThemeColor {
@@ -74,7 +77,7 @@ object Utils {
         .create().toJson(model)
 
     fun getOptionMetadata(nFormView: NFormView, optionName: String): Map<String, Any>? {
-       return nFormView.viewProperties.options?.first { option ->
+        return nFormView.viewProperties.options?.first { option ->
             option.name == optionName
         }?.viewMetadata
     }
@@ -88,5 +91,18 @@ object DialogUtil {
                 setMessage(message)
                 create()
             }
+    }
+}
+
+/**
+ * Utility methods for forms
+ */
+object FormUtils {
+    /**
+     * Parse [formDataJson] into a [HashMap] of field key against its [NFormViewData]
+     */
+    fun parseFormDataJson(formDataJson: String): HashMap<String, NFormViewData> {
+        return Gson().parseJson<HashMap<String, NFormViewData>>(formDataJson)
+            .filter { it.value.value.isNotNull() } as HashMap<String, NFormViewData>
     }
 }

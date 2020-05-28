@@ -11,7 +11,6 @@
           "properties": {
             "hint": "Enter adult's phone number",
             "type": "name",
-            "text": "",
             "padding": "8"
           },
           "meta_data": {
@@ -31,7 +30,7 @@
               "error_message": "Not a valid phone number"
             }
           ],
-          "subjects": "age:number, child:text, dob:number",
+          "subjects": "age:number, child:text",
           "required_status": "True:please add phone number"
         },
         {

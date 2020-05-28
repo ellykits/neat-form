@@ -11,7 +11,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.NFormRulesHandler
-import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.views.builders.NotificationViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 import timber.log.Timber
@@ -19,12 +18,13 @@ import timber.log.Timber
 class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener {
 
     override lateinit var viewProperties: NFormViewProperty
+    override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
     override val viewBuilder = NotificationViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
+    override var initialValue: Any? = null
 
     private val rulesHandler = NFormRulesHandler.INSTANCE
 
@@ -46,4 +46,6 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
        Timber.i("Updated calculation ${calculationField.first} -> ${calculationField.second}")
         viewBuilder.updateNotificationText(calculationField)
     }
+
+    override fun setValue(value: Any, enabled: Boolean) = Unit
 }

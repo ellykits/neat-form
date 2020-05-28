@@ -1,26 +1,30 @@
 package com.nerdstone.neatformcore.views.builders
 
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
 import com.nerdstone.neatformcore.utils.getViewsByTagValue
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
+import timber.log.Timber
 import java.util.*
 
 open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : ViewBuilder {
 
-    private var visibleNumbers = 1
     private var firstNumber = 1
-    private var lastNumber = visibleNumbers
-    private var maxValue = visibleNumbers
+    var visibleNumbers = 1
+    var lastNumber = visibleNumbers
+    var maxValue = visibleNumbers
     private val numberSelectorNFormView = nFormView as NumberSelectorNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(NumberSelectorProperties::class.java)
 
@@ -89,12 +93,12 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
         (firstNumber..this.visibleNumbers).forEach { number ->
             val item = getNumberSelectorItem(number)
             if (this.visibleNumbers == 1) {
-                setNumberSelectorBackground(item, false)
+                setNumberSelectorBackground(item, selected = false)
                 numberSelectorLayout.addView(item)
                 numberSelectorNFormView.addView(numberSelectorLayout)
                 return
             }
-            setNumberSelectorBackground(item, false)
+            setNumberSelectorBackground(item, selected = false)
             numberSelectorLayout.addView(item)
         }
         numberSelectorNFormView.addView(numberSelectorLayout)
@@ -120,7 +124,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                 setTag(R.id.is_number_selector, true)
                 setPadding(0, 20, 0, 20)
                 setOnClickListener {
-                    setNumberSelectorBackground(this, true)
+                    setNumberSelectorBackground(this, selected = true)
                     resetNumberSelectorBackground(getTag(R.id.number_selector_key) as String)
                     if (number == visibleNumbers && maxValue > visibleNumbers) {
                         showPopupMenu(this)
@@ -131,22 +135,55 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
             }
     }
 
-    private fun setNumberSelectorBackground(item: TextView, isSelected: Boolean) {
+    private fun setNumberSelectorBackground(
+        item: TextView, selected: Boolean, enabled: Boolean = true
+    ) {
         when {
-            isSelected && lastNumber > 1 -> when (getValue(item.text.toString())) {
-                firstNumber -> item.setBackgroundResource(R.drawable.num_selector_selected_left_bg)
-                lastNumber -> item.setBackgroundResource(R.drawable.num_selector_selected_right_bg)
-                else -> item.setBackgroundResource(R.drawable.num_selector_selected_flat_bg)
+            selected && lastNumber > 1 -> when (getValue(item.text.toString())) {
+                firstNumber -> {
+                    item.setBackgroundResource(R.drawable.num_selector_selected_left_bg)
+                    changeDrawableColor(item, enabled)
+                }
+                lastNumber -> {
+                    item.setBackgroundResource(R.drawable.num_selector_selected_right_bg)
+                    changeDrawableColor(item, enabled)
+                }
+                else -> {
+                    item.setBackgroundResource(R.drawable.num_selector_selected_flat_bg)
+                    changeDrawableColor(item, enabled)
+                }
             }
-            !isSelected && lastNumber > 1 -> when (getValue(item.text.toString())) {
+            !selected && lastNumber > 1 -> when (getValue(item.text.toString())) {
                 firstNumber -> item.setBackgroundResource(R.drawable.num_selector_left_bg)
                 lastNumber -> item.setBackgroundResource(R.drawable.num_selector_right_bg)
                 else -> item.setBackgroundResource(R.drawable.num_selector_flat_bg)
             }
-            isSelected && lastNumber == 1 -> item.setBackgroundResource(R.drawable.num_selector_selected_round_bg)
-            !isSelected && lastNumber == 1 -> item.setBackgroundResource(R.drawable.num_selector_round_bg)
+            selected && lastNumber == 1 -> {
+                item.setBackgroundResource(R.drawable.num_selector_selected_round_bg)
+                changeDrawableColor(item, enabled)
+            }
+            !selected && lastNumber == 1 -> item.setBackgroundResource(R.drawable.num_selector_round_bg)
         }
-        setNumberTextColor(item, isSelected)
+        setNumberTextColor(item, selected)
+    }
+
+    private fun changeDrawableColor(item: TextView, enabled: Boolean) {
+        with(item.background as GradientDrawable) {
+            when (enabled) {
+                true -> {
+                    apply {
+                        colors = intArrayOf(
+                            R.color.numberSelectorItemSelected, R.color.numberSelectorItemSelected
+                        )
+                    }
+                }
+                else -> {
+                    apply {
+                        colors = intArrayOf(R.color.colorDarkGrey, R.color.colorDarkGrey)
+                    }
+                }
+            }
+        }
     }
 
     private fun setNumberTextColor(item: TextView, isSelected: Boolean) {
@@ -156,8 +193,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorWhite)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources
-                        .getColor(R.color.colorWhite)
+                    numberSelectorNFormView.context.resources.getColor(R.color.colorWhite)
                 )
             }
         } else {
@@ -166,22 +202,25 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorBlack)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources
-                        .getColor(R.color.colorBlack)
+                    numberSelectorNFormView.context.resources.getColor(R.color.colorBlack)
                 )
             }
         }
     }
 
     private fun resetNumberSelectorBackground(tag: String) {
-        (numberSelectorNFormView as View)
-            .getViewsByTagValue(R.id.is_number_selector, true)
-            .map { it as TextView }
+        getNumberSelectorTextViews()
             .forEach { view ->
                 if (view.getTag(R.id.number_selector_key) as String != tag) {
-                    setNumberSelectorBackground(view, false)
+                    setNumberSelectorBackground(view, selected = false)
                 }
             }
+    }
+
+    private fun getNumberSelectorTextViews(): List<TextView> {
+        return (numberSelectorNFormView as View)
+            .getViewsByTagValue(R.id.is_number_selector, true)
+            .map { it as TextView }
     }
 
     private fun getValue(text: String): Int {
@@ -211,6 +250,39 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
         numberSelectorNFormView.viewDetails.value = null
         numberSelectorNFormView.dataActionListener?.onPassData(numberSelectorNFormView.viewDetails)
         resetNumberSelectorBackground(Constants.ANY_TAG)
+    }
+
+    fun setValue(value: Any, enabled: Boolean) {
+        val textViews = getNumberSelectorTextViews()
+        val index = when (value) {
+            is Double -> value.toInt()
+            is Int -> value
+            else -> -1
+        }
+        if (index <= maxValue) {
+            var textView: TextView? = null
+            if (index in 0..visibleNumbers) {
+                textView = textViews[index]
+            } else if (index >= visibleNumbers) {
+                lastNumber = index
+                textView = textViews[visibleNumbers].apply {
+                    text = index.toString()
+                }
+            }
+            textView?.also {
+                setNumberSelectorBackground(it, selected = true, enabled = enabled)
+                resetNumberSelectorBackground(it.getTag(R.id.number_selector_key) as String)
+                passValue(it)
+            }
+            textViews.forEach { it.setReadOnlyState(enabled) }
+        } else {
+            Toast.makeText(
+                numberSelectorNFormView.context,
+                "Error setting value for ${numberSelectorNFormView.viewDetails.name} -> index $index out of bounds.",
+                Toast.LENGTH_SHORT
+            ).show()
+            Timber.e("Error setting number selector value index ($index) > than max ($maxValue)")
+        }
     }
 }
 

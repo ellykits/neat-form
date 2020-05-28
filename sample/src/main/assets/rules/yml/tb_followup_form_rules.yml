@@ -1,0 +1,63 @@
+---
+name: "client_condition_visibility"
+description: "client_condition visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "client_condition_visibility =  true"
+---
+name: "problem_visibility"
+description: "problem visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "problem_visibility =  true"
+---
+name: "problem_other_visibility"
+description: "problem other visibility"
+priority: 1
+condition: "problem['other_problems'] != null"
+actions:
+  - "problem_other_visibility =  true"
+---
+name: "client_behaviour_and_environmental_risk_visibility"
+description: "client_behaviour_and_environmental_risk visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "client_behaviour_and_environmental_risk_visibility =  true"
+---
+name: "supplies_provided_visibility"
+description: "supplies_provided visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "supplies_provided_visibility =  true"
+---
+name: "supplies_provided_other_visibility"
+description: "supplies_provided_other visibility"
+priority: 1
+condition: "supplies_provided['other_medicine'] != null"
+actions:
+  - "supplies_provided_other_visibility =  true"
+---
+name: "tb_services_provided_visibility"
+description: "tb_services_provided visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "tb_services_provided_visibility =  true"
+---
+name: "tb_services_provided_other_visibility"
+description: "tb_services_provided_other visibility"
+priority: 1
+condition: "tb_services_provided['other_services'] != null"
+actions:
+  - "tb_services_provided_other_visibility =  true"
+---
+name: "state_of_therapy_visibility"
+description: "state_of_therapy visibility"
+priority: 1
+condition: "registration_or_followup_status.value == 'New Client' || registration_or_followup_status.value == 'Continuing with services'"
+actions:
+  - "state_of_therapy_visibility =  true"

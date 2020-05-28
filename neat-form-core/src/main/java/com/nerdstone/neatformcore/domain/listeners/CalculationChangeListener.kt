@@ -1,8 +1,10 @@
 package com.nerdstone.neatformcore.domain.listeners
 
 /**
+ * @author Elly Nerdstone
+ *
  * Calculation listener. This listener listens for changes in calculations.
- * Any views implementing this can make use of the updated value
+ * Any views implementing this can make use of the updated calculation value
  */
 interface CalculationChangeListener {
     /**

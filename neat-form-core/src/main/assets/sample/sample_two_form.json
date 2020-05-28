@@ -9,10 +9,7 @@
           "name": "adult",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "This is an adult",
-            "type": "name",
-            "text": "",
-            "padding": "8"
+            "hint": "This is an adult"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -22,15 +19,16 @@
           "validation": [
             {
               "validation_name": "length",
-              "condition": "value.length() < 8",
-              "error_message": "value should be less than eight digits"
-            },{
-              "validation_name": "special characters",
-              "condition": "!value.contains('@')",
-              "error_message": "value should not contain special character"
+              "condition": "value.length() < 11",
+              "error_message": "value should be less than ten digits"
+            },
+            {
+              "validation_name": "phone number",
+              "condition": "value.matches(\"\\\\d{10}\")",
+              "error_message": "Not a valid phone number"
             }
           ],
-          "subjects": "age:number, child:text, dob:number",
+          "subjects": "age:number",
           "required_status": "True:please add phone number"
         },
         {

@@ -9,7 +9,6 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RootView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 
 class VerticalRootView : LinearLayout, RootView {
 
@@ -40,6 +39,6 @@ class VerticalRootView : LinearLayout, RootView {
     }
 
     override fun addChildren(
-        viewProperties: List<NFormViewProperty>, viewDispatcher: ViewDispatcher, buildFromLayout: Boolean
-    ) = ViewUtils.createViews(this, viewProperties, viewDispatcher,buildFromLayout)
+        viewProperties: List<NFormViewProperty>, formBuilder: FormBuilder ,buildFromLayout: Boolean
+    ) = ViewUtils.createViews(this, viewProperties, formBuilder, buildFromLayout)
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/neatStepperLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:dot_indicator_default_color="@color/colorWhite"
+    app:dot_indicator_selected_color="@color/colorYellow"
+    app:indicator_type="progress_bar_indicator"
+    app:show_progress_indicator="false"
+    app:toolbar_color="@color/colorBlack" />

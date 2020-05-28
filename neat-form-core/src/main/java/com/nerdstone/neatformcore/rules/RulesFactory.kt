@@ -22,9 +22,8 @@ import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.HashSet
 
-class RulesFactory private constructor() : RuleListener {
+class RulesFactory : RuleListener {
 
     private var facts: Facts = Facts()
     private var rulesEngine: DefaultRulesEngine = DefaultRulesEngine()
@@ -176,17 +175,5 @@ class RulesFactory private constructor() : RuleListener {
 
     enum class RulesFileType {
         JSON, YAML
-    }
-
-    companion object {
-        @Volatile
-        private var instance: RulesFactory? = null
-
-        val INSTANCE: RulesFactory
-            get() = instance ?: synchronized(this) {
-                RulesFactory().also {
-                    instance = it
-                }
-            }
     }
 }

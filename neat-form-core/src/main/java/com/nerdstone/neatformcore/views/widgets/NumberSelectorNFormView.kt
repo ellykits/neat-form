@@ -9,7 +9,6 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.NumberSelectorViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
@@ -17,12 +16,13 @@ import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 class NumberSelectorNFormView : LinearLayout, NFormView {
 
     override lateinit var viewProperties: NFormViewProperty
+    override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = NumberSelectorViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override var formValidator: FormValidator = NeatFormValidator.INSTANCE
     override var visibilityChangeListener: VisibilityChangeListener? =
         ViewVisibilityChangeHandler.INSTANCE
+    override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)
 
@@ -36,10 +36,15 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
 
     override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
 
+    override fun setValue(value: Any, enabled: Boolean) {
+        initialValue = value
+        viewBuilder.setValue(value, enabled)
+    }
+
     override fun validateValue() = formValidator.validateLabeledField(this)
 
     override fun setVisibility(visibility: Int) {
-        super.setVisibility( visibility)
+        super.setVisibility(visibility)
         visibilityChangeListener?.onVisibilityChanged(this, visibility)
     }
 }

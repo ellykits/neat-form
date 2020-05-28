@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
 import com.nerdstone.neatformcore.R
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
@@ -17,13 +16,8 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
-class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
+class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
     private val radioOption1 = spyk(NFormSubViewProperty())
@@ -34,7 +28,6 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
 
     @Before
     fun `Before doing anything else`() {
-        radioGroupView.formValidator = this.formValidator
         viewProperty.name = "choose_language"
         viewProperty.type = "radio_group"
 
@@ -113,7 +106,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
+        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
         //Value is null first but will always contain a value when selection is done
         Assert.assertNull(radioGroupView.viewDetails.value)
 
@@ -131,7 +124,7 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        ViewUtils.setupView(radioGroupView, viewProperty, spyk())
+        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
         val radioButton1 = radioGroupView.getChildAt(1) as RadioButton
         radioButton1.isChecked = true
         radioGroupView.visibility = View.GONE
@@ -139,6 +132,20 @@ class `Test building RadioGroup view` : BaseJsonViewBuilderTest() {
         (1 until radioGroupView.childCount).forEach { i ->
             Assert.assertTrue(!(radioGroupView.getChildAt(i) as RadioButton).isChecked)
         }
+    }
+
+    @Test
+    fun `Should set value on radio group when provided`() {
+        viewProperty.viewAttributes = hashMapOf("text" to "Pick your preferred language")
+        viewProperty.options =
+            listOf(radioOption1, radioOption2, radioOption3)
+        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
+        val valueHashMap = mapOf("kotlin" to NFormViewData(value = "Kotlin"))
+        radioGroupView.setValue(valueHashMap)
+        Assert.assertEquals(radioGroupView.initialValue, valueHashMap)
+        Assert.assertTrue(radioGroupView.viewDetails.value is HashMap<*, *>)
+        val hashMap = radioGroupView.viewDetails.value as HashMap<*, *>
+        Assert.assertTrue(hashMap.containsKey("kotlin"))
     }
 
     @After

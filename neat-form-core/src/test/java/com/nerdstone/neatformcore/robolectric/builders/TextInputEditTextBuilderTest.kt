@@ -2,20 +2,15 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.text.InputType
 import android.view.View
-import com.nerdstone.neatformcore.TestNeatFormApp
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.builders.TextInputEditTextBuilder
-import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import io.mockk.spyk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 /**
  * Created by cozej4 on 2019-11-20.
@@ -23,9 +18,7 @@ import org.robolectric.annotation.Config
  * @cozej4 https://github.com/cozej4
  */
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestNeatFormApp::class)
-class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
+class TextInputEditTextBuilderTest : BaseJsonViewBuilderTest(){
 
     private val viewProperty = spyk(NFormViewProperty())
     private val textInputEditTextNFormView = TextInputEditTextNFormView(activity.get())
@@ -33,16 +26,13 @@ class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
         objToCopy = TextInputEditTextBuilder(textInputEditTextNFormView),
         recordPrivateCalls = true
     )
-    private val dataActionListener = spyk(objToCopy = ViewDispatcher.INSTANCE)
-
 
     @Before
     fun `Before doing anything else`() {
-        textInputEditTextNFormView.formValidator = this.formValidator
         viewProperty.name = "first_name"
         viewProperty.type = "text_input_layout"
         textInputEditTextNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(textInputEditTextNFormView, viewProperty, dataActionListener)
+        ViewUtils.setupView(textInputEditTextNFormView, viewProperty, formBuilder)
     }
 
     @Test
@@ -88,6 +78,16 @@ class `Test building TextInputEditText View` : BaseJsonViewBuilderTest(){
         textInputEditTextNFormView.editText?.setText("johndoegmail.com")
         Assert.assertFalse(textInputEditTextNFormView.validateValue())
         Assert.assertTrue(textInputEditTextNFormView.error == "Please enter a valid email address")
+    }
+
+
+    @Test
+    fun `Should set value to the edittext when provided`() {
+        testInputLayoutBuilder.buildView()
+        val textValue = "0723721920"
+        textInputEditTextNFormView.setValue(textValue)
+        Assert.assertEquals(textInputEditTextNFormView.initialValue, textValue)
+        Assert.assertEquals(textInputEditTextNFormView.editText?.text.toString(), "0723721920")
     }
 
     @Test

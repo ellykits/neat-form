@@ -1,0 +1,456 @@
+{
+  "form": "TB Followup form",
+  "count": "1",
+  "encounter_type": "TB Followup",
+  "entity_id": "",
+  "relational_id": "",
+  "rules_file": "rules/yml/tb_followup_form_rules.yml",
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "steps": [
+    {
+      "title": "TB Followup form",
+      "fields": [
+        {
+          "name": "registration_or_followup_status",
+          "type": "spinner",
+          "properties": {
+            "text": "Registration/Followup status"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "registration_or_followup_status",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "new_client",
+              "text": "New Client",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "new_client",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "continuing_with_services",
+              "text": "Continuing with services",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "continuing_with_services",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "deceased",
+              "text": "Deceased",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "deceased",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_not_found",
+              "text": "Client not found",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_not_found",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_relocated_to_another_location",
+              "text": "Client has relocated to another location",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_relocated_to_another_location",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_has_moved",
+              "text": "Client has moved ",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_has_moved",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_has_absconded",
+              "text": "Client has absconded",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_has_absconded",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_continues_with_clinic_from_elsewhere",
+              "text": "Clients continues with clinic from elsewhere",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_continues_with_clinic_from_elsewhere",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "completed_and_qualified_from_the_services ",
+              "text": "Client has completed and qualified from the services ",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "completed_and_qualified_from_the_services",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please select the registration/followup status"
+        },
+        {
+          "name": "client_condition",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "client_condition",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "Condition of the client"
+          },
+          "options": [
+            {
+              "name": "client_does_her_daily_activities",
+              "text": "Client does her daily activities",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_does_her_daily_activities",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_takes_care_of_himself",
+              "text": "Client takes care of him/herself (bathing, Eating)",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_takes_care_of_himself",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "client_is_unable_to_take_care_of_himself",
+              "text": "Client is unable to take care of him/herself",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "client_is_unable_to_take_care_of_himself",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify client's condition",
+          "subjects": "registration_or_followup_status:text"
+        },
+        {
+          "name": "problem",
+          "type": "multi_choice_checkbox",
+          "properties": {
+            "text": "Pick problem/Social challenges faced by the Client."
+          },
+          "meta_data": {
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "problem"
+          },
+          "options": [
+            {
+              "name": "other_problems",
+              "text": "Other Problems",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "other_problems",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "none",
+              "text": "None",
+              "is_exclusive": true,
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify client's problems",
+          "subjects": "registration_or_followup_status:text"
+        },
+        {
+          "name": "problem_other",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "Other symptoms",
+            "type": "name"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "problem_other",
+            "openmrs_entity_parent": "problem"
+          },
+          "required_status": "true:Please specify other symptoms",
+          "subjects": "problem:map"
+        },
+        {
+          "name": "client_behaviour_and_environmental_risk",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "client_behaviour_and_environmental_risk",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "Client's behaviour & environmental risks"
+          },
+          "options": [
+            {
+              "name": "none",
+              "text": "None",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "alcoholism",
+              "text": "Alcoholism",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "alcoholism",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "vulnerable_environment",
+              "text": "Clients lives in a vulnerable environment",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "vulnerable_environment",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "hiv_positive",
+              "text": "Client is HIV Positive",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "hiv_positive",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify client's behaviour",
+          "subjects": "registration_or_followup_status:text"
+        },
+        {
+          "name": "supplies_provided",
+          "type": "multi_choice_checkbox",
+          "properties": {
+            "text": "Supplies/medicines provided"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "supplies_provided",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "other_medicine",
+              "text": "Other treatment",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "other_medicine",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "none",
+              "text": "None",
+              "is_exclusive": true,
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please choose supplies/medicine given",
+          "subjects": "registration_or_followup_status:text"
+        },
+        {
+          "name": "supplies_provided_other",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "Other Supplies/Medicine",
+            "type": "name"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "supplies_provided_other",
+            "openmrs_entity_parent": "supplies_provided"
+          },
+          "required_status": "true:Please specify other supplies/Medicine given",
+          "subjects": "supplies_provided:map"
+        },
+        {
+          "name": "tb_services_provided",
+          "type": "multi_choice_checkbox",
+          "properties": {
+            "text": "TB services provided by CHW at the community"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "tb_services_provided",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "other_services",
+              "text": "Other TB services",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "other_tb_services",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "none",
+              "text": "None",
+              "is_exclusive": true,
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please TB services provided",
+          "subjects": "registration_or_followup_status:text"
+        },
+        {
+          "name": "tb_services_provided_other",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "Other TB Services Provided",
+            "type": "name"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "tb_services_provided_other",
+            "openmrs_entity_parent": "tb_services_provided"
+          },
+          "required_status": "true:Please specify other TB services provided",
+          "subjects": "tb_services_provided:map"
+        },
+        {
+          "name": "state_of_therapy",
+          "type": "spinner",
+          "properties": {
+            "text": "State of therapy and (TB) care"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "state_of_therapy",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "registered_but_not_began_medication",
+              "text": "Registered in TB clinic but hasn't begun TB/DR-TB medication",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "registered_but_not_began_medication",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "registered_and_uses_medication",
+              "text": "Registered in TB clinic and uses TB/ DR TB medication",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "registered_and_uses_medication",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "not_registered_in_tb_clinic",
+              "text": "Client is not registed in TB clinic",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "not_registered_in_tb_clinic",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "none",
+              "text": "None",
+              "meta_data": {
+                "openmrs_entity": "",
+                "openmrs_entity_id": "",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please specify the state of TB therapy",
+          "subjects": "registration_or_followup_status:text"
+        }
+      ]
+    }
+  ]
+}
