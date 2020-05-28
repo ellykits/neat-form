@@ -124,7 +124,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         val viewData = spinnerNFormView.viewDetails.value as NFormViewData
         Assert.assertEquals(viewData.value ,"Female")
         spinnerNFormView.setValue(NFormViewData(value = "Male"))
-        Assert.assertEquals(((spinnerNFormView.viewDetails.value) as NFormViewData).value ,"Male")
+        Assert.assertEquals((spinnerNFormView.viewDetails.value as NFormViewData).value ,"Male")
     }
 
     @After
