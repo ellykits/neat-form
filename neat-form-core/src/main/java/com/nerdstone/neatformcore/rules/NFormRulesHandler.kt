@@ -11,26 +11,15 @@ import com.nerdstone.neatformcore.utils.DisposableList
 import com.nerdstone.neatformcore.utils.ViewUtils
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
+import java.lang.ref.WeakReference
 import java.util.*
 
-class NFormRulesHandler private constructor() : RulesHandler {
+object NFormRulesHandler : RulesHandler {
 
-    override lateinit var formBuilder: FormBuilder
+    override lateinit var formBuilder: WeakReference<FormBuilder>
     override lateinit var executableRulesList: HashSet<Rule>
     var calculationListeners: DisposableList<CalculationChangeListener> = DisposableList()
 
-    companion object {
-
-        @Volatile
-        private var instance: NFormRulesHandler? = null
-
-        val INSTANCE: NFormRulesHandler
-            get() = instance ?: synchronized(this) {
-                NFormRulesHandler().also {
-                    instance = it
-                }
-            }
-    }
 
     override fun updateSkipLogicFactAfterEvaluate(
         evaluationResult: Boolean, rule: Rule?, facts: Facts?
@@ -67,7 +56,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         filterCurrentRules(CALCULATION)
             .forEach { key ->
                 val value = facts?.asMap()?.get(key)
-                formBuilder.dataViewModel.saveFieldValue(
+                formBuilder.get()?.dataViewModel?.saveFieldValue(
                     key.replace(CALCULATION, ""), NFormViewData("Calculation", value, null)
                 )
                 updateCalculationListeners(Pair(key, value))
@@ -78,7 +67,7 @@ class NFormRulesHandler private constructor() : RulesHandler {
         calculationListeners.get().forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        val view = ViewUtils.findViewWithKey(key, formBuilder.context)
+        val view = formBuilder.get()?.context?.let { ViewUtils.findViewWithKey(key, it) }
         if (view != null) {
             changeVisibility(isVisible, view)
         }

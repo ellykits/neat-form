@@ -20,13 +20,12 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
     override lateinit var viewProperties: NFormViewProperty
     override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
-    override var visibilityChangeListener: VisibilityChangeListener? =
-        ViewVisibilityChangeHandler.INSTANCE
+    override var visibilityChangeListener: VisibilityChangeListener? = ViewVisibilityChangeHandler
     override val viewBuilder = NotificationViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var initialValue: Any? = null
 
-    private val rulesHandler = NFormRulesHandler.INSTANCE
+    private val rulesHandler = NFormRulesHandler
 
     init {
         rulesHandler.calculationListeners.add(this)
@@ -43,7 +42,7 @@ class NotificationNFormView : FrameLayout, NFormView, CalculationChangeListener 
     override fun trackRequiredField() = Unit
 
     override fun onCalculationChanged(calculationField: Pair<String, Any?>) {
-       Timber.i("Updated calculation ${calculationField.first} -> ${calculationField.second}")
+        Timber.i("Updated calculation ${calculationField.first} -> ${calculationField.second}")
         viewBuilder.updateNotificationText(calculationField)
     }
 

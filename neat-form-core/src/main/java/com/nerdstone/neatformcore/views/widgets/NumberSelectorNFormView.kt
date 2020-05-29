@@ -20,8 +20,7 @@ class NumberSelectorNFormView : LinearLayout, NFormView {
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = NumberSelectorViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override var visibilityChangeListener: VisibilityChangeListener? =
-        ViewVisibilityChangeHandler.INSTANCE
+    override var visibilityChangeListener: VisibilityChangeListener? = ViewVisibilityChangeHandler
     override var initialValue: Any? = null
 
     constructor(context: Context) : super(context)

@@ -144,6 +144,11 @@ class StepFragment : Step {
         return ScrollView(activity).apply { addView(formView) }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        formView = null
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dataViewModel = (activity as FormActions).formBuilder.dataViewModel

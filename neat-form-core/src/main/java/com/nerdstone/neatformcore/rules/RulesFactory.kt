@@ -30,7 +30,7 @@ class RulesFactory : RuleListener {
     private lateinit var currentViewDetails: NFormViewDetails
     private var executableRulesList: HashSet<Rule> = hashSetOf()
     var allRules: Rules? = null
-    val rulesHandler: RulesHandler = NFormRulesHandler.INSTANCE
+    val rulesHandler: RulesHandler = NFormRulesHandler
     val subjectsRegistry: HashMap<String, HashSet<NFormRule>> = hashMapOf()
 
     init {

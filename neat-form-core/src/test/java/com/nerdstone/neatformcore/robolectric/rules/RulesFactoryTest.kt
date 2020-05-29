@@ -22,12 +22,13 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.lang.ref.WeakReference
 
 class RulesFactoryTest: BaseJsonViewBuilderTest() {
     private val view = EditTextNFormView(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
-    private val rulesHandler = NFormRulesHandler.INSTANCE
+    private val rulesHandler = NFormRulesHandler
     private lateinit var rule1: Rule
     private lateinit var rule2: Rule
 
@@ -55,10 +56,10 @@ class RulesFactoryTest: BaseJsonViewBuilderTest() {
         mainLayout.addView(view)
 
         //Setup rules handler with form builder and views map
-        rulesHandler.formBuilder = JsonFormBuilder(
+        rulesHandler.formBuilder = WeakReference(JsonFormBuilder(
             activity.get(),
             TestConstants.SAMPLE_ONE_FORM_FILE
-        )
+        ))
         every { rulesFactory.rulesHandler } returns rulesHandler
     }
 

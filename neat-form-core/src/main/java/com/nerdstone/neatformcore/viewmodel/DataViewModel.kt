@@ -22,4 +22,8 @@ class DataViewModel : ViewModel() {
     fun updateDetails(newDetails: HashMap<String, NFormViewData>) {
         details.value?.putAll(newDetails)
     }
+
+    override fun onCleared() {
+        details.value = hashMapOf()
+    }
 }

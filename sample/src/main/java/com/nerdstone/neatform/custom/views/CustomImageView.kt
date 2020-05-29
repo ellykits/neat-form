@@ -19,7 +19,7 @@ class CustomImageView(context: Context) : CircleImageView(context), NFormView {
     override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
-            ViewVisibilityChangeHandler.INSTANCE
+            ViewVisibilityChangeHandler
     override val viewBuilder = CustomImageViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
     override var initialValue: Any? = null

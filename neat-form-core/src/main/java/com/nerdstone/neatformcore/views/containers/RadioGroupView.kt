@@ -19,7 +19,7 @@ class RadioGroupView : LinearLayout, NFormView {
     override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
     override var visibilityChangeListener: VisibilityChangeListener? =
-        ViewVisibilityChangeHandler.INSTANCE
+        ViewVisibilityChangeHandler
     override val viewBuilder = RadioGroupViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var initialValue: Any? = null
