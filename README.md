@@ -646,7 +646,7 @@ class FormActivity : AppCompatActivity() {
                 }  
             } 
 
-          //Create an embbeded JSON Form withing mainLayout
+          //Create an embbeded JSON Form within mainLayout
           formBuilder = JsonFormBuilder(this, formData.filePath)
           JsonFormEmbedded(formBuilder as JsonFormBuilder, mainLayout).buildForm()         
         }  
