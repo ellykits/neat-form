@@ -1,17 +1,14 @@
 package com.nerdstone.neatformcore.robolectric.rules
 
 import android.view.View
-import com.nerdstone.neatformcore.TestConstants
 import com.nerdstone.neatformcore.domain.model.NFormRule
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.rules.NFormRulesHandler
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
-import io.mockk.every
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -22,13 +19,11 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.lang.ref.WeakReference
 
 class RulesFactoryTest: BaseJsonViewBuilderTest() {
     private val view = EditTextNFormView(activity.get())
     private val viewDetails = NFormViewDetails(view)
     private val rulesFactory = spyk<RulesFactory>(recordPrivateCalls = true)
-    private val rulesHandler = NFormRulesHandler
     private lateinit var rule1: Rule
     private lateinit var rule2: Rule
 
@@ -45,7 +40,6 @@ class RulesFactoryTest: BaseJsonViewBuilderTest() {
             viewMetadata = hashMapOf()
             calculations = listOf("decade")
         }
-        val formBuilder = spyk<JsonFormBuilder>()
         ViewUtils.setupView(view, viewProperties, formBuilder)
         view.id = 1
         view.visibility = View.GONE
@@ -55,12 +49,6 @@ class RulesFactoryTest: BaseJsonViewBuilderTest() {
                 hashSetOf(NFormRule("adult", hashSetOf(rule1, rule2)))
         mainLayout.addView(view)
 
-        //Setup rules handler with form builder and views map
-        rulesHandler.formBuilder = WeakReference(JsonFormBuilder(
-            activity.get(),
-            TestConstants.SAMPLE_ONE_FORM_FILE
-        ))
-        every { rulesFactory.rulesHandler } returns rulesHandler
     }
 
     private fun setupRules() {
@@ -152,7 +140,8 @@ class RulesFactoryTest: BaseJsonViewBuilderTest() {
         //If this view has a rule to handle its visibility then by default set it's visibility
         //To false when you first launch the form until when rules are fired
         view.visibility = View.VISIBLE
-        rulesHandler.hideOrShowField("adult", false)
+        val rulesHandler = rulesFactory.rulesHandler
+        (rulesHandler as NFormRulesHandler).hideOrShowField("adult", false)
         Assert.assertTrue(view.visibility == View.GONE)
     }
 
