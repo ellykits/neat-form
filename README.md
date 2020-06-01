@@ -3,7 +3,7 @@
   
 [![CodeFactor](https://www.codefactor.io/repository/github/ellykits/neat-form/badge)](https://www.codefactor.io/repository/github/ellykits/neatform) [![CircleCI](https://circleci.com/gh/ellykits/neat-form/tree/master.svg?style=svg)](https://circleci.com/gh/ellykits/neat-form/tree/master) [![codecov](https://codecov.io/gh/ellykits/neat-form/branch/master/graph/badge.svg)](https://codecov.io/gh/ellykits/neat-form)[ ![Download](https://api.bintray.com/packages/ellykits/nerdstone/neat-form-core/images/download.svg) ](https://bintray.com/ellykits/nerdstone/neat-form-core/_latestVersion)  
   
-NeatForm lets you create basic android views using JSON standard. This is especially useful when you are trying things out or when you need to update the UI without necessarily having to rebuild the app. NeatForm comes in handy when authoring forms with repetative UI designs but different configurations especially data collection forms. The idea behind this project was birthed out of frustration in working on such projects. The library will be shipped with common views used for data collection comprising of multiple question checkboxes, single question radio buttons, input text fields etc. In addition, ability to specify rules to handle skip logic and calculations on the form (All these done via JSON for the UI and JSON/YML for the Rules Engine as supported by [Easy Rules](https://github.com/j-easy/easy-rules)). NeatForm does not aim at replacing the spefied standard for creating views on Android that is using XML.  
+NeatForm lets you generate android views using JSON schema. This is especially useful when you are trying things out or when you need to update the UI without necessarily having to rebuild the app. NeatForm comes in handy when authoring forms with repetative UI designs but different configurations especially data collection forms. The idea behind this project was birthed out of frustration in working on such projects. The library will be shipped with common views used for data collection comprising of multiple question checkboxes, single question radio buttons, input text fields etc. In addition, ability to specify rules to handle skip logic and calculations on the form (All these done via JSON for the UI and JSON/YML for the Rules Engine as supported by [Easy Rules](https://github.com/j-easy/easy-rules)). NeatForm does not aim at replacing Android view creation using XML.  
   
 ## Jump to section  
 
@@ -618,7 +618,8 @@ import android.widget.LinearLayout
 import android.widget.TextView  
 import com.nerdstone.neatform.R  
 import com.nerdstone.neatformcore.domain.builders.FormBuilder  
-import com.nerdstone.neatformcore.form.json.JsonFormBuilder  
+import com.nerdstone.neatformcore.form.json.JsonFormBuilder
+import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
   
   
 class FormActivity : AppCompatActivity() {  
@@ -633,9 +634,7 @@ class FormActivity : AppCompatActivity() {
   
         mainLayout = findViewById(R.id.mainLayout)  
         pageTitleTextView = findViewById(R.id.pageTitleTextView)  
-        exitFormImageView = findViewById(R.id.exitFormImageView)  
-  
-  
+        exitFormImageView = findViewById(R.id.exitFormImageView)
   
         if (intent.extras != null) {  
             val path = intent?.extras?.getString("path") ?: ""  
@@ -645,19 +644,11 @@ class FormActivity : AppCompatActivity() {
                 if (it.id == R.id.exitFormImageView) {  
                     finish()  
                 }  
-            }  
-  
-            formBuilder = if (pageTitle.equals("Programmer Survey"))  
-                JsonFormBuilder(mainLayout, path).buildForm()  
-            else {  
-                val views = listOf<View>(  
-                    layoutInflater.inflate(  
-                        R.layout.sample_one_form_custom_layout,  
-                        null  
-                    )  
-                )  
-                JsonFormBuilder(mainLayout, path).buildForm(views)  
-            }  
+            } 
+
+          //Create an embbeded JSON Form withing mainLayout
+          formBuilder = JsonFormBuilder(this, formData.filePath)
+          JsonFormEmbedded(formBuilder as JsonFormBuilder, mainLayout).buildForm()         
         }  
     }  
 }  

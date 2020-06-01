@@ -67,8 +67,7 @@ class FormActivity : AppCompatActivity() {
             )
             when (formData.formCategory) {
                 FormType.jsonFromEmbeddedDefault -> {
-                    formBuilder = JsonFormBuilder(this, formData.filePath)
-                    formBuilder?.also {
+                    formBuilder = JsonFormBuilder(this, formData.filePath).also {
                         it.registeredViews["custom_image"] = CustomImageView::class
                         it.withFormData(
                             Constants.PREVIOUS_DATA, mutableSetOf(
@@ -80,8 +79,7 @@ class FormActivity : AppCompatActivity() {
                     }
                 }
                 FormType.jsonFormEmbeddedCustomized -> {
-                    formBuilder = JsonFormBuilder(this, formData.filePath)
-                    formBuilder?.also {
+                    formBuilder = JsonFormBuilder(this, formData.filePath).also {
                         it.registeredViews["custom_image"] = CustomImageView::class
                     }
                     JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm(views)
