@@ -27,6 +27,3 @@ fun String.removeAsterisk(): String {
 fun Any?.isNotNull(): Boolean {
     return this != null
 }
-fun Any?.isNull(): Boolean {
-    return this == null
-}

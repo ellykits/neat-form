@@ -19,7 +19,7 @@ import com.nerdstone.neatformcore.utils.isNotNull
  *
  * The rules are handled by the [RulesFactory] class and the validation
  */
-class ViewDispatcher(val rulesFactory: RulesFactory ) : DataActionListener {
+class ViewDispatcher(val rulesFactory: RulesFactory) : DataActionListener {
 
     /**
      * Dispatches an action when view value changes. If value is the same as what had already been
@@ -27,9 +27,10 @@ class ViewDispatcher(val rulesFactory: RulesFactory ) : DataActionListener {
      *  [viewDetails] are the details of the view that has just dispatched a value
      */
     override fun onPassData(viewDetails: NFormViewDetails) {
+        val formData = ViewUtils.getDataViewModel(viewDetails).details
         with(viewDetails) {
             if (value.isNotNull()) {
-                ViewUtils.getDataViewModel(viewDetails).details.value?.also { details ->
+                formData.value?.also { details ->
                     if (details[name] != value) {
                         details[name] =
                             NFormViewData(

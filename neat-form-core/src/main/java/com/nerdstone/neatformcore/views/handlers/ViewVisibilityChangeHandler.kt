@@ -5,7 +5,7 @@ import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.ViewUtils
 
-class ViewVisibilityChangeHandler private constructor() : VisibilityChangeListener {
+object ViewVisibilityChangeHandler: VisibilityChangeListener {
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         ViewUtils.animateView(changedView)
@@ -17,17 +17,5 @@ class ViewVisibilityChangeHandler private constructor() : VisibilityChangeListen
             }
             changedView.trackRequiredField()
         }
-    }
-
-    companion object {
-        @Volatile
-        private var instance: ViewVisibilityChangeHandler? = null
-
-        val INSTANCE: ViewVisibilityChangeHandler
-            get() = instance ?: synchronized(this) {
-                ViewVisibilityChangeHandler().also {
-                    instance = it
-                }
-            }
     }
 }

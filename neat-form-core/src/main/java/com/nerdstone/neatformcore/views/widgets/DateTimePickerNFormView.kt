@@ -19,8 +19,7 @@ class DateTimePickerNFormView : TextInputLayout, NFormView {
     override lateinit var viewProperties: NFormViewProperty
     override lateinit var formValidator: FormValidator
     override var dataActionListener: DataActionListener? = null
-    override var visibilityChangeListener: VisibilityChangeListener? =
-        ViewVisibilityChangeHandler.INSTANCE
+    override var visibilityChangeListener: VisibilityChangeListener? = ViewVisibilityChangeHandler
     override val viewBuilder = DateTimePickerViewBuilder(this)
     override val viewDetails = NFormViewDetails(this)
     override var initialValue: Any? = null

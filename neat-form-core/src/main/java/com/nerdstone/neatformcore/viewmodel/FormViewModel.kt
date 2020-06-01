@@ -13,4 +13,7 @@ class FormViewModel : ViewModel() {
 
     val readOnlyFields get() = _readOnlyFields
 
+    override fun onCleared() {
+        readOnlyFields.value = mutableSetOf()
+    }
 }

@@ -18,14 +18,8 @@
           },
           "validation": [
             {
-              "validation_name": "length",
-              "condition": "value.length() < 11",
-              "error_message": "value should be less than ten digits"
-            },
-            {
-              "validation_name": "phone number",
-              "condition": "value.matches(\"\\\\d{10}\")",
-              "error_message": "Not a valid phone number"
+              "condition": "value.length() <= 10",
+              "message": "value should be less than or equal to ten digits"
             }
           ],
           "subjects": "age:number, child:text",
@@ -278,14 +272,7 @@
             "openmrs_entity": "",
             "openmrs_entity_id": "",
             "openmrs_entity_parent": ""
-          },
-          "validation": [
-            {
-              "validation_name": "special characters",
-              "condition": "!value.contains('@')",
-              "error_message": "value should not contain special character"
-            }
-          ]
+          }
         }
       ]
     }

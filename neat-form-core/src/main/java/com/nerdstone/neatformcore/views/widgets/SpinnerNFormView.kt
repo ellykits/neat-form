@@ -23,8 +23,7 @@ class SpinnerNFormView : LinearLayout, NFormView {
     override var dataActionListener: DataActionListener? = null
     override val viewBuilder = SpinnerViewBuilder(this)
     override var viewDetails = NFormViewDetails(this)
-    override var visibilityChangeListener: VisibilityChangeListener? =
-        ViewVisibilityChangeHandler.INSTANCE
+    override var visibilityChangeListener: VisibilityChangeListener? = ViewVisibilityChangeHandler
     override var initialValue: Any? = null
 
     init {
