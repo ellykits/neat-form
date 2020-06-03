@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.nerdstone.neatformcore.datasource.AssetFile
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.domain.model.NForm
@@ -26,7 +25,6 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import kotlin.reflect.KClass
