@@ -42,9 +42,9 @@ object ViewUtils {
     ) {
         val registeredViews = formBuilder.registeredViews
         for (viewProperty in viewProperties) {
-            val kClass = registeredViews[viewProperty.type] as KClass<*>
+            val kClass = registeredViews[viewProperty.type]
             if (kClass.isNotNull()) {
-                buildView(buildFromLayout, rootView, viewProperty, formBuilder, kClass)
+                buildView(buildFromLayout, rootView, viewProperty, formBuilder, kClass!!)
             }
         }
     }

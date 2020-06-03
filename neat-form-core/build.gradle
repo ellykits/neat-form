@@ -11,7 +11,7 @@ jacoco {
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
 
-version = "1.1.0"
+version = "1.1.1"
 
 android {
     compileSdkVersion 28
@@ -84,7 +84,7 @@ dependencies {
     }
     api 'androidx.recyclerview:recyclerview:1.1.0'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
-    api 'com.google.android.material:material:1.2.0-alpha06'
+    api 'com.google.android.material:material:1.2.0-beta01'
     api 'com.jakewharton.timber:timber:4.7.1'
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
