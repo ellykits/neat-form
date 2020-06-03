@@ -67,7 +67,8 @@ class FormActivity : AppCompatActivity() {
             )
             when (formData.formCategory) {
                 FormType.jsonFromEmbeddedDefault -> {
-                    formBuilder = JsonFormBuilder(this, formData.filePath).also {
+                    formBuilder = JsonFormBuilder(this, formData.filePath)
+                    formBuilder?.also {
                         it.registeredViews["custom_image"] = CustomImageView::class
                         it.withFormData(
                             Constants.PREVIOUS_DATA, mutableSetOf(
