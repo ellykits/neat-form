@@ -18,6 +18,8 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
     private var dateDisplayFormat = "yyyy-MM-dd"
+    private var minDate: Long? = null
+    private var maxDate: Long? = null
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
     private val calendar = getInstance()
@@ -28,7 +30,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         )
 
     enum class DateTimePickerProperties {
-        HINT, TYPE, DISPLAY_FORMAT
+        HINT, TYPE, DISPLAY_FORMAT, MIN_DATE, MAX_DATE
     }
 
     private object DatePickerType {
@@ -76,6 +78,18 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                 DateTimePickerProperties.DISPLAY_FORMAT.name -> {
                     dateDisplayFormat = attribute.value.toString()
                 }
+                DateTimePickerProperties.MIN_DATE.name -> {
+                    minDate = SimpleDateFormat(
+                        dateDisplayFormat,
+                        Locale.getDefault()
+                    ).parse(attribute.value.toString()).time
+                }
+                DateTimePickerProperties.MAX_DATE.name -> {
+                    maxDate = SimpleDateFormat(
+                        dateDisplayFormat,
+                        Locale.getDefault()
+                    ).parse(attribute.value.toString()).time
+                }
             }
         }
     }
@@ -96,6 +110,9 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
 
         val datePickerDialog =
             DatePickerDialog(dateTimePickerNFormView.context, this, year, month, dayOfMonth)
+
+        minDate?.let { datePickerDialog.datePicker.minDate = this.minDate!! }
+        maxDate?.let { datePickerDialog.datePicker.maxDate = this.maxDate!! }
         datePickerDialog.show()
 
     }
