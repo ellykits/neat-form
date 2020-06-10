@@ -10,9 +10,12 @@ import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
+import timber.log.Timber
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar.*
+import java.util.regex.Pattern
 
 open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
@@ -79,16 +82,31 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                     dateDisplayFormat = attribute.value.toString()
                 }
                 DateTimePickerProperties.MIN_DATE.name -> {
-                    minDate = SimpleDateFormat(
-                        dateDisplayFormat,
-                        Locale.getDefault()
-                    ).parse(attribute.value.toString()).time
+                    minDate = when {
+                        attribute.value.toString().contains("today") -> {
+                            getDate(attribute.value.toString())
+                        }
+                        else -> {
+                            SimpleDateFormat(
+                                dateDisplayFormat,
+                                Locale.getDefault()
+                            ).parse(attribute.value.toString()).time
+                        }
+                    }
                 }
                 DateTimePickerProperties.MAX_DATE.name -> {
-                    maxDate = SimpleDateFormat(
-                        dateDisplayFormat,
-                        Locale.getDefault()
-                    ).parse(attribute.value.toString()).time
+                    maxDate = when {
+                        attribute.value.toString().contains("today") -> {
+                            getDate(attribute.value.toString())
+                        }
+                        else -> {
+                            SimpleDateFormat(
+                                dateDisplayFormat,
+                                Locale.getDefault()
+                            ).parse(attribute.value.toString()).time
+                        }
+                    }
+
                 }
             }
         }
@@ -144,12 +162,63 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
     }
 
-    private fun getFormattedDate(): String = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
-        .format(Date(selectedDate.timeInMillis))
+    private fun getFormattedDate(): String =
+        SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
+            .format(Date(selectedDate.timeInMillis))
 
     fun resetDatetimePickerValue() {
         textInputEditText.setText("")
         dateTimePickerNFormView.viewDetails.value = null
         dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
+    }
+
+    /**
+     * This method returns a [Calendar] object at mid-day corresponding to a date matching the
+     * format specified in `DATE_FORMAT` or a day in reference to today e.g today, today-1,
+     * today+10
+     *
+     * @param dayString_ The string to be converted to a date
+     * @return The calendar object corresponding to the day, or object corresponding to today's date
+     * if an error occurred
+     */
+    open fun getDate(dayString_: String?): Long? {
+        val calendarDate = getInstance()
+        if (dayString_ != null && dayString_.trim { it <= ' ' }.isNotEmpty()) {
+            val dayString = dayString_.trim { it <= ' ' }.toLowerCase(Locale.getDefault())
+            if ("today" != dayString) {
+                val pattern =
+                    Pattern.compile("today\\s*([-\\+])\\s*(\\d+)([dmywDMY]{1})")
+                val matcher = pattern.matcher(dayString)
+                if (matcher.find()) {
+                    var timeValue = matcher.group(2).toInt()
+                    if ("-" == matcher.group(1)) {
+                        timeValue *= -1
+                    }
+                    var field = DATE
+                    if (matcher.group(3).equals("y", ignoreCase = true)) {
+                        field = YEAR
+                    } else if (matcher.group(3).equals("m", ignoreCase = true)) {
+                        field = MONTH
+                    } else if (matcher.group(3).equals("w", ignoreCase = true)) {
+                        field = WEEK_OF_MONTH
+                    }
+                    calendarDate.add(field, timeValue)
+                } else {
+                    try {
+                        calendarDate.time = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
+                            .parse(dayString)
+                    } catch (e: ParseException) {
+                        Timber.e(e)
+                    }
+                }
+            }
+        }
+
+        //set time to mid-day
+        calendarDate[HOUR_OF_DAY] = 12
+        calendarDate[MINUTE] = 0
+        calendarDate[SECOND] = 0
+        calendarDate[MILLISECOND] = 0
+        return calendarDate.timeInMillis
     }
 }
