@@ -52,7 +52,7 @@ class RulesFactory : RuleListener {
     override fun afterEvaluate(rule: Rule?, facts: Facts?, evaluationResult: Boolean) =
             rulesHandler.updateSkipLogicFactAfterEvaluate(evaluationResult, rule, facts)
 
-    fun readRulesFromFile(
+/*    fun readRulesFromFile(
             context: Context, filePath: String, rulesFileType: RulesFileType
     ) {
         if (allRules == null) {
@@ -64,6 +64,23 @@ class RulesFactory : RuleListener {
             allRules = mvelRuleFactory.createRules(
                     BufferedReader(
                             InputStreamReader(AssetFile.openFileAsset(context, filePath))
+                    )
+            )
+        }
+    }*/
+
+    fun readRulesFromFile(
+            context: Context, fileName: String, rulesFileType: RulesFileType
+    ) {
+        if (allRules == null) {
+            val mvelRuleFactory: MVELRuleFactory = when (rulesFileType) {
+                RulesFileType.JSON -> MVELRuleFactory(JsonRuleDefinitionReader())
+                RulesFileType.YAML -> MVELRuleFactory(YamlRuleDefinitionReader())
+            }
+
+            allRules = mvelRuleFactory.createRules(
+                    BufferedReader(
+                            InputStreamReader(context.openFileInput(fileName))
                     )
             )
         }
