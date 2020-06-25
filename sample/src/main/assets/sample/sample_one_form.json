@@ -411,7 +411,9 @@
           "properties": {
             "hint": "Enter birth date",
             "type": "date_picker",
-            "display_format": "dd/MM/yyyy"
+            "display_format": "dd/MM/yyyy",
+            "min_date": "01/01/2020",
+            "max_date": "01/01/2025"
           },
           "required_status": "true:Please specify your dob"
         },

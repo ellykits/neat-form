@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
 
@@ -95,6 +96,20 @@ class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
         dateTimePickerViewBuilder.textInputEditText.performClick()
         dateTimePickerViewBuilder.onDateSet(spyk(), 2019, 0, 1)
         Assert.assertTrue(dateTimePickerViewBuilder.textInputEditText.text.toString() == "01/01/2019")
+    }
+
+    @Test
+    fun `Should return date from passed pattern`() {
+        val today = Calendar.getInstance()
+        today[Calendar.HOUR_OF_DAY] = 12
+        today[Calendar.MINUTE] = 0
+        today[Calendar.SECOND] = 0
+        today[Calendar.MILLISECOND] = 0
+
+        Assert.assertEquals(today.timeInMillis,dateTimePickerViewBuilder.getDate("today"))
+
+        today.add(Calendar.YEAR,1)
+        Assert.assertEquals(today.timeInMillis,dateTimePickerViewBuilder.getDate("today+1y"))
     }
 
     @Test

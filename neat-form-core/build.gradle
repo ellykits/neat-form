@@ -11,7 +11,7 @@ jacoco {
 def properties = new Properties()
 properties.load(new FileInputStream(rootProject.file("local.properties")))
 
-version = "1.1.1"
+version = "1.1.2"
 
 android {
     compileSdkVersion 28
