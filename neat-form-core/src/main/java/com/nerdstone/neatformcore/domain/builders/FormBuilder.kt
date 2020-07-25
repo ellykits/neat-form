@@ -41,6 +41,7 @@ interface FormBuilder {
     var formViewModel: FormViewModel
 
     val rulesFactory: RulesFactory
+
     val viewDispatcher: ViewDispatcher
 
     /**
