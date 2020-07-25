@@ -12,7 +12,7 @@ import com.nerdstone.neatformcore.utils.isNotNull
 /**
  * @author Elly Nerdstone
  *
- * This Singleton class provides a listener method that is called when a field's value
+ * This class provides a listener method that is called when a field's value
  * has been changed. Say for instance when the text of an EditText has been updated the listener
  * will be triggered. At this point the fields value can be validated and then the rules are fired
  * for the fields watching on the field that has passed its value.

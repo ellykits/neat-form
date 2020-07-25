@@ -7,6 +7,7 @@ import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -106,10 +107,17 @@ class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
         today[Calendar.SECOND] = 0
         today[Calendar.MILLISECOND] = 0
 
-        Assert.assertEquals(today.timeInMillis,dateTimePickerViewBuilder.getDate("today"))
+        Assert.assertEquals(today.timeInMillis, dateTimePickerViewBuilder.getDate("today"))
 
-        today.add(Calendar.YEAR,1)
-        Assert.assertEquals(today.timeInMillis,dateTimePickerViewBuilder.getDate("today+1y"))
+        today.add(Calendar.YEAR, 1)
+        Assert.assertEquals(today.timeInMillis, dateTimePickerViewBuilder.getDate("today+1y"))
+
+        val hint = "Am a hint"
+        val type = "date_picker"
+        viewProperty.viewAttributes =
+            hashMapOf("hint" to hint, "display_format" to "dd/MM/yyyy", "type" to type, "min_date" to "today-80y", "max_date" to "today")
+        dateTimePickerViewBuilder.buildView()
+        verify { dateTimePickerViewBuilder.getDate(any()) }
     }
 
     @Test

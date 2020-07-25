@@ -100,7 +100,7 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
     }
 
     /**
-     * Example is when you have an option called  'none' and you do not want select it with the
+     * Example is when you have an option called  'none' and you do not want to select it with the
      * other options.
      */
     private fun handleExclusiveChecks(checkBox: CheckBox) {

@@ -17,6 +17,8 @@ import java.util.*
 import java.util.Calendar.*
 import java.util.regex.Pattern
 
+private const val TODAY = "today"
+
 open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
@@ -83,26 +85,24 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                 }
                 DateTimePickerProperties.MIN_DATE.name -> {
                     minDate = when {
-                        attribute.value.toString().contains("today") -> {
+                        attribute.value.toString().contains(TODAY) -> {
                             getDate(attribute.value.toString())
                         }
                         else -> {
                             SimpleDateFormat(
-                                dateDisplayFormat,
-                                Locale.getDefault()
+                                dateDisplayFormat, Locale.getDefault()
                             ).parse(attribute.value.toString()).time
                         }
                     }
                 }
                 DateTimePickerProperties.MAX_DATE.name -> {
                     maxDate = when {
-                        attribute.value.toString().contains("today") -> {
+                        attribute.value.toString().contains(TODAY) -> {
                             getDate(attribute.value.toString())
                         }
                         else -> {
                             SimpleDateFormat(
-                                dateDisplayFormat,
-                                Locale.getDefault()
+                                dateDisplayFormat, Locale.getDefault()
                             ).parse(attribute.value.toString()).time
                         }
                     }
@@ -177,17 +177,17 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
      * format specified in `DATE_FORMAT` or a day in reference to today e.g today, today-1,
      * today+10
      *
-     * @param dayString_ The string to be converted to a date
+     * @param day The string to be converted to a date
      * @return The calendar object corresponding to the day, or object corresponding to today's date
      * if an error occurred
      */
-    open fun getDate(dayString_: String?): Long? {
+    open fun getDate(day: String?): Long? {
         val calendarDate = getInstance()
-        if (dayString_ != null && dayString_.trim { it <= ' ' }.isNotEmpty()) {
-            val dayString = dayString_.trim { it <= ' ' }.toLowerCase(Locale.getDefault())
-            if ("today" != dayString) {
+        if (day != null && day.trim { it <= ' ' }.isNotEmpty()) {
+            val dayString = day.trim { it <= ' ' }.toLowerCase(Locale.getDefault())
+            if (TODAY != dayString) {
                 val pattern =
-                    Pattern.compile("today\\s*([-\\+])\\s*(\\d+)([dmywDMY]{1})")
+                    Pattern.compile("$TODAY\\s*([-\\+])\\s*(\\d+)([dmywDMYW]{1})")
                 val matcher = pattern.matcher(dayString)
                 if (matcher.find()) {
                     var timeValue = matcher.group(2).toInt()
@@ -195,12 +195,19 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                         timeValue *= -1
                     }
                     var field = DATE
-                    if (matcher.group(3).equals("y", ignoreCase = true)) {
-                        field = YEAR
-                    } else if (matcher.group(3).equals("m", ignoreCase = true)) {
-                        field = MONTH
-                    } else if (matcher.group(3).equals("w", ignoreCase = true)) {
-                        field = WEEK_OF_MONTH
+                    when {
+                        matcher.group(3).equals("y", ignoreCase = true) -> {
+                            field = YEAR
+                        }
+                        matcher.group(3).equals("m", ignoreCase = true) -> {
+                            field = MONTH
+                        }
+                        matcher.group(3).equals("w", ignoreCase = true) -> {
+                            field = WEEK_OF_MONTH
+                        }
+                        matcher.group(3).equals("d", ignoreCase = true) -> {
+                            field = DAY_OF_MONTH
+                        }
                     }
                     calendarDate.add(field, timeValue)
                 } else {
