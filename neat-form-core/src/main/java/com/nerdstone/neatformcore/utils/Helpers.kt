@@ -73,7 +73,7 @@ class DefaultDispatcherProvider : DispatcherProvider
  * @author Elly Nerdstone
  *
  * This is a weak collection list that internally uses [LinkedList]. We use this to hold weak references
- * of items in order to avoid memory leaks as in the case oh caching listeners in a singleton class
+ * of items in order to avoid memory leaks as in the case of caching listeners in a singleton class
  */
 class DisposableList<T> {
 
@@ -98,7 +98,6 @@ class DisposableList<T> {
      * values on the [WeakReference]. If so the items will be removed from the list. This is useful when
      * trying to avoid memory leaks by the list maintaining references to items that had been garbage
      * collected
-     * f
      */
     fun get(): MutableList<T> {
         val finalList = arrayListOf<T>()
