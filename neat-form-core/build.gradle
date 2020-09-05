@@ -5,7 +5,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.5"
 }
 
 def properties = new Properties()
@@ -14,11 +14,11 @@ properties.load(new FileInputStream(rootProject.file("local.properties")))
 version = "1.1.2"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName this.version
         multiDexEnabled true
@@ -60,12 +60,10 @@ android {
         unitTests.all {
             jacoco {
                 includeNoLocationClasses = true
+                excludes = ['jdk.internal.*']
             }
             jvmArgs '-noverify'
         }
-    }
-    configurations.all {
-        resolutionStrategy.force 'com.google.android.material:material:1.2.0-alpha05'
     }
 }
 
@@ -73,8 +71,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.core:core-ktx:1.3.0"
-    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.core:core-ktx:1.3.1"
+    implementation "androidx.appcompat:appcompat:1.2.0"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     api("com.nerdstone:neat-android-stepper:1.0.6") {
@@ -83,8 +81,7 @@ dependencies {
         exclude group: 'androidx.constraintlayout', module: 'constraintlayout'
     }
     api 'androidx.recyclerview:recyclerview:1.1.0'
-    api 'androidx.constraintlayout:constraintlayout:1.1.3'
-    api 'com.google.android.material:material:1.3.0-alpha01'
+    api 'com.google.android.material:material:1.3.0-alpha02'
     api 'com.jakewharton.timber:timber:4.7.1'
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
@@ -98,12 +95,12 @@ dependencies {
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
     debugImplementation 'androidx.fragment:fragment-testing:1.2.5'
 
-    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test:core:1.3.0'
     testImplementation "io.mockk:mockk:$mockKVersion"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // debugImplementation because LeakCanary should only run in debug builds.
    // debugImplementation "com.squareup.leakcanary:leakcanary-android:2.3"
