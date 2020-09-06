@@ -1,8 +1,8 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.os.Build
 import android.view.View
 import android.widget.RadioButton
+import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -25,6 +25,8 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(RadioGroupViewProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
+
     override fun buildView() {
         ViewUtils.applyViewAttributes(
             nFormView = radioGroupView,
@@ -42,6 +44,10 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         }
     }
 
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
+    }
+
     private fun createMultipleRadios() {
         val options = radioGroupView.viewProperties.options
         options?.also {
@@ -53,8 +59,7 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         val radioButton = RadioButton(radioGroupView.context)
         radioButton.apply {
             text = nFormSubViewProperty.text
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.radioButtonStyle)
-            else setTextAppearance(radioGroupView.context, R.style.radioButtonStyle)
+            TextViewCompat.setTextAppearance(this, R.style.radioButtonStyle)
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_radio_group_option, true)
             setOnCheckedChangeListener { radioButton, isChecked ->

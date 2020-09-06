@@ -26,6 +26,8 @@ open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBui
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(SpinnerProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
+
     override fun buildView() {
         ViewUtils.applyViewAttributes(
             nFormView = spinnerNFormView,
@@ -51,6 +53,10 @@ open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBui
                 }
             }
         }
+    }
+
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
     }
 
     private fun addSpinnerOptions() {

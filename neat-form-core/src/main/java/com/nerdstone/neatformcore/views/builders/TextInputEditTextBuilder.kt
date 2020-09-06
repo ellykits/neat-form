@@ -23,6 +23,8 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputEditTextViewProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
+
     override fun buildView() {
         createEditText()
         ViewUtils.applyViewAttributes(
@@ -65,6 +67,10 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
                 }
             }
         }
+    }
+
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
     }
 
     private fun createEditText() {

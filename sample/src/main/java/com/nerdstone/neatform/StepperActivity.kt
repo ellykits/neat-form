@@ -43,6 +43,8 @@ class StepperActivity : AppCompatActivity(), FormActions {
             JsonFormBuilder(this, filePath)
         formBuilder.also {
             it.registeredViews["custom_image"] = CustomImageView::class
+            it.stylesMap["sampleCheckboxStyle"] = R.style.sampleCheckboxStyle
+            it.stylesMap["sampleDatePickerStyle"] = R.style.sampleDatePickerStyle
             if (preFilled!!) it.withFormData(Constants.PREVIOUS_DATA, mutableSetOf())
         }
         JsonFormStepper(formBuilder as JsonFormBuilder, neatStepperLayout).buildForm()

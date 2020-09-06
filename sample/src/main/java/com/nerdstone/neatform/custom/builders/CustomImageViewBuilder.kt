@@ -11,6 +11,8 @@ class CustomImageViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     override val acceptedAttributes = Utils.convertEnumToSet(ImageViewProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
+
     private val customImageViewNFormView = nFormView as CustomImageView
 
     enum class ImageViewProperties {
@@ -38,5 +40,9 @@ class CustomImageViewBuilder(override val nFormView: NFormView) : ViewBuilder {
                 customImageViewNFormView.setImageResource(id)
             }
         }
+    }
+
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
     }
 }

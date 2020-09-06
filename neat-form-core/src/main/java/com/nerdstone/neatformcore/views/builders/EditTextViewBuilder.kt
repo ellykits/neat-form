@@ -1,7 +1,7 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.os.Build
 import android.text.SpannableStringBuilder
+import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
@@ -15,6 +15,8 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
     private val editTextNFormView = nFormView as EditTextNFormView
 
     override val acceptedAttributes = Utils.convertEnumToSet(EditTextProperties::class.java)
+
+    override lateinit var stylesMap: MutableMap<String, Int>
 
     enum class EditTextProperties {
         HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE
@@ -46,8 +48,7 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         editTextNFormView.apply {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.editTextStyle)
-            else setTextAppearance(editTextNFormView.context, R.style.editTextStyle)
+          TextViewCompat.setTextAppearance(editTextNFormView, R.style.editTextStyle)
 
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 EditTextProperties.HINT.name -> {
@@ -75,5 +76,9 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
                 }
             }
         }
+    }
+
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
     }
 }

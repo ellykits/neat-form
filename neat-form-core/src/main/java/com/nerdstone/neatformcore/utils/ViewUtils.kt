@@ -3,13 +3,11 @@ package com.nerdstone.neatformcore.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -68,7 +66,7 @@ object ViewUtils {
                 if (BuildConfig.DEBUG) Toast.makeText(context, message, LENGTH_SHORT).show()
             }
         } else {
-            val constructor = kClass.constructors.minBy { it.parameters.size }
+            val constructor = kClass.constructors.minByOrNull { it.parameters.size }
             rootView.addChild(
                 getView(constructor!!.call(context) as NFormView, viewProperty, formBuilder)
             )
@@ -138,7 +136,9 @@ object ViewUtils {
 
             addRequiredFields(nFormView)
             trackRequiredField()
+            viewBuilder.stylesMap = formBuilder.stylesMap
             viewBuilder.buildView()
+
         }
         return nFormView
     }
@@ -161,13 +161,6 @@ object ViewUtils {
             if (acceptedAttributes.contains(attribute.key.toUpperCase(Locale.getDefault()))) {
                 task(attribute)
             }
-        }
-    }
-
-    fun applyCheckBoxStyle(context: Context, checkBox: CheckBox) {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> checkBox.setTextAppearance(R.style.checkBoxStyle)
-            else -> checkBox.setTextAppearance(context, R.style.checkBoxStyle)
         }
     }
 

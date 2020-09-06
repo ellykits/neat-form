@@ -4,11 +4,13 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Utils
 import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.getStyleFromAttribute
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import timber.log.Timber
 import java.text.ParseException
@@ -27,6 +29,8 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     private var maxDate: Long? = null
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
+    override lateinit var stylesMap: MutableMap<String, Int>
+
     private val calendar = getInstance()
     val selectedDate: Calendar = getInstance()
     val textInputEditText =
@@ -47,10 +51,10 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         ViewUtils.applyViewAttributes(
             dateTimePickerNFormView, acceptedAttributes, this::setViewProperties
         )
-
         dateTimePickerNFormView.addView(textInputEditText)
         textInputEditText.compoundDrawablePadding = 8
         textInputEditText.isFocusable = false
+        dateTimePickerNFormView.viewProperties.getStyleFromAttribute()?.let { applyStyle(it) }
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
@@ -89,9 +93,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                             getDate(attribute.value.toString())
                         }
                         else -> {
-                            SimpleDateFormat(
-                                dateDisplayFormat, Locale.getDefault()
-                            ).parse(attribute.value.toString()).time
+                            setDate(attribute)
                         }
                     }
                 }
@@ -101,15 +103,23 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                             getDate(attribute.value.toString())
                         }
                         else -> {
-                            SimpleDateFormat(
-                                dateDisplayFormat, Locale.getDefault()
-                            ).parse(attribute.value.toString()).time
+                            setDate(attribute)
                         }
                     }
 
                 }
             }
         }
+    }
+
+    override fun applyStyle(style: String) {
+        stylesMap[style]?.let { TextViewCompat.setTextAppearance(textInputEditText, it) }
+    }
+
+    private fun setDate(attribute: Map.Entry<String, Any>): Long {
+        return SimpleDateFormat(
+                dateDisplayFormat, Locale.getDefault()
+        ).parse(attribute.value.toString()).time
     }
 
     private fun formatHintForRequiredFields() {

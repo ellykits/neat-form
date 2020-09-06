@@ -51,6 +51,12 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
 
     override val acceptedAttributes = Utils.convertEnumToSet(NotificationProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
+
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun buildView() {
         currentViewProps = notificationView.viewProperties.viewAttributes
         val layout = View.inflate(

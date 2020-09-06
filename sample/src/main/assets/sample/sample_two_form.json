@@ -56,7 +56,8 @@
           "name": "email_subscription",
           "type": "checkbox",
           "properties": {
-            "text": "Subscribe to email notifications"
+            "text": "Subscribe to email notifications",
+            "style": "sampleCheckboxStyle"
           },
           "required_status": "yes:Please specify if you want subscription",
           "subjects": "age:number"
@@ -204,7 +205,8 @@
             "type": "date_picker",
             "display_format": "dd/MM/yyyy",
             "min_date": "today-80y",
-            "max_date": "today"
+            "max_date": "today",
+            "style": "sampleDatePickerStyle"
           },
           "required_status": "true:Please specify your dob"
         },
@@ -214,7 +216,8 @@
           "properties": {
             "hint": "Enter time you clocked in",
             "type": "time_picker",
-            "display_format": "hh:m a"
+            "display_format": "hh:m a",
+            "style": "sampleDatePickerStyle"
           },
           "required_status": "true:Please specify the time you clocked in"
         },

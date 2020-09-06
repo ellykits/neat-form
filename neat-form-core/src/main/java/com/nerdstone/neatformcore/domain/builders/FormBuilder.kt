@@ -22,6 +22,9 @@ import kotlin.reflect.KClass
  *              for an EditText inside the view type map you will have
  *              ["edit_text" -> EditTextNFormView::class]
  *
+ * Optionally you can pass default styling for widgets using the [stylesMap]. Each of the styles defined in the
+ * map will be applied to the respective views.
+ * Example: assuming in your map you have declared this [edit_text_style -> R.style.globalEditTextStyle] and in the
  * This map can be overridden if you have custom views that you also want rendered. Just remember to register the views
  * before building the form.
  *
@@ -36,7 +39,9 @@ interface FormBuilder {
 
     val formValidator: FormValidator
 
-    var registeredViews: HashMap<String, KClass<*>>
+    var registeredViews: MutableMap<String, KClass<*>>
+
+    var stylesMap: MutableMap<String, Int>
 
     var formViewModel: FormViewModel
 

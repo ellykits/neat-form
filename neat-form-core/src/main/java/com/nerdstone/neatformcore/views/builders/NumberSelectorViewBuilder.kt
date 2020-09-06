@@ -27,6 +27,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
     private var maxValue = visibleNumbers
     private val numberSelectorNFormView = nFormView as NumberSelectorNFormView
     override val acceptedAttributes = Utils.convertEnumToSet(NumberSelectorProperties::class.java)
+    override lateinit var stylesMap: MutableMap<String, Int>
 
     enum class NumberSelectorProperties {
         MAX_VALUE, TEXT, FIRST_NUMBER, VISIBLE_NUMBERS
@@ -70,6 +71,9 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
         }
     }
 
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
+    }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
@@ -193,7 +197,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorWhite)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources.getColor(R.color.colorWhite)
+                    ContextCompat.getColor(item.context, R.color.colorWhite)
                 )
             }
         } else {
@@ -202,7 +206,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorBlack)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources.getColor(R.color.colorBlack)
+                        ContextCompat.getColor(item.context, R.color.colorBlack)
                 )
             }
         }

@@ -60,7 +60,8 @@ class JsonFormBuilder() : FormBuilder {
     override val rulesFactory: RulesFactory = RulesFactory()
     override val viewDispatcher: ViewDispatcher = ViewDispatcher(rulesFactory)
     override val formValidator: FormValidator = NeatFormValidator()
-    override var registeredViews = hashMapOf<String, KClass<*>>()
+    override var registeredViews = mutableMapOf<String, KClass<*>>()
+    override var stylesMap = mutableMapOf<String, Int>()
     private val rulesHandler = rulesFactory.rulesHandler
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null

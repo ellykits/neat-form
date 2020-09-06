@@ -3,6 +3,7 @@ package com.nerdstone.neatformcore.views.builders
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
@@ -27,6 +28,7 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
 
     override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
 
+    override lateinit var stylesMap: MutableMap<String, Int>
 
     override fun buildView() {
         ViewUtils.applyViewAttributes(
@@ -57,6 +59,10 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
         }
     }
 
+    override fun applyStyle(style: String) {
+        TODO("Not yet implemented")
+    }
+
     private fun createMultipleCheckboxes() {
         multiChoiceCheckBox.viewProperties.options
             ?.also { option ->
@@ -70,7 +76,7 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
             text = nFormSubViewProperty.text
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_checkbox_option, true)
-            ViewUtils.applyCheckBoxStyle(multiChoiceCheckBox.context, checkBox)
+            TextViewCompat.setTextAppearance(checkBox, R.style.checkBoxStyle)
             setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (valuesMap == null) valuesMap = hashMapOf()
                 val fieldName = compoundButton.getTag(R.id.field_name)
