@@ -3,19 +3,22 @@ package com.nerdstone.neatformcore.views.handlers
 import android.view.View
 import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.animateView
+import com.nerdstone.neatformcore.utils.isNotNull
 
-object ViewVisibilityChangeHandler: VisibilityChangeListener {
+object ViewVisibilityChangeHandler : VisibilityChangeListener {
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        ViewUtils.animateView(changedView)
-        if (changedView is NFormView) {
-            if (visibility == View.GONE && changedView.viewDetails.value != null
-                && changedView.initialValue == null
-            ) {
-                changedView.resetValueWhenHidden()
+        changedView.animateView()
+        with(changedView){
+            if (this is NFormView) {
+                if (visibility == View.GONE && viewDetails.value.isNotNull()
+                    && initialValue == null
+                ) {
+                    resetValueWhenHidden()
+                }
+                trackRequiredField()
             }
-            changedView.trackRequiredField()
         }
     }
 }

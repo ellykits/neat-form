@@ -7,7 +7,7 @@ import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.RadioGroupViewBuilder
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import io.mockk.spyk
@@ -106,7 +106,7 @@ class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
+        radioGroupView.setupView(viewProperty, formBuilder)
         //Value is null first but will always contain a value when selection is done
         Assert.assertNull(radioGroupView.viewDetails.value)
 
@@ -124,7 +124,7 @@ class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
         val text = "Pick your preferred Android programming language"
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options = listOf(radioOption1, radioOption2, radioOption3)
-        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
+        radioGroupView.setupView(viewProperty, formBuilder)
         val radioButton1 = radioGroupView.getChildAt(1) as RadioButton
         radioButton1.isChecked = true
         radioGroupView.visibility = View.GONE
@@ -139,7 +139,7 @@ class RadioGroupViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your preferred language")
         viewProperty.options =
             listOf(radioOption1, radioOption2, radioOption3)
-        ViewUtils.setupView(radioGroupView, viewProperty, formBuilder)
+        radioGroupView.setupView(viewProperty, formBuilder)
         val valueHashMap = mapOf("kotlin" to NFormViewData(value = "Kotlin"))
         radioGroupView.setValue(valueHashMap)
         Assert.assertEquals(radioGroupView.initialValue, valueHashMap)

@@ -6,7 +6,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.rules.RulesFactory
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.getDataViewModel
 import com.nerdstone.neatformcore.utils.isNotNull
 
 /**
@@ -27,7 +27,7 @@ class ViewDispatcher(val rulesFactory: RulesFactory) : DataActionListener {
      *  [viewDetails] are the details of the view that has just dispatched a value
      */
     override fun onPassData(viewDetails: NFormViewDetails) {
-        val formData = ViewUtils.getDataViewModel(viewDetails).details
+        val formData = viewDetails.getDataViewModel().details
         with(viewDetails) {
             if (value.isNotNull()) {
                 formData.value?.also { details ->

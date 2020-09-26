@@ -61,7 +61,7 @@ class JsonFormBuilder() : FormBuilder {
     override val viewDispatcher: ViewDispatcher = ViewDispatcher(rulesFactory)
     override val formValidator: FormValidator = NeatFormValidator()
     override var registeredViews = mutableMapOf<String, KClass<*>>()
-    override var stylesMap = mutableMapOf<String, Int>()
+    override var resourcesMap = mutableMapOf<String, Int>()
     private val rulesHandler = rulesFactory.rulesHandler
     var defaultContextProvider: DispatcherProvider
     var form: NForm? = null
@@ -127,7 +127,7 @@ class JsonFormBuilder() : FormBuilder {
                 it[JsonFormConstants.FORM_VERSION] = form?.formVersion
                 it[JsonFormConstants.FORM_DATA] = dataViewModel.details.value
             }
-            return Utils.getJsonFromModel(formDetails)
+            return formDetails.getJsonFromModel()
         }
         FormErrorDialog(context).show()
         logInvalidFields()
@@ -147,7 +147,7 @@ class JsonFormBuilder() : FormBuilder {
             && formDataJson.isNotNull()
         ) {
             this.formViewModel.readOnlyFields.value?.addAll(readOnlyFields)
-            dataViewModel.updateDetails(FormUtils.parseFormDataJson(formDataJson!!))
+            dataViewModel.updateDetails(formDataJson!!.parseFormDataJson())
         }
     }
 

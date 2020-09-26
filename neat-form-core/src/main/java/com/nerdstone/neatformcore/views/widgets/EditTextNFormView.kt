@@ -9,9 +9,9 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
+import com.nerdstone.neatformcore.utils.handleRequiredStatus
 import com.nerdstone.neatformcore.utils.removeAsterisk
+import com.nerdstone.neatformcore.utils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -48,7 +48,7 @@ class EditTextNFormView : AppCompatEditText, NFormView {
 
     override fun resetValueWhenHidden() = setText("")
 
-    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+    override fun trackRequiredField() = handleRequiredStatus()
 
     override fun validateValue(): Boolean {
         val validationPair = formValidator.validateField(this)

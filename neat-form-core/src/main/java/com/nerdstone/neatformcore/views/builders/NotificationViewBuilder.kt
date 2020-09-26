@@ -14,9 +14,9 @@ import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.Constants.NotificationTypes
-import com.nerdstone.neatformcore.utils.DialogUtil
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.applyViewAttributes
+import com.nerdstone.neatformcore.utils.convertEnumToSet
+import com.nerdstone.neatformcore.utils.createAlertDialog
 import com.nerdstone.neatformcore.views.widgets.NotificationNFormView
 import java.util.*
 
@@ -49,13 +49,9 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
         TEXT, TITLE, TEXT_COLOR, BACKGROUND_COLOR, HIGHLIGHTED_TEXT_COLOR
     }
 
-    override val acceptedAttributes = Utils.convertEnumToSet(NotificationProperties::class.java)
+    override val acceptedAttributes = NotificationProperties::class.java.convertEnumToSet()
 
-    override lateinit var stylesMap: MutableMap<String, Int>
-
-    override fun applyStyle(style: String) {
-        TODO("Not yet implemented")
-    }
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     override fun buildView() {
         currentViewProps = notificationView.viewProperties.viewAttributes
@@ -86,7 +82,7 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
                 NotificationProperties.NOTIFICATION_TYPE.name.toLowerCase(Locale.getDefault())
             ).toString()
         setupNotificationType(notificationType)
-        ViewUtils.applyViewAttributes(nFormView, acceptedAttributes, this::setViewProperties)
+        nFormView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
@@ -133,9 +129,8 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
             visibility = View.VISIBLE
             setOnClickListener {
                 val dialogTitleAndText = getDialogTitleAndText()
-                DialogUtil.createAlertDialog(
-                    notificationView.context, dialogTitleAndText.first,
-                    dialogTitleAndText.second
+                notificationView.context.createAlertDialog(
+                     dialogTitleAndText.first, dialogTitleAndText.second
                 ).apply {
                     setCancelable(true)
                     setNegativeButton(R.string.ok) { _, _ -> return@setNegativeButton }

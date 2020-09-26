@@ -5,7 +5,7 @@ import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.SpinnerNFormView
 import io.mockk.spyk
@@ -91,7 +91,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
+        spinnerNFormView.setupView(viewProperty, formBuilder)
         spinnerNFormView.visibility = View.GONE
         Assert.assertNull(spinnerNFormView.viewDetails.value)
         spinnerNFormView.resetValueWhenHidden()
@@ -104,7 +104,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
+        spinnerNFormView.setupView(viewProperty, formBuilder)
         val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
         materialSpinner.setSelection(1)
         materialSpinner.isSelected = true
@@ -116,7 +116,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your gender")
         viewProperty.options =
             listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        ViewUtils.setupView(spinnerNFormView, viewProperty, formBuilder)
+        spinnerNFormView.setupView(viewProperty, formBuilder)
         val valueHashMap = mapOf("value" to "Female")
         spinnerNFormView.setValue(valueHashMap)
         Assert.assertEquals(spinnerNFormView.initialValue, valueHashMap)

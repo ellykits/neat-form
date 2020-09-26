@@ -7,9 +7,7 @@ import android.widget.LinearLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.removeAsterisk
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.widgets.TextInputEditTextNFormView
 import java.util.*
 
@@ -21,30 +19,24 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
         HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE
     }
 
-    override val acceptedAttributes get() = Utils.convertEnumToSet(TextInputEditTextViewProperties::class.java)
+    override val acceptedAttributes get() = TextInputEditTextViewProperties::class.java.convertEnumToSet()
 
-    override lateinit var stylesMap: MutableMap<String, Int>
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     override fun buildView() {
         createEditText()
-        ViewUtils.applyViewAttributes(
-            nFormView = textInputEditTextNFormView,
-            acceptedAttributes = acceptedAttributes,
-            task = this::setViewProperties
-        )
+        textInputEditTextNFormView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         textInputEditTextNFormView.apply {
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 TextInputEditTextViewProperties.PADDING.name -> {
-                    val value = Utils.pxToDp(
+                    val value = textInputEditTextNFormView.context.pxToDp(
                         (attribute.value as String).toFloat(),
-                        textInputEditTextNFormView.context
                     )
                     setPadding(value, value, value, value)
                 }
-
                 TextInputEditTextViewProperties.HINT.name -> {
                     hint = SpannableStringBuilder(attribute.value as String)
                     formatHintForRequiredFields()
@@ -62,15 +54,11 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
                     setText(attribute.value.toString())
                 }
                 TextInputEditTextViewProperties.INPUT_TYPE.name -> {
-                    ViewUtils.getSupportedEditTextTypes()[attribute.value.toString()]
+                    getSupportedEditTextTypes()[attribute.value.toString()]
                         ?.also { inputType = it }
                 }
             }
         }
-    }
-
-    override fun applyStyle(style: String) {
-        TODO("Not yet implemented")
     }
 
     private fun createEditText() {
@@ -88,9 +76,7 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
 
         //Hide keyboard when focus is lost
         textInputEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                Utils.hideSoftKeyBoard(textInputEditText)
-            }
+            if (!hasFocus) textInputEditText.hideSoftKeyBoard()
         }
 
         textInputEditText.addTextChangedListener(object : TextWatcher {
@@ -116,10 +102,9 @@ open class TextInputEditTextBuilder(final override val nFormView: NFormView) : V
     }
 
     private fun formatHintForRequiredFields() {
-        if (textInputEditTextNFormView.viewProperties.requiredStatus != null) {
-            if (Utils.isFieldRequired(textInputEditTextNFormView)) {
-                textInputEditTextNFormView.hint =
-                    ViewUtils.addRedAsteriskSuffix(textInputEditTextNFormView.hint.toString())
+        with(textInputEditTextNFormView) {
+            if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
+                hint = hint.toString().addRedAsteriskSuffix()
             }
         }
     }

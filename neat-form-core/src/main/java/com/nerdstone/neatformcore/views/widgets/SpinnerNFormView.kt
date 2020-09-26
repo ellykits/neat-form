@@ -11,8 +11,8 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.VALUE
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
+import com.nerdstone.neatformcore.utils.handleRequiredStatus
+import com.nerdstone.neatformcore.utils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.SpinnerViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -34,7 +34,7 @@ class SpinnerNFormView : LinearLayout, NFormView {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+    override fun trackRequiredField() = handleRequiredStatus()
 
     override fun resetValueWhenHidden() = viewBuilder.resetSpinnerValue()
 

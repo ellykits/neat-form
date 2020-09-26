@@ -4,13 +4,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import android.widget.TimePicker
-import androidx.core.widget.TextViewCompat
+import com.google.android.material.textfield.TextInputEditText
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.getStyleFromAttribute
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import timber.log.Timber
 import java.text.ParseException
@@ -28,15 +26,12 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     private var minDate: Long? = null
     private var maxDate: Long? = null
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
-    override val acceptedAttributes = Utils.convertEnumToSet(DateTimePickerProperties::class.java)
-    override lateinit var stylesMap: MutableMap<String, Int>
+    override val acceptedAttributes = DateTimePickerProperties::class.java.convertEnumToSet()
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     private val calendar = getInstance()
     val selectedDate: Calendar = getInstance()
-    val textInputEditText =
-        com.google.android.material.textfield.TextInputEditText(
-            dateTimePickerNFormView.context
-        )
+    val textInputEditText = TextInputEditText(dateTimePickerNFormView.context)
 
     enum class DateTimePickerProperties {
         HINT, TYPE, DISPLAY_FORMAT, MIN_DATE, MAX_DATE
@@ -48,13 +43,17 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     }
 
     override fun buildView() {
-        ViewUtils.applyViewAttributes(
-            dateTimePickerNFormView, acceptedAttributes, this::setViewProperties
-        )
-        dateTimePickerNFormView.addView(textInputEditText)
-        textInputEditText.compoundDrawablePadding = 8
-        textInputEditText.isFocusable = false
-        dateTimePickerNFormView.viewProperties.getStyleFromAttribute()?.let { applyStyle(it) }
+        dateTimePickerNFormView.apply {
+            applyViewAttributes(
+                acceptedAttributes, this@DateTimePickerViewBuilder::setViewProperties
+            )
+            addView(textInputEditText)
+        }
+        textInputEditText.apply {
+            compoundDrawablePadding = 8
+            isFocusable = false
+        }
+
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
@@ -112,21 +111,16 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         }
     }
 
-    override fun applyStyle(style: String) {
-        stylesMap[style]?.let { TextViewCompat.setTextAppearance(textInputEditText, it) }
-    }
-
     private fun setDate(attribute: Map.Entry<String, Any>): Long {
         return SimpleDateFormat(
-                dateDisplayFormat, Locale.getDefault()
+            dateDisplayFormat, Locale.getDefault()
         ).parse(attribute.value.toString()).time
     }
 
     private fun formatHintForRequiredFields() {
-        if (dateTimePickerNFormView.viewProperties.requiredStatus != null) {
-            if (Utils.isFieldRequired(dateTimePickerNFormView)) {
-                textInputEditText.hint =
-                    ViewUtils.addRedAsteriskSuffix(textInputEditText.hint.toString())
+        with(dateTimePickerNFormView) {
+            if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
+                textInputEditText.hint =    textInputEditText.hint.toString().addRedAsteriskSuffix()
             }
         }
     }
@@ -137,7 +131,9 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         val dayOfMonth = selectedDate.get(DAY_OF_MONTH)
 
         val datePickerDialog =
-            DatePickerDialog(dateTimePickerNFormView.context, this, year, month, dayOfMonth)
+            DatePickerDialog(
+                nFormView.viewDetails.getViewContext(), this, year, month, dayOfMonth
+            )
 
         minDate?.let { datePickerDialog.datePicker.minDate = this.minDate!! }
         maxDate?.let { datePickerDialog.datePicker.maxDate = this.maxDate!! }

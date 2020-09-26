@@ -5,8 +5,7 @@ import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import java.util.*
 
@@ -14,41 +13,38 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
 
     private val editTextNFormView = nFormView as EditTextNFormView
 
-    override val acceptedAttributes = Utils.convertEnumToSet(EditTextProperties::class.java)
+    override val acceptedAttributes = EditTextProperties::class.java.convertEnumToSet()
 
-    override lateinit var stylesMap: MutableMap<String, Int>
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     enum class EditTextProperties {
-        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE
+        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE, BACKGROUND
     }
 
     override fun buildView() {
-        ViewUtils.applyViewAttributes(
-            nFormView = editTextNFormView,
-            acceptedAttributes = acceptedAttributes,
-            task = this::setViewProperties
-        )
         //Hide keyboard when focus is lost
-        editTextNFormView.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                Utils.hideSoftKeyBoard(editTextNFormView)
+        editTextNFormView.apply {
+            applyViewAttributes(acceptedAttributes, this@EditTextViewBuilder::setViewProperties)
+            setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    editTextNFormView.hideSoftKeyBoard()
+                }
             }
         }
     }
 
     private fun formatHintForRequiredFields() {
-        if (editTextNFormView.viewProperties.requiredStatus != null) {
-            if (Utils.isFieldRequired(editTextNFormView)) {
-                editTextNFormView.hint =
-                    ViewUtils.addRedAsteriskSuffix(editTextNFormView.hint.toString())
+        with(editTextNFormView) {
+            if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
+                hint = hint.toString().addRedAsteriskSuffix()
             }
         }
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         editTextNFormView.apply {
-
-          TextViewCompat.setTextAppearance(editTextNFormView, R.style.editTextStyle)
+            if (viewProperties.getResourceFromAttribute().isNullOrEmpty())
+                TextViewCompat.setTextAppearance(editTextNFormView, R.style.editTextStyle)
 
             when (attribute.key.toUpperCase(Locale.getDefault())) {
                 EditTextProperties.HINT.name -> {
@@ -57,13 +53,11 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
                 }
 
                 EditTextProperties.PADDING.name -> {
-                    val value = Utils.pxToDp(
-                        (attribute.value as String).toFloat(),
-                        editTextNFormView.context
+                    val value =   editTextNFormView.context.pxToDp(
+                            (attribute.value as String).toFloat(),
                     )
                     setPadding(value, value, value, value)
                 }
-
                 EditTextProperties.TEXT_SIZE.name ->
                     textSize = (attribute.value as String).toFloat()
 
@@ -71,14 +65,13 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
                     setText(attribute.value.toString())
                 }
                 EditTextProperties.INPUT_TYPE.name -> {
-                    ViewUtils.getSupportedEditTextTypes()[attribute.value.toString()]
-                        ?.also { inputType = it}
+                    getSupportedEditTextTypes()[attribute.value.toString()]
+                            ?.also { inputType = it }
+                }
+                EditTextProperties.BACKGROUND.name -> {
+                    resourcesMap[attribute.value.toString()]?.let { setBackgroundResource(it) }
                 }
             }
         }
-    }
-
-    override fun applyStyle(style: String) {
-        TODO("Not yet implemented")
     }
 }

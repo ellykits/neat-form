@@ -3,7 +3,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 import android.view.View
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.widgets.CheckBoxNFormView
 import io.mockk.spyk
@@ -25,7 +25,7 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.type = "checkbox"
         //Set EditText properties and assign EditText view builder
         checkBoxNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(checkBoxNFormView, viewProperty, formBuilder)
+        checkBoxNFormView.setupView(viewProperty, formBuilder)
     }
 
     @Test
@@ -46,9 +46,7 @@ class CheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         checkBoxViewBuilder.buildView()
         Assert.assertTrue(
             checkBoxNFormView.text.toString().isNotEmpty() && checkBoxNFormView.text.toString()
-                .endsWith(
-                    "*"
-                )
+                .endsWith("*")
         )
     }
 

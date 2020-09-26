@@ -9,10 +9,7 @@ import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
-import com.nerdstone.neatformcore.utils.getViewsByTagValue
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import java.util.*
 
@@ -26,13 +23,12 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
         TEXT, OPTIONS_TEXT_SIZE, LABEL_TEXT_SIZE
     }
 
-    override val acceptedAttributes get() = Utils.convertEnumToSet(MultiChoiceCheckBoxProperties::class.java)
+    override val acceptedAttributes get() = MultiChoiceCheckBoxProperties::class.java.convertEnumToSet()
 
-    override lateinit var stylesMap: MutableMap<String, Int>
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     override fun buildView() {
-        ViewUtils.applyViewAttributes(
-            nFormView = multiChoiceCheckBox,
+        multiChoiceCheckBox.applyViewAttributes(
             acceptedAttributes = acceptedAttributes,
             task = this::setViewProperties
         )
@@ -42,9 +38,7 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
             MultiChoiceCheckBoxProperties.TEXT.name -> {
-                multiChoiceCheckBox.addView(
-                    ViewUtils.addViewLabel(attribute.toPair(), multiChoiceCheckBox)
-                )
+                multiChoiceCheckBox.addView(multiChoiceCheckBox.addViewLabel(attribute.toPair()))
             }
 
             MultiChoiceCheckBoxProperties.LABEL_TEXT_SIZE.name -> {
@@ -57,10 +51,6 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
                 checkBoxTextSize = attribute.value.toString().toFloat()
             }
         }
-    }
-
-    override fun applyStyle(style: String) {
-        TODO("Not yet implemented")
     }
 
     private fun createMultipleCheckboxes() {
@@ -76,7 +66,8 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
             text = nFormSubViewProperty.text
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_checkbox_option, true)
-            TextViewCompat.setTextAppearance(checkBox, R.style.checkBoxStyle)
+            if (multiChoiceCheckBox.viewProperties.getResourceFromAttribute().isNullOrEmpty())
+                TextViewCompat.setTextAppearance(this, R.style.checkBoxStyle)
             setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (valuesMap == null) valuesMap = hashMapOf()
                 val fieldName = compoundButton.getTag(R.id.field_name)
@@ -85,7 +76,7 @@ open class MultiChoiceCheckBoxViewBuilder(final override val nFormView: NFormVie
                         fieldName as String,
                         NFormViewData(
                             null, compoundButton.text.toString(),
-                            Utils.getOptionMetadata(multiChoiceCheckBox, fieldName)
+                            multiChoiceCheckBox.getOptionMetadata(fieldName)
                         )
                     )
                     handleExclusiveChecks(this)

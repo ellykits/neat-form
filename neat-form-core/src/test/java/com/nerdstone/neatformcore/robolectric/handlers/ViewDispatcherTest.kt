@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.robolectric.handlers
 
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.unmockkAll
 import org.junit.After
@@ -21,7 +21,7 @@ class ViewDispatcherTest : BaseJsonViewBuilderTest() {
         viewProperty.type = "edit_text"
         viewProperty.viewAttributes = hashMapOf("hint" to "Am a sample hint on field")
         editTextNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(editTextNFormView, viewProperty, formBuilder)
+        editTextNFormView.setupView(viewProperty, formBuilder)
     }
 
     @Test

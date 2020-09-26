@@ -9,9 +9,9 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
+import com.nerdstone.neatformcore.utils.handleRequiredStatus
 import com.nerdstone.neatformcore.utils.removeAsterisk
+import com.nerdstone.neatformcore.utils.setReadOnlyState
 import com.nerdstone.neatformcore.views.builders.CheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -46,7 +46,7 @@ class CheckBoxNFormView : AppCompatCheckBox, NFormView {
         isChecked = false
     }
 
-    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+    override fun trackRequiredField() = handleRequiredStatus()
 
     override fun setValue(value: Any, enabled: Boolean) {
         initialValue = value

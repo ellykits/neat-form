@@ -1,24 +1,27 @@
 <resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
-  <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-  </style>
+    <style name="SampleTextInputLayoutStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHint">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+    </style>
 
-  <style name="sampleCheckboxStyle" parent="android:Widget.CompoundButton.CheckBox">
-    <item name="android:textSize">@dimen/default_text_size</item>
-    <item name="android:layout_marginStart">0dp</item>
-    <item name="android:focusable">true</item>
-    <item name="android:focusableInTouchMode">true</item>
-    <item name="android:textColor">@color/colorPrimaryDark</item>
-  </style>
+    <style name="SampleEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
 
-  <style name="sampleDatePickerStyle" parent="Widget.AppCompat.EditText">
-    <item name="android:textSize">18sp</item>
-    <item name="android:textColor">#4D9D4B</item>
-  </style>
-
+    <style name="SampleCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@android:color/holo_purple</item>
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
