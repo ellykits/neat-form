@@ -1,6 +1,22 @@
 package com.nerdstone.neatformcore.utils
 
+/**
+ * ======================================================================================================
+ * Global Constants
+ * ======================================================================================================
+ */
+const val ID = "id"
+const val DRAWABLE = "drawable"
+const val VALUE = "value"
+const val VALIDATION_RESULT = "validationResults"
+
 object Constants {
+
+    object ThemeColor {
+        const val COLOR_ACCENT = "colorAccent"
+        const val COLOR_PRIMARY = "colorPrimary"
+        const val COLOR_PRIMARY_DARK = "colorPrimaryDark"
+    }
 
     object ViewType {
         const val TOAST_NOTIFICATION = "toast_notification"

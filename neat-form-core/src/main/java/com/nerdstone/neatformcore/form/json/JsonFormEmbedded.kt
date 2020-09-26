@@ -8,8 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.SingleRunner
-import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.isNotNull
+import com.nerdstone.neatformcore.utils.updateFieldValues
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -69,7 +69,7 @@ class JsonFormEmbedded(
             }
             mainLayout.addView(formViews)
             jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, Observer {
-                ViewUtils.updateFieldValues(it, context, jsonFormBuilder.readOnlyFields)
+                context.updateFieldValues(it, jsonFormBuilder.readOnlyFields)
             })
         }
     }

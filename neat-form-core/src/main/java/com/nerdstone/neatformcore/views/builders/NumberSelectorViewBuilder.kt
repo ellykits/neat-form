@@ -11,10 +11,7 @@ import androidx.core.content.ContextCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
-import com.nerdstone.neatformcore.utils.getViewsByTagValue
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.widgets.NumberSelectorNFormView
 import timber.log.Timber
 import java.util.*
@@ -26,7 +23,8 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
     private var lastNumber = visibleNumbers
     private var maxValue = visibleNumbers
     private val numberSelectorNFormView = nFormView as NumberSelectorNFormView
-    override val acceptedAttributes = Utils.convertEnumToSet(NumberSelectorProperties::class.java)
+    override val acceptedAttributes = NumberSelectorProperties::class.java.convertEnumToSet()
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     enum class NumberSelectorProperties {
         MAX_VALUE, TEXT, FIRST_NUMBER, VISIBLE_NUMBERS
@@ -42,11 +40,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
     override fun buildView() {
         createLabel()
         initNumbers()
-        ViewUtils.applyViewAttributes(
-            nFormView = numberSelectorNFormView,
-            acceptedAttributes = acceptedAttributes,
-            task = this::setViewProperties
-        )
+        numberSelectorNFormView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
     }
 
     private fun createLabel() {
@@ -56,9 +50,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
             )
         )
         numberSelectorNFormView.addView(
-            ViewUtils.addViewLabel(
-                Pair(NumberSelectorProperties.TEXT.name, text!!), numberSelectorNFormView
-            )
+            numberSelectorNFormView.addViewLabel(Pair(NumberSelectorProperties.TEXT.name, text!!))
         )
     }
 
@@ -69,7 +61,6 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
             visibleNumbers = it[Constants.VISIBLE_NUMBERS].toString().toInt()
         }
     }
-
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
@@ -193,7 +184,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorWhite)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources.getColor(R.color.colorWhite)
+                    ContextCompat.getColor(item.context, R.color.colorWhite)
                 )
             }
         } else {
@@ -202,7 +193,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorBlack)
                 )
                 else -> item.setTextColor(
-                    numberSelectorNFormView.context.resources.getColor(R.color.colorBlack)
+                        ContextCompat.getColor(item.context, R.color.colorBlack)
                 )
             }
         }

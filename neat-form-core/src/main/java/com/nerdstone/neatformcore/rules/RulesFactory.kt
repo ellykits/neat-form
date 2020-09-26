@@ -8,7 +8,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
-import com.nerdstone.neatformcore.utils.Utils
+import com.nerdstone.neatformcore.utils.extractKeyValue
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.RuleListener
@@ -135,7 +135,7 @@ class RulesFactory : RuleListener {
     fun registerSubjects(subjects: List<String>, viewProperty: NFormViewProperty) {
         subjects.forEach { subject ->
 
-            val (key, dataType) = Utils.extractKeyValue(subject)
+            val (key, dataType) = subject.extractKeyValue()
             setDefaultFact(key, dataType)
 
             if (!subjectsRegistry.containsKey(key)) {

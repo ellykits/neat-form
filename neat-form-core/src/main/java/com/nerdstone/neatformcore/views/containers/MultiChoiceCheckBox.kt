@@ -10,8 +10,8 @@ import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.handleRequiredStatus
+import com.nerdstone.neatformcore.utils.pixelsToSp
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.handlers.ViewVisibilityChangeHandler
 
@@ -40,7 +40,7 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
         setupViewAttributes(attrs)
     }
 
-    override fun trackRequiredField() = ViewUtils.handleRequiredStatus(this)
+    override fun trackRequiredField() = handleRequiredStatus()
 
     override fun resetValueWhenHidden() {
         viewBuilder.resetCheckBoxValues()
@@ -69,15 +69,11 @@ class MultiChoiceCheckBox : LinearLayout, NFormView {
                 attrs, R.styleable.MultiChoiceCheckBox, 0, 0
             )
             try {
-                checkBoxOptionsTextSize = Utils.pixelsToSp(
-                    context, typedArray.getDimension(
-                        R.styleable.MultiChoiceCheckBox_options_text_size, 0f
-                    )
+                checkBoxOptionsTextSize = context.pixelsToSp(
+                    typedArray.getDimension(R.styleable.MultiChoiceCheckBox_options_text_size, 0f)
                 )
-                labelTextSize = Utils.pixelsToSp(
-                    context, typedArray.getDimension(
-                        R.styleable.MultiChoiceCheckBox_label_text_size, 0f
-                    )
+                labelTextSize = context.pixelsToSp(
+                    typedArray.getDimension(R.styleable.MultiChoiceCheckBox_label_text_size, 0f)
                 )
             } finally {
                 typedArray.recycle()

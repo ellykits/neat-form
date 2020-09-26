@@ -7,8 +7,8 @@ import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.pixelsToSp
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.MultiChoiceCheckBoxViewBuilder
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import io.mockk.spyk
@@ -50,7 +50,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         checkBoxOption4.text = "None"
         checkBoxOption4.viewAttributes = hashMapOf()
         multiChoiceCheckBox.viewProperties = viewProperty
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
+        multiChoiceCheckBox.setupView(viewProperty, formBuilder)
     }
 
     @Test
@@ -64,12 +64,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
 
         val textView = view.findViewById<TextView>(R.id.labelTextView)
         Assert.assertTrue(textView.text.toString() == text)
-        Assert.assertTrue(
-            textView.textSize == Utils.pixelsToSp(
-                textView.context,
-                labelTextSize.toFloat()
-            )
-        )
+        Assert.assertTrue(textView.textSize == textView.context.pixelsToSp(labelTextSize.toFloat()))
         Assert.assertTrue(multiChoiceCheckBox.findViewById<TextView>(R.id.errorMessageTextView).visibility == View.GONE)
     }
 
@@ -126,7 +121,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty,  formBuilder)
+        multiChoiceCheckBox.setupView(viewProperty, formBuilder)
         //Select 2 checkboxes and ensure value map contains the 2 checkboxes
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
@@ -155,7 +150,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
+        multiChoiceCheckBox.setupView(viewProperty, formBuilder)
         //An exclusive option can only be selected independently
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox //kotlin
         val checkBox3 = multiChoiceCheckBox.getChildAt(3) as CheckBox //don't know
@@ -183,7 +178,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to text)
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
+        multiChoiceCheckBox.setupView(viewProperty, formBuilder)
         val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox
         val checkBox2 = multiChoiceCheckBox.getChildAt(2) as CheckBox
         checkBox1.isChecked = true
@@ -200,7 +195,7 @@ class MultiChoiceCheckBoxViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your languages")
         viewProperty.options =
             listOf(checkBoxOption1, checkBoxOption2, checkBoxOption3, checkBoxOption4)
-        ViewUtils.setupView(multiChoiceCheckBox, viewProperty, formBuilder)
+        multiChoiceCheckBox.setupView(viewProperty, formBuilder)
         val valueHashMap = mapOf(
             "kotlin" to NFormViewData(value = "Kotlin"),
             "java" to NFormViewData(value = "Java")

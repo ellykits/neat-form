@@ -1,11 +1,10 @@
 package com.nerdstone.neatformcore.junit.utils
 
-import com.nerdstone.neatformcore.utils.Utils
-import io.mockk.mockkObject
+import com.nerdstone.neatformcore.utils.convertEnumToSet
+import com.nerdstone.neatformcore.utils.extractKeyValue
 import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 
 class UtilsTest {
@@ -16,28 +15,23 @@ class UtilsTest {
 
     private enum class EmptyEnum
 
-    @Before
-    fun `Before doing anything else`() {
-        mockkObject(Utils)
-    }
-
     @Test
     fun `Should extract a key value from colon separated text`() {
-        assertEquals(Pair("yes", "am required"), Utils.extractKeyValue("yes:am required"))
+        assertEquals(Pair("yes", "am required"), "yes:am required".extractKeyValue())
     }
 
     @Test
     fun `Should return a set when provided with enum`() {
         assertEquals(
             hashSetOf("THREE", "TWO", "ONE", "ZERO") as Any?,
-            Utils.convertEnumToSet(TestEnum::class.java)
+            TestEnum::class.java.convertEnumToSet()
         )
     }
 
     @Test
     fun `Should return an empty set when provided with empty enum`() {
         val emptyHashSet: HashSet<Any?> = HashSet()
-        assertEquals(emptyHashSet, Utils.convertEnumToSet(EmptyEnum::class.java))
+        assertEquals(emptyHashSet, EmptyEnum::class.java.convertEnumToSet())
     }
 
     @After

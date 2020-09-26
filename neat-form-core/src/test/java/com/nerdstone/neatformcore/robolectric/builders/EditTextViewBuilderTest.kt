@@ -4,7 +4,7 @@ import android.text.InputType
 import android.view.View
 import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.EditTextViewBuilder
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
@@ -26,7 +26,7 @@ class EditTextViewBuilderTest : BaseJsonViewBuilderTest() {
         viewProperty.type = "edit_text"
         //Set EditText properties and assign EditText view builder
         editTextNFormView.viewProperties = viewProperty
-        ViewUtils.setupView(editTextNFormView, viewProperty, formBuilder)
+        editTextNFormView.setupView(viewProperty, formBuilder)
     }
 
     @Test

@@ -3,13 +3,15 @@ package com.nerdstone.neatform.custom.builders
 import com.nerdstone.neatform.custom.views.CustomImageView
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.applyViewAttributes
+import com.nerdstone.neatformcore.utils.convertEnumToSet
 import java.util.*
 
 class CustomImageViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
-    override val acceptedAttributes = Utils.convertEnumToSet(ImageViewProperties::class.java)
+    override val acceptedAttributes = ImageViewProperties::class.java.convertEnumToSet()
+
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     private val customImageViewNFormView = nFormView as CustomImageView
 
@@ -19,7 +21,7 @@ class CustomImageViewBuilder(override val nFormView: NFormView) : ViewBuilder {
 
     override fun buildView() {
         imageSetup()
-        ViewUtils.applyViewAttributes(nFormView, acceptedAttributes, this::setViewProperties)
+        nFormView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
     }
 
     private fun imageSetup() {

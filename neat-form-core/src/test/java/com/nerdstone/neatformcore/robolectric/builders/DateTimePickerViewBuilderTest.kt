@@ -2,7 +2,7 @@ package com.nerdstone.neatformcore.robolectric.builders
 
 import android.view.View
 import com.nerdstone.neatformcore.domain.model.NFormViewProperty
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.builders.DateTimePickerViewBuilder
 import com.nerdstone.neatformcore.views.widgets.DateTimePickerNFormView
 import io.mockk.spyk
@@ -155,7 +155,7 @@ class DateTimePickerViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should validate the date picker widget`() {
-        ViewUtils.setupView(dateTimePickerNFormView, viewProperty, formBuilder)
+        dateTimePickerNFormView.setupView(viewProperty, formBuilder)
         dateTimePickerNFormView.viewDetails.value = 1589555422331
         Assert.assertTrue(dateTimePickerNFormView.validateValue())
     }

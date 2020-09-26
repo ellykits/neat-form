@@ -16,8 +16,8 @@ import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.form.common.FormActions
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.SingleRunner
-import com.nerdstone.neatformcore.utils.ViewUtils
 import com.nerdstone.neatformcore.utils.isNotNull
+import com.nerdstone.neatformcore.utils.updateFieldValues
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import kotlinx.coroutines.CoroutineScope
@@ -154,7 +154,7 @@ class StepFragment : Step {
         dataViewModel = (activity as FormActions).formBuilder.dataViewModel
         with(dataViewModel) {
             details.observe(viewLifecycleOwner, Observer {
-                ViewUtils.updateFieldValues(it, activity as Context, mutableSetOf())
+                (activity as Context).updateFieldValues(it, mutableSetOf())
             })
         }
     }

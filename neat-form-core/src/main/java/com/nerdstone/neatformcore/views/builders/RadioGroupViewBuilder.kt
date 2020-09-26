@@ -1,17 +1,14 @@
 package com.nerdstone.neatformcore.views.builders
 
-import android.os.Build
 import android.view.View
 import android.widget.RadioButton
+import androidx.core.widget.TextViewCompat
 import com.nerdstone.neatformcore.R
 import com.nerdstone.neatformcore.domain.builders.ViewBuilder
 import com.nerdstone.neatformcore.domain.model.NFormSubViewProperty
 import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.ViewUtils
-import com.nerdstone.neatformcore.utils.ViewUtils.setReadOnlyState
-import com.nerdstone.neatformcore.utils.getViewsByTagValue
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import java.util.*
 
@@ -23,21 +20,19 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         TEXT
     }
 
-    override val acceptedAttributes get() = Utils.convertEnumToSet(RadioGroupViewProperties::class.java)
+    override val acceptedAttributes get() = RadioGroupViewProperties::class.java.convertEnumToSet()
+
+    override lateinit var resourcesMap: MutableMap<String, Int>
 
     override fun buildView() {
-        ViewUtils.applyViewAttributes(
-            nFormView = radioGroupView,
-            acceptedAttributes = acceptedAttributes,
-            task = this::setViewProperties
-        )
+        radioGroupView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
         createMultipleRadios()
     }
 
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         when (attribute.key.toUpperCase(Locale.getDefault())) {
             RadioGroupViewProperties.TEXT.name -> {
-                radioGroupView.addView(ViewUtils.addViewLabel(attribute.toPair(), radioGroupView))
+                radioGroupView.addView(radioGroupView.addViewLabel(attribute.toPair()))
             }
         }
     }
@@ -53,8 +48,8 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
         val radioButton = RadioButton(radioGroupView.context)
         radioButton.apply {
             text = nFormSubViewProperty.text
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(R.style.radioButtonStyle)
-            else setTextAppearance(radioGroupView.context, R.style.radioButtonStyle)
+            if (radioGroupView.viewProperties.getResourceFromAttribute().isNullOrEmpty())
+                TextViewCompat.setTextAppearance(this, R.style.radioButtonStyle)
             setTag(R.id.field_name, nFormSubViewProperty.name)
             setTag(R.id.is_radio_group_option, true)
             setOnCheckedChangeListener { radioButton, isChecked ->
@@ -64,8 +59,7 @@ open class RadioGroupViewBuilder(final override val nFormView: NFormView) : View
                             radioButton.getTag(R.id.field_name) to
                                     NFormViewData(
                                         null, radioButton.text.toString(),
-                                        Utils.getOptionMetadata(
-                                            radioGroupView,
+                                        radioGroupView.getOptionMetadata(
                                             radioButton.getTag(R.id.field_name) as String
                                         )
                                     )

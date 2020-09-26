@@ -86,7 +86,7 @@ class FormActivity : AppCompatActivity() {
                     JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm(views)
                 }
                 FormType.jsonFormStepperDefault -> {
-                    startStepperActivity(formData.filePath, true)
+                    startStepperActivity(formData.filePath)
                 }
                 FormType.jsonFormStepperCustomized -> {
                     startStepperActivity(formData.filePath)

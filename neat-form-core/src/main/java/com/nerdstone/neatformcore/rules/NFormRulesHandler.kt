@@ -8,7 +8,8 @@ import com.nerdstone.neatformcore.domain.view.RulesHandler
 import com.nerdstone.neatformcore.utils.Constants
 import com.nerdstone.neatformcore.utils.Constants.RuleActions.CALCULATION
 import com.nerdstone.neatformcore.utils.DisposableList
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.findViewWithKey
+import com.nerdstone.neatformcore.utils.getKey
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
 import java.lang.ref.WeakReference
@@ -34,9 +35,7 @@ object NFormRulesHandler : RulesHandler {
     override fun handleSkipLogic(facts: Facts?) {
         val suffix = Constants.RuleActions.VISIBILITY
         filterCurrentRules(suffix)
-            .map { name ->
-                ViewUtils.getKey(name, suffix)
-            }
+            .map { name -> name.getKey(suffix) }
             .forEach { key ->
                 facts?.also {
                     hideOrShowField(key, it.get<Boolean>("$key${Constants.RuleActions.VISIBILITY}"))
@@ -67,10 +66,7 @@ object NFormRulesHandler : RulesHandler {
         calculationListeners.get().forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        val view = formBuilder.get()?.context?.let { ViewUtils.findViewWithKey(key, it) }
-        if (view != null) {
-            changeVisibility(isVisible, view)
-        }
+        formBuilder.get()?.context?.findViewWithKey(key)?.also {changeVisibility(isVisible, it)  }
     }
 
     override fun changeVisibility(value: Boolean?, view: View) = if (value != null)

@@ -7,9 +7,11 @@
       "fields": [
         {
           "name": "adult",
-          "type": "text_input_edit_text",
+          "type": "edit_text",
           "properties": {
-            "hint": "This is an adult"
+            "hint": "This is an adult",
+            "style": "SampleEditTextStyle",
+            "background": "bordered_edit_text"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -27,9 +29,12 @@
         },
         {
           "name": "age",
-          "type": "text_input_edit_text",
+          "type": "edit_text",
           "properties": {
-            "hint": "Enter your age"
+            "hint": "Enter your age",
+            "style": "SampleEditTextStyle",
+            "background": "bordered_edit_text",
+            "input_type": "number"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -40,9 +45,11 @@
         },
         {
           "name": "child",
-          "type": "text_input_edit_text",
+          "type": "edit_text",
           "properties": {
-            "hint": "I am a child"
+            "hint": "I am a child",
+            "style": "SampleEditTextStyle",
+            "background": "bordered_edit_text"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -56,7 +63,8 @@
           "name": "email_subscription",
           "type": "checkbox",
           "properties": {
-            "text": "Subscribe to email notifications"
+            "text": "Subscribe to email notifications",
+            "style": "SampleCheckboxStyle"
           },
           "required_status": "yes:Please specify if you want subscription",
           "subjects": "age:number"
@@ -152,8 +160,7 @@
           "name": "language_none",
           "type": "edit_text",
           "properties": {
-            "hint": "Specify your language",
-            "type": "name"
+            "hint": "Specify your language"
           },
           "meta_data": {
             "openmrs_entity": "",
@@ -190,8 +197,7 @@
           "name": "wiki_contribution_yes",
           "type": "edit_text",
           "properties": {
-            "hint": "What was your contribution?",
-            "type": "name"
+            "hint": "What was your contribution?"
           },
           "required_status": "true:Please specify your contributions",
           "subjects": "wiki_contribution:map"
@@ -204,7 +210,8 @@
             "type": "date_picker",
             "display_format": "dd/MM/yyyy",
             "min_date": "today-80y",
-            "max_date": "today"
+            "max_date": "today",
+            "style": "SampleTextInputLayoutStyle"
           },
           "required_status": "true:Please specify your dob"
         },
@@ -214,7 +221,8 @@
           "properties": {
             "hint": "Enter time you clocked in",
             "type": "time_picker",
-            "display_format": "hh:m a"
+            "display_format": "hh:m a",
+            "style": "SampleTextInputLayoutStyle"
           },
           "required_status": "true:Please specify the time you clocked in"
         },

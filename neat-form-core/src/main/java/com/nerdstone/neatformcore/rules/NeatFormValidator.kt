@@ -9,10 +9,7 @@ import com.nerdstone.neatformcore.domain.model.NFormFieldValidation
 import com.nerdstone.neatformcore.domain.model.NFormViewDetails
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.domain.view.NFormView
-import com.nerdstone.neatformcore.utils.Utils
-import com.nerdstone.neatformcore.utils.VALIDATION_RESULT
-import com.nerdstone.neatformcore.utils.VALUE
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.*
 import com.nerdstone.neatformcore.viewmodel.DataViewModel
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rule
@@ -44,13 +41,11 @@ class NeatFormValidator : FormValidator {
         if (viewDetails.view.visibility == View.VISIBLE) {
             if ((viewDetails.value == null || viewDetails.value is HashMap<*, *>
                         && (viewDetails.value as HashMap<*, *>).isEmpty())
-                && Utils.isFieldRequired(nFormView)
+                && nFormView.isFieldRequired()
             ) {
                 invalidFields.add(viewDetails.name)
                 val errorMessage =
-                    nFormView.viewProperties.requiredStatus?.let {
-                        Utils.extractKeyValue(it).second
-                    }
+                    nFormView.viewProperties.requiredStatus?.let { it.extractKeyValue().second }
                 return Pair(false, errorMessage)
             }
             if (nFormView.viewProperties.validations != null) {
@@ -102,7 +97,7 @@ class NeatFormValidator : FormValidator {
      */
     private fun performValidation(validation: NFormFieldValidation, viewDetails: NFormViewDetails): Boolean {
         facts.put(VALIDATION_RESULT, false)
-        val dataViewModel:DataViewModel = ViewUtils.getDataViewModel(viewDetails)
+        val dataViewModel:DataViewModel = viewDetails.getDataViewModel()
         facts.asMap().putAll(getFormData(dataViewModel))
         facts.put(VALUE, viewDetails.value)
 
@@ -121,5 +116,4 @@ class NeatFormValidator : FormValidator {
     private fun getFormData(dataViewModel: DataViewModel): MutableMap<String, Any?> {
         return dataViewModel.details.value?.mapValuesTo(mutableMapOf(), { entry -> entry.value })!!
     }
-
 }

@@ -7,7 +7,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewProperty
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
 import com.nerdstone.neatformcore.rules.NFormRulesHandler
 import com.nerdstone.neatformcore.rules.RulesFactory
-import com.nerdstone.neatformcore.utils.ViewUtils
+import com.nerdstone.neatformcore.utils.setupView
 import com.nerdstone.neatformcore.views.widgets.EditTextNFormView
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -40,7 +40,7 @@ class RulesFactoryTest: BaseJsonViewBuilderTest() {
             viewMetadata = hashMapOf()
             calculations = listOf("decade")
         }
-        ViewUtils.setupView(view, viewProperties, formBuilder)
+        view.setupView(viewProperties, formBuilder)
         view.id = 1
         view.visibility = View.GONE
 
