@@ -66,10 +66,7 @@ object NFormRulesHandler : RulesHandler {
         calculationListeners.get().forEach { it.onCalculationChanged(calculation) }
 
     fun hideOrShowField(key: String, isVisible: Boolean?) {
-        val view = formBuilder.get()?.context?.let { it.findViewWithKey(key) }
-        if (view != null) {
-            changeVisibility(isVisible, view)
-        }
+        formBuilder.get()?.context?.findViewWithKey(key)?.also {changeVisibility(isVisible, it)  }
     }
 
     override fun changeVisibility(value: Boolean?, view: View) = if (value != null)

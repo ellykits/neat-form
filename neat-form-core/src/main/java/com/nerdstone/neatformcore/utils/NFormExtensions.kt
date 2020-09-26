@@ -60,7 +60,7 @@ private fun RootView.buildView(
 ) {
     val context = (this as View).context
     if (buildFromLayout) {
-        val view = (this).findViewById<View>(
+        val view = this.findViewById<View>(
             context.resources.getIdentifier(viewProperty.name, ID, context.packageName)
         )
         try {
