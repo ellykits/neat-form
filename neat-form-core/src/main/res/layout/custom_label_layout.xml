@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/errorMessageTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/error_popup_border"
+        android:background="@color/colorBlack"
         android:padding="@dimen/error_text_view_padding"
         android:layout_marginBottom="8dp"
-        android:layout_gravity="start"
-        android:textColor="@color/colorRed"
+        android:layout_gravity="end"
+        android:textColor="@color/colorWhite"
         android:visibility="gone" />
 
     <TextView

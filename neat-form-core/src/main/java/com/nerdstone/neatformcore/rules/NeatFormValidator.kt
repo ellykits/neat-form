@@ -45,7 +45,7 @@ class NeatFormValidator : FormValidator {
             ) {
                 invalidFields.add(viewDetails.name)
                 val errorMessage =
-                    nFormView.viewProperties.requiredStatus?.let { it.extractKeyValue().second }
+                        nFormView.viewProperties.requiredStatus?.extractKeyValue()?.second
                 return Pair(false, errorMessage)
             }
             if (nFormView.viewProperties.validations != null) {

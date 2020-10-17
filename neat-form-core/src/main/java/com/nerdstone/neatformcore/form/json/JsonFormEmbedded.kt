@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.utils.isNotNull
@@ -68,7 +67,7 @@ class JsonFormEmbedded(
                 jsonFormBuilder.addViewsToVerticalRootView(views, index, formContent, rootView)
             }
             mainLayout.addView(formViews)
-            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, Observer {
+            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, {
                 context.updateFieldValues(it, jsonFormBuilder.readOnlyFields)
             })
         }

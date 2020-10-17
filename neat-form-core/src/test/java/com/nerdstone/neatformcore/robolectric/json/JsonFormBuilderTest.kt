@@ -47,7 +47,7 @@ class JsonFormBuilderTest {
     private lateinit var jsonFormBuilder: JsonFormBuilder
     private lateinit var jsonFormStepper: JsonFormStepper
     private lateinit var jsonFormEmbedded: JsonFormEmbedded
-    var observer: Observer<HashMap<String, NFormViewData>> = spyk()
+    private var observer: Observer<HashMap<String, NFormViewData>> = spyk()
     private val previousFormData = """
         {
             "age": {

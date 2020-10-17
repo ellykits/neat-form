@@ -27,15 +27,15 @@ class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHol
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val form: FormData = formList[position]
         form.also {
-            holder.formCategoryTextView?.text = it.formCategory.capitalize()
-            holder.formTitleTextView?.text = it.formTitle.capitalizeWords()
+            holder.formCategoryTextView.text = it.formCategory.capitalize()
+            holder.formTitleTextView.text = it.formTitle.capitalizeWords()
         }
     }
 
     inner class MainViewHolder(rowSection: View) : RecyclerView.ViewHolder(rowSection) {
 
-        val formTitleTextView = rowSection.findViewById<TextView?>(R.id.formTitleTextView)
-        val formCategoryTextView = rowSection.findViewById<TextView?>(R.id.formCategoryTextView)
+        val formTitleTextView: TextView = rowSection.findViewById(R.id.formTitleTextView)
+        val formCategoryTextView: TextView = rowSection.findViewById(R.id.formCategoryTextView)
 
         init {
             rowSection.tag = this

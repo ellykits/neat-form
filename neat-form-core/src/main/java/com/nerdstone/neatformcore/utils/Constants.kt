@@ -6,7 +6,6 @@ package com.nerdstone.neatformcore.utils
  * ======================================================================================================
  */
 const val ID = "id"
-const val DRAWABLE = "drawable"
 const val VALUE = "value"
 const val VALIDATION_RESULT = "validationResults"
 

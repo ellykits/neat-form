@@ -137,7 +137,7 @@ private fun NFormView.addRequiredFields() {
 
 /**
  * This method is the one responsible for mapping the JSON string [acceptedAttributes] to actual
- * view attributes to [nFormView]. [task] is a the method that is responsible for applying these
+ * view attributes to [NFormView]. [task] is a the method that is responsible for applying these
  * properties
  */
 fun NFormView.applyViewAttributes(
@@ -153,7 +153,7 @@ fun NFormView.applyViewAttributes(
 
 /**
  * This method extracts the value from the provided [attribute] and uses it as the text that will
- * be displayed on the top label of [nFormView]
+ * be displayed on the top label of [NFormView]
  */
 fun NFormView.addViewLabel(attribute: Pair<String, Any>): LinearLayout {
     val layout = View.inflate((this as View).context, R.layout.custom_label_layout, null)
@@ -173,7 +173,7 @@ fun NFormView.addViewLabel(attribute: Pair<String, Any>): LinearLayout {
 }
 
 /**
- * When a field represented by this [nFormView] is required it must be filled otherwise
+ * When a field represented by this [NFormView] is required it must be filled otherwise
  * data will not be valid and an empty map will be returned if you try to access the form data.
  */
 fun NFormView.handleRequiredStatus() {

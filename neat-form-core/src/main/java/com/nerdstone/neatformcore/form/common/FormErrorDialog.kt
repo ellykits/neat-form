@@ -16,7 +16,7 @@ class FormErrorDialog(context: Context) : AlertDialog(context, R.style.ErrorDial
         super.onCreate(savedInstanceState)
         setContentView(R.layout.form_error_dialog)
         setCanceledOnTouchOutside(false)
-        dialogView = window!!.decorView.findViewById<View>(android.R.id.content)
+        dialogView = window!!.decorView.findViewById(android.R.id.content)
         findViewById<Button>(R.id.error_dialog_button).setOnClickListener {
             this.dismiss()
         }

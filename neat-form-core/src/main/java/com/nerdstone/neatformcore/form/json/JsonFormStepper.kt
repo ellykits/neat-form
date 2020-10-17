@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
@@ -153,7 +152,7 @@ class StepFragment : Step {
         super.onActivityCreated(savedInstanceState)
         dataViewModel = (activity as FormActions).formBuilder.dataViewModel
         with(dataViewModel) {
-            details.observe(viewLifecycleOwner, Observer {
+            details.observe(viewLifecycleOwner, {
                 (activity as Context).updateFieldValues(it, mutableSetOf())
             })
         }
