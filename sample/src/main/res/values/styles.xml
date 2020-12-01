@@ -9,19 +9,19 @@
 
     <style name="SampleTextInputLayoutStyle">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColorHint">@color/colorPrimaryDark</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:textColorHint">@color/colorDarkGrey</item>
+        <item name="android:textColorPrimary">@color/colorDarkGrey</item>
     </style>
 
     <style name="SampleEditTextStyle" parent="android:Widget.EditText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorDarkGrey</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:paddingStart">8dp</item>
     </style>
 
     <style name="SampleCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="buttonTint">@android:color/holo_purple</item>
+        <item name="buttonTint">@color/colorDarkGrey</item>
         <item name="android:textSize">18sp</item>
     </style>
 </resources>

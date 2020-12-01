@@ -193,7 +193,7 @@ open class NumberSelectorViewBuilder(final override val nFormView: NFormView) : 
                     ContextCompat.getColor(numberSelectorNFormView.context, R.color.colorBlack)
                 )
                 else -> item.setTextColor(
-                        ContextCompat.getColor(item.context, R.color.colorBlack)
+                    ContextCompat.getColor(item.context, R.color.colorBlack)
                 )
             }
         }

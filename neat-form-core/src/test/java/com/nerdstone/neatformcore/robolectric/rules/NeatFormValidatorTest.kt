@@ -12,6 +12,7 @@ import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormConstants
 import com.nerdstone.neatformcore.form.json.JsonFormEmbedded
 import com.nerdstone.neatformcore.robolectric.builders.BaseJsonViewBuilderTest
+import com.nerdstone.neatformcore.utils.getOptionMetadata
 import com.nerdstone.neatformcore.views.containers.MultiChoiceCheckBox
 import com.nerdstone.neatformcore.views.containers.RadioGroupView
 import com.nerdstone.neatformcore.views.containers.VerticalRootView
@@ -28,6 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.LooperMode
 
 const val VALIDATION_FORM = """
 {
@@ -181,8 +183,7 @@ const val VALIDATION_FORM = """
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestNeatFormApp::class)
 @ExperimentalCoroutinesApi
-//@Ignore("I still don't understand how this test passes individually but fails when run with others")
-class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
+class NeatFormValidatorTest : BaseJsonViewBuilderTest() {
 
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
@@ -266,7 +267,7 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
                     "email_subscription"
                 )
             )
-            Assert.assertTrue((formData["gender"]?.value as NFormViewData).metadata != null)
+            Assert.assertNull((formData["gender"]?.value as NFormViewData).metadata)
             Assert.assertTrue((formData["choose_language"]?.value as HashMap<*, *>).size == 1)
             Assert.assertTrue(
                 (formData["wiki_contribution"]?.value as HashMap<*, *>).containsKey(
@@ -314,8 +315,16 @@ class NeatFormValidatorTest: BaseJsonViewBuilderTest() {
             checkBoxNFormView.viewDetails.view.visibility = View.VISIBLE
 
             val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
-            materialSpinner.setSelection(1)
-            materialSpinner.isSelected = true
+            materialSpinner.setSelection(1, false)
+            spinnerNFormView.dataActionListener?.onPassData(
+                spinnerNFormView.viewDetails.apply {
+                    value = NFormViewData(
+                        null, materialSpinner.item[materialSpinner.selectedItemPosition],
+                        null, true
+                    )
+                }
+            )
+
             spinnerNFormView.viewDetails.view.visibility = View.VISIBLE
 
             val checkBox1 = multiChoiceCheckBox.getChildAt(1) as CheckBox

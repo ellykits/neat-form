@@ -7,7 +7,7 @@ import com.nerdstone.neatformcore.domain.view.NFormView
  * widgets. For instances [acceptedAttributes] is a set of supported view attributes and  [resourcesMap]
  * is used to store styles that can be applied uniformly to this type of widget
  *
-*/
+ */
 interface ViewBuilder {
 
     val nFormView: NFormView

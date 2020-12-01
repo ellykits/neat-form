@@ -1,4 +1,5 @@
 @file:JvmName("NeatFormAndroidUtils")
+
 package com.nerdstone.neatformcore.utils
 
 import android.app.Activity

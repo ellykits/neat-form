@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -43,10 +44,12 @@ class SingleRunner {
      *    }
      * }
      * ```
-     *
+     *@param coroutineDispatcher Coroutine context used to run the job e.g, default, main, io
      * @param block the code to run after previous work is complete.
      */
-    suspend fun <T> afterPrevious(block: suspend () -> T): T {
+    suspend fun <T> afterPrevious(
+        coroutineDispatcher: CoroutineDispatcher, block: suspend () -> T
+    ): T {
         // Before running the block, ensure that no other blocks are running by taking a lock on the
         // mutex.
 
@@ -54,8 +57,8 @@ class SingleRunner {
 
         // If any other block were already running when we get here, it will wait for it to complete
         // before entering the `withLock` block.
-        mutex.withLock {
-            return block()
+        return withContext(coroutineDispatcher) {
+            mutex.withLock { block() }
         }
     }
 }

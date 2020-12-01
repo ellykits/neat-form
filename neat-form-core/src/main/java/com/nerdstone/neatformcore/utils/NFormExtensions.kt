@@ -308,14 +308,9 @@ fun String.addRedAsteriskSuffix(): SpannableString {
 
 fun String.getKey(suffix: String) = this.substringBefore(suffix)
 
+fun String.removeAsterisk() = this.trim().removeSuffix("*").trim()
 
-fun String.removeAsterisk(): String {
-    return this.trim().removeSuffix("*").trim()
-}
-
-fun Any?.isNotNull(): Boolean {
-    return this != null
-}
+fun Any?.isNotNull() = this != null
 
 fun String.extractKeyValue(): Pair<String, String> {
     val keyDataType = splitText(":")

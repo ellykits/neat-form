@@ -130,7 +130,7 @@ open class NotificationViewBuilder(final override val nFormView: NFormView) : Vi
             setOnClickListener {
                 val dialogTitleAndText = getDialogTitleAndText()
                 notificationView.context.createAlertDialog(
-                     dialogTitleAndText.first, dialogTitleAndText.second
+                    dialogTitleAndText.first, dialogTitleAndText.second
                 ).apply {
                     setCancelable(true)
                     setNegativeButton(R.string.ok) { _, _ -> return@setNegativeButton }

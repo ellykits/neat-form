@@ -21,7 +21,7 @@ open class CheckBoxViewBuilder(final override val nFormView: NFormView) : ViewBu
     }
 
     override fun buildView() {
-        checkBoxNFormView.applyViewAttributes( acceptedAttributes, this::setViewProperties)
+        checkBoxNFormView.applyViewAttributes(acceptedAttributes, this::setViewProperties)
         with(checkBoxNFormView) {
             if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
                 text = text.toString().addRedAsteriskSuffix()

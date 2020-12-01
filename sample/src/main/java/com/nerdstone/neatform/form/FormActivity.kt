@@ -69,13 +69,6 @@ class FormActivity : AppCompatActivity() {
                 FormType.jsonFromEmbeddedDefault -> {
                     formBuilder = JsonFormBuilder(this, formData.filePath)
                     formBuilder?.also {
-                        it.registeredViews["custom_image"] = CustomImageView::class
-                        it.withFormData(
-                            Constants.PREVIOUS_DATA, mutableSetOf(
-                                "dob", "time", "email_subscription", "country",
-                                "no_prev_pregnancies", "choose_language", "wiki_contribution"
-                            )
-                        )
                         JsonFormEmbedded(formBuilder as JsonFormBuilder, formLayout).buildForm()
                     }
                 }

@@ -10,7 +10,7 @@ object ViewVisibilityChangeHandler : VisibilityChangeListener {
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         changedView.animateView()
-        with(changedView){
+        with(changedView) {
             if (this is NFormView) {
                 if (visibility == View.GONE && viewDetails.value.isNotNull()
                     && initialValue == null

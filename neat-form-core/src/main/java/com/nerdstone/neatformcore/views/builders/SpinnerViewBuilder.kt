@@ -74,11 +74,9 @@ open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBui
                     adapterView: AdapterView<*>, view: View, position: Int, id: Long
                 ) {
                     with(spinnerNFormView) {
+                        val optionText = optionsNamesMap.getValue(position)
                         viewDetails.value =
-                            NFormViewData(
-                                null, item[position],
-                                optionsNamesMap[position]?.let { getOptionMetadata(it) }
-                            )
+                            NFormViewData(null, item[position], getOptionMetadata(optionText))
                         dataActionListener?.onPassData(viewDetails)
                     }
                 }
@@ -96,7 +94,7 @@ open class SpinnerViewBuilder(final override val nFormView: NFormView) : ViewBui
 
     fun resetSpinnerValue() {
         materialSpinner.clearSelection()
-        with(spinnerNFormView){
+        with(spinnerNFormView) {
             viewDetails.value = null
             dataActionListener?.onPassData(viewDetails)
         }

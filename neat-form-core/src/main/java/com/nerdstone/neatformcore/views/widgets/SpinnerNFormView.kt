@@ -43,10 +43,10 @@ class SpinnerNFormView : LinearLayout, NFormView {
         viewBuilder.materialSpinner.apply {
             when (value) {
                 is Map<*, *> -> {
-                    setSelection(item.indexOf(value[VALUE]))
+                    setSelection(item.indexOf(value[VALUE]), false)
                 }
                 is NFormViewData -> {
-                    setSelection(item.indexOf(value.value as String))
+                    setSelection(item.indexOf(value.value as String), false)
                 }
             }
             setReadOnlyState(enabled)

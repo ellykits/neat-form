@@ -67,7 +67,7 @@ class JsonFormBuilder() : FormBuilder {
     var form: NForm? = null
     var fileSource: String? = null
     var formDataJson: String? = null
-    override var formString: String? = null
+    override lateinit var formString: String
 
     constructor(context: Context, fileSource: String) : this() {
         this.context = context
@@ -91,9 +91,9 @@ class JsonFormBuilder() : FormBuilder {
         defaultContextProvider = DefaultDispatcherProvider()
     }
 
-    internal fun parseJsonForm(): NForm? {
-        return when {
-            formString.isNotNull() -> parseJson<NForm>(formString)
+    internal fun parseJsonForm() {
+        form = when {
+            this::formString.isInitialized && formString.isNotNull() -> parseJson<NForm>(formString)
             fileSource.isNotNull() -> parseJson<NForm>(
                 AssetFile.readAssetFileAsString(context, fileSource!!)
             )
