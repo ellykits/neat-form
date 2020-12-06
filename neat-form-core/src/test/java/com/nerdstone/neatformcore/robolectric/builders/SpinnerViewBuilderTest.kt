@@ -15,31 +15,34 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
+class SpinnerViewBuilderTest : BaseJsonViewBuilderTest() {
 
     private val viewProperty = spyk(NFormViewProperty())
-    private val spinnerOption1 = spyk(NFormSubViewProperty())
-    private val spinnerOption2 = spyk(NFormSubViewProperty())
-    private val spinnerOption3 = spyk(NFormSubViewProperty())
     private val spinnerNFormView = SpinnerNFormView(activity.get())
-    private val spinnerViewBuilder =
-        spyk(objToCopy = SpinnerViewBuilder(spinnerNFormView), recordPrivateCalls = true)
+    private lateinit var spinnerViewBuilder: SpinnerViewBuilder
 
     @Before
     fun `Before doing anything else`() {
         viewProperty.name = "gender"
         viewProperty.type = "spinner"
-        spinnerNFormView.viewProperties = viewProperty
 
         //Add options
-        spinnerOption1.name = "dont_know"
-        spinnerOption1.text = "Don't know"
+        val spinnerOption1 = NFormSubViewProperty().apply {
+            name = "dont_know"
+            text = "Don't know"
+        }
+        val spinnerOption2 = NFormSubViewProperty().apply {
+            name = "female"
+            text = "Female"
+        }
+        val spinnerOption3 = NFormSubViewProperty().apply {
+            name = "male"
+            text = "Male"
+        }
 
-        spinnerOption2.name = "female"
-        spinnerOption2.text = "Female"
-
-        spinnerOption3.name = "male"
-        spinnerOption3.text = "Male"
+        spinnerNFormView.viewProperties =
+            viewProperty.apply { options = listOf(spinnerOption1, spinnerOption2, spinnerOption3) }
+        spinnerViewBuilder = spinnerNFormView.viewBuilder
     }
 
     @Test
@@ -61,7 +64,8 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
         spinnerViewBuilder.buildView()
         val view = spinnerNFormView.getChildAt(0)
         Assert.assertTrue(
-            (view as SmartMaterialSpinner<*>).hint.toString().isNotEmpty() &&  view.hint.toString().endsWith("*")
+            (view as SmartMaterialSpinner<*>).hint.toString().isNotEmpty() && view.hint.toString()
+                .endsWith("*")
         )
     }
 
@@ -69,10 +73,7 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
     fun `Should add options to the spinner`() {
         val text = "Pick gender"
         viewProperty.viewAttributes = hashMapOf("text" to text)
-        viewProperty.options =
-            listOf(spinnerOption1, spinnerOption2, spinnerOption3)
         spinnerViewBuilder.buildView()
-
         Assert.assertTrue(spinnerNFormView.childCount == 1)
         val view = spinnerNFormView.getChildAt(0)
         //First item is Label and the other
@@ -89,8 +90,6 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
     fun `Should reset spinner value when the view is gone`() {
         val text = "Pick gender"
         viewProperty.viewAttributes = hashMapOf("text" to text)
-        viewProperty.options =
-            listOf(spinnerOption1, spinnerOption2, spinnerOption3)
         spinnerNFormView.setupView(viewProperty, formBuilder)
         spinnerNFormView.visibility = View.GONE
         Assert.assertNull(spinnerNFormView.viewDetails.value)
@@ -102,29 +101,23 @@ class SpinnerViewBuilderTest : BaseJsonViewBuilderTest(){
     fun `Should set spinner value when an option is selected`() {
         val text = "Pick your gender"
         viewProperty.viewAttributes = hashMapOf("text" to text)
-        viewProperty.options =
-            listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        spinnerNFormView.setupView(viewProperty, formBuilder)
+        spinnerViewBuilder.buildView()
         val materialSpinner = spinnerNFormView.getChildAt(0) as SmartMaterialSpinner<*>
-        materialSpinner.setSelection(1)
-        materialSpinner.isSelected = true
-        Assert.assertTrue(materialSpinner.item[materialSpinner.selectedItemPosition]  == "Female")
+        materialSpinner.setSelection(1, false)
+        Assert.assertEquals(materialSpinner.item[materialSpinner.selectedItemPosition], "Female")
     }
 
     @Test
     fun `Should set value on spinner when provided`() {
         viewProperty.viewAttributes = hashMapOf("text" to "Pick your gender")
-        viewProperty.options =
-            listOf(spinnerOption1, spinnerOption2, spinnerOption3)
-        spinnerNFormView.setupView(viewProperty, formBuilder)
+        spinnerViewBuilder.buildView()
         val valueHashMap = mapOf("value" to "Female")
         spinnerNFormView.setValue(valueHashMap)
         Assert.assertEquals(spinnerNFormView.initialValue, valueHashMap)
-        Assert.assertTrue(spinnerNFormView.viewDetails.value is NFormViewData)
-        val viewData = spinnerNFormView.viewDetails.value as NFormViewData
-        Assert.assertEquals(viewData.value ,"Female")
+        val materialSpinner = spinnerNFormView.viewBuilder.materialSpinner
+        Assert.assertEquals(materialSpinner.item[materialSpinner.selectedItemPosition], "Female")
         spinnerNFormView.setValue(NFormViewData(value = "Male"))
-        Assert.assertEquals((spinnerNFormView.viewDetails.value as NFormViewData).value ,"Male")
+        Assert.assertEquals(materialSpinner.item[materialSpinner.selectedItemPosition], "Male")
     }
 
     @After

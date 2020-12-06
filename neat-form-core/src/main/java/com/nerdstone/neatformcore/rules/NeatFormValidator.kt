@@ -45,7 +45,7 @@ class NeatFormValidator : FormValidator {
             ) {
                 invalidFields.add(viewDetails.name)
                 val errorMessage =
-                    nFormView.viewProperties.requiredStatus?.let { it.extractKeyValue().second }
+                    nFormView.viewProperties.requiredStatus?.extractKeyValue()?.second
                 return Pair(false, errorMessage)
             }
             if (nFormView.viewProperties.validations != null) {
@@ -95,9 +95,11 @@ class NeatFormValidator : FormValidator {
      * @param viewDetails details about the current view
      * @return true if validation passes false otherwise
      */
-    private fun performValidation(validation: NFormFieldValidation, viewDetails: NFormViewDetails): Boolean {
+    private fun performValidation(
+        validation: NFormFieldValidation, viewDetails: NFormViewDetails
+    ): Boolean {
         facts.put(VALIDATION_RESULT, false)
-        val dataViewModel:DataViewModel = viewDetails.getDataViewModel()
+        val dataViewModel: DataViewModel = viewDetails.getDataViewModel()
         facts.asMap().putAll(getFormData(dataViewModel))
         facts.put(VALUE, viewDetails.value)
 

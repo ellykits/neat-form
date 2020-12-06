@@ -32,7 +32,7 @@ import kotlin.reflect.KClass
  */
 interface FormBuilder {
 
-    var formString: String?
+    var formString: String
 
     val context: Context
 

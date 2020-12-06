@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.CustomExceptions
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.utils.isNotNull
 import com.nerdstone.neatformcore.utils.updateFieldValues
@@ -14,8 +14,6 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class JsonFormEmbedded(
     private val jsonFormBuilder: JsonFormBuilder, private val mainLayout: ViewGroup
@@ -26,34 +24,21 @@ class JsonFormEmbedded(
     fun buildForm(viewList: List<View>? = null): JsonFormEmbedded {
         jsonFormBuilder.registerViews()
         val context = jsonFormBuilder.context
-        launch(jsonFormBuilder.defaultContextProvider.main()) {
-            try {
-                if (jsonFormBuilder.form == null) {
-                    jsonFormBuilder.form =
-                        withContext(jsonFormBuilder.defaultContextProvider.default()) {
-                            singleRunner.afterPrevious {
-                                jsonFormBuilder.parseJsonForm()
-                            }
-                        }
+        val defaultContextProvider = jsonFormBuilder.defaultContextProvider
+        launch(defaultContextProvider.main() + CustomExceptions.coroutineExceptionHandler) {
+            if (jsonFormBuilder.form == null) {
+                singleRunner.afterPrevious(defaultContextProvider.default()) {
+                    jsonFormBuilder.parseJsonForm()
                 }
-
-                val rulesAsync = withContext(jsonFormBuilder.defaultContextProvider.io()) {
-                    singleRunner.afterPrevious {
-                        jsonFormBuilder.registerFormRulesFromFile(
-                            context,
-                            RulesFactory.RulesFileType.YAML
-                        )
-                    }
-                }
-                if (rulesAsync) {
-                    withContext(jsonFormBuilder.defaultContextProvider.main()) {
-                        createFormViews(context, viewList ?: arrayListOf())
-                    }
-                }
-            } catch (throwable: Throwable) {
-                Timber.e(throwable)
             }
+
+            val readRules = singleRunner.afterPrevious(defaultContextProvider.io()) {
+                jsonFormBuilder.registerFormRulesFromFile(context, RulesFileType.YAML)
+            }
+
+            if (readRules) createFormViews(context, viewList ?: arrayListOf())
         }
+
         jsonFormBuilder.preFillForm()
         return this
     }
@@ -62,13 +47,12 @@ class JsonFormEmbedded(
         if (jsonFormBuilder.form.isNotNull() && mainLayout.isNotNull()) {
             val formViews = ScrollView(context)
             jsonFormBuilder.form!!.steps.withIndex().forEach { (index, formContent) ->
-                val rootView =
-                    VerticalRootView(context).apply { formBuilder = jsonFormBuilder }
+                val rootView = VerticalRootView(context).apply { formBuilder = jsonFormBuilder }
                 formViews.addView(rootView.initRootView(jsonFormBuilder) as View)
                 jsonFormBuilder.addViewsToVerticalRootView(views, index, formContent, rootView)
             }
             mainLayout.addView(formViews)
-            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, Observer {
+            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, {
                 context.updateFieldValues(it, jsonFormBuilder.readOnlyFields)
             })
         }

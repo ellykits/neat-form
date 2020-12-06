@@ -8,7 +8,7 @@ import org.junit.Test
 
 class JsonParserTest {
 
-    private var json: String? = null
+    private lateinit var json: String
 
     @Before
     fun `Before everything else`() {
@@ -255,11 +255,5 @@ class JsonParserTest {
         assertEquals(property.options!![1].text, "Male")
         assertEquals(property.options!![0].viewMetadata!!.size.toLong(), 3)
         assertEquals(property.options!![1].viewMetadata!!.size.toLong(), 3)
-    }
-
-    @Test
-    fun `Should not parse empty JSON or null`() {
-        assertNull(JsonParser.parseJson<NForm>(null))
-        assertNull(JsonParser.parseJson<NForm>(""))
     }
 }

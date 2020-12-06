@@ -214,7 +214,7 @@
           "name": "dob",
           "type": "datetime_picker",
           "properties": {
-            "hint": "Enter birth date",
+            "hint": "Start date",
             "type": "date_picker",
             "display_format": "dd/MM/yyyy"
           },
@@ -224,7 +224,7 @@
           "name": "time",
           "type": "datetime_picker",
           "properties": {
-            "hint": "Enter time you clocked in",
+            "hint": "Start time",
             "type": "time_picker",
             "display_format": "hh:m a"
           },

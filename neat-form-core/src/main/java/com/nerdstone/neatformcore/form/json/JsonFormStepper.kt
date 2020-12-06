@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.nerdstone.neatandroidstepper.core.model.StepModel
 import com.nerdstone.neatandroidstepper.core.stepper.Step
 import com.nerdstone.neatandroidstepper.core.stepper.StepVerificationState
 import com.nerdstone.neatandroidstepper.core.stepper.StepperPagerAdapter
 import com.nerdstone.neatandroidstepper.core.widget.NeatStepperLayout
 import com.nerdstone.neatformcore.form.common.FormActions
-import com.nerdstone.neatformcore.rules.RulesFactory
+import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
+import com.nerdstone.neatformcore.utils.CustomExceptions
 import com.nerdstone.neatformcore.utils.SingleRunner
 import com.nerdstone.neatformcore.utils.isNotNull
 import com.nerdstone.neatformcore.utils.updateFieldValues
@@ -23,8 +23,6 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class JsonFormStepper(
     private val jsonFormBuilder: JsonFormBuilder, private val neatStepperLayout: NeatStepperLayout
@@ -35,34 +33,22 @@ class JsonFormStepper(
     fun buildForm(viewList: List<View>? = null): JsonFormStepper {
         jsonFormBuilder.registerViews()
         val defaultContextProvider = jsonFormBuilder.defaultContextProvider
-        launch(defaultContextProvider.main()) {
-            try {
-                if (jsonFormBuilder.form == null) {
-                    jsonFormBuilder.form = withContext(defaultContextProvider.default()) {
-                        singleRunner.afterPrevious {
-                            jsonFormBuilder.parseJsonForm()
-                        }
-                    }
+        launch(defaultContextProvider.main() + CustomExceptions.coroutineExceptionHandler) {
+            if (jsonFormBuilder.form == null) {
+                singleRunner.afterPrevious(defaultContextProvider.default()) {
+                    jsonFormBuilder.parseJsonForm()
                 }
-
-                val rulesAsync = withContext(defaultContextProvider.io()) {
-                    singleRunner.afterPrevious {
-                        jsonFormBuilder.registerFormRulesFromFile(
-                            jsonFormBuilder.context,
-                            RulesFactory.RulesFileType.YAML
-                        )
-                    }
-                }
-                if (rulesAsync) {
-                    withContext(defaultContextProvider.main()) {
-                        createFormViews(jsonFormBuilder.context, viewList ?: arrayListOf())
-                    }
-                }
-
-            } catch (throwable: Throwable) {
-                Timber.e(throwable)
             }
+
+            val readRules = singleRunner.afterPrevious(defaultContextProvider.io()) {
+                jsonFormBuilder.registerFormRulesFromFile(
+                    jsonFormBuilder.context, RulesFileType.YAML
+                )
+            }
+
+            if (readRules) createFormViews(jsonFormBuilder.context, viewList ?: arrayListOf())
         }
+
         jsonFormBuilder.preFillForm()
         return this
     }
@@ -153,7 +139,7 @@ class StepFragment : Step {
         super.onActivityCreated(savedInstanceState)
         dataViewModel = (activity as FormActions).formBuilder.dataViewModel
         with(dataViewModel) {
-            details.observe(viewLifecycleOwner, Observer {
+            details.observe(viewLifecycleOwner, {
                 (activity as Context).updateFieldValues(it, mutableSetOf())
             })
         }

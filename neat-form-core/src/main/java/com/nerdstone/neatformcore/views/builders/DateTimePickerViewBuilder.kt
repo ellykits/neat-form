@@ -23,6 +23,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ViewBuilder {
 
     private var dateDisplayFormat = "yyyy-MM-dd"
+    private var simpleDateFormat = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
     private var minDate: Long? = null
     private var maxDate: Long? = null
     private val dateTimePickerNFormView = nFormView as DateTimePickerNFormView
@@ -67,7 +68,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                     when {
                         attribute.value.toString() == DatePickerType.DATE_PICKER -> {
                             textInputEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                0, 0, R.drawable.ic_today, 0
+                                R.drawable.ic_today, 0, 0, 0
                             )
                             textInputEditText.setOnClickListener {
                                 launchDatePickerDialog()
@@ -75,7 +76,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                         }
                         attribute.value.toString() == DatePickerType.TIME_PICKER -> {
                             textInputEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                0, 0, R.drawable.ic_schedule, 0
+                                R.drawable.ic_schedule, 0, 0, 0
                             )
                             textInputEditText.setOnClickListener {
                                 launchTimePickerDialog()
@@ -85,6 +86,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                 }
                 DateTimePickerProperties.DISPLAY_FORMAT.name -> {
                     dateDisplayFormat = attribute.value.toString()
+                    simpleDateFormat = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
                 }
                 DateTimePickerProperties.MIN_DATE.name -> {
                     minDate = when {
@@ -111,16 +113,13 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
         }
     }
 
-    private fun setDate(attribute: Map.Entry<String, Any>): Long {
-        return SimpleDateFormat(
-            dateDisplayFormat, Locale.getDefault()
-        ).parse(attribute.value.toString()).time
-    }
+    private fun setDate(attribute: Map.Entry<String, Any>) =
+        simpleDateFormat.parse(attribute.value.toString())!!.time
 
     private fun formatHintForRequiredFields() {
         with(dateTimePickerNFormView) {
             if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
-                textInputEditText.hint =    textInputEditText.hint.toString().addRedAsteriskSuffix()
+                textInputEditText.hint = textInputEditText.hint.toString().addRedAsteriskSuffix()
             }
         }
     }
@@ -163,14 +162,10 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
     }
 
     fun updateViewData() {
-        textInputEditText.setText(getFormattedDate())
+        textInputEditText.setText(simpleDateFormat.format(Date(selectedDate.timeInMillis)))
         dateTimePickerNFormView.viewDetails.value = selectedDate.timeInMillis
         dateTimePickerNFormView.dataActionListener?.onPassData(dateTimePickerNFormView.viewDetails)
     }
-
-    private fun getFormattedDate(): String =
-        SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
-            .format(Date(selectedDate.timeInMillis))
 
     fun resetDatetimePickerValue() {
         textInputEditText.setText("")
@@ -196,7 +191,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                     Pattern.compile("$TODAY\\s*([-\\+])\\s*(\\d+)([dmywDMYW]{1})")
                 val matcher = pattern.matcher(dayString)
                 if (matcher.find()) {
-                    var timeValue = matcher.group(2).toInt()
+                    var timeValue = matcher.group(2)!!.toInt()
                     if ("-" == matcher.group(1)) {
                         timeValue *= -1
                     }
@@ -218,8 +213,7 @@ open class DateTimePickerViewBuilder(final override val nFormView: NFormView) :
                     calendarDate.add(field, timeValue)
                 } else {
                     try {
-                        calendarDate.time = SimpleDateFormat(dateDisplayFormat, Locale.getDefault())
-                            .parse(dayString)
+                        calendarDate.time = simpleDateFormat.parse(dayString)!!
                     } catch (e: ParseException) {
                         Timber.e(e)
                     }

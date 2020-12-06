@@ -53,8 +53,8 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
                 }
 
                 EditTextProperties.PADDING.name -> {
-                    val value =   editTextNFormView.context.pxToDp(
-                            (attribute.value as String).toFloat(),
+                    val value = editTextNFormView.context.pxToDp(
+                        (attribute.value as String).toFloat(),
                     )
                     setPadding(value, value, value, value)
                 }
@@ -66,7 +66,7 @@ open class EditTextViewBuilder(final override val nFormView: NFormView) : ViewBu
                 }
                 EditTextProperties.INPUT_TYPE.name -> {
                     getSupportedEditTextTypes()[attribute.value.toString()]
-                            ?.also { inputType = it }
+                        ?.also { inputType = it }
                 }
                 EditTextProperties.BACKGROUND.name -> {
                     resourcesMap[attribute.value.toString()]?.let { setBackgroundResource(it) }
