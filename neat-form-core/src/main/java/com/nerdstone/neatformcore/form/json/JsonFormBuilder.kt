@@ -12,6 +12,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
+import com.nerdstone.neatformcore.internationalization.LanguageHelper
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
@@ -25,8 +26,10 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
+import org.apache.commons.text.StringSubstitutor
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.*
 import kotlin.reflect.KClass
 
 object JsonFormConstants {
@@ -69,6 +72,8 @@ class JsonFormBuilder() : FormBuilder {
     var formDataJson: String? = null
     override lateinit var formString: String
 
+    var substitutorMap = mutableMapOf<String, StringSubstitutor>()
+
     constructor(context: Context, fileSource: String) : this() {
         this.context = context
         this.fileSource = fileSource
@@ -94,11 +99,40 @@ class JsonFormBuilder() : FormBuilder {
     internal fun parseJsonForm() {
         form = when {
             this::formString.isInitialized && formString.isNotNull() -> parseJson<NForm>(formString)
-            fileSource.isNotNull() -> parseJson<NForm>(
-                AssetFile.readAssetFileAsString(context, fileSource!!)
-            )
+            fileSource.isNotNull() -> {
+
+                val bundleName = fileSource!!.substring(fileSource!!.lastIndexOf('/') + 1, fileSource!!.lastIndexOf('.'))
+                val rawJsonStringTemplate: String = AssetFile.readAssetFileAsString(context, fileSource!!)
+
+                val interpolatedLocale = getStringSubstitutor(bundleName, Locale.getDefault())?.replace(rawJsonStringTemplate)
+                val interpolatedDefaultLocale = getStringSubstitutor(bundleName, Locale.ENGLISH)?.replace(interpolatedLocale)
+                        ?: interpolatedLocale ?: rawJsonStringTemplate
+
+                interpolatedDefaultLocale?.let {
+                    parseJson<NForm>(
+
+                            it
+                    )
+                }
+
+            }
             else -> null
         }
+    }
+
+    private fun getStringSubstitutor(basename: String, locale: Locale): StringSubstitutor? {
+        val key = basename + "_" + locale
+        var substitutor: StringSubstitutor? = substitutorMap.getOrDefault(key, null)
+
+        if (substitutor == null) {
+            substitutor = LanguageHelper.getBundleStringSubstitutor(basename, locale)
+            if (substitutor != null) {
+                substitutorMap[key] = substitutor
+            }
+        }
+        return substitutor;
+
+
     }
 
     internal fun addViewsToVerticalRootView(

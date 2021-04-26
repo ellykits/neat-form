@@ -1,0 +1,322 @@
+{
+  "form": "{{tb_registration_form_name}}",
+  "count": "1",
+  "encounter_type": "TB Registration",
+  "entity_id": "",
+  "relational_id": "",
+  "rules_file": "rules/yml/tb_registration_form_rules.yml",
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "steps": [
+    {
+      "title": "{{tb_client_registration_title}}",
+      "fields": [
+        {
+          "name": "community_client_tb_registration_number",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "{{community_client_tb_registration_number.hint}}"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "community_client_tb_registration_number",
+            "openmrs_entity_parent": ""
+          },
+          "required_status": "yes:{{community_client_tb_registration_number.required_status.validation_error}}"
+        },
+        {
+          "name": "client_tb_status_during_registration",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "client_tb_status_during_registration",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "{{client_tb_status_during_reg.properties.text}}"
+          },
+          "options": [
+            {
+              "name": "unknown",
+              "text": "{{client_tb_status_during_reg.options.unknown}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "unknown",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "positive",
+              "text": "{{client_tb_status_during_reg.options.positive}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "positive",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "negative",
+              "text": "{{client_tb_status_during_reg.options.negative}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "negative",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:{{client_tb_status_during_reg.required_status}}"
+        },
+        {
+          "name": "place_of_domicile",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "place_of_domicile",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "{{place_of_domicile.properties.text}}"
+          },
+          "options": [
+            {
+              "name": "a_family_with_tb_patient",
+              "text": "{{place_of_domicile.options.a_family_with_tb_patient}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "a_family_with_tb_patient",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "a_family_without_tb_patient",
+              "text": "{{place_of_domicile.options.a_family_without_tb_patient}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "a_family_without_tb_patient",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "community_gathering",
+              "text": "{{place_of_domicile.options.community_gathering}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "community_gathering",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "pharmacy",
+              "text": "{{place_of_domicile.options.pharmacy}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "pharmacy",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "traditional_doctors",
+              "text": "{{place_of_domicile.options.traditional_doctors}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "traditional_doctors",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:{{place_of_domicile.required_status}}"
+        },
+        {
+          "name": "community_gathering",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "community_gathering",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "{{community_gathering.properties.text.community_gathering}}"
+          },
+          "options": [
+            {
+              "name": "school",
+              "text": "{{community_gathering.options.school}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "school",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "worship_houses",
+              "text": "{{community_gathering.options.worship_houses}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "worship_houses",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "mining",
+              "text": "community_gathering.options.mining",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "mining",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "public_meetings",
+              "text": "community_gathering.options.public_meetings",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "public_meetings",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "prison",
+              "text": "community_gathering.options.prison",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "prison",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "others",
+              "text": "community_gathering.options.others",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "others",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:{{community_gathering.required_status}}",
+          "subjects": "place_of_domicile:text"
+        },
+        {
+          "name": "other_community_gathering",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "{{other_community_gathering.properties.hint}}"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "other_community_gathering",
+            "openmrs_entity_parent": ""
+          },
+          "required_status": "yes:{{other_community_gathering.required_status}}",
+          "subjects": "community_gathering:text"
+        },
+        {
+          "name": "client_screening_results",
+          "type": "spinner",
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "client_screening_results",
+            "openmrs_entity_parent": ""
+          },
+          "properties": {
+            "text": "{{client_screening_results.properties.text}}"
+          },
+          "options": [
+            {
+              "name": "coughing",
+              "text": "{{client_screening_results.options.coughing}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "coughing",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "hemoptysis",
+              "text": "{{client_screening_results.options.hemoptysis}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "hemoptysis",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "fever",
+              "text": "{{client_screening_results.options.fever}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "fever",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "weight_lose",
+              "text": "{{client_screening_results.options.weight_lose}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "weight_lose",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "history_of_night_sweats",
+              "text": "{{client_screening_results.options.history_of_night_sweats}}",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "history_of_night_sweats",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:{{client_screening_results.required_status}}"
+        }
+      ]
+    }
+  ]
+}

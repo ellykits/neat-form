@@ -672,6 +672,60 @@ The *condition* is evaluated and validation result returns `true` when the field
   
 >NOTE: value is a special kind of keyword in Neat form used to refer to the value of the current field. You can use the name of the field instead. With this approach you can potentially perform validation against other fields as well. Like in the case of password confirmation.  
   
+### Internationalization (i18n) 
+  
+Neat form supports internationalization for the forms allowing localization for your app. For this you need to create a `.properties` file with the key-value entries for the translations. The convention is to give the properties file the same name as the json form file. 
+For example, if you have json form called `collect_demographics.json` create a file `collect_demographics_en.properties` in the `/assets/resources/` folder for the english translations.
+  
+```
+collect_demographics.json  
+
+        {
+          "name": "gender",
+          "type": "spinner",
+          "properties": {
+            "text": "{{gender.properties.text}}"
+          },
+          "options": [
+            {
+              "name": "male",
+              "text": "{{gender.options.male}}",
+              "meta_data": {
+                    ...
+              }
+            },
+            {
+              "name": "female",
+              "text": "{{gender.options.female}}",
+              "meta_data": {
+                    ...
+              }
+            },
+
+            ...  
+``` 
+
+The translation string keys must be unique per file, they could however be anything the user wants. For convention and ease of maintainability it is recommended to use the Json Path notation. In the example below, the key for the translated `text` string under the `properties` field of the `gender` form field would be `gender.properties.text`.
+For arrays e.g. `options` field the json path could altered to include the options key (instead of index) e.g. `gender.options.male` 
+
+**collect_demographics_en.properties**
+```  
+gender.properties.text = Your Gender
+gender.options.male = Male
+gender.options.female = Female
+```  
+
+**collect_demographics_fr_FR.properties** 
+``` 
+gender.properties.text = Votre sexe
+gender.options.male = Mâle
+gender.options.female = Femelle
+```  
+
+The implementation uses Android's resource bundles so translations can be provided for all variations supported by Android. This includes specifying language, script, country and variant. See the [android documentation](https://developer.android.com/reference/java/util/ResourceBundle) for more.
+
+Please note for this Multi-Language Support implementation the localization respects the device language settings
+
 ### App demo  
 Please check out the sample app for this demo.  
   
@@ -853,8 +907,8 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 | ✔️ |️ Form Fields Validation |  
 | ✔️ |️ Support Multi-Step Forms |  
 | ✔️ |️ Rules Engine integration - handle form skip logic and calculations |  
+| ✔️ |️ Multi language support - Internationalization (i18n)|  
 | ❌ |️ Support image and location picker and barcode reader |  
-| ❌ |️ Multi language support |  
 | ❌ |️ Ability to obtain and render `JSON`form from server |  
   
 >If you need addition of more attributes on the current widgets or new widget implementations, create an issue. Contributions are also welcome.  
