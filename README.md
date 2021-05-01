@@ -708,14 +708,14 @@ collect_demographics.json
 The translation string keys must be unique per file, they could however be anything the user wants. For convention and ease of maintainability it is recommended to use the Json Path notation. In the example below, the key for the translated `text` string under the `properties` field of the `gender` form field would be `gender.properties.text`.
 For arrays e.g. `options` field the json path could altered to include the options key (instead of index) e.g. `gender.options.male` 
 
-**collect_demographics_en.properties**
+**collect_demographics.properties** - `(this is the file with the default language translations)`
 ```  
 gender.properties.text = Your Gender
 gender.options.male = Male
 gender.options.female = Female
 ```  
 
-**collect_demographics_fr_FR.properties** 
+**collect_demographics_fr.properties**  - `(French language translations)`
 ``` 
 gender.properties.text = Votre sexe
 gender.options.male = Mâle
@@ -724,7 +724,7 @@ gender.options.female = Femelle
 
 The implementation uses Android's resource bundles so translations can be provided for all variations supported by Android. This includes specifying language, script, country and variant. See the [android documentation](https://developer.android.com/reference/java/util/ResourceBundle) for more.
 
-Please note for this Multi-Language Support implementation the localization respects the device language settings
+**NB:** In this Multi-Language Support implementation, the localization respects the device language settings
 
 ### App demo  
 Please check out the sample app for this demo.  

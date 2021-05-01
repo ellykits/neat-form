@@ -13,14 +13,14 @@ import kotlin.reflect.jvm.isAccessible
 object LanguageHelper {
 
     fun getBundleStringSubstitutor(baseName: String, locale: Locale?): StringSubstitutor? {
-        try {
-
+        return try {
 
             val resourceBundle: ResourceBundle = ResourceBundle.getBundle(baseName, locale)
-            return StringSubstitutor(getLookupMap(resourceBundle), "{{", "}}")
+            StringSubstitutor(getLookupMap(resourceBundle), "{{", "}}")
 
         } catch (missingResourceException: MissingResourceException) {
-            return null; }
+            null
+        }
     }
 
     private fun getLookupMap(bundle: ResourceBundle): HashMap<String, Any>? {
@@ -32,5 +32,9 @@ object LanguageHelper {
             }
         }
         return null
+    }
+
+    fun getBundleNameFromFilesource(fileSource: String?): String {
+        return fileSource!!.substring(fileSource!!.lastIndexOf('/') + 1, fileSource!!.lastIndexOf('.'))
     }
 }
