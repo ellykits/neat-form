@@ -78,7 +78,7 @@ class JsonFormBuilder() : FormBuilder {
         this.context = context
         this.fileSource = fileSource
         this.dataViewModel =
-                ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+            ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
         this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
 
     }
@@ -87,7 +87,7 @@ class JsonFormBuilder() : FormBuilder {
         this.formString = jsonString
         this.context = context
         this.dataViewModel =
-                ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
+            ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
         this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
     }
 
@@ -102,16 +102,19 @@ class JsonFormBuilder() : FormBuilder {
             fileSource.isNotNull() -> {
 
                 val bundleName = LanguageHelper.getBundleNameFromFilesource(fileSource)
-                val rawJsonStringTemplate: String = AssetFile.readAssetFileAsString(context, fileSource!!)
+                val rawJsonStringTemplate: String =
+                    AssetFile.readAssetFileAsString(context, fileSource!!)
 
-                val parsedJsonStringSelectedLocale = parseTemplate(bundleName, Locale.getDefault(), rawJsonStringTemplate)
-                val parsedJsonStringFinal = parseTemplate(bundleName, Locale.ROOT, parsedJsonStringSelectedLocale)
+                val parsedJsonStringSelectedLocale =
+                    parseTemplate(bundleName, Locale.getDefault(), rawJsonStringTemplate)
+                val parsedJsonStringFinal =
+                    parseTemplate(bundleName, Locale.ROOT, parsedJsonStringSelectedLocale)
                         ?: parsedJsonStringSelectedLocale ?: rawJsonStringTemplate
 
                 parsedJsonStringFinal?.let {
                     parseJson<NForm>(
 
-                            it
+                        it
                     )
                 }
 
@@ -140,8 +143,8 @@ class JsonFormBuilder() : FormBuilder {
     }
 
     internal fun addViewsToVerticalRootView(
-            customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
-            verticalRootView: VerticalRootView,
+        customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
+        verticalRootView: VerticalRootView,
     ) {
         val view = customViews?.getOrNull(stepIndex)
         when {
@@ -181,8 +184,8 @@ class JsonFormBuilder() : FormBuilder {
 
     override fun preFillForm() {
         if (
-                this::dataViewModel.isInitialized && dataViewModel.details.value.isNullOrEmpty()
-                && formDataJson.isNotNull()
+            this::dataViewModel.isInitialized && dataViewModel.details.value.isNullOrEmpty()
+            && formDataJson.isNotNull()
         ) {
             this.formViewModel.readOnlyFields.value?.addAll(readOnlyFields)
             dataViewModel.updateDetails(formDataJson!!.parseFormDataJson())
