@@ -101,7 +101,7 @@ class JsonFormBuilder() : FormBuilder {
             this::formString.isInitialized && formString.isNotNull() -> parseJson<NForm>(formString)
             fileSource.isNotNull() -> {
 
-                val bundleName = LanguageHelper.getBundleNameFromFilesource(fileSource)
+                val bundleName = LanguageHelper.getBundleNameFromFileSource(fileSource!!)
                 val rawJsonStringTemplate: String =
                     AssetFile.readAssetFileAsString(context, fileSource!!)
 

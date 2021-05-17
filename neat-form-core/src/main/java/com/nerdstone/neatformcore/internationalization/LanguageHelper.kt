@@ -33,10 +33,9 @@ object LanguageHelper {
         return null
     }
 
-    fun getBundleNameFromFilesource(fileSource: String?): String {
-        return fileSource!!.substring(
-            fileSource!!.lastIndexOf('/') + 1,
-            fileSource!!.lastIndexOf('.')
-        )
-    }
+    fun getBundleNameFromFileSource(fileSource: String): String = fileSource.substring(
+        fileSource.lastIndexOf('/') + 1,
+        fileSource.lastIndexOf('.')
+    )
+
 }
