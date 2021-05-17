@@ -204,7 +204,7 @@
             },
             {
               "name": "mining",
-              "text": "community_gathering.options.mining",
+              "text": "{{community_gathering.options.mining}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "mining",
@@ -213,7 +213,7 @@
             },
             {
               "name": "public_meetings",
-              "text": "community_gathering.options.public_meetings",
+              "text": "{{community_gathering.options.public_meetings}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "public_meetings",
@@ -222,7 +222,7 @@
             },
             {
               "name": "prison",
-              "text": "community_gathering.options.prison",
+              "text": "{{community_gathering.options.prison}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "prison",
@@ -231,7 +231,7 @@
             },
             {
               "name": "others",
-              "text": "community_gathering.options.others",
+              "text": "{{community_gathering.options.others}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "others",

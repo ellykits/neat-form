@@ -133,13 +133,11 @@ class JsonFormBuilder() : FormBuilder {
 
         if (substitutor == null) {
             substitutor = LanguageHelper.getBundleStringSubstitutor(basename, locale)
-            if (substitutor != null) {
+            substitutor?.let {
                 substitutorMap[key] = substitutor
             }
         }
         return substitutor;
-
-
     }
 
     internal fun addViewsToVerticalRootView(

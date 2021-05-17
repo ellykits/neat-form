@@ -12,9 +12,8 @@ import kotlin.reflect.jvm.isAccessible
  */
 object LanguageHelper {
 
-    fun getBundleStringSubstitutor(baseName: String, locale: Locale?): StringSubstitutor? {
+    fun getBundleStringSubstitutor(baseName: String, locale: Locale): StringSubstitutor? {
         return try {
-
             val resourceBundle: ResourceBundle = ResourceBundle.getBundle(baseName, locale)
             StringSubstitutor(getLookupMap(resourceBundle), "{{", "}}")
 
