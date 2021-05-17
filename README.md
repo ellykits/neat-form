@@ -722,7 +722,7 @@ gender.options.male = Mâle
 gender.options.female = Femelle
 ```  
 
-The implementation uses Android's resource bundles so translations can be provided for all variations supported by Android. This includes specifying language, script, country and variant. See the [android documentation](https://developer.android.com/reference/java/util/ResourceBundle) for more.
+The implementation uses Android's resource bundles so translations can be provided for all variations supported by Android. This includes specifying language, script, country and variant. See the android documentation [Resource Bundle](https://developer.android.com/reference/java/util/ResourceBundle) and [Locale](https://developer.android.com/reference/java/util/Locale) for more on locales and valid language codes.
 
 **NB:** In this Multi-Language Support implementation, the localization respects the device language settings
 
