@@ -12,7 +12,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
-import com.nerdstone.neatformcore.internationalization.LanguageHelper
+import com.nerdstone.neatformcore.utils.internationalization.LanguageHelper
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
@@ -72,7 +72,7 @@ class JsonFormBuilder() : FormBuilder {
     var formDataJson: String? = null
     override lateinit var formString: String
 
-    var substitutorMap = mutableMapOf<String, StringSubstitutor>()
+    private var substitutorMap = mutableMapOf<String, StringSubstitutor>()
 
     constructor(context: Context, fileSource: String) : this() {
         this.context = context
@@ -80,7 +80,6 @@ class JsonFormBuilder() : FormBuilder {
         this.dataViewModel =
             ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
         this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
-
     }
 
     constructor(jsonString: String, context: Context) : this() {
@@ -102,43 +101,26 @@ class JsonFormBuilder() : FormBuilder {
             fileSource.isNotNull() -> {
 
                 val bundleName = LanguageHelper.getBundleNameFromFileSource(fileSource!!)
-                val rawJsonStringTemplate: String =
-                    AssetFile.readAssetFileAsString(context, fileSource!!)
+                val rawJsonStringTemplate = AssetFile.readAssetFileAsString(context, fileSource!!)
 
-                val parsedJsonStringSelectedLocale =
+                parseJson<NForm>(
                     parseTemplate(bundleName, Locale.getDefault(), rawJsonStringTemplate)
-                val parsedJsonStringFinal =
-                    parseTemplate(bundleName, Locale.ROOT, parsedJsonStringSelectedLocale)
-                        ?: parsedJsonStringSelectedLocale ?: rawJsonStringTemplate
-
-                parsedJsonStringFinal?.let {
-                    parseJson<NForm>(
-
-                        it
-                    )
-                }
+                )
 
             }
             else -> null
         }
     }
 
-    private fun parseTemplate(bundleName: String, locale: Locale, template: String?): String? {
-        return getStringSubstitutor(bundleName, locale)?.replace(template) ?: template
-    }
+    private fun parseTemplate(bundleName: String, locale: Locale, template: String) =
+        if (bundleName.endsWith("i18n", ignoreCase = true))
+            getStringSubstitutor(bundleName, locale).replace(template)
+        else template
 
-    private fun getStringSubstitutor(basename: String, locale: Locale): StringSubstitutor? {
-        val key = basename + "_" + locale
-        var substitutor: StringSubstitutor? = substitutorMap.getOrDefault(key, null)
-
-        if (substitutor == null) {
-            substitutor = LanguageHelper.getBundleStringSubstitutor(basename, locale)
-            substitutor?.let {
-                substitutorMap[key] = substitutor
-            }
+    private fun getStringSubstitutor(basename: String, locale: Locale) =
+        substitutorMap.getOrPut("${basename}_$locale") {
+            LanguageHelper.getBundleStringSubstitutor(basename, locale)
         }
-        return substitutor;
-    }
 
     internal fun addViewsToVerticalRootView(
         customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
