@@ -26,7 +26,6 @@ import com.nerdstone.neatformcore.views.containers.VerticalRootView
 import com.nerdstone.neatformcore.views.handlers.ViewDispatcher
 import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
-import org.apache.commons.text.StringSubstitutor
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.*
@@ -72,8 +71,6 @@ class JsonFormBuilder() : FormBuilder {
     var formDataJson: String? = null
     override lateinit var formString: String
 
-    private var substitutorMap = mutableMapOf<String, StringSubstitutor>()
-
     constructor(context: Context, fileSource: String) : this() {
         this.context = context
         this.fileSource = fileSource
@@ -112,17 +109,16 @@ class JsonFormBuilder() : FormBuilder {
         }
     }
 
-    private fun parseTemplate(bundleName: String, locale: Locale, template: String) =
-        if (bundleName.endsWith("i18n", ignoreCase = true))
-            getStringSubstitutor(bundleName, locale).replace(template)
-        else template
-
-    private fun getStringSubstitutor(basename: String, locale: Locale) =
-        substitutorMap.getOrPut("${basename}_$locale") {
-            LanguageHelper.getBundleStringSubstitutor(basename, locale)
+    private fun parseTemplate(bundleName: String, locale: Locale, template: String): String {
+        return try {
+            val bundle = ResourceBundle.getBundle(bundleName, locale)
+            LanguageHelper.getBundleStringSubstitutor(bundle).replace(template)
+        } catch (exception:  MissingResourceException){
+            template
         }
+    }
 
-    internal fun addViewsToVerticalRootView(
+    fun addViewsToVerticalRootView(
         customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
         verticalRootView: VerticalRootView,
     ) {

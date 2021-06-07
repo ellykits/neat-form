@@ -10,16 +10,11 @@ import java.util.*
  */
 object LanguageHelper {
 
-    @Throws(IllegalArgumentException::class, MissingResourceException::class)
-    fun getBundleStringSubstitutor(baseName: String, locale: Locale): StringSubstitutor {
-        val resourceBundle = ResourceBundle.getBundle(baseName, locale)
-        return StringSubstitutor(getLookupMap(resourceBundle), "{{", "}}")
-    }
-
-    private fun getLookupMap(resourceBundle: ResourceBundle): MutableMap<String, Any> {
-        val mutableMap = mutableMapOf<String, Any>()
-        resourceBundle.keys.toList().forEach { mutableMap[it] = resourceBundle.getObject(it) }
-        return mutableMap
+    @Throws(IllegalArgumentException::class)
+    fun getBundleStringSubstitutor(resourceBundle: ResourceBundle): StringSubstitutor {
+        val lookup = mutableMapOf<String, Any>()
+        resourceBundle.keys.toList().forEach { lookup[it] = resourceBundle.getObject(it) }
+        return StringSubstitutor(lookup, "{{", "}}")
     }
 
     fun getBundleNameFromFileSource(fileSource: String) = fileSource.run {
