@@ -1,22 +1,22 @@
 {
-  "form": "TB Registration form",
+  "form": "{{tb_registration_form_name}}",
   "rules_file": "rules/yml/tb_registration_form_rules.yml",
   "steps": [
     {
-      "title": "TB Clients Registration form",
+      "title": "{{tb_client_registration_title}}",
       "fields": [
         {
           "name": "community_client_tb_registration_number",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Community Based Health Services Registration Number (CBHS Number)"
+            "hint": "{{community_client_tb_registration_number.hint}}"
           },
           "meta_data": {
             "openmrs_entity": "concept",
             "openmrs_entity_id": "community_client_tb_registration_number",
             "openmrs_entity_parent": ""
           },
-          "required_status": "yes:Please add cbhs number"
+          "required_status": "yes:{{community_client_tb_registration_number.required_status.validation_error}}"
         },
         {
           "name": "client_tb_status_during_registration",
@@ -27,12 +27,12 @@
             "openmrs_entity_parent": ""
           },
           "properties": {
-            "text": "Client's TB status during registration"
+            "text": "{{client_tb_status_during_reg.properties.text}}"
           },
           "options": [
             {
               "name": "unknown",
-              "text": "Unknown",
+              "text": "{{client_tb_status_during_reg.options.unknown}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "unknown",
@@ -41,7 +41,7 @@
             },
             {
               "name": "positive",
-              "text": "Positive",
+              "text": "{{client_tb_status_during_reg.options.positive}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "positive",
@@ -50,7 +50,7 @@
             },
             {
               "name": "negative",
-              "text": "Negative",
+              "text": "{{client_tb_status_during_reg.options.negative}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "negative",
@@ -58,7 +58,7 @@
               }
             }
           ],
-          "required_status": "yes:Please specify your gender"
+          "required_status": "yes:{{client_tb_status_during_reg.required_status}}"
         },
         {
           "name": "place_of_domicile",
@@ -69,12 +69,12 @@
             "openmrs_entity_parent": ""
           },
           "properties": {
-            "text": "Place of Domicile"
+            "text": "{{place_of_domicile.properties.text}}"
           },
           "options": [
             {
               "name": "a_family_with_tb_patient",
-              "text": "A family with TB patient",
+              "text": "{{place_of_domicile.options.a_family_with_tb_patient}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "a_family_with_tb_patient",
@@ -83,7 +83,7 @@
             },
             {
               "name": "a_family_without_tb_patient",
-              "text": "A family  without TB patient",
+              "text": "{{place_of_domicile.options.a_family_without_tb_patient}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "a_family_without_tb_patient",
@@ -92,7 +92,7 @@
             },
             {
               "name": "community_gathering",
-              "text": "Community Gathering",
+              "text": "{{place_of_domicile.options.community_gathering}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "community_gathering",
@@ -101,7 +101,7 @@
             },
             {
               "name": "pharmacy",
-              "text": "Pharmacy",
+              "text": "{{place_of_domicile.options.pharmacy}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "pharmacy",
@@ -110,7 +110,7 @@
             },
             {
               "name": "traditional_doctors",
-              "text": "Traditional doctors",
+              "text": "{{place_of_domicile.options.traditional_doctors}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "traditional_doctors",
@@ -118,7 +118,7 @@
               }
             }
           ],
-          "required_status": "yes:Please specify place of domicile"
+          "required_status": "yes:{{place_of_domicile.required_status}}"
         },
         {
           "name": "community_gathering",
@@ -129,12 +129,12 @@
             "openmrs_entity_parent": ""
           },
           "properties": {
-            "text": "Type of community gathering"
+            "text": "{{community_gathering.properties.text.community_gathering}}"
           },
           "options": [
             {
               "name": "school",
-              "text": "School",
+              "text": "{{community_gathering.options.school}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "school",
@@ -143,7 +143,7 @@
             },
             {
               "name": "worship_houses",
-              "text": "Worship houses",
+              "text": "{{community_gathering.options.worship_houses}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "worship_houses",
@@ -152,7 +152,7 @@
             },
             {
               "name": "mining",
-              "text": "Mining",
+              "text": "{{community_gathering.options.mining}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "mining",
@@ -161,7 +161,7 @@
             },
             {
               "name": "public_meetings",
-              "text": "Public meetings",
+              "text": "{{community_gathering.options.public_meetings}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "public_meetings",
@@ -170,7 +170,7 @@
             },
             {
               "name": "prison",
-              "text": "Prison",
+              "text": "{{community_gathering.options.prison}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "prison",
@@ -179,7 +179,7 @@
             },
             {
               "name": "others",
-              "text": "Others",
+              "text": "{{community_gathering.options.others}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "others",
@@ -187,21 +187,21 @@
               }
             }
           ],
-          "required_status": "yes:Please specify the type of community gathering",
+          "required_status": "yes:{{community_gathering.required_status}}",
           "subjects": "place_of_domicile:text"
         },
         {
           "name": "other_community_gathering",
           "type": "text_input_edit_text",
           "properties": {
-            "hint": "Specify other community gathering"
+            "hint": "{{other_community_gathering.properties.hint}}"
           },
           "meta_data": {
             "openmrs_entity": "concept",
             "openmrs_entity_id": "other_community_gathering",
             "openmrs_entity_parent": ""
           },
-          "required_status": "yes:Please specify other community gathering",
+          "required_status": "yes:{{other_community_gathering.required_status}}",
           "subjects": "community_gathering:text"
         },
         {
@@ -213,12 +213,12 @@
             "openmrs_entity_parent": ""
           },
           "properties": {
-            "text": "Client's screening results"
+            "text": "{{client_screening_results.properties.text}}"
           },
           "options": [
             {
               "name": "coughing",
-              "text": "Coughing",
+              "text": "{{client_screening_results.options.coughing}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "coughing",
@@ -227,7 +227,7 @@
             },
             {
               "name": "hemoptysis",
-              "text": "Sputum with blood (hemoptysis) ",
+              "text": "{{client_screening_results.options.hemoptysis}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "hemoptysis",
@@ -236,7 +236,7 @@
             },
             {
               "name": "fever",
-              "text": "Fever",
+              "text": "{{client_screening_results.options.fever}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "fever",
@@ -245,7 +245,7 @@
             },
             {
               "name": "weight_lose",
-              "text": "Weight lose",
+              "text": "{{client_screening_results.options.weight_lose}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "weight_lose",
@@ -254,7 +254,7 @@
             },
             {
               "name": "history_of_night_sweats",
-              "text": "History of night sweats",
+              "text": "{{client_screening_results.options.history_of_night_sweats}}",
               "meta_data": {
                 "openmrs_entity": "concept",
                 "openmrs_entity_id": "history_of_night_sweats",
@@ -262,7 +262,7 @@
               }
             }
           ],
-          "required_status": "yes:Please specify your gender"
+          "required_status": "yes:{{client_screening_results.required_status}}"
         }
       ]
     }

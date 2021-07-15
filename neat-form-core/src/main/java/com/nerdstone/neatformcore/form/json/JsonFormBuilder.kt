@@ -12,6 +12,7 @@ import com.nerdstone.neatformcore.domain.model.NFormViewData
 import com.nerdstone.neatformcore.domain.view.FormValidator
 import com.nerdstone.neatformcore.form.common.FormErrorDialog
 import com.nerdstone.neatformcore.form.json.JsonParser.parseJson
+import com.nerdstone.neatformcore.utils.internationalization.LanguageHelper
 import com.nerdstone.neatformcore.rules.NeatFormValidator
 import com.nerdstone.neatformcore.rules.RulesFactory
 import com.nerdstone.neatformcore.rules.RulesFactory.RulesFileType
@@ -27,6 +28,7 @@ import com.nerdstone.neatformcore.views.widgets.*
 import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.*
 import kotlin.reflect.KClass
 
 object JsonFormConstants {
@@ -75,7 +77,6 @@ class JsonFormBuilder() : FormBuilder {
         this.dataViewModel =
             ViewModelProvider(context as FragmentActivity)[DataViewModel::class.java]
         this.formViewModel = ViewModelProvider(context)[FormViewModel::class.java]
-
     }
 
     constructor(jsonString: String, context: Context) : this() {
@@ -94,16 +95,32 @@ class JsonFormBuilder() : FormBuilder {
     internal fun parseJsonForm() {
         form = when {
             this::formString.isInitialized && formString.isNotNull() -> parseJson<NForm>(formString)
-            fileSource.isNotNull() -> parseJson<NForm>(
-                AssetFile.readAssetFileAsString(context, fileSource!!)
-            )
+            fileSource.isNotNull() -> {
+
+                val bundleName = LanguageHelper.getBundleNameFromFileSource(fileSource!!)
+                val rawJsonStringTemplate = AssetFile.readAssetFileAsString(context, fileSource!!)
+
+                parseJson<NForm>(
+                    parseTemplate(bundleName, Locale.getDefault(), rawJsonStringTemplate)
+                )
+
+            }
             else -> null
         }
     }
 
-    internal fun addViewsToVerticalRootView(
+    private fun parseTemplate(bundleName: String, locale: Locale, template: String): String {
+        return try {
+            val bundle = ResourceBundle.getBundle(bundleName, locale)
+            LanguageHelper.getBundleStringSubstitutor(bundle).replace(template)
+        } catch (exception:  MissingResourceException){
+            template
+        }
+    }
+
+    fun addViewsToVerticalRootView(
         customViews: List<View>?, stepIndex: Int, formContent: NFormContent,
-        verticalRootView: VerticalRootView
+        verticalRootView: VerticalRootView,
     ) {
         val view = customViews?.getOrNull(stepIndex)
         when {

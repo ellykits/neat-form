@@ -50,9 +50,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     filePath = "sample/tb_registration.json"
                 ),
                 FormData(
+                    formTitle = "TB Registration with Multi-language Support",
+                    formCategory = FormType.jsonFromEmbeddedDefault,
+                    filePath = "sample/tb_registration_with_i18n.json"
+                ),
+                FormData(
                     formTitle = "TB Followup",
                     formCategory = FormType.jsonFromEmbeddedDefault,
                     filePath = "sample/tb_followup_visit.json"
+                ),
+                FormData(
+                    formTitle = "Default Embedded Form",
+                    formCategory = FormType.jsonFromEmbeddedDefault,
+                    filePath = "sample/sample_one_form.json"
                 ),
                 FormData(
                     formTitle = "Customized Embedded Form",
