@@ -23,6 +23,7 @@ object Constants {
         const val SPINNER = "spinner"
         const val EDIT_TEXT = "edit_text"
         const val TEXT_INPUT_EDIT_TEXT = "text_input_edit_text"
+        const val MASKED_EDIT_TEXT = "masked_edit_text"
         const val MULTI_CHOICE_CHECKBOX = "multi_choice_checkbox"
         const val CHECKBOX = "checkbox"
         const val RADIO_GROUP = "radio_group"
