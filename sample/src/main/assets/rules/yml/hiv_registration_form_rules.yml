@@ -1,0 +1,28 @@
+---
+name: "hiv_registration_date_calculation"
+description: "calculating the hiv registration date"
+priority: 1
+condition: "true"
+actions:
+  - "hiv_registration_date_calculation = System.currentTimeMillis()"
+---
+name: "client_hiv_status_during_registration_calculation"
+description: "calculating client_hiv_status_during_registration"
+priority: 1
+condition: "true"
+actions:
+  - "client_hiv_status_during_registration_calculation = 'Positive'"
+---
+name: "test_results_calculation"
+description: "calculating test_results"
+priority: 1
+condition: "true"
+actions:
+  - "test_results_calculation = 'Positive'"
+---
+name: "place_where_test_was_conducted_other_visibility"
+description: "Specify other place where the test was conducted"
+priority: 1
+condition: "place_where_test_was_conducted['other'] != null"
+actions:
+  - "place_where_test_was_conducted_other_visibility =  true"

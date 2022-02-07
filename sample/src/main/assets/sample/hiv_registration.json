@@ -1,0 +1,271 @@
+{
+  "form": "HIV Registration form",
+  "count": "1",
+  "encounter_type": "HIV Registration",
+  "entity_id": "",
+  "relational_id": "",
+  "rules_file": "rules/yml/hiv_registration_form_rules.yml",
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "steps": [
+    {
+      "title": "HIV Clients Registration form",
+      "fields": [
+        {
+          "name": "new_or_current_hiv_client",
+          "type": "radio_group",
+          "properties": {
+            "text": "Is the registered client a new HIV Client or an existing HIV Client?"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "new_or_current_hiv_client",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "new",
+              "text": "New HIV client",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "new",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "existing",
+              "text": "Existing HIV Client",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "existing",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please select the answer"
+        },
+        {
+          "name": "place_where_test_was_conducted",
+          "type": "radio_group",
+          "properties": {
+            "text": "Where was the test conducted?"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "place_where_test_was_conducted",
+            "openmrs_entity_parent": ""
+          },
+          "options": [
+            {
+              "name": "tb_clinic_outpatient",
+              "text": "Tuberculosis clinic (out patient)",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "tb_clinic_outpatient",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "sexual_transmitted_diseases_clinic",
+              "text": "Sexual transmitted diseases clinic",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "sexual_transmitted_diseases_clinic",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "outpatient_department",
+              "text": "Outpatient department",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "outpatient_department",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "inpatient_department",
+              "text": "Inpatient department",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "inpatient_department",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "blood_transfusion_service",
+              "text": "Blood transfusion service",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "blood_transfusion_service",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "home_selftest_service",
+              "text": "Home selftest service",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "home_selftest_service",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "voluntary_patients",
+              "text": "Voluntary patients",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "voluntary_patients",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "family_planning_clinic",
+              "text": "Family planning clinic",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "family_planning_clinic",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "ctc",
+              "text": "CTC",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "ctc",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "men_circumcision",
+              "text": "Men circumcision",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "men_circumcision",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "outreach_services",
+              "text": "Outreach services",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "outreach_services",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "reproductive_an_child_health",
+              "text": "Reproductive and child health",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "reproductive_an_child_health",
+                "openmrs_entity_parent": ""
+              }
+            },
+            {
+              "name": "other",
+              "text": "Other",
+              "meta_data": {
+                "openmrs_entity": "concept",
+                "openmrs_entity_id": "other",
+                "openmrs_entity_parent": ""
+              }
+            }
+          ],
+          "required_status": "yes:Please select the answer"
+        },
+        {
+          "name": "place_where_test_was_conducted_other",
+          "type": "text_input_edit_text",
+          "properties": {
+            "hint": "Other (Specify)",
+            "type": "name"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "place_where_test_was_conducted_other",
+            "openmrs_entity_parent": ""
+          },
+          "required_status": "true:Please specify the place where the test was conducted",
+          "subjects": "place_where_test_was_conducted:map"
+        },
+        {
+          "name": "ctc_number",
+          "type": "masked_edit_text",
+          "properties": {
+            "hint": "CTC Number e.g 12-34-5678-912345",
+            "mask": "##-##-####-######",
+            "mask_hint": "12345678912345",
+            "allowed_chars": "1234567890-",
+            "type": "Clinic of Treatment and Care registration number (CTC Number)"
+          },
+          "meta_data": {
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "ctc_number",
+            "openmrs_entity_parent": ""
+          },
+          "validation": [
+            {
+              "condition": "value.matches(\"(\\\\d{2}-\\\\d{2}-\\\\d{4}-\\\\d{6})?\")",
+              "message": "CTC Number should be of the format (XX-XX-XXXX-XXXXXX)."
+            }
+          ],
+          "required_status": "yes:Please specify client's CTC number",
+          "dependent_calculations": [
+            "hiv_registration_date",
+            "client_hiv_status_during_registration",
+            "test_results"
+          ]
+        }
+      ]
+    }
+  ]
+}

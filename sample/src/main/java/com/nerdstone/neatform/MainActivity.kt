@@ -60,6 +60,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     filePath = "sample/tb_followup_visit.json"
                 ),
                 FormData(
+                    formTitle = "HIV Registration",
+                    formCategory = FormType.jsonFromEmbeddedDefault,
+                    filePath = "sample/hiv_registration.json"
+                ),
+                FormData(
                     formTitle = "Default Embedded Form",
                     formCategory = FormType.jsonFromEmbeddedDefault,
                     filePath = "sample/sample_one_form.json"
