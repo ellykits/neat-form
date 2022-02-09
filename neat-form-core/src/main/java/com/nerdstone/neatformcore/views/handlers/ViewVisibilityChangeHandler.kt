@@ -5,6 +5,7 @@ import com.nerdstone.neatformcore.domain.listeners.VisibilityChangeListener
 import com.nerdstone.neatformcore.domain.view.NFormView
 import com.nerdstone.neatformcore.utils.animateView
 import com.nerdstone.neatformcore.utils.isNotNull
+import com.nerdstone.neatformcore.views.widgets.MaskedEditTextNFormView
 
 object ViewVisibilityChangeHandler : VisibilityChangeListener {
 
@@ -17,8 +18,12 @@ object ViewVisibilityChangeHandler : VisibilityChangeListener {
                 ) {
                     resetValueWhenHidden()
                 }
+                if (this is MaskedEditTextNFormView && visibility == View.GONE && viewDetails.value.isNotNull()) {
+                    resetValueWhenHidden()
+                }
                 trackRequiredField()
             }
+
         }
     }
 }
