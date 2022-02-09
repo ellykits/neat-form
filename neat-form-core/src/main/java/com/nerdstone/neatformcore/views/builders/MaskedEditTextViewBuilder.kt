@@ -39,7 +39,7 @@ open class MaskedEditTextViewBuilder(final override val nFormView: NFormView) : 
     private fun formatHintForRequiredFields() {
         with(editTextNFormView) {
             if (!viewProperties.requiredStatus.isNullOrBlank() && isFieldRequired()) {
-                hint = hint.toString().addRedAsteriskSuffix()
+                floatingLabelText = floatingLabelText.toString().addRedAsteriskSuffix()
             }
         }
     }
@@ -65,9 +65,7 @@ open class MaskedEditTextViewBuilder(final override val nFormView: NFormView) : 
                 }
                 EditTextProperties.HINT.name -> {
                     floatingLabelText = attribute.value.toString()
-                    if (isFieldRequired()) {
-                        floatingLabelText = floatingLabelText.toString().addRedAsteriskSuffix()
-                    }
+                    formatHintForRequiredFields()
                 }
                 EditTextProperties.PADDING.name -> {
                     val value = editTextNFormView.context.pxToDp(
@@ -83,7 +81,7 @@ open class MaskedEditTextViewBuilder(final override val nFormView: NFormView) : 
                 }
                 EditTextProperties.INPUT_TYPE.name -> {
                     getSupportedEditTextTypes()[attribute.value.toString()]
-                        ?.also { inputType = it }
+                        ?.also { setRawInputType(it) }
                 }
                 EditTextProperties.BACKGROUND.name -> {
                     resourcesMap[attribute.value.toString()]?.let { setBackgroundResource(it) }
