@@ -62,6 +62,19 @@ class MaskedEditTextViewBuilderTest : BaseJsonViewBuilderTest() {
     }
 
     @Test
+    fun `Should set only allow the allowed characters on the field `() {
+        val mask = "##"
+        val allowedChars = "12"
+        viewProperty.viewAttributes = hashMapOf("mask" to mask,"text" to "13242")
+        maskedEditTextNFormView.allowedChars = allowedChars
+        maskedEditTextViewBuilder.buildView()
+        Assert.assertTrue(
+            maskedEditTextNFormView.text.toString().isNotEmpty() &&
+                    maskedEditTextNFormView.text.toString() == "12"
+        )
+    }
+
+    @Test
     fun `Should set mask hint on the field `() {
         val hint = "1234"
         viewProperty.viewAttributes = hashMapOf("mask_hint" to hint)
@@ -82,8 +95,8 @@ class MaskedEditTextViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should reset the MaskedEditText value when visibility is gone`() {
-       maskedEditTextNFormView.mask = "##-##"
-        maskedEditTextNFormView.setValue("1122")
+        viewProperty.viewAttributes = hashMapOf("mask" to "##-##","text" to "1122" )
+        maskedEditTextViewBuilder.buildView()
         maskedEditTextNFormView.visibility = View.GONE
         Assert.assertTrue(maskedEditTextNFormView.text.toString().isEmpty())
         Assert.assertTrue(maskedEditTextNFormView.mask.toString() == "##-##")
@@ -91,9 +104,7 @@ class MaskedEditTextViewBuilderTest : BaseJsonViewBuilderTest() {
 
     @Test
     fun `Should set Text to the MaskedEditText`() {
-        //mask should be set before setting text
-        maskedEditTextNFormView.mask = "##-##"
-        maskedEditTextNFormView.setText("1122")
+        viewProperty.viewAttributes = hashMapOf("mask" to "##-##","text" to "1122" )
         maskedEditTextViewBuilder.buildView()
         Assert.assertFalse(maskedEditTextNFormView.text.toString().isEmpty())
     }
