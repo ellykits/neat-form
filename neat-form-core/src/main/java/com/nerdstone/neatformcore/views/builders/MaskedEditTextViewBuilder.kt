@@ -15,14 +15,33 @@ open class MaskedEditTextViewBuilder(final override val nFormView: NFormView) : 
 
     override val acceptedAttributes = EditTextProperties::class.java.convertEnumToSet()
 
+    private val acceptedMaskedAttributes = MaskedEditTextProperties::class.java.convertEnumToSet()
+
     override lateinit var resourcesMap: MutableMap<String, Int>
 
+    enum class MaskedEditTextProperties {
+        MASK,  MASK_HINT
+    }
+
     enum class EditTextProperties {
-        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE, BACKGROUND, MASK, ALLOWED_CHARS, MASK_HINT
+        HINT, PADDING, TEXT_SIZE, TEXT, INPUT_TYPE, BACKGROUND, ALLOWED_CHARS,
     }
 
     override fun buildView() {
-        //Hide keyboard when focus is lost
+        //set MaskedProperties before the EditTextProperties
+        if (!acceptedMaskedAttributes.isNullOrEmpty()) {
+            editTextNFormView.apply {
+                applyViewAttributes(
+                    acceptedMaskedAttributes,
+                    this@MaskedEditTextViewBuilder::setMaskedProperties
+                )
+                setOnFocusChangeListener { _, hasFocus ->
+                    if (!hasFocus) {
+                        editTextNFormView.hideSoftKeyBoard()
+                    }
+                }
+            }
+        }
         editTextNFormView.apply {
             applyViewAttributes(
                 acceptedAttributes,
@@ -44,22 +63,27 @@ open class MaskedEditTextViewBuilder(final override val nFormView: NFormView) : 
         }
     }
 
+    private fun setMaskedProperties(attribute: Map.Entry<String, Any>) {
+        editTextNFormView.apply {
+            if (viewProperties.getResourceFromAttribute().isNullOrEmpty())
+                TextViewCompat.setTextAppearance(editTextNFormView, R.style.editTextStyle)
+            when (attribute.key.toUpperCase(Locale.getDefault())) {
+                MaskedEditTextProperties.MASK_HINT.name -> {
+                    hint = SpannableStringBuilder(attribute.value as String)
+                }
+                MaskedEditTextProperties.MASK.name -> {
+                    mask = attribute.value.toString()
+                }
+
+            }
+        }
+    }
+
     override fun setViewProperties(attribute: Map.Entry<String, Any>) {
         editTextNFormView.apply {
             if (viewProperties.getResourceFromAttribute().isNullOrEmpty())
                 TextViewCompat.setTextAppearance(editTextNFormView, R.style.editTextStyle)
-
-
             when (attribute.key.toUpperCase(Locale.getDefault())) {
-                EditTextProperties.MASK_HINT.name -> {
-                    hint = SpannableStringBuilder(attribute.value as String)
-                }
-            }
-
-            when (attribute.key.toUpperCase(Locale.getDefault())) {
-                EditTextProperties.MASK.name -> {
-                    mask = attribute.value.toString()
-                }
                 EditTextProperties.ALLOWED_CHARS.name -> {
                     allowedChars = attribute.value.toString()
                 }
