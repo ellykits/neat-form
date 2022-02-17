@@ -30,8 +30,12 @@ class MaskedEditTextNFormView : MaskedEditText, NFormView {
 
     constructor(context: Context) : super(context, null) {
         setFloatingLabel(MaterialEditText.FLOATING_LABEL_NORMAL)
+        setPrimaryColor(R.color.colorBlack)
+        isFloatingLabelAlwaysShown = true
         floatingLabelTextSize = resources.getDimension(R.dimen.default_text_size).toInt()
         floatingLabelTextColor = resources.getColor(R.color.colorBlack)
+        focusFraction=1F
+        setMetHintTextColor(R.color.colorBlack)
         invalidate()
     }
 
