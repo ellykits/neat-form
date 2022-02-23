@@ -134,7 +134,7 @@ class MaskedEditTextViewBuilderTest : BaseJsonViewBuilderTest() {
         maskedEditTextNFormView.mask = "(###)-###-###"
         maskedEditTextNFormView.setText("012345678")
         maskedEditTextViewBuilder.buildView()
-        Assert.assertTrue( maskedEditTextNFormView.text.toString()==("(012)-345-678"))
+        Assert.assertTrue( maskedEditTextNFormView.text.toString()=="(012)-345-678")
     }
 
     @Test
