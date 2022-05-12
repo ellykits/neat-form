@@ -192,6 +192,7 @@ class JsonFormBuilder() : FormBuilder {
 
     override fun registerViews() {
         registeredViews[ViewType.EDIT_TEXT] = EditTextNFormView::class
+        registeredViews[ViewType.MASKED_EDIT_TEXT] = MaskedEditTextNFormView::class
         registeredViews[ViewType.TEXT_INPUT_EDIT_TEXT] = TextInputEditTextNFormView::class
         registeredViews[ViewType.NUMBER_SELECTOR] = NumberSelectorNFormView::class
         registeredViews[ViewType.SPINNER] = SpinnerNFormView::class
