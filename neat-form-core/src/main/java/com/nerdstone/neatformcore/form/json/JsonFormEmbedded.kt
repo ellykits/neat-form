@@ -52,9 +52,9 @@ class JsonFormEmbedded(
                 jsonFormBuilder.addViewsToVerticalRootView(views, index, formContent, rootView)
             }
             mainLayout.addView(formViews)
-            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner, {
+            jsonFormBuilder.dataViewModel.details.observe(context as LifecycleOwner) {
                 context.updateFieldValues(it, jsonFormBuilder.readOnlyFields)
-            })
+            }
         }
     }
 }
