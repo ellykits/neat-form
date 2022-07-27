@@ -5,7 +5,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-29
+      - image: circleci/android:api-30
     environment:
       JVM_OPTS: -Xmx3200m -noverify
     steps:
@@ -17,7 +17,7 @@ jobs:
       #         command: sudo chmod +x ./gradlew
       - run:
           name: Create local.properties file
-          command: printf "gpr.usr=$GPR_USER\ngpr.key=$GPR_API_KEY" && printf "\njcenter.usr=$BINTRAY_USER\njcenter.key=$BINTRAY_KEY" >> ~/code/local.properties
+          command: printf "gpr.usr=$GPR_USER\ngpr.key=$GPR_API_KEY"
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies --stacktrace
@@ -29,7 +29,7 @@ jobs:
           name: Run gradle clean
           command: ./gradlew clean
       - run:
-          name: Run JacocoTestReport for neat-form module
+          name: Run JacocoTestReport for neat-form-core module
           command: ./gradlew jacocoTestReportDebug --stacktrace #for more info refer to this plugin: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin
       #      - run:
       #          name: Merge jacoco reports for codecov
