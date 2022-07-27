@@ -13,7 +13,6 @@ import com.nerdstone.neatform.FormType
 import com.nerdstone.neatform.R
 import com.nerdstone.neatform.StepperActivity
 import com.nerdstone.neatform.custom.views.CustomImageView
-import com.nerdstone.neatform.utils.Constants
 import com.nerdstone.neatformcore.domain.builders.FormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormBuilder
 import com.nerdstone.neatformcore.form.json.JsonFormEmbedded

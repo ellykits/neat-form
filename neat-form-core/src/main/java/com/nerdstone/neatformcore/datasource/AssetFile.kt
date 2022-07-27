@@ -14,11 +14,7 @@ object AssetFile : FileSource {
         val buffer = ByteArray(size)
         inputStream.read(buffer)
         inputStream.close()
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            String(buffer, StandardCharsets.UTF_8)
-        } else {
-            String(buffer)
-        }
+        return String(buffer, StandardCharsets.UTF_8)
     }
 
     fun openFileAsset(context: Context, path: String): InputStream {
