@@ -4,8 +4,6 @@ apply plugin: "com.vanniktech.android.junit.jacoco"
 buildscript {
 
     ext.kotlin_version = '1.6.20'
-    ext.mockk_version = '1.12.3'
-    ext.room_version = "1.1.1"
 
     repositories {
         mavenLocal()

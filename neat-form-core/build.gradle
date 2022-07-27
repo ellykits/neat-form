@@ -13,11 +13,11 @@ properties.load(new FileInputStream(rootProject.file("local.properties")))
 version = "1.1.5"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName this.version
         multiDexEnabled true
@@ -79,8 +79,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'com.jakewharton.timber:timber:5.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+
+    //Breaking changes from version 4.0+
     implementation "org.jeasy:easy-rules-core:3.3.0"
     implementation "org.jeasy:easy-rules-mvel:3.3.0"
     implementation "com.google.code.gson:gson:2.9.0"
@@ -98,11 +100,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.7.3'
     testImplementation "org.robolectric:shadows-multidex:4.4"
-    debugImplementation 'androidx.fragment:fragment-testing:1.4.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.0'
 
     testImplementation 'androidx.test:core:1.4.0'
-    testImplementation "io.mockk:mockk:$mockk_version"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+    testImplementation "io.mockk:mockk:1.12.3"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
