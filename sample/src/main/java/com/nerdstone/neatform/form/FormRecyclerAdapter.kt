@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nerdstone.neatform.R
+import java.util.Locale
 
 class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHolder>() {
 
@@ -27,7 +28,7 @@ class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHol
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val form: FormData = formList[position]
         form.also {
-            holder.formCategoryTextView.text = it.formCategory.capitalize()
+            holder.formCategoryTextView.text = it.formCategory.capitalize(Locale.ROOT)
             holder.formTitleTextView.text = it.formTitle.capitalizeWords()
         }
     }
@@ -48,4 +49,4 @@ class FormRecyclerAdapter : RecyclerView.Adapter<FormRecyclerAdapter.MainViewHol
 }
 
 
-fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.capitalize() }
+fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.capitalize(Locale.ROOT) }
