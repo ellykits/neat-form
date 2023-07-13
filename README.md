@@ -94,14 +94,14 @@ dependencies {
   
 First you will need to add the form file with its corresponding rules file to the assets directory of your application. Here are the supported attributes for the form.  
   
-  
+  /*
 | Form Attribute        | Usage                                                                             |  
 | ----------------------|:--------------------------------------------------------------------------------- |  
 | form                  | Name of your form                                                                 |  
 | rules_file            | File containing the rules for handling skip logic and calculation          |  
 | steps                 | The form steps with the desired fields                                            |  
 | metadata              | Additional information that you would also like to pass with the form when submitting data   |  
-  
+  */
  *Sample form obtained from the sample app on this lib*  
   
 ```json  
@@ -899,7 +899,7 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 * [Smart Material Spinner](https://github.com/Chivorns/SmartMaterialSpinner) - Powerful android spinner library
   
 ## RoadMap  
-  
+  /*
 | Status        | Action                                                                             |  
 | ----------------------|:--------------------------------------------------------------------------------- |  
 | ✔️ |️ Implementation of the common views - *multichoice checkbox, spinner, buttons, radio buttons number selector*|  
@@ -909,7 +909,8 @@ Custom  `sample_one_form_custom_layout.xml` layout  used for rendering views
 | ✔️ |️ Rules Engine integration - handle form skip logic and calculations |  
 | ✔️ |️ Multi language support - Internationalization (i18n)|  
 | ❌ |️ Support image and location picker and barcode reader |  
-| ❌ |️ Ability to obtain and render `JSON`form from server |  
+| ❌ |️ Ability to obtain and render `JSON`form from server | 
+*/
   
 >If you need addition of more attributes on the current widgets or new widget implementations, create an issue. Contributions are also welcome.  
   
